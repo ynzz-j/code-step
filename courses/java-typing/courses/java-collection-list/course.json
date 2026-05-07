@@ -1,0 +1,10 @@
+{
+  "id": "java-collection-list",
+  "title": "List Collection",
+  "description": "Master ArrayList operations",
+  "language": "java",
+  "difficulty": "intermediate",
+  "steps": [
+    "steps/step-01.json"
+  ]
+}

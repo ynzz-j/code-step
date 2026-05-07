@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@Configuration 配置类",
+  "concept": "Configuration",
+  "difficulty": "advanced",
+  "instruction": "用 @Configuration 定义配置类，手动注册 Bean。\n\n照着敲，感受配置类写法。",
+  "hint": "@Configuration 注解定义配置类",
+  "targetCode": "import org.springframework.context.annotation.Bean;\nimport org.springframework.context.annotation.Configuration;\n\n@Configuration\npublic class AppConfig {\n    \n    @Bean\n    public DataSource dataSource() {\n        return new DataSource();\n    }\n}\n\nclass DataSource {\n    public String getUrl() {\n        return \"jdbc:mysql://localhost:3306/test\";\n    }\n}",
+  "encouragement": "配置类注册 Bean！"
+}

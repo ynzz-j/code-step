@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "overloading",
+  "concept": "overloading",
+  "difficulty": "intermediate",
+  "instruction": "方法重载：同一个方法名，参数不同（个数或类型）。\n\n照着敲，感受方法重载的用法。",
+  "hint": "编译器根据参数自动选择调用哪个方法",
+  "targetCode": "public class Main {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n\n    public static double add(double a, double b) {\n        return a + b;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(add(1, 2));\n        System.out.println(add(1.5, 2.5));\n    }\n}",
+  "encouragement": "方法重载，同名不同参！"
+}

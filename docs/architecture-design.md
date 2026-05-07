@@ -1,6 +1,8 @@
 # CodeStep - 编程学习应用架构设计文档
 
-> 版本：V1.1 | 日期：2026-05-06 | 状态：初稿
+> 版本：V1.2 | 日期：2026-05-07 | 状态：更新中
+>
+> **V1.2 变更摘要**：新增课程分类体系、编程环境检测与模式降级、用户学习中心三大特性
 
 ---
 
@@ -64,32 +66,47 @@ codestep/
 │   │   │   ├── InstructionPanel.tsx
 │   │   │   ├── ProgressDots.tsx
 │   │   │   └── StatsPanel.tsx
+│   │   ├── courses/             # [V1.2 扩展] 课程相关组件
+│   │   │   ├── CategoryFilter.tsx   # [新增] 分类筛选器
+│   │   │   └── CourseCard.tsx       # [改动] 显示分类标签
+│   │   ├── env/                 # [V1.2 新增] 环境检测模块
+│   │   │   ├── EnvCheckModal.tsx    # 环境检测弹窗
+│   │   │   └── EnvStatusBadge.tsx   # 环境状态徽章
+│   │   ├── user/                # [V1.2 新增] 用户中心组件
+│   │   │   ├── ProgressDashboard.tsx # 学习进度看板
+│   │   │   ├── CourseSummaryCard.tsx # 课程学习卡片
+│   │   │   └── LearningCalendar.tsx  # 学习日历
 │   │   └── layout/              # 布局组件
 │   │       ├── AppShell.tsx
-│   │       └── Header.tsx
+│   │       └── Header.tsx       # [改动] 增加用户中心入口
 │   ├── hooks/                    # 自定义 Hooks
 │   │   ├── useCourse.ts         # 课程状态管理
 │   │   ├── useTypingStats.ts    # 打字统计
 │   │   ├── useKeyboardShortcuts.ts
-│   │   └── useProgress.ts
+│   │   ├── useProgress.ts
+│   │   └── useEnvCheck.ts       # [新增] 环境检测 Hook
 │   ├── pages/                    # 页面组件
 │   │   ├── WelcomePage.tsx
 │   │   ├── AboutPage.tsx
-│   │   ├── CoursesPage.tsx
-│   │   ├── LearnPage.tsx
+│   │   ├── CoursesPage.tsx      # [改动] 增加分类筛选
+│   │   ├── LearnPage.tsx        # [改动] 增加环境检测入口
+│   │   ├── UserCenterPage.tsx   # [新增] 用户中心页
 │   │   └── CompletePage.tsx
 │   ├── stores/                   # Zustand 状态管理
-│   │   ├── courseStore.ts
+│   │   ├── courseStore.ts       # [改动] 增加分类筛选状态
 │   │   ├── settingsStore.ts
-│   │   └── userStore.ts
+│   │   ├── userStore.ts         # [改动] 增加进度摘要数据
+│   │   └── envStore.ts          # [新增] 编程环境状态
 │   ├── services/                 # 业务逻辑服务
 │   │   ├── courseService.ts     # 课程加载/保存
 │   │   ├── validationService.ts  # 代码验证
-│   │   └── statsService.ts      # 统计数据
+│   │   ├── statsService.ts      # 统计数据
+│   │   └── envService.ts        # [新增] 环境检测服务
 │   ├── types/                     # TypeScript 类型定义
-│   │   ├── course.ts
+│   │   ├── course.ts            # [改动] 增加 category 字段
 │   │   ├── step.ts
-│   │   └── user.ts
+│   │   ├── user.ts              # [改动] 增加学习摘要类型
+│   │   └── env.ts               # [新增] 环境类型定义
 │   ├── utils/                    # 工具函数
 │   │   ├── editor.ts
 │   │   └── constants.ts
@@ -102,45 +119,40 @@ codestep/
 │   │   ├── lib.rs               # 库入口
 │   │   ├── commands/            # Tauri 命令
 │   │   │   ├── mod.rs
-│   │   │   ├── course.rs        # 课程数据操作
-│   │   │   ├── progress.rs      # 学习进度
+│   │   │   ├── course.rs        # [改动] 增加分类查询
+│   │   │   ├── progress.rs      # [改动] 增加摘要查询
 │   │   │   ├── executor.rs      # 代码执行器
-│   │   │   └── settings.rs      # 设置管理
+│   │   │   ├── settings.rs      # 设置管理
+│   │   │   ├── env_checker.rs   # [新增] 环境检测命令
+│   │   │   └── user_center.rs   # [新增] 用户中心命令
 │   │   ├── models/              # 数据模型
 │   │   │   ├── mod.rs
-│   │   │   ├── course.rs
+│   │   │   ├── course.rs        # [改动] 增加 category
 │   │   │   ├── step.rs
-│   │   │   └── user_progress.rs
+│   │   │   ├── user_progress.rs # [改动] 增加 summary
+│   │   │   └── env_status.rs    # [新增] 环境状态模型
 │   │   ├── db/                   # 数据库操作
 │   │   │   ├── mod.rs
-│   │   │   ├── schema.rs
-│   │   │   └── migrations/
+│   │   │   ├── schema.rs        # [改动] 新增表/字段
+│   │   │   └── migrations/      # [改动] 新增 V2 迁移脚本
 │   │   ├── executor/             # 代码执行引擎
 │   │   │   ├── mod.rs
-│   │   │   ├── java.rs           # Java 执行器
-│   │   │   ├── python.rs         # Python 执行器
-│   │   │   └── sandbox.rs        # 沙箱隔离
-│   │   └── utils/                # Rust 工具函数
+│   │   │   ├── java.rs
+│   │   │   ├── python.rs
+│   │   │   └── sandbox.rs
+│   │   └── utils/
 │   ├── Cargo.toml
 │   ├── tauri.conf.json
 │   ├── build.rs
-│   └── icons/                    # 应用图标
+│   └── icons/
 ├── courses/                      # 课程内容目录
-│   ├── java/
-│   │   ├── course.json          # 课程元数据
-│   │   └── steps/               # 步骤内容
-│   │       ├── step-01.json
-│   │       └── step-02.json
-│   └── python/
-├── locales/                      # 国际化
-│   ├── zh-CN.json
-│   └── en-US.json
+├── locales/
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
 ├── tailwind.config.js
 ├── postcss.config.js
-└── SPEC.md                       # 产品规格文档
+└── SPEC.md
 ```
 
 ---
@@ -149,55 +161,68 @@ codestep/
 
 ### 3.1 前端模块架构
 
-#### 3.1.1 组件层级
+#### 3.1.1 组件层级（V1.2 更新）
 
 ```
 AppShell (应用外壳)
 ├── Header (顶部导航栏)
 │   ├── Logo
 │   ├── NavLinks
-│   └── WindowControls (窗口控制)
+│   ├── UserAvatar → UserCenterPage  # [新增] 用户中心入口
+│   └── WindowControls
 ├── MainContent (主内容区)
 │   ├── WelcomePage (首页)
 │   ├── AboutPage (理念页)
-│   ├── CoursesPage (课程列表)
-│   │   └── CourseCard
-│   ├── LearnPage (学习界面)
-│   │   ├── InstructionPanel (左侧说明面板)
-│   │   │   ├── StepHeader (步骤标题/标签)
-│   │   │   ├── StepInstruction (步骤说明)
-│   │   │   └── HintBox (提示框)
-│   │   ├── EditorPanel (右侧编辑器面板)
-│   │   │   ├── OutputTerminal (输出终端)
-│   │   │   ├── StatsPanel (统计面板 - typing模式)
-│   │   │   ├── CodeEditor (coding模式编辑器)
-│   │   │   │   └── CodeMirror / Monaco
-│   │   │   ├── TypingEditor (typing模式编辑器)
-│   │   │   │   ├── TargetDisplay (目标代码)
-│   │   │   │   └── TypingInput (用户输入)
-│   │   │   └── EditorToolbar (工具栏)
-│   │   ├── FeedbackArea (反馈区)
-│   │   ├── NavigationBar (导航按钮)
-│   │   └── ProgressDots (进度点)
+│   ├── CoursesPage (课程列表)       # [改动]
+│   │   ├── CategoryFilter           # [新增] 分类筛选组件
+│   │   │   ├── CategoryTab (全部/前端/后端/算法...)
+│   │   │   └── LanguageFilter (Java/Python/JS...)
+│   │   └── CourseCard               # [改动] 含 category badge
+│   ├── LearnPage (学习界面)          # [改动]
+│   │   ├── InstructionPanel
+│   │   ├── EditorPanel
+│   │   │   ├── OutputTerminal
+│   │   │   ├── StatsPanel
+│   │   │   ├── CodeEditor           # coding 模式（需环境）
+│   │   │   ├── TypingEditor         # typing 模式（无需环境）
+│   │   │   └── EditorToolbar
+│   │   ├── FeedbackArea
+│   │   ├── NavigationBar
+│   │   └── ProgressDots
+│   ├── UserCenterPage               # [新增] 用户中心
+│   │   ├── UserProfileHeader
+│   │   ├── ProgressDashboard        # 学习进度总览
+│   │   │   ├── CourseSummaryCard    # 每门课程卡片
+│   │   │   ├── LearningCalendar     # 学习日历热力图
+│   │   │   └── StatsOverview        # 总计统计
+│   │   └── AchievementList
 │   └── CompletePage (完成页)
+├── EnvCheckModal (环境检测弹窗)      # [新增] 全局弹窗
 └── Footer (可选)
 ```
 
-#### 3.1.2 状态管理 (Zustand)
+#### 3.1.2 状态管理（Zustand，V1.2 更新）
 
 ```typescript
-// stores/courseStore.ts
+// stores/courseStore.ts [改动]
 interface CourseStore {
+  // 课程列表
+  courses: Course[];
+  filteredCourses: Course[];       // 筛选后的课程列表
+
+  // 分类筛选状态 [新增]
+  selectedCategory: CourseCategory | 'all';
+  selectedLanguage: string | 'all';
+
   // 当前课程状态
   currentCourse: Course | null;
   currentStepIndex: number;
   completedSteps: Set<number>;
 
-  // 课程列表
-  courses: Course[];
-
   // Actions
   loadCourses: () => Promise<void>;
+  setCategory: (category: CourseCategory | 'all') => void;  // [新增]
+  setLanguage: (lang: string | 'all') => void;              // [新增]
   startCourse: (courseId: string) => void;
   nextStep: () => void;
   prevStep: () => void;
@@ -205,7 +230,20 @@ interface CourseStore {
   resetProgress: () => void;
 }
 
-// stores/settingsStore.ts
+// stores/envStore.ts [新增]
+interface EnvStore {
+  // 各语言环境状态
+  envStatus: Record<string, EnvCheckResult>;
+  isChecking: boolean;
+  lastCheckedAt: Date | null;
+
+  // Actions
+  checkEnv: (language: string) => Promise<EnvCheckResult>;
+  checkAllEnvs: () => Promise<void>;
+  clearCache: () => void;
+}
+
+// stores/settingsStore.ts [不变]
 interface SettingsStore {
   theme: 'dark' | 'light' | 'system';
   fontSize: number;
@@ -214,19 +252,20 @@ interface SettingsStore {
   autoValidateDelay: number;
   focusModeShortcut: string;
 
-  // Actions
   updateSettings: (settings: Partial<Settings>) => void;
   resetSettings: () => void;
 }
 
-// stores/userStore.ts
+// stores/userStore.ts [改动]
 interface UserStore {
-  // 用户数据
   userId: string;
   displayName: string;
   totalLearningTime: number;
   completedCourses: string[];
   stepStats: StepStats[];
+
+  // 学习摘要 [新增]
+  learningSummary: LearningSummary;
 
   // 成就系统
   achievements: Achievement[];
@@ -234,160 +273,505 @@ interface UserStore {
   // Actions
   updateStats: (stats: Partial<StepStats>) => void;
   unlockAchievement: (achievementId: string) => void;
+  fetchLearningSummary: () => Promise<void>;  // [新增]
 }
 ```
 
-### 3.2 后端模块架构 (Rust)
+### 3.2 后端模块架构（Rust，V1.2 更新）
 
-#### 3.2.1 命令层 (Tauri Commands)
+#### 3.2.1 命令层（Tauri Commands）
 
 ```rust
-// commands/course.rs
+// commands/course.rs [改动]
 #[tauri::command]
-pub async fn get_courses() -> Result<Vec<Course>, String> {
-    // 获取所有课程列表
+pub async fn get_courses() -> Result<Vec<Course>, String> { }
+
+#[tauri::command]
+pub async fn get_courses_by_category(
+    category: Option<String>,   // [新增] 分类过滤
+    language: Option<String>,   // [新增] 语言过滤
+) -> Result<Vec<Course>, String> { }
+
+// commands/env_checker.rs [新增]
+#[tauri::command]
+pub async fn check_env(language: String) -> Result<EnvCheckResult, String> {
+    // 检测指定语言的运行环境
 }
 
 #[tauri::command]
-pub async fn get_course(course_id: String) -> Result<Course, String> {
-    // 获取单个课程详情
+pub async fn check_all_envs() -> Result<HashMap<String, EnvCheckResult>, String> {
+    // 批量检测所有支持语言的环境
+}
+
+// commands/user_center.rs [新增]
+#[tauri::command]
+pub async fn get_learning_summary() -> Result<LearningSummary, String> {
+    // 获取用户学习进度总览
 }
 
 #[tauri::command]
-pub async fn get_step(course_id: String, step_index: u32) -> Result<Step, String> {
-    // 获取课程步骤
+pub async fn get_course_progress_detail(
+    course_id: String,
+) -> Result<CourseProgressDetail, String> {
+    // 获取单门课程详细进度
 }
 
-// commands/progress.rs
+// commands/progress.rs [改动]
 #[tauri::command]
 pub async fn save_progress(
     course_id: String,
     step_index: u32,
     completed: bool,
-) -> Result<(), String> {
-    // 保存步骤完成状态
-}
+) -> Result<(), String> { }
 
 #[tauri::command]
-pub async fn get_user_progress() -> Result<UserProgress, String> {
-    // 获取用户总进度
-}
+pub async fn get_user_progress() -> Result<UserProgress, String> { }
 
-// commands/executor.rs
 #[tauri::command]
-pub async fn execute_code(
-    language: String,
-    code: String,
-) -> Result<ExecutionResult, String> {
-    // 执行用户代码
-}
-
-// commands/settings.rs
-#[tauri::command]
-pub async fn get_settings() -> Result<Settings, String> { }
-#[tauri::command]
-pub async fn save_settings(settings: Settings) -> Result<(), String> { }
-```
-
-#### 3.2.2 数据模型
-
-```rust
-// models/course.rs
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Course {
-    pub id: String,
-    pub title: String,
-    pub description: String,
-    pub language: String,        // java, python, javascript...
-    pub difficulty: Difficulty,
-    pub concepts: Vec<String>,
-    pub steps: Vec<Step>,
-    pub estimated_time: u32,     // 预计分钟数
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Difficulty {
-    Beginner,
-    Intermediate,
-    Advanced,
-}
-
-// models/step.rs
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(tag = "type")]
-pub enum Step {
-    Coding {
-        title: String,
-        concept: String,
-        instruction: String,
-        hint: Option<String>,
-        starter: Option<String>,
-        answer: String,
-        expected_output: Option<String>,
-        validate: ValidationRule,
-    },
-    Typing {
-        title: String,
-        concept: String,
-        instruction: String,
-        hint: Option<String>,
-        target_code: String,
-    },
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ValidationRule {
-    pub rule_type: ValidationType,
-    pub pattern: Option<String>,
-    pub keywords: Option<Vec<String>>,
-    pub exact_match: Option<bool>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ValidationType {
-    Contains,
-    Regex,
-    Exact,
-    AST,  // 抽象语法树验证（高级）
-}
-
-// models/user_progress.rs
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserProgress {
-    pub user_id: String,
-    pub course_progress: HashMap<String, CourseProgress>,
-    pub total_time: u64,
-    pub last_active: DateTime<Utc>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CourseProgress {
-    pub course_id: String,
-    pub completed_steps: Vec<u32>,
-    pub current_step: u32,
-    pub started_at: DateTime<Utc>,
-    pub completed_at: Option<DateTime<Utc>>,
-    pub time_spent: u64,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct StepStats {
-    pub step_id: String,
-    pub attempts: u32,
-    pub time_spent: u64,
-    pub errors_count: u32,
-    pub accuracy: f32,
-    pub wpm: Option<f32>,  // 仅 typing 模式
-}
+pub async fn get_learning_calendar(
+    year: u32,
+    month: u32,
+) -> Result<Vec<LearningDay>, String> { }  // [新增] 日历热力图数据
 ```
 
 ---
 
 ## 四、核心功能详细设计
 
-### 4.1 课程引擎
+### 4.1 课程分类体系（V1.2 新增）
 
-#### 4.1.1 步骤类型定义
+#### 4.1.1 分类体系设计
+
+课程采用**双维度分类**：
+- **学科分类（category）**：按学习方向划分，用于宏观导航
+- **编程语言（language）**：按语言筛选，对应编程环境
+
+```typescript
+// types/course.ts [改动]
+type CourseCategory =
+  | 'fundamentals'   // 编程基础
+  | 'frontend'       // 前端开发
+  | 'backend'        // 后端开发
+  | 'algorithms'     // 数据结构与算法
+  | 'database'       // 数据库
+  | 'devtools';      // 开发工具
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  language: string;             // java | python | javascript | ...
+  category: CourseCategory;     // [新增] 学科分类
+  tags: string[];               // [新增] 辅助标签
+  difficulty: Difficulty;
+  concepts: Vec<String>;
+  steps: Vec<Step>;
+  estimatedTime: number;
+  thumbnail?: string;           // [新增] 课程封面
+  prerequisites?: string[];     // [新增] 前置课程 ID
+}
+```
+
+```rust
+// models/course.rs [改动]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type)]
+#[sqlx(type_name = "TEXT")]
+pub enum CourseCategory {
+    Fundamentals,
+    Frontend,
+    Backend,
+    Algorithms,
+    Database,
+    DevTools,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Course {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub language: String,
+    pub category: CourseCategory,  // [新增]
+    pub tags: Vec<String>,         // [新增]
+    pub difficulty: Difficulty,
+    pub concepts: Vec<String>,
+    pub steps: Vec<Step>,
+    pub estimated_time: u32,
+    pub thumbnail: Option<String>, // [新增]
+    pub prerequisites: Vec<String>,// [新增]
+}
+```
+
+#### 4.1.2 课程内容格式（V1.2 更新）
+
+```json
+// course.json [改动]
+{
+  "id": "java-hello",
+  "title": "Java 入门：Hello World",
+  "description": "学习 Java 程序的基本结构，写出你的第一个程序",
+  "language": "java",
+  "category": "fundamentals",
+  "tags": ["入门", "Hello World", "基础语法"],
+  "difficulty": "beginner",
+  "concepts": ["基础语法", "main 方法", "输出语句"],
+  "estimatedMinutes": 15,
+  "thumbnail": "assets/java-hello.png",
+  "prerequisites": [],
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json"
+  ]
+}
+```
+
+#### 4.1.3 分类筛选 UI 设计
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  课程列表                                                        │
+├─────────────────────────────────────────────────────────────────┤
+│  学科分类：[全部] [编程基础] [前端] [后端] [算法] [数据库]         │
+│  编程语言：[全部] [Java] [Python] [JavaScript] [C++]             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │
+│  │ [编程基础]    │  │ [前端]       │  │ [算法]        │          │
+│  │ Java 入门    │  │ HTML/CSS     │  │ 排序算法      │           │
+│  │ ★★☆☆☆       │  │ ★★★☆☆       │  │ ★★★★☆        │          │
+│  │ 15min  0/8步 │  │ 20min  0/12步│  │ 30min  0/15步│           │
+│  └──────────────┘  └──────────────┘  └──────────────┘           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 4.2 编程环境检测（V1.2 新增）
+
+#### 4.2.1 设计决策（ADR-001）
+
+```
+# ADR-001: 编程环境检测触发时机
+
+## Status
+Accepted
+
+## Context
+coding 模式需要调用系统已安装的编程语言运行时（如 javac/java、python3）。
+用户可能未安装对应环境，需在进入 coding 步骤前完成检测，避免运行时报错。
+
+## Decision
+采用"延迟检测"策略：
+1. 课程列表页：展示每门课程所需环境，不强制检测
+2. 点击"开始课程"时：触发对应语言环境检测（带 1~2s 缓存）
+3. 检测失败：弹出 EnvCheckModal，给出安装引导，并提供"仅使用 Typing 模式学习"降级选项
+4. 检测结果缓存至 SQLite env_cache 表，TTL = 1小时，避免每次检测系统
+
+## Consequences
++ 用户能立刻了解环境情况，不会在学习中途被打断
++ Typing 模式可在无环境时平稳降级，保留学习体验
+- 一小时 TTL 可能导致用户安装环境后需等待或手动刷新
+```
+
+#### 4.2.2 环境检测流程
+
+```
+用户点击"开始课程"
+        │
+        ▼
+  课程含 coding 步骤？
+    │         │
+   否         是
+    │         ▼
+    │    查询 env_cache (TTL 1h)
+    │         │
+    │    命中缓存？
+    │      │     │
+    │     是     否
+    │      │     ▼
+    │      │  调用 check_env(language)
+    │      │     │
+    │      └─────┘
+    │         │
+    │    检测通过？
+    │      │     │
+    │     是     否
+    │      │     ▼
+    │      │  EnvCheckModal 弹出
+    │      │    ├── [去安装] → 打开安装引导链接
+    │      │    └── [跳过，仅 Typing 模式] → 降级进入
+    │      │
+    ▼      ▼
+   进入学习页（coding 或 typing 降级模式）
+```
+
+#### 4.2.3 数据模型
+
+```rust
+// models/env_status.rs [新增]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EnvCheckResult {
+    pub language: String,
+    pub available: bool,
+    pub version: Option<String>,   // 如 "java 21.0.1"
+    pub runtime_path: Option<String>,
+    pub error_message: Option<String>,
+    pub checked_at: DateTime<Utc>,
+}
+
+// 支持的检测方式
+// Java:        javac --version + java --version
+// Python:      python3 --version（fallback: python --version）
+// JavaScript:  node --version
+// C++:         g++ --version（fallback: clang++ --version）
+```
+
+```rust
+// commands/env_checker.rs [新增]
+#[tauri::command]
+pub async fn check_env(language: String) -> Result<EnvCheckResult, String> {
+    // 1. 先查缓存
+    if let Some(cached) = db::get_env_cache(&language).await? {
+        if cached.is_valid() { return Ok(cached.result); }
+    }
+
+    // 2. 执行检测
+    let result = match language.as_str() {
+        "java"       => detect_java().await,
+        "python"     => detect_python().await,
+        "javascript" => detect_node().await,
+        "cpp"        => detect_cpp().await,
+        _            => Err(format!("Unsupported language: {}", language)),
+    }?;
+
+    // 3. 写入缓存
+    db::save_env_cache(&language, &result).await?;
+    Ok(result)
+}
+
+async fn detect_java() -> Result<EnvCheckResult, String> {
+    // 检测 javac 和 java 是否在 PATH 中
+    let output = Command::new("javac")
+        .arg("--version")
+        .output()
+        .map_err(|_| "javac not found".to_string())?;
+
+    Ok(EnvCheckResult {
+        language: "java".to_string(),
+        available: output.status.success(),
+        version: parse_version(&output.stdout),
+        runtime_path: which::which("javac").ok().map(|p| p.display().to_string()),
+        error_message: if output.status.success() { None }
+                       else { Some("javac not found in PATH".to_string()) },
+        checked_at: Utc::now(),
+    })
+}
+```
+
+#### 4.2.4 前端 EnvCheckModal
+
+```typescript
+// components/env/EnvCheckModal.tsx [新增]
+interface EnvCheckModalProps {
+  language: string;
+  onConfirmInstall: () => void;   // 打开安装文档
+  onSkipToTyping: () => void;     // 降级为 typing 模式
+  onClose: () => void;
+}
+
+// 弹窗内容设计
+// ┌──────────────────────────────────────────┐
+// │  检测到未安装 Java 运行环境               │
+// │                                          │
+// │  coding 模式需要本地安装 Java (JDK 11+)   │
+// │  才能运行和验证你编写的代码。              │
+// │                                          │
+// │  [查看安装指南 ↗]                         │
+// │                                          │
+// │  安装完成后请重新进入课程，               │
+// │  检测结果将自动更新。                     │
+// │                                          │
+// │  ┌────────────────┐  ┌────────────────┐  │
+// │  │  先跳过，用打字  │  │   去安装 Java  │  │
+// │  │   模式练习      │  │               │  │
+// │  └────────────────┘  └────────────────┘  │
+// └──────────────────────────────────────────┘
+```
+
+#### 4.2.5 模式降级处理（LearnPage）
+
+```typescript
+// hooks/useEnvCheck.ts [新增]
+function useEnvCheck(language: string) {
+  const { envStatus, checkEnv } = useEnvStore();
+
+  const envReady = envStatus[language]?.available ?? null;
+
+  const effectiveMode = useCallback(
+    (requestedMode: StepType): StepType => {
+      // coding 步骤但环境不可用，降级为 typing
+      if (requestedMode === 'coding' && envReady === false) {
+        return 'typing';
+      }
+      return requestedMode;
+    },
+    [envReady]
+  );
+
+  return { envReady, effectiveMode, checkEnv };
+}
+```
+
+**模式降级说明：**
+
+| 步骤类型 | 环境状态 | 实际执行模式 | 说明 |
+|---------|---------|------------|------|
+| coding  | 可用    | coding     | 正常运行，可编译执行 |
+| coding  | 不可用  | typing     | 降级为照打模式，无法验证输出 |
+| typing  | 任意    | typing     | 不依赖环境，正常执行 |
+
+> **架构权衡**：降级时 coding 步骤的 `validation` 语义改变（无法验证输出，只能验证打字完成）。这是有意为之的取舍——保留学习路径连续性优先于严格验证正确性。
+
+---
+
+### 4.3 用户学习中心（V1.2 新增）
+
+#### 4.3.1 设计范围
+
+用户中心聚焦**轻量化进度追踪**，不做社交/排行功能（Phase 2 再议）。
+
+核心展示：
+1. **学习总览**：累计时长、完成课程数、步骤数
+2. **课程进度列表**：每门课的进度百分比、最后学习时间
+3. **学习热力图**：近 3 个月每日学习情况（类 GitHub contribution graph）
+
+#### 4.3.2 数据模型
+
+```typescript
+// types/user.ts [改动，新增 LearningSummary]
+interface LearningSummary {
+  totalMinutes: number;            // 总学习分钟数
+  completedCourses: number;        // 完成课程数
+  completedSteps: number;          // 完成步骤总数
+  currentStreak: number;           // 当前连续学习天数
+  longestStreak: number;           // 最长连续天数
+  courseProgress: CourseSummary[]; // 各课程进度
+  recentActivity: LearningDay[];   // 近期学习记录（热力图用）
+}
+
+interface CourseSummary {
+  courseId: string;
+  courseTitle: string;
+  language: string;
+  category: CourseCategory;
+  totalSteps: number;
+  completedSteps: number;
+  progressPercent: number;         // 0~100
+  lastStudiedAt: Date | null;
+  completedAt: Date | null;
+  timeSpentMinutes: number;
+}
+
+interface LearningDay {
+  date: string;                    // YYYY-MM-DD
+  minutesLearned: number;
+  stepsCompleted: number;
+}
+```
+
+```rust
+// models/user_progress.rs [改动]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct LearningSummary {
+    pub total_minutes: u64,
+    pub completed_courses: u32,
+    pub completed_steps: u32,
+    pub current_streak: u32,
+    pub longest_streak: u32,
+    pub course_progress: Vec<CourseSummary>,
+    pub recent_activity: Vec<LearningDay>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct LearningDay {
+    pub date: String,             // YYYY-MM-DD
+    pub minutes_learned: u32,
+    pub steps_completed: u32,
+}
+```
+
+#### 4.3.3 学习中心页面布局
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  用户中心                                                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  总学习时长      完成课程      完成步骤      连续学习             │
+│  ┌─────────┐   ┌─────────┐  ┌─────────┐  ┌─────────┐          │
+│  │  12.5h  │   │    3    │  │   48    │  │  7 天   │          │
+│  └─────────┘   └─────────┘  └─────────┘  └─────────┘          │
+│                                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│  学习日历 (近 3 个月)                                            │
+│  Mon  □ □ □ ■ □ □ □ □ ■ ■ ...                                  │
+│  Wed  □ ■ □ □ ■ □ ■ □ ■ □ ...                                  │
+│  Fri  ■ □ ■ □ □ ■ □ ■ □ ■ ...                                  │
+│  (颜色深浅 = 当日学习时长)                                        │
+├─────────────────────────────────────────────────────────────────┤
+│  课程进度                                                        │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ Java 入门    [编程基础]  ████████░░  80%   上次：今天     │   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │ Python 基础  [编程基础]  ████░░░░░░  40%   上次：2天前   │   │
+│  ├─────────────────────────────────────────────────────────┤   │
+│  │ 排序算法     [算法]      ██░░░░░░░░  20%   上次：5天前   │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 4.3.4 进度计算逻辑
+
+进度数据由 Rust 后端汇总计算，前端只展示。计算规则：
+
+```rust
+// commands/user_center.rs [新增]
+#[tauri::command]
+pub async fn get_learning_summary(
+    state: tauri::State<'_, AppState>,
+) -> Result<LearningSummary, String> {
+    let db = &state.db;
+    let user_id = get_current_user_id(db).await?;
+
+    // 1. 聚合各课程进度
+    let course_progress = db::get_all_course_progress(&user_id).await?;
+
+    // 2. 计算连续学习天数（基于 step_stats.last_attempt 按日聚合）
+    let streak = calc_streak(db, &user_id).await?;
+
+    // 3. 近 90 天热力图数据
+    let recent_activity = db::get_learning_days(db, &user_id, 90).await?;
+
+    // 4. 汇总
+    Ok(LearningSummary {
+        total_minutes: course_progress.iter().map(|c| c.time_spent / 60).sum(),
+        completed_courses: course_progress.iter()
+            .filter(|c| c.completed_at.is_some()).count() as u32,
+        completed_steps: course_progress.iter()
+            .map(|c| c.completed_steps.len()).sum::<usize>() as u32,
+        current_streak: streak.current,
+        longest_streak: streak.longest,
+        course_progress: course_progress.into_iter().map(CourseSummary::from).collect(),
+        recent_activity,
+    })
+}
+```
+
+---
+
+### 4.4 课程引擎（原有，保持不变）
+
+#### 4.4.1 步骤类型定义
 
 ```typescript
 // types/step.ts
@@ -405,378 +789,130 @@ interface BaseStep {
 
 interface CodingStep extends BaseStep {
   type: 'coding';
-  starter?: string;           // 起始代码
-  answer: string;             // 参考答案
-  expectedOutput?: string;    // 期望输出
+  starter?: string;
+  answer: string;
+  expectedOutput?: string;
   validation: ValidationRule;
 }
 
 interface TypingStep extends BaseStep {
   type: 'typing';
-  targetCode: string;         // 目标代码（逐字照打）
+  targetCode: string;
   expectedOutput?: string;
 }
 
 type Step = CodingStep | TypingStep;
 ```
 
-#### 4.1.2 步骤流转
+#### 4.4.2 步骤流转（V1.2 新增环境降级分支）
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    步骤状态机                           │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   [待开始] ──点击进入──> [进行中] ──完成验证──> [已完成] │
-│       ^                         │                       │
-│       │                         │ 未通过                │
-│       │                         v                       │
-│       └────────重新开始──── [进行中]                     │
-│                                                         │
-│   特殊情况：                                            │
-│   - typing 模式：逐字符匹配，实时反馈                     │
-│   - coding 模式：输入即验证 (500ms 防抖)                  │
-│   - 到达最后一步：触发完成页面                           │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                        步骤状态机 (V1.2)                      │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│   进入 coding 步骤                                           │
+│       │                                                      │
+│       ▼                                                      │
+│   检查环境状态 (envStore)                                     │
+│       │                                                      │
+│   ┌───┴───┐                                                  │
+│   环境OK   环境不可用                                         │
+│   │        │                                                 │
+│   ▼        ▼ (降级)                                          │
+│  coding   typing (跳过执行验证，仅完成打字即通过)              │
+│   模式     模式                                              │
+│   │        │                                                 │
+│   └───┬────┘                                                 │
+│       ▼                                                      │
+│  [进行中] ──完成──> [已完成]                                  │
+│       ^                │                                     │
+│       └────重试─────────┘ (未通过时)                         │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-### 4.2 代码编辑器
+---
 
-#### 4.2.1 编辑器选型
+### 4.5 代码执行引擎（原有，保持不变）
 
-| 编辑器 | 优点 | 缺点 | 适用场景 |
-|-------|------|------|---------|
-| CodeMirror 5 | 轻量、API 简单 | 样式旧 | 原型/简单场景 |
-| CodeMirror 6 | 模块化、性能好 | 学习曲线陡 | 生产推荐 |
-| Monaco | VSCode 同款、功能强 | 体积大 (2MB+) | 复杂编辑 |
+> 详见 V1.1 §4.3，无变更。
 
-**推荐**：CodeMirror 6 作为主编辑器
+---
 
-#### 4.2.2 编辑器配置
+### 4.6 数据持久化（V1.2 更新）
 
-```typescript
-// components/editor/CodeEditor.tsx
-const editorOptions: EditorViewOptions = {
-  extensions: [
-    // 语言支持
-    java(),
-    python(),
-    javascript(),
-
-    // 核心功能
-    lineNumbers(),              // 行号
-    highlightActiveLineGutter(), // 高亮当前行
-    highlightSpecialChars(),
-    history(),
-    foldGutter(),
-    drawSelection(),
-    dropCursor(),
-
-    // 编辑辅助
-    indentOnInput(),
-    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-    bracketMatching(),
-    closeBrackets(),
-    autocompletion(),
-    rectangularSelection(),
-    crosshairCursor(),
-    highlightActiveLine(),
-
-    // 键盘快捷键
-    keymap.of([
-      ...defaultKeymap,
-      ...historyKeymap,
-      ...foldKeymap,
-      ...completionKeymap,
-      indentWithTab,
-    ]),
-
-    // 主题
-    oneDark,
-  ],
-
-  // 配置
-  indentUnit: 4,
-  tabSize: 4,
-  lineWrapping: true,
-};
-```
-
-#### 4.2.3 打字模式高亮
-
-```typescript
-// components/editor/TypingEditor.tsx
-function highlightTypingErrors(typed: string, target: string, view: EditorView) {
-  const marks: Mark[] = [];
-
-  for (let i = 0; i < typed.length; i++) {
-    const char = typed[i];
-    const expected = target[i] || '';
-
-    if (char === expected) {
-      marks.push({
-        from: i,
-        to: i + 1,
-        class: 'cm-correct-char',
-      });
-    } else {
-      marks.push({
-        from: i,
-        to: i + 1,
-        class: 'cm-error-char',
-      });
-    }
-  }
-
-  // 应用标记
-  marks.forEach(mark => {
-    view.dispatch({
-      changes: { from: mark.from, to: mark.to, insert: typed.slice(mark.from, mark.to) },
-      effects: EditorView.decorations.reconfigure([
-        Decoration.mark({ class: mark.class }).range(mark.from)
-      ])
-    });
-  });
-}
-```
-
-### 4.3 代码执行引擎
-
-#### 4.3.1 架构设计
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                   代码执行请求                           │
-│                   (前端 → Tauri)                        │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-                          v
-┌─────────────────────────────────────────────────────────┐
-│              Rust Backend: executor 模块                │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐  │
-│  │   Java     │    │   Python    │    │  JavaScript │  │
-│  │  Executor  │    │  Executor   │    │  Executor   │  │
-│  └─────┬──────┘    └──────┬──────┘    └──────┬──────┘  │
-│        │                  │                  │         │
-│        └──────────────────┼──────────────────┘         │
-│                           │                             │
-│                           v                             │
-│              ┌─────────────────────┐                   │
-│              │   Sandbox Manager   │                   │
-│              │   (进程隔离/资源限制) │                   │
-│              └──────────┬──────────┘                   │
-│                         │                              │
-│                         v                              │
-│              ┌─────────────────────┐                   │
-│              │    Output Parser    │                   │
-│              │   (结果格式化)       │                   │
-│              └─────────────────────┘                   │
-└─────────────────────────────────────────────────────────┘
-                          │
-                          v
-┌─────────────────────────────────────────────────────────┐
-│              ExecutionResult                            │
-│  { success: boolean, output: string, error?: string,    │
-│    executionTime: number }                              │
-└─────────────────────────────────────────────────────────┘
-```
-
-#### 4.3.2 执行器实现
-
-```rust
-// executor/mod.rs
-pub struct Executor {
-    sandbox: Sandbox,
-    timeout: Duration,
-}
-
-impl Executor {
-    pub async fn execute(&self, lang: Language, code: &str)
-        -> Result<ExecutionResult, ExecutionError>
-    {
-        match lang {
-            Language::Java => self.execute_java(code).await,
-            Language::Python => self.execute_python(code).await,
-            Language::JavaScript => self.execute_js(code).await,
-        }
-    }
-
-    async fn execute_java(&self, code: &str) -> Result<ExecutionResult, ExecutionError> {
-        // 1. 写入临时文件
-        let temp_dir = self.sandbox.create_temp_dir()?;
-        let file_path = temp_dir.join("Main.java");
-        fs::write(&file_path, code)?;
-
-        // 2. 编译
-        let compile_output = Command::new("javac")
-            .arg(file_path)
-            .output()
-            .map_err(|e| ExecutionError::CompileError(e.to_string()))?;
-
-        if !compile_output.status.success() {
-            return Ok(ExecutionResult {
-                success: false,
-                output: String::new(),
-                error: String::from_utf8_lossy(&compile_output.stderr).to_string(),
-                execution_time: 0,
-            });
-        }
-
-        // 3. 运行（带超时）
-        let start = Instant::now();
-        let run_output = Command::new("java")
-            .current_dir(temp_dir)
-            .arg("-cp", ".")
-            .arg("Main")
-            .output();
-
-        // ... 处理运行结果
-    }
-}
-
-// executor/sandbox.rs
-pub struct Sandbox {
-    max_memory_mb: u64,
-    max_cpu_percent: u64,
-    max_time_ms: u64,
-}
-
-impl Sandbox {
-    // 使用 seccomp / Landlock 实现进程隔离
-    // 或使用轻量级方案：ulimit / cgroups
-}
-```
-
-#### 4.3.3 安全考虑
-
-| 风险 | 缓解措施 |
-|-----|---------|
-| 无限循环 | 设置执行超时 (5秒) |
-| 内存耗尽 | 限制进程内存 (256MB) |
-| 文件系统访问 | 隔离临时目录，禁止访问用户文件 |
-| 网络访问 | 禁止网络请求 |
-| 系统调用 | 使用 seccomp 过滤危险 syscall |
-
-### 4.4 数据持久化
-
-#### 4.4.1 SQLite 数据库设计
+#### 4.6.1 SQLite Schema（V2 迁移）
 
 ```sql
--- 用户表
-CREATE TABLE users (
-    id TEXT PRIMARY KEY,
-    display_name TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    last_active DATETIME
+-- ============================================================
+-- V2 Migration: 新增 env_cache 表，扩展 courses / step_stats 表
+-- ============================================================
+
+-- 1. courses 表增加 category、tags 字段
+ALTER TABLE courses ADD COLUMN category TEXT DEFAULT 'fundamentals';
+ALTER TABLE courses ADD COLUMN tags TEXT DEFAULT '[]';      -- JSON array
+ALTER TABLE courses ADD COLUMN thumbnail TEXT;
+ALTER TABLE courses ADD COLUMN prerequisites TEXT DEFAULT '[]'; -- JSON array
+
+-- 2. 新增环境缓存表
+CREATE TABLE IF NOT EXISTS env_cache (
+    language    TEXT PRIMARY KEY,
+    available   INTEGER NOT NULL,                    -- 0 | 1
+    version     TEXT,
+    runtime_path TEXT,
+    error_msg   TEXT,
+    checked_at  DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- 课程进度表
-CREATE TABLE course_progress (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL,
-    course_id TEXT NOT NULL,
-    current_step INTEGER DEFAULT 0,
-    completed_steps TEXT,  -- JSON array
-    started_at DATETIME,
-    completed_at DATETIME,
-    time_spent INTEGER DEFAULT 0,
+-- 3. 新增学习日历汇总表（按天聚合，避免每次全表扫描）
+CREATE TABLE IF NOT EXISTS learning_daily_summary (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id     TEXT NOT NULL,
+    date        TEXT NOT NULL,                       -- YYYY-MM-DD
+    minutes_learned INTEGER DEFAULT 0,
+    steps_completed INTEGER DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    UNIQUE(user_id, course_id)
+    UNIQUE(user_id, date)
 );
 
--- 步骤统计表
-CREATE TABLE step_stats (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL,
-    course_id TEXT NOT NULL,
-    step_index INTEGER NOT NULL,
-    attempts INTEGER DEFAULT 0,
-    time_spent INTEGER DEFAULT 0,
-    errors_count INTEGER DEFAULT 0,
-    accuracy REAL,
-    wpm REAL,
-    last_attempt DATETIME,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    UNIQUE(user_id, course_id, step_index)
-);
+-- 4. 原有表保持不变
+-- users, course_progress, step_stats, achievements, settings
 
--- 成就表
-CREATE TABLE achievements (
-    id TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
--- 设置表
-CREATE TABLE settings (
-    user_id TEXT PRIMARY KEY,
-    settings_json TEXT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+-- 索引优化
+CREATE INDEX IF NOT EXISTS idx_learning_daily_user_date
+    ON learning_daily_summary(user_id, date DESC);
+CREATE INDEX IF NOT EXISTS idx_course_progress_user
+    ON course_progress(user_id, completed_at);
 ```
 
-#### 4.4.2 前端存储服务
+#### 4.6.2 数据更新时机
 
-```typescript
-// services/courseService.ts
-export class CourseService {
-  constructor(private tauri: TauriContext) {}
-
-  async getCourses(): Promise<Course[]> {
-    return await this.tauri.invoke('get_courses');
-  }
-
-  async getCourse(courseId: string): Promise<Course> {
-    return await this.tauri.invoke('get_course', { courseId });
-  }
-
-  async saveProgress(courseId: string, stepIndex: number, completed: boolean) {
-    return await this.tauri.invoke('save_progress', {
-      courseId,
-      stepIndex,
-      completed,
-    });
-  }
-}
-
-// services/statsService.ts
-export class StatsService {
-  constructor(private tauri: TauriContext) {}
-
-  async recordStepAttempt(stats: StepStats) {
-    return await this.tauri.invoke('record_step_stats', { stats });
-  }
-
-  async getUserStats(): Promise<UserStats> {
-    return await this.tauri.invoke('get_user_stats');
-  }
-}
-```
+| 事件 | 触发操作 |
+|-----|---------|
+| 完成一个步骤 | `step_stats` 写入 + `learning_daily_summary` upsert |
+| 课程完成 | `course_progress.completed_at` 写入 |
+| 进入课程 | 检测环境 → 写/刷新 `env_cache` |
+| 打开用户中心 | `get_learning_summary()` 聚合查询 |
 
 ---
 
 ## 五、用户界面设计
 
-### 5.1 页面结构
+### 5.1 页面结构（V1.2 更新）
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    应用窗口框架                          │
 ├─────────────────────────────────────────────────────────┤
 │  ┌───────────────────────────────────────────────────┐  │
-│  │  标题栏 (原生或自定义)                             │  │
-│  │  [─ □ ×]            CodeStep                      │  │
+│  │  标题栏                                           │  │
+│  │  [─ □ ×]   CodeStep      [用户头像/进度]          │  │
 │  └───────────────────────────────────────────────────┘  │
 │  ┌───────────────────────────────────────────────────┐  │
 │  │                                                   │  │
-│  │                   内容区域                        │  │
-│  │                                                   │  │
-│  │   WelcomePage / CoursesPage / LearnPage / ...    │  │
-│  │                                                   │  │
+│  │  WelcomePage / CoursesPage / LearnPage /          │  │
+│  │  UserCenterPage / CompletePage                    │  │
 │  │                                                   │  │
 │  └───────────────────────────────────────────────────┘  │
 │  ┌───────────────────────────────────────────────────┐  │
@@ -785,487 +921,31 @@ export class StatsService {
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 学习界面布局
+### 5.2 学习界面布局（原有）
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Header: [← 退出]    Java 入门    [● ● ● ● ○ ○ ○ ○]  3/8        │
-├───────────────────────────────┬─────────────────────────────────┤
-│                               │  ┌─────────────────────────────┐│
-│  步骤 3 / 8                  │  │ Output                      ││
-│  ┌───────────────────────┐   │  │ ● ● ● Hello                 ││
-│  │ [概念] [难度] [coding] │   │  │ World                       ││
-│  └───────────────────────┘   │  └─────────────────────────────┘│
-│                               │                                 │
-│  输出第一行文字                │  ┌─────────────────────────────┐│
-│                               │  │ Main.java           [重置]  ││
-│  在 main 方法中使用            │  │ 1 │ public class Main {     ││
-│  System.out.println()         │  │ 2 │     public static...    ││
-│  输出文字。                    │  │ 3 │         System.out...   ││
-│                               │  └─────────────────────────────┘│
-│  ┌───────────────────────┐   │                                 │
-│  │ 💡 提示：              │   │  [✓ 正确！自动进入下一步...]     ││
-│  │ System.out.println(...) │   │                                 │
-│  └───────────────────────┘   │  [↑ 上一步]      [下一步 ↓]      ││
-│                               │                                 │
-│  💪 加油，你可以的！            │  Enter 验证 | F 专注模式 | Esc  ││
-└───────────────────────────────┴─────────────────────────────────┘
-```
+（保持 V1.1 §5.2 不变）
 
-### 5.3 打字练习模式布局
+### 5.3 打字练习模式布局（原有）
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Header: [← 退出]    Java 入门    [● ● ● ● ● ○ ○ ○]  5/8        │
-├───────────────────────────────┬─────────────────────────────────┤
-│                               │  ┌─────────────────────────────┐│
-│  步骤 5 / 8                  │  │ 统计面板                      ││
-│  ┌───────────────────────┐   │  │ ┌─────┐ ┌─────┐ ┌─────┐      ││
-│  │ [概念] [难度] [typing] │   │  │ │ 45  │ │ 96% │ │  2  │      ││
-│  └───────────────────────┘   │  │ │ WPM │ │准确率│ │错误 │      ││
-│                               │  │ └─────┘ └─────┘ └─────┘      ││
-│  添加 main 方法               │  │         ┌─────────┐           ││
-│                               │  │         │  62%   │           ││
-│  main 方法是 Java 程序的       │  │         │  进度   │           ││
-│  入口。请照着敲一遍，           │  │         └─────────┘           ││
-│  记住这个固定写法！             │  └─────────────────────────────┘│
-│                               │                                 │
-│  ┌───────────────────────┐   │  ┌─────────────────────────────┐│
-│  │ 💡 提示：              │   │  │ 🟢 目标代码 (只读)           ││
-│  │ 这是 Java 最常用的     │   │  │ 1 │ public class Main {      ││
-│  │ 代码片段               │   │  │ 2 │     public static...     ││
-│  └───────────────────────┘   │  └─────────────────────────────┘│
-│                               │                                 │
-│  💪 动手敲代码是最好的学习方式  │  ┌─────────────────────────────┐│
-└───────────────────────────────┴──│ 🔵 你的输入 (逐字验证) ────────┤
-                                   │ 1 │ public class Main {      │
-                                   │ 2 │     ████ (红色高亮错误)   │
-                                   └─────────────────────────────┘
-```
+（保持 V1.1 §5.3 不变）
 
 ---
 
-## 六、窗口与系统集成
+## 六、窗口与系统集成（原有）
 
-### 6.1 窗口管理
-
-```rust
-// src-tauri/src/main.rs
-fn main() {
-    tauri::Builder::default()
-        .setup(|app| {
-            // 获取主窗口
-            let window = app.get_webview_window("main").unwrap();
-
-            // 设置窗口属性
-            window.set_title("CodeStep - 一步步学编程")?;
-            window.set_min_size(Some(PhysicalSize::new(1024, 768)))?;
-            window.set_decorations(true)?;  // 使用原生标题栏
-            window.center()?;
-
-            Ok(())
-        })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-}
-```
-
-### 6.2 全局快捷键
-
-```rust
-// src-tauri/src/commands/mod.rs
-#[tauri::command]
-pub fn register_shortcuts(app: AppHandle) -> Result<(), String> {
-    use tauri::GlobalShortcutManager;
-
-    let mut manager = app.global_shortcut_manager();
-
-    // 注册全局快捷键 (即使应用未聚焦也能响应)
-    manager.register("CmdOrCtrl+Shift+L", || {
-        // 启动应用或聚焦窗口
-        if let Some(window) = app.get_webview_window("main") {
-            let _ = window.show();
-            let _ = window.set_focus();
-        }
-    })?;
-
-    Ok(())
-}
-```
-
-### 6.3 系统托盘
-
-```rust
-// src-tauri/src/tray.rs
-pub fn create_tray(app: &App) -> Result<(), tauri::Error> {
-    use tauri::menu::{Menu, MenuItem};
-    use tauri::tray::TrayIconBuilder;
-
-    let quit = MenuItem::with_id(app, "quit", "退出", true, None::<&str>)?;
-    let show = MenuItem::with_id(app, "show", "显示窗口", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&show, &quit])?;
-
-    TrayIconBuilder::new()
-        .icon(app.default_window_icon().unwrap().clone())
-        .menu(&menu)
-        .on_menu_event(|app, event| {
-            match event.id.as_ref() {
-                "quit" => {
-                    app.exit(0);
-                }
-                "show" => {
-                    if let Some(window) = app.get_webview_window("main") {
-                        let _ = window.show();
-                    }
-                }
-                _ => {}
-            }
-        })
-        .build(app)?;
-
-    Ok(())
-}
-```
-
-### 6.4 自动更新
-
-```rust
-// tauri.conf.json
-{
-  "plugins": {
-    "updater": {
-      "pubkey": "YOUR_PUBLIC_KEY",
-      "endpoints": [
-        "https://releases.codestep.app/update/{{target}}/{{current_version}}"
-      ],
-      "dialog": true
-    }
-  }
-}
-```
+（保持 V1.1 §六 不变）
 
 ---
 
-## 七、课程加载系统
+## 七、课程加载系统（原有）
 
-### 7.1 设计理念
-
-课程是应用的核心内容，采用**混合架构**实现动态加载，兼顾离线体验和内容扩展能力。
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                   课程加载优先级                          │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   1️⃣ [最高] 用户自定义课程包 (./courses/*.codestep)      │
-│           ↓ 不存在                                      │
-│   2️⃣ 本地内置课程 (bundled with app)                   │
-│           ↓ 需要更新                                    │
-│   3️⃣ 远程课程市场 (api.codestep.app/courses)           │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 7.2 课程来源类型
-
-| 来源 | 位置 | 更新方式 | 适用场景 |
-|------|------|---------|---------|
-| 内置课程 | `src-tauri/courses/` | 随应用发版 | 核心教学内容 |
-| 用户课程 | `~/.codestep/courses/` | 用户手动导入 | 自定义/社区课程 |
-| 远程课程 | API 接口 | 自动/手动检查更新 | 持续更新的内容 |
-
-### 7.3 前端加载服务
-
-```typescript
-// services/courseLoader.ts
-
-/** 课程加载器接口 */
-interface ICourseLoader {
-  loadCourse(id: string): Promise<Course>;
-  loadCourses(): Promise<Course[]>;
-  checkUpdates(): Promise<CourseUpdate[]>;
-}
-
-/** 混合课程加载器 */
-class HybridCourseLoader implements ICourseLoader {
-  constructor(
-    private userCourses: UserCourseProvider,
-    private bundledCourses: BundledCourseProvider,
-    private remoteCourses: RemoteCourseProvider
-  ) {}
-
-  async loadCourse(id: string): Promise<Course> {
-    // 1. 优先检查用户自定义课程
-    const userCourse = await this.userCourses.load(id);
-    if (userCourse) return userCourse;
-
-    // 2. 检查内置课程
-    const bundledCourse = await this.bundledCourses.load(id);
-    if (bundledCourse) return bundledCourse;
-
-    // 3. 从远程获取（可能触发下载）
-    return await this.remoteCourses.load(id);
-  }
-
-  async loadCourses(): Promise<Course[]> {
-    // 合并所有来源的课程列表
-    const [userCourses, bundledCourses, remoteCourses] = await Promise.all([
-      this.userCourses.list(),
-      this.bundledCourses.list(),
-      this.remoteCourses.list(),
-    ]);
-
-    // 去重：用户课程 > 内置课程 > 远程课程
-    const courseMap = new Map<string, Course>();
-
-    // 按优先级添加
-    remoteCourses.forEach(c => courseMap.set(c.id, c));
-    bundledCourses.forEach(c => courseMap.set(c.id, c));
-    userCourses.forEach(c => courseMap.set(c.id, c));
-
-    return Array.from(courseMap.values());
-  }
-}
-```
-
-### 7.4 后端加载命令 (Rust)
-
-```rust
-// commands/course_loader.rs
-
-#[derive(Debug, Clone)]
-pub enum CourseSource {
-    Bundled,    // 内置课程
-    User,       // 用户课程
-    Remote,     // 远程课程
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CourseMetadata {
-    pub id: String,
-    pub title: String,
-    pub language: String,
-    pub difficulty: Difficulty,
-    pub step_count: u32,
-    pub estimated_minutes: u32,
-    pub version: String,
-    pub source: CourseSource,
-}
-
-#[tauri::command]
-pub async fn get_course_metadata(id: String) -> Result<CourseMetadata, String> {
-    // 按优先级查找课程元数据
-    // 1. 用户目录
-    // 2. 内置资源
-    // 3. 远程 API
-}
-
-#[tauri::command]
-pub async fn get_all_courses_metadata() -> Result<Vec<CourseMetadata>, String> {
-    // 聚合所有课程源，返回列表
-}
-
-#[tauri::command]
-pub async fn load_step(
-    course_id: String,
-    step_index: u32,
-) -> Result<Step, String> {
-    // 按需加载单个步骤内容
-}
-
-#[tauri::command]
-pub async fn import_user_course(path: String) -> Result<CourseMetadata, String> {
-    // 导入用户课程包 (.codestep)
-}
-
-#[tauri::command]
-pub async fn check_course_updates() -> Result<Vec<CourseUpdate>, String> {
-    // 检查内置/远程课程更新
-}
-
-#[tauri::command]
-pub async fn download_course(id: String) -> Result<(), String> {
-    // 下载远程课程到本地
-}
-```
-
-### 7.5 课程包格式 (.codestep)
-
-```
-my-course.codestep/          # ZIP 包结构
-├── manifest.json            # 元数据清单
-├── course.json             # 课程定义
-├── steps/                  # 步骤内容
-│   ├── step-01.json
-│   └── step-02.json
-└── assets/                 # 资源文件
-    └── logo.png
-```
-
-```json
-// manifest.json
-{
-  "id": "java-algorithms",
-  "title": "Java 算法入门",
-  "version": "1.0.0",
-  "author": "李四",
-  "createdAt": "2026-05-01",
-  "compatibility": "^2.0.0",
-  "checksum": "sha256:abc123...",
-  "files": [
-    "course.json",
-    "steps/step-01.json",
-    "steps/step-02.json",
-    "assets/logo.png"
-  ]
-}
-```
-
-### 7.6 渐进式加载策略
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                课程内容加载策略                          │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   课程列表页：                                           │
-│   └── 只加载元数据 (id, title, difficulty, progress)     │
-│       └── 体积小 (每课程 ~500B)，快速展示               │
-│                                                         │
-│   进入学习页：                                           │
-│   └── 按需加载当前步骤 + 预加载下一步                    │
-│       └── 支持大课程 (100+ 步骤) 不卡顿                  │
-│                                                         │
-│   步骤结构：                                             │
-│   ├── step-01.json  (~2KB)                             │
-│   ├── step-02.json  (~2KB)                              │
-│   └── ...                                              │
-│                                                         │
-│   远程课程：                                             │
-│   └── 首步立即可用，后续步骤后台下载                     │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 7.7 远程 API 设计
-
-```typescript
-// API 端点
-
-interface CourseListResponse {
-  courses: CourseMetadata[];
-  total: number;
-}
-
-interface CourseDetailResponse {
-  course: Course;
-  latestVersion: string;
-  changelog?: string;
-}
-
-interface StepResponse {
-  step: Step;
-  nextStep?: StepMetadata;  // 预加载下一题
-}
-
-// HTTP 端点
-GET  /api/v1/courses                    // 课程列表
-GET  /api/v1/courses/:id                // 课程详情
-GET  /api/v1/courses/:id/steps/:index   // 单步内容
-GET  /api/v1/courses/:id/download       // 下载课程包
-GET  /api/v1/courses/:id/updates        // 检查更新
-```
-
-### 7.8 更新机制
-
-```rust
-// 更新检查逻辑
-async fn check_updates() -> Result<Vec<CourseUpdate>, Error> {
-    let mut updates = Vec::new();
-
-    // 1. 检查内置课程更新
-    let bundled_updates = check_bundled_updates().await?;
-    updates.extend(bundled_updates);
-
-    // 2. 检查远程课程更新
-    let remote_updates = check_remote_updates().await?;
-    updates.extend(remote_updates);
-
-    Ok(updates)
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CourseUpdate {
-    pub course_id: String,
-    pub current_version: String,
-    pub latest_version: String,
-    pub changelog: String,
-    pub download_url: Option<String>,
-}
-```
-
-| 更新场景 | 更新方式 | 实现 |
-|---------|---------|------|
-| 内置课程 | 应用版本更新 | 发版时替换 bundled 目录 |
-| 远程课程 | 增量更新 + checksum | 比对 checksum，只下差异 |
-| 用户课程 | 无自动更新 | 依赖作者手动维护 |
-
-### 7.9 课程市场 (未来规划)
-
-```
-┌─────────────────────────────────────────────────────────┐
-│              课程市场功能架构 (Phase 3)                   │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   创作者平台：                                           │
-│   ├── 课程编辑器 (可视化/JSON)                          │
-│   ├── 预览和测试                                        │
-│   ├── 版本管理                                          │
-│   └── 发布审核                                          │
-│                                                         │
-│   课程分发：                                             │
-│   ├── 免费/付费课程                                     │
-│   ├── 课程排行/推荐                                     │
-│   ├── 用户评分/评论                                     │
-│   └── 下载统计                                          │
-│                                                         │
-│   收益分成：                                             │
-│   ├── 创作者仪表盘                                      │
-│   ├── 收入统计                                          │
-│   └── 提现功能                                          │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 7.10 实施路径
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                   课程系统实施计划                       │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   MVP (V1.0):                                           │
-│   ├── ✅ 内置 JSON 课程                                 │
-│   └── 适合：首批 5-10 个核心课程                        │
-│                                                         │
-│   成熟期 (V2.0):                                        │
-│   ├── 增加本地课程包导入 (.codestep)                    │
-│   ├── 用户可导入自己或社区的课程                        │
-│   └── 课程搜索/筛选                                     │
-│                                                         │
-│   生态期 (V3.0):                                        │
-│   ├── 远程课程市场 API                                  │
-│   ├── 创作者平台                                        │
-│   └── UGC 内容生态                                      │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
+（保持 V1.1 §七 不变）
 
 ---
 
-## 八、课程内容格式
+## 八、课程内容格式（V1.2 更新）
 
-### 8.1 课程元数据 (course.json)
+### 8.1 课程元数据（course.json，V1.2 更新）
 
 ```json
 {
@@ -1273,9 +953,13 @@ pub struct CourseUpdate {
   "title": "Java 入门：Hello World",
   "description": "学习 Java 程序的基本结构，写出你的第一个程序",
   "language": "java",
+  "category": "fundamentals",
+  "tags": ["入门", "Hello World", "基础语法"],
   "difficulty": "beginner",
   "concepts": ["基础语法", "main 方法", "输出语句"],
   "estimatedMinutes": 15,
+  "thumbnail": "assets/java-hello.png",
+  "prerequisites": [],
   "steps": [
     "steps/step-01.json",
     "steps/step-02.json"
@@ -1283,89 +967,23 @@ pub struct CourseUpdate {
 }
 ```
 
-### 8.2 步骤文件格式
+### 8.2 步骤文件格式（无变更）
 
-```json
-// steps/step-01.json (Coding 模式)
-{
-  "type": "coding",
-  "title": "理解 Java 程序结构",
-  "concept": "基础语法",
-  "difficulty": "beginner",
-  "instruction": "每个 Java 程序都由一个类组成。类是 Java 程序的基本单位。请在编辑器中写一个空的 Main 类。",
-  "hint": "public class Main { }",
-  "starter": "",
-  "answer": "public class Main {\n\n}",
-  "expectedOutput": "",
-  "validation": {
-    "type": "contains",
-    "value": "class Main"
-  },
-  "encouragement": "类名必须与文件名相同！"
-}
-```
-
-```json
-// steps/step-02.json (Typing 模式)
-{
-  "type": "typing",
-  "title": "添加 main 方法",
-  "concept": "main 方法",
-  "difficulty": "beginner",
-  "instruction": "main 方法是 Java 程序的入口。请照着敲一遍，记住这个固定写法！",
-  "hint": "这是 Java 最常用的代码片段",
-  "expectedOutput": "",
-  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
-  "encouragement": "main 方法是每个 Java 程序的起点！"
-}
-```
+（保持 V1.1 §8.2 不变）
 
 ---
 
-## 九、成就系统设计
+## 九、成就系统设计（原有）
 
-### 8.1 成就类型
-
-```typescript
-interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  category: 'course' | 'streak' | 'stats' | 'special';
-  requirement: AchievementRequirement;
-  reward?: {
-    xp: number;
-    badge?: string;
-  };
-}
-
-type AchievementRequirement =
-  | { type: 'complete_course'; courseId: string }
-  | { type: 'complete_courses'; count: number }
-  | { type: 'perfect_typing'; accuracy: number }
-  | { type: 'speed_typing'; wpm: number }
-  | { type: 'daily_streak'; days: number }
-  | { type: 'total_time'; minutes: number };
-```
-
-### 8.2 内置成就
-
-| 成就 ID | 名称 | 条件 | XP |
-|--------|------|------|-----|
-| first-course | 初出茅庐 | 完成第一个课程 | 100 |
-| java-master | Java 大师 | 完成所有 Java 课程 | 500 |
-| perfect-run | 完美无瑕 | 单次打字准确率 100% | 50 |
-| speed-demon | 速度达人 | 单次打字 WPM > 60 | 75 |
-| week-warrior | 一周战士 | 连续学习 7 天 | 200 |
-| time-investor | 时间投资者 | 累计学习 10 小时 | 150 |
+（保持 V1.1 §九 不变）
 
 ---
 
-## 十、验收标准
+## 十、验收标准（V1.2 补充）
 
-### 9.1 功能验收
+### 10.1 功能验收
 
+**原有**
 - [ ] 用户可以浏览课程列表并选择课程
 - [ ] Coding 模式：用户可以自由编写代码并验证
 - [ ] Typing 模式：用户可以照着敲代码，实时看到对错
@@ -1375,14 +993,26 @@ type AchievementRequirement =
 - [ ] 专注模式正确隐藏/显示元素
 - [ ] 课程完成后显示成就和统计
 
-### 9.2 性能验收
+**V1.2 新增**
+- [ ] 课程分类筛选正确过滤课程，"全部"时显示所有课程
+- [ ] 开始含 coding 步骤的课程时触发环境检测
+- [ ] 环境检测结果在 1 小时内命中缓存，不重复检测
+- [ ] 环境不可用时，EnvCheckModal 正确弹出并引导用户
+- [ ] 选择"跳过安装"后，coding 步骤降级为 typing 模式正常运行
+- [ ] 用户中心正确显示总学习时长、完成课程数、连续学习天数
+- [ ] 学习热力图正确反映近 3 个月的学习记录
+- [ ] 每门课程的进度百分比计算正确
+
+### 10.2 性能验收
 
 - [ ] 应用启动时间 < 3 秒
 - [ ] 页面切换动画流畅 (60fps)
 - [ ] 打字输入延迟 < 16ms
 - [ ] 代码验证响应时间 < 100ms
+- [ ] 环境检测响应时间 < 2s（首次），< 50ms（缓存命中）
+- [ ] 学习中心数据加载 < 500ms
 
-### 9.3 安全验收
+### 10.3 安全验收
 
 - [ ] 用户代码在沙箱中执行
 - [ ] 执行超时设置为 5 秒
@@ -1391,15 +1021,75 @@ type AchievementRequirement =
 
 ---
 
-## 十一、后续规划
+## 十一、架构决策记录（ADRs）
 
-### Phase 2: 扩展功能
+### ADR-001：编程环境检测时机（见 §4.2.1）
+
+### ADR-002：Coding 步骤降级策略
+
+```
+# ADR-002: Coding 步骤在无环境时的降级策略
+
+## Status
+Accepted
+
+## Context
+用户选择不安装编程环境，但课程中存在 coding 类型步骤。
+需决定此时的行为：拒绝进入、隐藏 coding 步骤、还是降级执行。
+
+## Decision
+将 coding 步骤降级为 typing 模式执行：
+- 显示目标代码（即 answer 字段内容）供用户照打
+- 跳过代码执行和输出验证
+- 通过条件：用户完整打完 answer 代码
+- 界面显示提示 badge："Typing 模式（未安装 Java 环境）"
+
+## Consequences
++ 学习路径连续，用户不会因环境问题卡关
++ 仍能建立代码肌肉记忆（typing 的核心价值）
+- 无法验证代码逻辑正确性，用户可能误以为代码没问题
+- 进度数据中 coding 步骤以 typing 形式完成，统计有混淆风险
+  → 缓解：在进度详情中标注该步骤的完成模式
+```
+
+### ADR-003：用户学习中心数据存储方式
+
+```
+# ADR-003: 学习中心数据：实时计算 vs. 预聚合
+
+## Status
+Accepted
+
+## Context
+用户中心需要展示热力图、连续天数、总时长等汇总数据。
+可选方案：每次打开时从 step_stats 实时聚合，或维护独立汇总表。
+
+## Decision
+采用混合方案：
+- learning_daily_summary 表：每次完成步骤时 upsert，保持实时
+- 复杂聚合（连续天数、总时长）：打开用户中心时按需计算，结果不持久化
+- 热力图数据：直接从 learning_daily_summary 查询，O(90) 次读，性能可控
+
+## Consequences
++ 无复杂 trigger 或异步计算，实现简单
++ 热力图数据始终准确
+- 连续天数在每次打开用户中心时计算，但数据量小（<365行），可接受
+```
+
+---
+
+## 十二、后续规划
+
+### Phase 2: 扩展功能（包含 V1.2 新增项目）
 
 1. **多语言支持** - Python, JavaScript, C++
 2. **代码执行** - 实时运行用户代码并显示输出
 3. **用户课程包** - 导入自定义 .codestep 课程
 4. **课程搜索/筛选** - 快速找到想学的内容
 5. **社区功能** - 分享代码、讨论问题
+6. ~~课程分类~~ - **已在 V1.2 完成**
+7. ~~环境检测与降级~~ - **已在 V1.2 完成**
+8. ~~用户学习中心~~ - **已在 V1.2 完成**
 
 ### Phase 3: 高级功能
 
@@ -1407,10 +1097,11 @@ type AchievementRequirement =
 2. **AI 辅助** - 智能提示、代码解释
 3. **自适应学习** - 根据表现调整练习难度
 4. **团队模式** - 多人同时学习、竞赛
+5. **用户中心增强** - 成就分享、学习报告导出
 
 ---
 
-## 十二、附录
+## 十三、附录
 
 ### A. 快捷键参考
 
@@ -1436,6 +1127,7 @@ type AchievementRequirement =
 | Zustand | 4.x | 状态管理 |
 | Vite | 5.x | 构建工具 |
 | rusqlite | 0.31.x | SQLite 绑定 |
+| which | 4.x | Rust PATH 查找（新增，用于环境检测） |
 
 ### C. 参考资料
 

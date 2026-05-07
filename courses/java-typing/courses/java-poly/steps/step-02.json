@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Abstract Class 抽象类",
+  "concept": "abstract class",
+  "difficulty": "intermediate",
+  "instruction": "抽象类不能直接实例化，可以有抽象方法。\n\n照着敲，感受抽象类的用法。",
+  "hint": "抽象类用 abstract 关键字",
+  "targetCode": "abstract class Animal {\n    String name;\n    \n    public Animal(String name) {\n        this.name = name;\n    }\n    \n    abstract void sound();\n    \n    public void eat() {\n        System.out.println(name + \" is eating...\");\n    }\n}\n\nclass Dog extends Animal {\n    public Dog(String name) {\n        super(name);\n    }\n    \n    @Override\n    public void sound() {\n        System.out.println(name + \" says: Woof!\");\n    }\n}",
+  "encouragement": "抽象类是模板模式的核心！"
+}

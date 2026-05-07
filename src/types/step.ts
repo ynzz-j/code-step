@@ -12,6 +12,13 @@ export interface ValidationRule {
   exactMatch?: boolean;
 }
 
+export interface ExecutionResult {
+  success: boolean;
+  output: string;
+  error: string | null;
+  execution_time_ms: number;
+}
+
 export interface BaseStep {
   id: string;
   type: StepType;

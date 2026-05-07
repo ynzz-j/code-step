@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "BeanDefinition Interface",
+  "concept": "BeanDefinition",
+  "chapter": "Chapter 2: Bean Definition and Registry",
+  "difficulty": "hell",
+  "instruction": "BeanDefinition encapsulates Bean configuration metadata.\n\nType it out and understand how Bean is defined.",
+  "hint": "BeanDefinition contains all Bean configuration",
+  "targetCode": "package org.springframework.beans.factory.config;\n\npublic interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {\n    \n    String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;\n    String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;\n    \n    void setParentName(String parentName);\n    String getParentName();\n    void setBeanClassName(String beanClassName);\n    String getBeanClassName();\n    void setScope(String scope);\n    String getScope();\n    void setLazyInit(boolean lazyInit);\n    boolean isLazyInit();\n    void setDependsOn(String... dependsOn);\n    String[] getDependsOn();\n    void setPrimary(boolean primary);\n    boolean isPrimary();\n    ConstructorArgumentValues getConstructorArgumentValues();\n    MutablePropertyValues getPropertyValues();\n    boolean isSingleton();\n    boolean isPrototype();\n}",
+  "encouragement": "Bean metadata definition!"
+}

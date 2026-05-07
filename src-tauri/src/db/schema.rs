@@ -1,4 +1,4 @@
-use rusqlite::Connection;
+use rusqlite::{params, Connection};
 
 pub fn run_migrations(conn: &Connection) -> Result<(), rusqlite::Error> {
     conn.execute_batch(
@@ -10,12 +10,24 @@ pub fn run_migrations(conn: &Connection) -> Result<(), rusqlite::Error> {
             last_active DATETIME
         );
 
+        CREATE TABLE IF NOT EXISTS courses (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            language TEXT NOT NULL,
+            category TEXT DEFAULT 'fundamentals',
+            difficulty TEXT DEFAULT 'beginner',
+            concepts TEXT DEFAULT '[]',
+            estimated_minutes INTEGER DEFAULT 15,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
         CREATE TABLE IF NOT EXISTS course_progress (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT NOT NULL,
             course_id TEXT NOT NULL,
             current_step INTEGER DEFAULT 0,
-            completed_steps TEXT,
+            completed_steps TEXT DEFAULT '[]',
             started_at DATETIME,
             completed_at DATETIME,
             time_spent INTEGER DEFAULT 0,
@@ -49,6 +61,15 @@ pub fn run_migrations(conn: &Connection) -> Result<(), rusqlite::Error> {
             user_id TEXT PRIMARY KEY,
             settings_json TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS env_cache (
+            language TEXT PRIMARY KEY,
+            available INTEGER NOT NULL,
+            version TEXT,
+            runtime_path TEXT,
+            error_msg TEXT,
+            checked_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         ",
     )?;

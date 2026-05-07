@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "统一响应格式 Result",
+  "concept": "Unified Response",
+  "difficulty": "advanced",
+  "instruction": "定义统一的响应格式，包含状态码、消息和数据。\n\n照着敲，感受 RESTful API 的标准响应。",
+  "hint": "统一响应包含 code, message, data",
+  "targetCode": "public class Result<T> {\n    private int code;\n    private String message;\n    private T data;\n    \n    public static <T> Result<T> success(T data) {\n        Result<T> r = new Result<>();\n        r.code = 200;\n        r.message = \"success\";\n        r.data = data;\n        return r;\n    }\n    \n    public static <T> Result<T> error(String msg) {\n        Result<T> r = new Result<>();\n        r.code = 500;\n        r.message = msg;\n        return r;\n    }\n}",
+  "encouragement": "统一响应格式！"
+}

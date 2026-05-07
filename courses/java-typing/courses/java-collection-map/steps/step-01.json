@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "HashMap 的创建",
+  "concept": "HashMap",
+  "difficulty": "intermediate",
+  "instruction": "HashMap 存储键值对（key-value）。\n\n照着敲，感受 HashMap 的创建方式。",
+  "hint": "HashMap 需要 import java.util.HashMap;",
+  "targetCode": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> scores = new HashMap<>();\n        scores.put(\"Chinese\", 85);\n        scores.put(\"Math\", 92);\n        scores.put(\"English\", 78);\n        System.out.println(scores.size());\n    }\n}",
+  "encouragement": "HashMap 键值对存储！"
+}

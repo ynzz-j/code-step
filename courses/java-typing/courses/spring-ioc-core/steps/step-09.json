@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "InjectionMetadata",
+  "concept": "InjectionMetadata",
+  "chapter": "Chapter 4: Dependency Injection",
+  "difficulty": "hell",
+  "instruction": "InjectionMetadata manages metadata for injection.\n\nType it out and understand the complete injection flow.",
+  "hint": "InjectionMetadata encapsulates injection information",
+  "targetCode": "public class InjectionMetadata {\n    \n    private final Class<?> targetClass;\n    private final Collection<InjectedElement> checkedElements;\n    \n    public InjectionMetadata(Class<?> targetClass, Collection<InjectedElement> elements) {\n        this.targetClass = targetClass;\n        this.checkedElements = elements;\n    }\n    \n    public void inject(Object target, String beanName, PropertyValues pvs) throws Throwable {\n        ReflectionUtils.doWithLocalFields(targetClass, field -> {\n            InjectedElement element = findInjectedElement(targetClass, field);\n            if (element != null) {\n                element.inject(target, beanName, pvs);\n            }\n        });\n        ReflectionUtils.doWithLocalMethods(targetClass, method -> {\n            method = BridgeMethodResolver.findBridgedMethod(method);\n            InjectedElement element = findInjectedElement(targetClass, method);\n            if (element != null) {\n                element.inject(target, beanName, pvs);\n            }\n        });\n    }\n}",
+  "encouragement": "Injection metadata management!"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@SpringBootApplication 入口",
+  "concept": "Spring Boot Application",
+  "difficulty": "advanced",
+  "instruction": "每个 Spring Boot 应用都有一个启动类。\n\n照着敲，记住这个固定的入口写法。",
+  "hint": "@SpringBootApplication 是启动注解",
+  "targetCode": "import org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\n\n@SpringBootApplication\npublic class Application {\n    public static void main(String[] args) {\n        SpringApplication.run(Application.class, args);\n    }\n}",
+  "encouragement": "Spring Boot 入口类！"
+}

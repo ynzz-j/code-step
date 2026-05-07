@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@GetMapping 获取数据",
+  "concept": "GetMapping",
+  "difficulty": "advanced",
+  "instruction": "用 @GetMapping 处理 GET 请求。\n\n照着敲，记住这个模式。",
+  "hint": "@GetMapping 处理GET请求",
+  "targetCode": "import org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class UserController {\n    \n    @GetMapping(\"/api/users\")\n    public String getUsers() {\n        return \"Get all users\";\n    }\n    \n    @GetMapping(\"/api/user/1\")\n    public String getUser() {\n        return \"Get user by id\";\n    }\n}",
+  "encouragement": "GET 请求处理！"
+}

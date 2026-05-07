@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "定义 Bean",
+  "concept": "@Component",
+  "difficulty": "advanced",
+  "instruction": "用 @Component 注解将类注册为 Spring Bean。\n\n照着敲，记住这个模式。",
+  "hint": "@Component 注解标记一个Bean",
+  "targetCode": "import org.springframework.stereotype.Component;\n\n@Component\npublic class UserService {\n    public String getUser() {\n        return \"Tom\";\n    }\n}",
+  "encouragement": "Bean 定义成功！"
+}

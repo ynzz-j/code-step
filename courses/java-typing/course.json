@@ -1,0 +1,155 @@
+{
+  "id": "java-typing",
+  "title": "Java Typing Course",
+  "description": "Master Java by typing real code - from syntax basics to Spring IoC source code",
+  "language": "java",
+  "difficulty": "beginner",
+  "courses": [
+    {
+      "id": "java-syntax-basic",
+      "title": "Basic Program Structure",
+      "description": "Learn Java program basic structure",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": ["class", "main method", "print statement"],
+      "estimatedMinutes": 10,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json"]
+    },
+    {
+      "id": "java-syntax-cond",
+      "title": "Conditional Statements",
+      "description": "Master if/else conditional statements",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": ["if", "else", "else-if"],
+      "estimatedMinutes": 8,
+      "steps": ["steps/step-01.json", "steps/step-02.json"]
+    },
+    {
+      "id": "java-syntax-loop",
+      "title": "Loop Statements",
+      "description": "Master for and while loops",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": ["for loop", "while loop", "do-while"],
+      "estimatedMinutes": 12,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json"]
+    },
+    {
+      "id": "java-syntax-method",
+      "title": "Method Definition",
+      "description": "Learn method definition, parameters, return values",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": ["method", "parameter", "return value", "overloading"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json", "steps/step-04.json"]
+    },
+    {
+      "id": "java-syntax-array",
+      "title": "Array Operations",
+      "description": "Master array declaration and traversal",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": ["array declaration", "array initialization", "array traversal"],
+      "estimatedMinutes": 10,
+      "steps": ["steps/step-01.json", "steps/step-02.json"]
+    },
+    {
+      "id": "java-oop-patterns",
+      "title": "OOP Patterns",
+      "description": "Master class, constructor, and inheritance",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": ["class", "constructor", "inheritance", "polymorphism"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json"]
+    },
+    {
+      "id": "java-collection-list",
+      "title": "List Collection",
+      "description": "Master ArrayList operations",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["ArrayList", "add", "get", "size"],
+      "estimatedMinutes": 8,
+      "steps": ["steps/step-01.json"]
+    },
+    {
+      "id": "java-collection-map",
+      "title": "Map Collection",
+      "description": "Master HashMap operations",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["HashMap", "put", "get", "keySet"],
+      "estimatedMinutes": 12,
+      "steps": ["steps/step-01.json", "steps/step-02.json"]
+    },
+    {
+      "id": "java-exception",
+      "title": "Exception Handling",
+      "description": "Master try-catch and exception handling",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["try-catch", "throw", "throws", "finally"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json", "steps/step-04.json"]
+    },
+    {
+      "id": "java-poly",
+      "title": "Interface and Abstract Class",
+      "description": "Master interface and abstract class",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["interface", "abstract class", "implements"],
+      "estimatedMinutes": 10,
+      "steps": ["steps/step-01.json", "steps/step-02.json"]
+    },
+    {
+      "id": "spring-boot-basics",
+      "title": "Spring Boot Basics",
+      "description": "Master Spring Boot fundamentals",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": ["@SpringBootApplication", "@Component", "@Autowired", "@Configuration"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json", "steps/step-04.json"]
+    },
+    {
+      "id": "spring-boot-api",
+      "title": "Web API Development",
+      "description": "Master REST API development with Spring Boot",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": ["@RestController", "@GetMapping", "@PostMapping", "@RequestBody"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json", "steps/step-04.json"]
+    },
+    {
+      "id": "spring-boot-rest",
+      "title": "RESTful API",
+      "description": "Master RESTful API design patterns",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": ["@PathVariable", "@RequestParam", "CRUD API", "Result"],
+      "estimatedMinutes": 15,
+      "steps": ["steps/step-01.json", "steps/step-02.json", "steps/step-03.json", "steps/step-04.json"]
+    },
+    {
+      "id": "spring-ioc-core",
+      "title": "Spring IoC Core - HELL MODE",
+      "description": "Master Spring IoC principle by typing real Spring framework source code",
+      "language": "java",
+      "difficulty": "hell",
+      "concepts": ["BeanFactory", "ApplicationContext", "refresh", "BeanDefinition", "BeanPostProcessor", "三级缓存", "循环依赖"],
+      "estimatedMinutes": 60,
+      "steps": [
+        "steps/step-01.json", "steps/step-02.json", "steps/step-03.json",
+        "steps/step-04.json", "steps/step-05.json",
+        "steps/step-06.json", "steps/step-07.json",
+        "steps/step-08.json", "steps/step-09.json",
+        "steps/step-10.json", "steps/step-11.json", "steps/step-12.json", "steps/step-13.json"
+      ]
+    }
+  ]
+}

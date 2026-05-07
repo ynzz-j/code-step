@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@PostMapping 提交数据",
+  "concept": "PostMapping",
+  "difficulty": "advanced",
+  "instruction": "用 @PostMapping 处理 POST 请求。\n\n照着敲，感受 POST 请求的处理方式。",
+  "hint": "@PostMapping 处理POST请求",
+  "targetCode": "import org.springframework.web.bind.annotation.PostMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class UserController {\n    \n    @PostMapping(\"/api/user\")\n    public String createUser() {\n        return \"Create a new user\";\n    }\n}",
+  "encouragement": "POST 请求处理！"
+}

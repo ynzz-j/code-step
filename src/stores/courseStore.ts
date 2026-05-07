@@ -1,17 +1,29 @@
 import { create } from 'zustand';
-import type { Course, CourseMetadata, Step, TypingStats } from '@/types';
+import type { Course, CourseMetadata, Step, TypingStats, CourseCategory, Difficulty } from '@/types';
 import { courseService } from '@/services/courseService';
+
+interface CourseProgressInfo {
+  completedSteps: number[];
+  currentStep: number;
+}
 
 interface CourseStore {
   courses: CourseMetadata[];
+  filteredCourses: CourseMetadata[];
+  selectedCategory: CourseCategory | 'all';
+  selectedLanguage: string | 'all';
+  selectedDifficulty: Difficulty | 'all';
   currentCourse: Course | null;
   currentStepIndex: number;
   currentStepCompleted: boolean;
   completedSteps: Set<number>;
   typingStats: TypingStats;
   typingStartTime: number | null;
+  courseStartTime: number | null;
   isLoading: boolean;
   error: string | null;
+  // 课程进度映射
+  courseProgress: Record<string, CourseProgressInfo>;
 
   loadCourses: () => Promise<void>;
   startCourse: (courseId: string) => Promise<void>;
@@ -23,28 +35,73 @@ interface CourseStore {
   markStepCompleted: () => void;
   recordTypingKeystroke: (isCorrect: boolean) => void;
   resetTypingStats: () => void;
+  setCategory: (category: CourseCategory | 'all') => void;
+  setLanguage: (lang: string | 'all') => void;
+  setDifficulty: (difficulty: Difficulty | 'all') => void;
+  getCourseProgress: (courseId: string) => CourseProgressInfo | null;
 }
 
 export const useCourseStore = create<CourseStore>((set, get) => ({
   courses: [],
+  filteredCourses: [],
+  selectedCategory: 'all',
+  selectedLanguage: 'all',
+  selectedDifficulty: 'all',
   currentCourse: null,
   currentStepIndex: 0,
   currentStepCompleted: false,
   completedSteps: new Set(),
   typingStats: { wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 },
   typingStartTime: null,
+  courseStartTime: null,
   isLoading: false,
   error: null,
+  courseProgress: {},
 
   loadCourses: async () => {
     set({ isLoading: true, error: null });
     try {
       const courses = await courseService.getCourses();
       set({ courses, isLoading: false });
+      // 初始筛选
+      get().setCategory(get().selectedCategory);
     } catch (error) {
       console.error('Failed to load courses:', error);
       set({ error: '加载课程列表失败', isLoading: false });
     }
+  },
+
+  setCategory: (category) => {
+    const { courses, selectedLanguage, selectedDifficulty } = get();
+    const filtered = courses.filter((c) => {
+      const matchCategory = category === 'all' || c.category === category;
+      const matchLang = selectedLanguage === 'all' || c.language === selectedLanguage;
+      const matchDiff = selectedDifficulty === 'all' || c.difficulty === selectedDifficulty;
+      return matchCategory && matchLang && matchDiff;
+    });
+    set({ selectedCategory: category, filteredCourses: filtered });
+  },
+
+  setLanguage: (lang) => {
+    const { courses, selectedCategory, selectedDifficulty } = get();
+    const filtered = courses.filter((c) => {
+      const matchCategory = selectedCategory === 'all' || c.category === selectedCategory;
+      const matchLang = lang === 'all' || c.language === lang;
+      const matchDiff = selectedDifficulty === 'all' || c.difficulty === selectedDifficulty;
+      return matchCategory && matchLang && matchDiff;
+    });
+    set({ selectedLanguage: lang, filteredCourses: filtered });
+  },
+
+  setDifficulty: (difficulty) => {
+    const { courses, selectedCategory, selectedLanguage } = get();
+    const filtered = courses.filter((c) => {
+      const matchCategory = selectedCategory === 'all' || c.category === selectedCategory;
+      const matchLang = selectedLanguage === 'all' || c.language === selectedLanguage;
+      const matchDiff = difficulty === 'all' || c.difficulty === difficulty;
+      return matchCategory && matchLang && matchDiff;
+    });
+    set({ selectedDifficulty: difficulty, filteredCourses: filtered });
   },
 
   startCourse: async (courseId: string) => {
@@ -53,13 +110,20 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     try {
       const course = await courseService.getCourse(courseId);
       console.log('Course loaded:', course.title, 'steps:', course.steps.length);
+      // 先尝试从数据库获取已有进度
+      const dbProgress = await courseService.getProgress(courseId);
+      const existingProgress = dbProgress
+        ? { currentStep: dbProgress.currentStep, completedSteps: new Set(dbProgress.completedSteps) }
+        : { currentStep: 0, completedSteps: new Set<number>() };
+
       set({
         currentCourse: course,
-        currentStepIndex: 0,
-        currentStepCompleted: false,
-        completedSteps: new Set(),
+        currentStepIndex: existingProgress.currentStep,
+        currentStepCompleted: existingProgress.completedSteps.has(existingProgress.currentStep),
+        completedSteps: existingProgress.completedSteps,
         typingStats: { wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 },
         typingStartTime: Date.now(),
+        courseStartTime: Date.now(),
         isLoading: false,
       });
     } catch (error) {
@@ -69,10 +133,26 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   },
 
   nextStep: () => {
-    const { currentCourse, currentStepIndex, currentStepCompleted } = get();
+    const { currentCourse, currentStepIndex, currentStepCompleted, courseProgress, courseStartTime } = get();
+    if (!currentCourse) return;
     if (!currentStepCompleted) return;
     if (currentCourse && currentStepIndex < currentCourse.steps.length - 1) {
-      set({ currentStepIndex: currentStepIndex + 1, currentStepCompleted: false });
+      const newIndex = currentStepIndex + 1;
+      // 更新 courseProgress
+      const progressKey = currentCourse.id;
+      const newCourseProgress = {
+        ...courseProgress,
+        [progressKey]: {
+          ...courseProgress[progressKey],
+          currentStep: newIndex,
+        },
+      };
+      set({ currentStepIndex: newIndex, currentStepCompleted: false, courseProgress: newCourseProgress });
+
+      // 异步保存到数据库
+      const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
+      const completedSteps = Array.from(get().completedSteps);
+      courseService.saveProgress(currentCourse.id, currentStepIndex, completedSteps, timeSpent);
     }
   },
 
@@ -90,7 +170,32 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     set({ completedSteps: newCompleted });
   },
 
-  markStepCompleted: () => set({ currentStepCompleted: true }),
+  markStepCompleted: () => {
+    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime } = get();
+    if (!currentCourse) return;
+
+    // 更新 completedSteps Set
+    const newCompleted = new Set(completedSteps);
+    newCompleted.add(currentStepIndex);
+
+    // 更新 courseProgress
+    const progressKey = currentCourse.id;
+    const newCourseProgress = {
+      ...courseProgress,
+      [progressKey]: {
+        completedSteps: Array.from(newCompleted),
+        currentStep: currentStepIndex,
+      },
+    };
+
+    // 计算学习时间（秒）
+    const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
+
+    set({ currentStepCompleted: true, completedSteps: newCompleted, courseProgress: newCourseProgress });
+
+    // 异步保存到数据库
+    courseService.saveProgress(currentCourse.id, currentStepIndex, Array.from(newCompleted), timeSpent);
+  },
 
   recordTypingKeystroke: (isCorrect: boolean) => {
     const { typingStats, typingStartTime } = get();
@@ -127,5 +232,10 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
       return currentCourse.steps[currentStepIndex];
     }
     return null;
+  },
+
+  getCourseProgress: (courseId: string) => {
+    const { courseProgress } = get();
+    return courseProgress[courseId] || null;
   },
 }));

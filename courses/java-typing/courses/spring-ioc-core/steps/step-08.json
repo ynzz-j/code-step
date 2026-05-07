@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "AutowiredAnnotationBeanPostProcessor",
+  "concept": "Autowired Injection",
+  "chapter": "Chapter 4: Dependency Injection",
+  "difficulty": "hell",
+  "instruction": "AutowiredAnnotationBeanPostProcessor handles @Autowired and @Value annotations.\n\nType it out and understand the implementation of autowiring.",
+  "hint": "This Processor handles autowiring annotations",
+  "targetCode": "public class AutowiredAnnotationBeanPostProcessor \n        extends InstantiationAwareBeanPostProcessorAdapter {\n    \n    private final Map<Class<?>, InjectionMetadata> injectionMetadataCache =\n            new ConcurrentHashMap<>(256);\n    \n    private final Set<Class<? extends Annotation>> autowiredAnnotationTypes =\n            new LinkedHashSet<>(4);\n    \n    public AutowiredAnnotationBeanPostProcessor() {\n        autowiredAnnotationTypes.add(Autowired.class);\n        autowiredAnnotationTypes.add(Value.class);\n    }\n    \n    @Override\n    public PropertyValues postProcessPropertyValues(\n            PropertyValues pvs, PropertyDescriptor[] pds, \n            Object bean, String beanName) {\n        InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass());\n        metadata.inject(bean, beanName, pvs);\n        return pvs;\n    }\n}",
+  "encouragement": "Autowiring implementation!"
+}

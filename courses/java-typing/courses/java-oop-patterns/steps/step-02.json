@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "constructor",
+  "concept": "constructor",
+  "difficulty": "intermediate",
+  "instruction": "构造方法在创建对象时自动调用，用于初始化。\n\n请照着敲，感受构造方法的使用。",
+  "hint": "构造方法名必须与类名相同",
+  "targetCode": "class Student {\n    private String name;\n    private int age;\n\n    public Student(String name, int age) {\n        this.name = name;\n        this.age = age;\n    }\n\n    public String getInfo() {\n        return name + \", \" + age;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student(\"Tom\", 18);\n        System.out.println(s.getInfo());\n    }\n}",
+  "encouragement": "构造方法，创建对象时自动调用！"
+}

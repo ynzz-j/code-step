@@ -1,0 +1,13 @@
+{
+  "id": "java-exception",
+  "title": "Exception Handling",
+  "description": "Master try-catch and exception handling",
+  "language": "java",
+  "difficulty": "intermediate",
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

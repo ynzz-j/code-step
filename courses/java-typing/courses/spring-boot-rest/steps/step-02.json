@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@RequestParam 查询参数",
+  "concept": "RequestParam",
+  "difficulty": "advanced",
+  "instruction": "用 @RequestParam 获取 URL 查询参数。\n\n照着敲，感受查询参数的用法。",
+  "hint": "@RequestParam 获取查询参数",
+  "targetCode": "import org.springframework.web.bind.annotation.RequestParam;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class UserController {\n    \n    @GetMapping(\"/api/users\")\n    public String searchUsers(\n            @RequestParam String name,\n            @RequestParam(defaultValue = \"1\") int page) {\n        return \"Search: \" + name + \", page: \" + page;\n    }\n}",
+  "encouragement": "查询参数获取！"
+}

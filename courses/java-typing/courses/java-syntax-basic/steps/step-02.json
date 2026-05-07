@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "输出多行内容",
+  "concept": "输出语句",
+  "difficulty": "beginner",
+  "instruction": "使用两个 println() 分别输出 \"Hello\" 和 \"World\"。\n\n照着敲！",
+  "hint": "每个 println() 输出一行",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello\");\n        System.out.println(\"World\");\n    }\n}",
+  "encouragement": "你学会了换行输出！"
+}

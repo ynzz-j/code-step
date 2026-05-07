@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "BeanDefinitionRegistry",
+  "concept": "BeanDefinitionRegistry",
+  "chapter": "Chapter 2: Bean Definition and Registry",
+  "difficulty": "hell",
+  "instruction": "BeanDefinitionRegistry manages registration of all BeanDefinitions.\n\nType it out and understand how Beans are added to the container.",
+  "hint": "BeanDefinitionRegistry manages Bean definitions",
+  "targetCode": "package org.springframework.beans.factory.support;\n\npublic interface BeanDefinitionRegistry {\n    \n    void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)\n            throws BeanDefinitionStoreException;\n    \n    void removeBeanDefinition(String beanName)\n            throws NoSuchBeanDefinitionException;\n    \n    BeanDefinition getBeanDefinition(String beanName)\n            throws NoSuchBeanDefinitionException;\n    \n    boolean containsBeanDefinition(String beanName);\n    \n    String[] getBeanDefinitionNames();\n    \n    int getBeanDefinitionCount();\n    \n    boolean isBeanNameInUse(String beanName);\n}",
+  "encouragement": "Bean definition registry!"
+}

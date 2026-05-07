@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "BeanFactory Interface",
+  "concept": "BeanFactory",
+  "chapter": "Chapter 1: IoC Container Entry",
+  "difficulty": "hell",
+  "instruction": "BeanFactory is the core interface of Spring IoC container.\n\nType it out and remember the interface definition.",
+  "hint": "BeanFactory is the root interface of IoC container",
+  "targetCode": "package org.springframework.beans.factory;\n\nimport org.springframework.beans.BeansException;\n\npublic interface BeanFactory {\n    String FACTORY_BEAN_PREFIX = \"&\";\n    \n    Object getBean(String name) throws BeansException;\n    <T> T getBean(String name, Class<T> requiredType);\n    <T> T getBean(Class<T> requiredType);\n    Object getBean(String name, Object... args);\n    boolean containsBean(String name);\n    boolean isSingleton(String name);\n    boolean isPrototype(String name);\n    Class<?> getType(String name);\n    String[] getAliases(String name);\n}",
+  "encouragement": "IoC Container root interface!"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "Three-Level Cache Structure",
+  "concept": "Three-Level Cache",
+  "chapter": "Chapter 5: Circular Dependency and Three-Level Cache",
+  "difficulty": "hell",
+  "instruction": "Spring uses three-level cache to solve circular dependency.\n\nType it out and remember the responsibilities of each level!",
+  "hint": "Level 1: finished Bean, Level 2: early Bean, Level 3: factory",
+  "targetCode": "public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry {\n    \n    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);\n    private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);\n    private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);\n    private final Set<String> singletonsCurrentlyInCreation =\n            Collections.newSetFromMap(new ConcurrentHashMap<>(16));\n    private final Set<String> registeredSingletons = new LinkedHashSet<>(256);\n}",
+  "encouragement": "Spring three-level cache! Circular dependency solution!"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "依赖注入 @Autowired",
+  "concept": "Dependency Injection",
+  "difficulty": "advanced",
+  "instruction": "用 @Autowired 自动注入依赖的 Bean。\n\n照着敲，感受依赖注入的写法。",
+  "hint": "@Autowired 自动注入Bean",
+  "targetCode": "import org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Component;\n\n@Component\npublic class UserController {\n    \n    @Autowired\n    private UserService userService;\n    \n    public void showUser() {\n        System.out.println(userService.getUser());\n    }\n}",
+  "encouragement": "依赖注入完成！"
+}

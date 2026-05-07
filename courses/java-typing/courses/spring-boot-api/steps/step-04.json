@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@RequestBody 接收 JSON",
+  "concept": "RequestBody",
+  "difficulty": "advanced",
+  "instruction": "用 @RequestBody 接收前端发送的 JSON 数据。\n\n照着敲，记住这个模式。",
+  "hint": "@RequestBody 接收JSON请求体",
+  "targetCode": "import org.springframework.web.bind.annotation.RequestBody;\nimport org.springframework.web.bind.annotation.PostMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class UserController {\n    \n    @PostMapping(\"/api/user\")\n    public String createUser(@RequestBody User user) {\n        return \"Create: \" + user.name;\n    }\n}\n\nclass User {\n    public String name;\n    public int age;\n}",
+  "encouragement": "JSON 数据接收！"
+}

@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTypingStats } from '@/hooks/useTypingStats';
+import { StatsPanel } from '@/components/learn/StatsPanel';
 import type { TypingStep } from '@/types';
 
 let audioCtx: AudioContext | null = null;
@@ -38,15 +40,24 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
   const [cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 使用现成的 useTypingStats hook
+  const { wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, recordKeystroke, reset: resetStats } = useTypingStats();
+
   useEffect(() => {
     setTyped('');
     setCursorPosition(0);
+    resetStats();
     onReset?.();
     containerRef.current?.focus();
-  }, [step, onReset]);
+  }, [step, onReset, resetStats]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    const targetCode = step.targetCode;
+    const targetCode = step?.targetCode || "";
+
+    // 防御性检查
+    if (!targetCode) {
+      return <span className="text-gray-500">暂无内容</span>;
+    }
 
     // 只对我们处理的特殊键调用preventDefault
     if (e.key === 'Backspace' || e.key === 'Tab' || e.key === 'Enter') {
@@ -112,6 +123,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
     const isCorrect = inputChar === expectedChar;
 
     playTypeSound(isCorrect);
+    recordKeystroke(isCorrect);
     onKeystroke(isCorrect);
 
     setTyped((prev) => prev + inputChar);
@@ -133,7 +145,12 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
 
   const renderCode = () => {
     const chars: JSX.Element[] = [];
-    const targetCode = step.targetCode;
+    const targetCode = step?.targetCode || "";
+
+    // 防御性检查
+    if (!targetCode) {
+      return <span className="text-gray-500">暂无内容</span>;
+    }
 
     for (let i = 0; i < targetCode.length; i++) {
       const char = targetCode[i];
@@ -190,14 +207,11 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
         </pre>
       </div>
 
-      <div className="px-6 py-3 bg-gray-800/50 border-t border-gray-700/50">
-        <div className="flex items-center justify-between text-xs text-gray-400">
-          <span>
-            进度: {cursorPosition} / {step.targetCode.length}
-          </span>
-          <span>
-            {Math.round((cursorPosition / step.targetCode.length) * 100)}%
-          </span>
+      <StatsPanel stats={{ wpm, accuracy, errors, totalKeystrokes, correctKeystrokes }} />
+      <div className="px-6 py-2 bg-gray-800/50 border-t border-gray-700/50">
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <span>进度: {cursorPosition} / {step.targetCode.length}</span>
+          <span>{Math.round((cursorPosition / step.targetCode.length) * 100)}%</span>
         </div>
         <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
           <div

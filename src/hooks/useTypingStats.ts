@@ -1,18 +1,13 @@
 import { useCallback, useRef, useState } from 'react';
-
-interface TypingStatsData {
-  wpm: number;
-  accuracy: number;
-  errors: number;
-  progress: number;
-}
+import type { TypingStats } from '@/types';
 
 export function useTypingStats() {
-  const [stats, setStats] = useState<TypingStatsData>({
+  const [stats, setStats] = useState<TypingStats>({
     wpm: 0,
     accuracy: 100,
     errors: 0,
-    progress: 0,
+    totalKeystrokes: 0,
+    correctKeystrokes: 0,
   });
 
   const startTimeRef = useRef<number | null>(null);
@@ -45,7 +40,8 @@ export function useTypingStats() {
       wpm,
       accuracy,
       errors: errorsRef.current,
-      progress: 0,
+      totalKeystrokes: totalKeystrokesRef.current,
+      correctKeystrokes: correctKeystrokesRef.current,
     });
   }, []);
 
@@ -54,7 +50,7 @@ export function useTypingStats() {
     totalKeystrokesRef.current = 0;
     correctKeystrokesRef.current = 0;
     errorsRef.current = 0;
-    setStats({ wpm: 0, accuracy: 100, errors: 0, progress: 0 });
+    setStats({ wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 });
   }, []);
 
   return {

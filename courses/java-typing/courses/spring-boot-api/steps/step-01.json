@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@RestController 控制器",
+  "concept": "RestController",
+  "difficulty": "advanced",
+  "instruction": "@RestController 是 REST API 的控制器。\n\n照着敲，记住控制器的定义格式。",
+  "hint": "@RestController = @Controller + @ResponseBody",
+  "targetCode": "import org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class HelloController {\n    \n    public String index() {\n        return \"Hello Spring Boot!\";\n    }\n}",
+  "encouragement": "REST 控制器创建成功！"
+}

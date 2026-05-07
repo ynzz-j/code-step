@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "综合练习：CRUD API",
+  "concept": "CRUD API",
+  "difficulty": "advanced",
+  "instruction": "综合练习：实现完整的 CRUD API。\n\n照着敲，记住 RESTful API 的标准设计。",
+  "hint": "GET查、POST增、PUT改、DELETE删",
+  "targetCode": "import org.springframework.web.bind.annotation.*;\n\n@RestController\n@RequestMapping(\"/api/users\")\npublic class UserController {\n    \n    @GetMapping\n    public Result<String> list() {\n        return Result.success(\"user list\");\n    }\n    \n    @GetMapping(\"/{id}\")\n    public Result<String> get(@PathVariable Long id) {\n        return Result.success(\"user: \" + id);\n    }\n    \n    @PostMapping\n    public Result<String> create(@RequestBody String name) {\n        return Result.success(\"created: \" + name);\n    }\n    \n    @DeleteMapping(\"/{id}\")\n    public Result<String> delete(@PathVariable Long id) {\n        return Result.success(\"deleted: \" + id);\n    }\n}",
+  "encouragement": "完整 CRUD API！"
+}

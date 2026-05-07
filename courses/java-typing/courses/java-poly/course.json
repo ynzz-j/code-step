@@ -1,0 +1,11 @@
+{
+  "id": "java-poly",
+  "title": "Interface and Abstract Class",
+  "description": "Master interface and abstract class",
+  "language": "java",
+  "difficulty": "intermediate",
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json"
+  ]
+}

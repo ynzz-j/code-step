@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "记住 if 的写法",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "if 语句用于条件判断。\n\n请照着敲一遍，记住这个固定格式！小括号里放条件，大括号里放要执行的代码。",
+  "hint": "条件后面有括号，代码块前后有大括号",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        if (score > 60) {\n        }\n    }\n}",
+  "encouragement": "记住 if 的格式，以后会经常用到！"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "InitializingBean and DisposableBean",
+  "concept": "Lifecycle Callback",
+  "chapter": "Chapter 3: Bean Lifecycle",
+  "difficulty": "hell",
+  "instruction": "InitializingBean and DisposableBean define Bean lifecycle callbacks.\n\nType it out and remember these two core interfaces.",
+  "hint": "InitializingBean for init, DisposableBean for destroy",
+  "targetCode": "public interface InitializingBean {\n    void afterPropertiesSet() throws Exception;\n}\n\npublic interface DisposableBean {\n    void destroy() throws Exception;\n}\n\npublic interface BeanNameAware extends Aware {\n    void setBeanName(String name);\n}\n\npublic interface BeanFactoryAware extends Aware {\n    void setBeanFactory(BeanFactory beanFactory) throws BeansException;\n}\n\npublic interface BeanClassLoaderAware extends Aware {\n    void setBeanClassLoader(ClassLoader classLoader);\n}",
+  "encouragement": "Bean lifecycle callback interfaces!"
+}

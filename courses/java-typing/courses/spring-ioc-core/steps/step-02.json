@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "ApplicationContext Interface",
+  "concept": "ApplicationContext",
+  "chapter": "Chapter 1: IoC Container Entry",
+  "difficulty": "hell",
+  "instruction": "ApplicationContext extends BeanFactory with more enterprise features.\n\nType it out and remember this advanced container interface.",
+  "hint": "ApplicationContext extends multiple interfaces",
+  "targetCode": "package org.springframework.context;\n\nimport org.springframework.beans.factory.HierarchicalBeanFactory;\nimport org.springframework.beans.factory.ListableBeanFactory;\nimport org.springframework.core.io.support.ResourcePatternResolver;\n\npublic interface ApplicationContext \n        extends EnvironmentCapable, ListableBeanFactory, \n                HierarchicalBeanFactory, ResourcePatternResolver {\n    \n    String getId();\n    String getApplicationName();\n    String getDisplayName();\n    long getStartupDate();\n    ApplicationContext getParent();\n    AutowireCapableBeanFactory getAutowireCapableBeanFactory();\n}",
+  "encouragement": "ApplicationContext is the advanced container!"
+}

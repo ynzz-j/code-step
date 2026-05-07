@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "BeanPostProcessor",
+  "concept": "BeanPostProcessor",
+  "chapter": "Chapter 3: Bean Lifecycle",
+  "difficulty": "hell",
+  "instruction": "BeanPostProcessor is the core interface for Spring extension points.\n\nType it out and understand the interception mechanism before and after Bean initialization.",
+  "hint": "BeanPostProcessor executes before and after initialization",
+  "targetCode": "package org.springframework.beans.factory.config;\n\nimport org.springframework.beans.BeansException;\n\npublic interface BeanPostProcessor {\n    \n    Object postProcessBeforeInitialization(Object bean, String beanName)\n            throws BeansException;\n    \n    Object postProcessAfterInitialization(Object bean, String beanName)\n            throws BeansException;\n}",
+  "encouragement": "Core interface for Bean extension point!"
+}

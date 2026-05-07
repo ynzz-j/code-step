@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Interface 接口定义",
+  "concept": "interface",
+  "difficulty": "intermediate",
+  "instruction": "接口是一种抽象类型，只包含抽象方法。\n\n照着敲，记住接口的定义格式。",
+  "hint": "接口用 interface 关键字定义",
+  "targetCode": "interface Printable {\n    void print();\n}\n\nclass Document implements Printable {\n    @Override\n    public void print() {\n        System.out.println(\"Printing document...\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Printable p = new Document();\n        p.print();\n    }\n}",
+  "encouragement": "接口是 Java 多态的重要体现！"
+}

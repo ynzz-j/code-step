@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类的定义",
+  "concept": "class and object",
+  "difficulty": "intermediate",
+  "instruction": "类是对一类事物的抽象描述，是创建对象的模板。\n\n请照着敲，感受类的定义格式。",
+  "hint": "类名通常首字母大写",
+  "targetCode": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "encouragement": "类定义成功！"
+}

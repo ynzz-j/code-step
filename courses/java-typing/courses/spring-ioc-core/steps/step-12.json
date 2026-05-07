@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "doGetBean() Core Method",
+  "concept": "doGetBean",
+  "chapter": "Chapter 5: Circular Dependency and Three-Level Cache",
+  "difficulty": "hell",
+  "instruction": "doGetBean() is the core method for getting Bean.\n\nType it out and understand the complete Bean acquisition flow!",
+  "hint": "doGetBean: cache first -> check creation -> create -> return",
+  "targetCode": "protected <T> T doGetBean(String name, Class<T> requiredType, \n                         Object[] args, boolean typeCheckOnly) {\n    String beanName = transformedBeanName(name);\n    Object bean;\n    \n    Object sharedInstance = getSingleton(beanName);\n    if (sharedInstance != null) {\n        bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);\n    } else {\n        if (isPrototypeCurrentlyInCreation(beanName)) {\n            throw new BeanCurrentlyInCreationException(beanName);\n        }\n        \n        BeanFactory parentBeanFactory = getParentBeanFactory();\n        if (parentBeanFactory != null) {\n            bean = parentBeanFactory.getBean(name, requiredType);\n        }\n        \n        if (!typeCheckOnly) {\n            markBeanAsCreated(beanName);\n        }\n        \n        try {\n            RootBeanDefinition mbd = getMergedLocalDefinition(beanName);\n            String[] dependsOn = mbd.getDependsOn();\n            if (dependsOn != null) {\n                for (String dep : dependsOn) {\n                    getBean(dep);\n                    registerDependentBean(dep, beanName);\n                }\n            }\n            if (mbd.isSingleton()) {\n                sharedInstance = getSingleton(beanName, () -> createBean(beanName, mbd, args));\n                bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);\n            }\n        } catch (BeansException ex) {\n            beanCreationException.principalHasBeenApplied(beanName, mbd);\n            throw ex;\n        }\n    }\n    return (T) bean;\n}",
+  "encouragement": "doGetBean core flow!"
+}

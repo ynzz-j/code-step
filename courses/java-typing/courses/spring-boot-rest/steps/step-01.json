@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@PathVariable 路径参数",
+  "concept": "PathVariable",
+  "difficulty": "advanced",
+  "instruction": "用 @PathVariable 获取 URL 路径中的参数。\n\n照着敲，记住 RESTful 风格。",
+  "hint": "@PathVariable 提取路径变量",
+  "targetCode": "import org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class UserController {\n    \n    @GetMapping(\"/api/user/{id}\")\n    public String getUser(@PathVariable Long id) {\n        return \"Get user: \" + id;\n    }\n}",
+  "encouragement": "路径参数获取！"
+}

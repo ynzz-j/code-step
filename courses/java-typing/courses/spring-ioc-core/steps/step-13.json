@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "createBean() Method",
+  "concept": "createBean",
+  "chapter": "Chapter 5: Circular Dependency and Three-Level Cache",
+  "difficulty": "hell",
+  "instruction": "createBean() is responsible for creating Bean instance.\n\nType it out and understand the Bean creation process!",
+  "hint": "createBean: resolve class -> instantiate -> populate -> initialize",
+  "targetCode": "protected Object createBean(String beanName, RootBeanDefinition mbd, \n                            Object[] args) throws BeanCreationException {\n    RootBeanDefinition mbdToUse = mbd;\n    Class<?> resolvedClass = resolveBeanClass(mbd, beanName);\n    \n    try {\n        Object bean = resolveBeforeInstantiation(beanName, mbdToUse);\n        if (bean != null) {\n            return bean;\n        }\n    } catch (Throwable ex) {\n        throw new BeanCreationException(beanName, \n            \"BeanPostProcessor before instantiation failed\", ex);\n    }\n    \n    Object beanInstance = doCreateBean(beanName, mbdToUse, args);\n    return beanInstance;\n}\n\nprotected Object doCreateBean(String beanName, RootBeanDefinition mbd,\n                              Object[] args) throws BeanCreationException {\n    BeanWrapper instanceWrapper = createBeanInstance(beanName, mbd, args);\n    Object bean = instanceWrapper.getWrappedInstance();\n    \n    boolean earlySingletonExposure = mbd.isSingleton() && \n                                       this.allowCircularReferences &&\n                                       isSingletonCurrentlyInCreation(beanName);\n    if (earlySingletonExposure) {\n        addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));\n    }\n    \n    populateBean(beanName, mbd, instanceWrapper);\n    bean = initializeBean(beanName, bean, mbd);\n    \n    return bean;\n}",
+  "encouragement": "createBean complete creation flow!"
+}

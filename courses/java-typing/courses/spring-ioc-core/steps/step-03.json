@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "refresh() Method",
+  "concept": "refresh",
+  "chapter": "Chapter 1: IoC Container Entry",
+  "difficulty": "hell",
+  "instruction": "refresh() is the core method of AbstractApplicationContext.\n\nType it out and remember the complete Spring startup flow!",
+  "hint": "refresh() contains 13 initialization steps",
+  "targetCode": "public void refresh() throws BeansException, IllegalStateException {\n    synchronized (this.startupShutdownMonitor) {\n        prepareRefresh();\n        ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();\n        prepareBeanFactory(beanFactory);\n        try {\n            postProcessBeanFactory(beanFactory);\n            invokeBeanFactoryPostProcessors(beanFactory);\n            registerBeanPostProcessors(beanFactory);\n            initMessageSource();\n            initApplicationEventMulticaster();\n            onRefresh();\n            registerListeners();\n            finishBeanFactoryInitialization(beanFactory);\n            finishRefresh();\n        } catch (BeansException ex) {\n            destroyBeans();\n            cancelRefresh(ex);\n            throw ex;\n        }\n    }\n}",
+  "encouragement": "Spring 13-step startup flow!"
+}

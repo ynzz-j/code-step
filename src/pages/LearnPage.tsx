@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCourseStore } from '@/stores/courseStore';
 import { InstructionPanel } from '@/components/learn/InstructionPanel';
 import { ProgressDots } from '@/components/learn/ProgressDots';
-import { StatsPanel } from '@/components/learn/StatsPanel';
-import { CodeEditor } from '@/components/editor/CodeEditor';
 import { TypingEditor } from '@/components/editor/TypingEditor';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import type { TypingStep } from '@/types';
 
 export function LearnPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -15,7 +14,6 @@ export function LearnPage() {
     currentCourse,
     currentStepIndex,
     currentStepCompleted,
-    typingStats,
     startCourse,
     nextStep,
     prevStep,
@@ -24,6 +22,7 @@ export function LearnPage() {
     resetTypingStats,
   } = useCourseStore();
 
+  // 进入课程时加载
   useEffect(() => {
     if (courseId) {
       startCourse(courseId);
@@ -33,8 +32,21 @@ export function LearnPage() {
   const currentStep = currentCourse?.steps[currentStepIndex];
   const isLastStep = currentCourse && currentStepIndex === currentCourse.steps.length - 1;
 
+  // 一期只做 typing 模式，所有步骤都转换为 typing
+  const typingStep: TypingStep | null = useMemo(() => {
+    if (!currentStep) return null;
+    // 已经是 TypingStep
+    if (currentStep.type === 'typing') return currentStep as TypingStep;
+    // CodingStep 也转为 TypingStep：用 starter 或 answer 作为 targetCode
+    const codingStep = currentStep as { starter?: string; answer?: string; type: string };
+    return {
+      ...codingStep,
+      type: 'typing' as const,
+      targetCode: codingStep.starter || codingStep.answer || '',
+    } as unknown as TypingStep;
+  }, [currentStep]);
+
   const handleStepComplete = () => {
-    // 先标记当前步骤完成
     if (!currentStepCompleted) {
       markStepCompleted();
     }
@@ -45,15 +57,18 @@ export function LearnPage() {
     }
   };
 
-  useKeyboardShortcuts({
-    arrowup: prevStep,
-    pagedown: nextStep,
-    arrowdown: handleStepComplete,
-    pageup: prevStep,
-    j: nextStep,
-    k: prevStep,
-    escape: () => navigate('/courses'),
-  }, !!currentCourse);
+  useKeyboardShortcuts(
+    {
+      arrowup: prevStep,
+      pagedown: currentStepCompleted ? nextStep : undefined,
+      arrowdown: currentStepCompleted ? handleStepComplete : undefined,
+      pageup: prevStep,
+      j: currentStepCompleted ? handleStepComplete : undefined,
+      k: prevStep,
+      escape: () => navigate('/courses'),
+    },
+    !!currentCourse,
+  );
 
   if (!currentCourse || !currentStep) {
     return (
@@ -77,6 +92,7 @@ export function LearnPage() {
 
   return (
     <div className="flex flex-col h-full animate-fade-in">
+      {/* 顶部导航栏 */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800/30 border-b border-gray-700/50">
         <button
           onClick={() => navigate('/courses')}
@@ -84,29 +100,19 @@ export function LearnPage() {
         >
           &larr; 退出
         </button>
-        <span className="text-sm font-medium text-gray-300">
-          {currentCourse.title}
-        </span>
-        <ProgressDots
-          total={currentCourse.steps.length}
-          current={currentStepIndex}
-        />
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-gray-300">{currentCourse.title}</span>
+        </div>
+        <ProgressDots total={currentCourse.steps.length} current={currentStepIndex} />
       </div>
 
+      {/* 主内容区 */}
       <div className="flex-1 flex overflow-hidden">
         <InstructionPanel step={currentStep} />
         <div className="flex-1 flex flex-col">
-          {currentStep.type === 'typing' && (
-            <StatsPanel stats={typingStats} />
-          )}
-          {currentStep.type === 'coding' ? (
-            <CodeEditor
-              step={currentStep}
-              onComplete={handleStepComplete}
-            />
-          ) : (
+          {typingStep && (
             <TypingEditor
-              step={currentStep}
+              step={typingStep}
               onComplete={markStepCompleted}
               onKeystroke={recordTypingKeystroke}
               onReset={resetTypingStats}
@@ -115,6 +121,7 @@ export function LearnPage() {
         </div>
       </div>
 
+      {/* 底部导航 */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800/30 border-t border-gray-700/50">
         <button
           onClick={prevStep}

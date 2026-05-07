@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 
 interface ShortcutMap {
-  [key: string]: () => void;
+  [key: string]: (() => void) | undefined;
 }
 
 export function useKeyboardShortcuts(shortcuts: ShortcutMap, enabled = true) {
@@ -21,9 +21,10 @@ export function useKeyboardShortcuts(shortcuts: ShortcutMap, enabled = true) {
       }
 
       const key = e.key.toLowerCase();
-      if (shortcuts[key]) {
+      const handler = shortcuts[key];
+      if (handler) {
         e.preventDefault();
-        shortcuts[key]();
+        handler();
       }
     },
     [shortcuts, enabled],

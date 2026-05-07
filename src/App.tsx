@@ -5,6 +5,7 @@ import { AboutPage } from './pages/AboutPage';
 import { CoursesPage } from './pages/CoursesPage';
 import { LearnPage } from './pages/LearnPage';
 import { CompletePage } from './pages/CompletePage';
+import { UserCenterPage } from './pages/UserCenterPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/learn/:courseId" element={<LearnPage />} />
           <Route path="/complete/:courseId" element={<CompletePage />} />
+          <Route path="/user-center" element={<UserCenterPage />} />
         </Routes>
       </AppShell>
     </BrowserRouter>

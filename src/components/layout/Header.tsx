@@ -4,6 +4,7 @@ const navLinks = [
   { path: '/', label: '首页' },
   { path: '/about', label: '理念' },
   { path: '/courses', label: '课程' },
+  { path: '/user-center', label: '学习中心' },
 ];
 
 export function Header() {

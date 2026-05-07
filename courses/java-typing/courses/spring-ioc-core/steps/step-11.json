@@ -1,0 +1,11 @@
+{
+  "type": "typing",
+  "title": "getSingleton() Three-Level Cache Logic",
+  "concept": "getSingleton",
+  "chapter": "Chapter 5: Circular Dependency and Three-Level Cache",
+  "difficulty": "hell",
+  "instruction": "getSingleton() checks three-level cache in order.\n\nType it out and understand the circular dependency resolution flow!",
+  "hint": "Order: Level 1 -> Level 2 -> Level 3 factory -> Level 2 cache",
+  "targetCode": "protected Object getSingleton(String beanName, boolean allowEarlyReference) {\n    Object singletonObject = this.singletonObjects.get(beanName);\n    if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {\n        synchronized (this.singletonObjects) {\n            singletonObject = this.earlySingletonObjects.get(beanName);\n            if (singletonObject == null && allowEarlyReference) {\n                ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);\n                if (singletonFactory != null) {\n                    singletonObject = singletonFactory.getObject();\n                    this.earlySingletonObjects.put(beanName, singletonObject);\n                    this.singletonFactories.remove(beanName);\n                }\n            }\n        }\n    }\n    return singletonObject;\n}",
+  "encouragement": "Three-level cache access logic!"
+}
