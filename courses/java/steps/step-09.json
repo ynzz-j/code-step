@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "声明 int 类型变量",
+  "concept": "variables",
+  "difficulty": "beginner",
+  "instruction": "在 Java 中，变量需要先声明类型再使用。\n\n请在 main 方法中声明一个 int 类型的变量 x，并赋值为 10。",
+  "hint": "int x = 10;",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "int x = 10"
+  },
+  "encouragement": "变量声明成功！"
+}

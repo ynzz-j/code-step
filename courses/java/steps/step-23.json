@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "嵌套 if",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "if 里面还可以再写 if。\n\n声明 int age = 20, boolean hasTicket = true。如果 age >= 18 且 hasTicket 为 true，输出 \"允许入场\"。",
+  "hint": "用 && 表示\"且\"",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int age = 20;\n        boolean hasTicket = true;\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int age = 20;\n        boolean hasTicket = true;\n        if (age >= 18 && hasTicket) {\n            System.out.println(\"Welcome!\");\n        }\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "&&"
+  },
+  "encouragement": "逻辑与 && ，两个条件都要满足！"
+}

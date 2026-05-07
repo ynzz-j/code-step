@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "输出数字",
+  "concept": "print statement",
+  "difficulty": "beginner",
+  "instruction": "System.out.println() 可以直接输出数字，不需要放在引号里。\n\n请输出数字 2024。",
+  "hint": "System.out.println(2024); 注意没有引号",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(2024);\n    }\n}",
+  "expectedOutput": "2024",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println(2024)"
+  },
+  "encouragement": "数字不需要引号！"
+}

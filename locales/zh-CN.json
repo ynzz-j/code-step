@@ -1,0 +1,49 @@
+{
+  "app": {
+    "name": "CodeStep",
+    "tagline": "一步步学编程"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "理念",
+    "courses": "课程"
+  },
+  "welcome": {
+    "title": "CodeStep",
+    "subtitle": "一步步学编程，在 AI 时代打牢编程基础",
+    "description": "通过「逐步显示、手敲代码、即时验证」的学习模式，帮助你建立真正的编程能力和肌肉记忆。",
+    "startButton": "开始学习",
+    "aboutButton": "了解更多"
+  },
+  "courses": {
+    "title": "选择课程",
+    "subtitle": "选择一门课程开始你的编程之旅",
+    "difficulty": {
+      "beginner": "入门",
+      "intermediate": "进阶",
+      "advanced": "高级"
+    }
+  },
+  "learn": {
+    "exit": "退出",
+    "prevStep": "上一步",
+    "nextStep": "下一步",
+    "hint": "提示",
+    "reset": "重置",
+    "run": "运行",
+    "targetCode": "目标代码（只读）",
+    "yourInput": "你的输入",
+    "expectedOutput": "期望输出"
+  },
+  "stats": {
+    "wpm": "WPM",
+    "accuracy": "准确率",
+    "errors": "错误"
+  },
+  "complete": {
+    "title": "课程完成！",
+    "description": "恭喜你完成了这门课程的所有步骤！继续加油，坚持练习。",
+    "continueButton": "继续学习",
+    "homeButton": "返回首页"
+  }
+}

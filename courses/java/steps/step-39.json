@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "局部变量的作用域",
+  "concept": "作用域",
+  "difficulty": "intermediate",
+  "instruction": "方法内部定义的变量是局部变量，只能在方法内部使用。\n\n定义两个方法，各有自己的局部变量。",
+  "hint": "方法 a 的变量不能在方法 b 中使用",
+  "starter": "public class Main {\n    public static void methodA() {\n        \n    }\n\n    public static void methodB() {\n        \n    }\n\n    public static void main(String[] args) {\n        methodA();\n        methodB();\n    }\n}",
+  "answer": "public class Main {\n    public static void methodA() {\n        int x = 10;\n        System.out.println(x);\n    }\n\n    public static void methodB() {\n        int y = 20;\n        System.out.println(y);\n    }\n\n    public static void main(String[] args) {\n        methodA();\n        methodB();\n    }\n}",
+  "expectedOutput": "10\n20",
+  "validation": {
+    "type": "contains",
+    "value": "int x = 10"
+  },
+  "encouragement": "作用域隔离，代码更安全！"
+}

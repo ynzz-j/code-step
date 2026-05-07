@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：创建一个工具类，包含：\n1. isPrime(int n) - 判断是否是质数\n2. 在 main 中输出 1-20 中所有质数的和",
+  "hint": "质数：只能被 1 和自身整除",
+  "starter": "public class Main {\n    public static boolean isPrime(int n) {\n        \n    }\n\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static boolean isPrime(int n) {\n        if (n <= 1) {\n            return false;\n        }\n        for (int i = 2; i < n; i++) {\n            if (n % i == 0) {\n                return false;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        int sum = 0;\n        for (int i = 1; i <= 20; i++) {\n            if (isPrime(i)) {\n                sum += i;\n            }\n        }\n        System.out.println(sum);\n    }\n}",
+  "expectedOutput": "77",
+  "validation": {
+    "type": "contains",
+    "value": "isPrime"
+  },
+  "encouragement": "方法综合运用，你已经掌握了 Java 方法！"
+}

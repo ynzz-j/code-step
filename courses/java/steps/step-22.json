@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "else-if 链",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "多个条件用 else if 连接，从上到下依次判断。\n\n照着敲，感受这个结构。",
+  "hint": "最后一个 else 是不满足所有条件时执行的",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 90) {\n            System.out.println(\"Excellent\");\n        } else if (score >= 80) {\n            System.out.println(\"Good\");\n        } else if (score >= 60) {\n            System.out.println(\"Pass\");\n        } else {\n            System.out.println(\"Fail\");\n        }\n    }\n}",
+  "encouragement": "多分支条件判断，代码更清晰！"
+}

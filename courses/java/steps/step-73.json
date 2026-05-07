@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "ArrayList 排序",
+  "concept": "集合应用",
+  "difficulty": "intermediate",
+  "instruction": "用 Collections.sort() 对 ArrayList 排序。\n\n创建包含数字的 ArrayList，排序后输出。",
+  "hint": "import java.util.Collections;",
+  "starter": "import java.util.ArrayList;\nimport java.util.Collections;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<Integer> nums = new ArrayList<>();\n        nums.add(5);\n        nums.add(2);\n        nums.add(8);\n        nums.add(1);\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\nimport java.util.Collections;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<Integer> nums = new ArrayList<>();\n        nums.add(5);\n        nums.add(2);\n        nums.add(8);\n        nums.add(1);\n        Collections.sort(nums);\n        for (int n : nums) {\n            System.out.println(n);\n        }\n    }\n}",
+  "expectedOutput": "1\n2\n5\n8",
+  "validation": {
+    "type": "contains",
+    "value": "Collections.sort(nums)"
+  },
+  "encouragement": "集合排序，Collections 工具类！"
+}

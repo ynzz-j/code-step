@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "默认构造方法",
+  "concept": "constructor",
+  "difficulty": "intermediate",
+  "instruction": "如果没写构造方法，Java 会提供默认的无参构造方法。\n\n定义一个无参构造方法，给 name 赋默认值 \"未知\"。",
+  "hint": "public Student() { this.name = \"未知\"; }",
+  "starter": "class Student {\n    private String name;\n    private int age;\n\n    public Student() {\n        \n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        System.out.println(s.getName());\n    }\n}",
+  "answer": "class Student {\n    private String name;\n    private int age;\n\n    public Student() {\n        this.name = \"Unknown\";\n    }\n\n    public String getName() {\n        return name;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        System.out.println(s.getName());\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "public Student()"
+  },
+  "encouragement": "无参构造方法，给属性默认值！"
+}

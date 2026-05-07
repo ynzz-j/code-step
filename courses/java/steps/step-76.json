@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "认识异常",
+  "concept": "exception basics",
+  "difficulty": "intermediate",
+  "instruction": "异常是程序运行时的错误，会导致程序中断。\n\n照着敲，感受除零异常。",
+  "hint": "ArithmeticException 是算术运算异常",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 0;\n        System.out.println(a / b);\n    }\n}",
+  "encouragement": "认识异常！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "变量的重新赋值",
+  "concept": "variables",
+  "difficulty": "beginner",
+  "instruction": "变量的值可以被修改。\n\n对变量重新赋值不需要再写类型名。先将 x 赋值为 10，再改成 20，然后输出 x。",
+  "hint": "x = 20; 前面不需要写 int",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n        x = 20;\n        System.out.println(x);\n    }\n}",
+  "expectedOutput": "20",
+  "validation": {
+    "type": "contains",
+    "value": "x = 20"
+  },
+  "encouragement": "重新赋值成功！变量是可以变的！"
+}

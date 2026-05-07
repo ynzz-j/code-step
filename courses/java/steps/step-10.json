@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "输出变量的值",
+  "concept": "variables",
+  "difficulty": "beginner",
+  "instruction": "声明变量后，可以用 System.out.println() 输出变量的值。\n\n注意输出变量时不要加引号。",
+  "hint": "System.out.println(x);",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n        System.out.println(x);\n    }\n}",
+  "expectedOutput": "10",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println(x)"
+  },
+  "encouragement": "输出变量成功！"
+}

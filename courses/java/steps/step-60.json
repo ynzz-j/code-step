@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "方法重写 @Override",
+  "concept": "方法重写",
+  "difficulty": "intermediate",
+  "instruction": "子类可以重写父类的方法。\n\n在 Dog 类中重写 eat() 方法，输出 \"狗吃骨头\"。",
+  "hint": "@Override 表示这是重写的方法",
+  "starter": "class Animal {\n    public void eat() {\n        System.out.println(\"eat\");\n    }\n}\n\nclass Dog extends Animal {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        d.eat();\n    }\n}",
+  "answer": "class Animal {\n    public void eat() {\n        System.out.println(\"eat\");\n    }\n}\n\nclass Dog extends Animal {\n    @Override\n    public void eat() {\n        System.out.println(\"Dog eats bone\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        d.eat();\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "@Override"
+  },
+  "encouragement": "方法重写，子类拥有自己的实现！"
+}

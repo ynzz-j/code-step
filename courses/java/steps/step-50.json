@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "创建对象",
+  "concept": "class and object",
+  "difficulty": "intermediate",
+  "instruction": "类是模板，用 new 关键字创建对象。\n\n定义 Student 类，然后用 new 创建两个学生对象 s1 和 s2。",
+  "hint": "Student s1 = new Student();",
+  "starter": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student();\n        Student s2 = new Student();\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "new Student()"
+  },
+  "encouragement": "对象创建成功！"
+}

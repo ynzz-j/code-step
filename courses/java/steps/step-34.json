@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "方法参数练习",
+  "concept": "方法参数",
+  "difficulty": "intermediate",
+  "instruction": "定义一个 printMax 方法，接收两个 int 参数 a 和 b，输出较大的那个数。\n\n然后在 main 中调用 printMax(10, 20)。",
+  "hint": "用 Math.max(a, b) 或 if 比较",
+  "starter": "public class Main {\n    public static void printMax(int a, int b) {\n        \n    }\n\n    public static void main(String[] args) {\n        printMax(10, 20);\n    }\n}",
+  "answer": "public class Main {\n    public static void printMax(int a, int b) {\n        if (a > b) {\n            System.out.println(a);\n        } else {\n            System.out.println(b);\n        }\n    }\n\n    public static void main(String[] args) {\n        printMax(10, 20);\n    }\n}",
+  "expectedOutput": "20",
+  "validation": {
+    "type": "contains",
+    "value": "printMax(int a, int b)"
+  },
+  "encouragement": "方法参数掌握得很好！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "数组求和与平均值",
+  "concept": "array applications",
+  "difficulty": "intermediate",
+  "instruction": "用数组存储成绩，计算总分和平均值。\n\nint[] scores = {85, 92, 78, 95, 88}; 计算总分并输出。",
+  "hint": "用循环累加所有元素",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] scores = {85, 92, 78, 95, 88};\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] scores = {85, 92, 78, 95, 88};\n        int sum = 0;\n        for (int i = 0; i < scores.length; i++) {\n            sum += scores[i];\n        }\n        System.out.println(sum);\n    }\n}",
+  "expectedOutput": "438",
+  "validation": {
+    "type": "contains",
+    "value": "sum += scores[i]"
+  },
+  "encouragement": "数组求和完成！"
+}

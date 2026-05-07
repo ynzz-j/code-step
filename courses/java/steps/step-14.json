@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "认识 String 类型",
+  "concept": "data types",
+  "difficulty": "beginner",
+  "instruction": "String 用于存储文本（字符串）。\n\n注意 String 的首字母是大写的 S。请声明一个 String 变量 name，赋值为 \"Java\"，然后输出。",
+  "hint": "String name = \"Java\"; 注意字符串用双引号",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        String name = \"Java\";\n        System.out.println(name);\n    }\n}",
+  "expectedOutput": "Java",
+  "validation": {
+    "type": "contains",
+    "value": "String name = \"Java\""
+  },
+  "encouragement": "String 的 S 是大写的！"
+}

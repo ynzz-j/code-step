@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "访问和修改元素",
+  "concept": "ArrayList",
+  "difficulty": "intermediate",
+  "instruction": "用 get(index) 获取元素，用 set(index, value) 修改元素。\n\n获取第一个水果，然后把第二个水果改成 \"葡萄\"。",
+  "hint": "list.set(1, \"Grape\"); 修改指定位置的元素",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        System.out.println(list.get(0));\n        list.set(1, \"Grape\");\n        System.out.println(list.get(1));\n    }\n}",
+  "expectedOutput": "\n",
+  "validation": {
+    "type": "contains",
+    "value": "list.set(1, \"Grape\")"
+  },
+  "encouragement": "get 和 set，访问和修改！"
+}

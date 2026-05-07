@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除元素",
+  "concept": "ArrayList",
+  "difficulty": "intermediate",
+  "instruction": "用 remove(index) 按位置删除，或 remove(Object) 按内容删除。\n\n添加水果，然后删除第一个水果。",
+  "hint": "list.remove(0); 删除第一个元素",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        list.remove(0);\n        System.out.println(list.get(0));\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "list.remove(0)"
+  },
+  "encouragement": "remove() 删除元素！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "字符串拼接",
+  "concept": "operators",
+  "difficulty": "beginner",
+  "instruction": "在 Java 中，用 + 可以拼接字符串。\n\n请声明 String 变量 firstName 和 lastName，然后用 + 拼接并输出全名。",
+  "hint": "System.out.println(firstName + lastName);",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        String firstName = \"Code\";\n        String lastName = \"Step\";\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        String firstName = \"Code\";\n        String lastName = \"Step\";\n        System.out.println(firstName + lastName);\n    }\n}",
+  "expectedOutput": "CodeStep",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println(firstName + lastName)"
+  },
+  "encouragement": "字符串拼接，用 + 就行了！"
+}

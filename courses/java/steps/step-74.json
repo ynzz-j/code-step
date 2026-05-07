@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "查找元素",
+  "concept": "集合应用",
+  "difficulty": "intermediate",
+  "instruction": "ArrayList 用 contains() 查找元素，HashMap 用 containsKey()/containsValue()。\n\n在列表中查找 \"数学\" 是否存在。",
+  "hint": "list.contains(\"数学\") 返回 boolean",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> subjects = new ArrayList<>();\n        subjects.add(\"Chinese\");\n        subjects.add(\"Math\");\n        subjects.add(\"English\");\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> subjects = new ArrayList<>();\n        subjects.add(\"Chinese\");\n        subjects.add(\"Math\");\n        subjects.add(\"English\");\n        boolean found = subjects.contains(\"Math\");\n        System.out.println(found);\n    }\n}",
+  "expectedOutput": "true",
+  "validation": {
+    "type": "contains",
+    "value": "subjects.contains(\"数学\")"
+  },
+  "encouragement": "contains() 查找元素！"
+}

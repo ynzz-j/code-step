@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "数组的静态初始化",
+  "concept": "Arrays",
+  "difficulty": "intermediate",
+  "instruction": "声明数组时直接赋值，叫做静态初始化。\n\n声明 int[] scores = {90, 85, 77}; 然后输出 scores 的长度。",
+  "hint": "用大括号 {} 包裹多个值",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] scores = {90, 85, 77};\n        System.out.println(scores.length);\n    }\n}",
+  "expectedOutput": "3",
+  "validation": {
+    "type": "contains",
+    "value": "int[] scores = {90, 85, 77}"
+  },
+  "encouragement": "静态初始化，一步到位！"
+}

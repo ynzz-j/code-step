@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "认识 double 类型",
+  "concept": "data types",
+  "difficulty": "beginner",
+  "instruction": "double 类型用于存储小数（浮点数）。\n\n请声明一个 double 变量 price，赋值为 9.99，然后输出它。",
+  "hint": "double price = 9.99;",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        double price = 9.99;\n        System.out.println(price);\n    }\n}",
+  "expectedOutput": "9.99",
+  "validation": {
+    "type": "contains",
+    "value": "double price = 9.99"
+  },
+  "encouragement": "小数要用 double 类型！"
+}

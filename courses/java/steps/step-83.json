@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：自定义一个异常类，实现除法运算并处理各种异常。\n\n当除数为负数时抛出自定义异常。",
+  "hint": "throw new Exception(\"divisor cannot be negative\");",
+  "starter": "public class Main {\n    public static int divide(int a, int b) {\n        // throw when b < 0\n        \n        return a / b;\n    }\n\n    public static void main(String[] args) {\n        try {\n            System.out.println(divide(10, -2));\n        } catch (Exception e) {\n            System.out.println(\"Error: \" + e.getMessage());\n        }\n    }\n}",
+  "answer": "public class Main {\n    public static int divide(int a, int b) throws Exception {\n        if (b < 0) {\n            throw new Exception(\"divisor cannot be negative\");\n        }\n        return a / b;\n    }\n\n    public static void main(String[] args) {\n        try {\n            System.out.println(divide(10, -2));\n        } catch (Exception e) {\n            System.out.println(\"Error: \" + e.getMessage());\n        }\n    }\n}",
+  "expectedOutput": "Error: divisor cannot be negative",
+  "validation": {
+    "type": "contains",
+    "value": "throw new Exception"
+  },
+  "encouragement": "自定义异常，处理错误情况，异常处理掌握了！"
+}

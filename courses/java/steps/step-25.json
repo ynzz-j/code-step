@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "用 for 打印数字",
+  "concept": "循环",
+  "difficulty": "intermediate",
+  "instruction": "用 for 循环输出 1 到 5。\n\n注意：输出的是数字，不是字符串。",
+  "hint": "从 1 开始，i <= 5",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) {\n            System.out.println(i);\n        }\n    }\n}",
+  "expectedOutput": "1\n2\n3\n4\n5",
+  "validation": {
+    "type": "contains",
+    "value": "for (int i = 1; i <= 5; i++)"
+  },
+  "encouragement": "循环打印数字，自动化操作！"
+}

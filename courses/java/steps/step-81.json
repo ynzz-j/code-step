@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "抛出异常 throw",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "用 throw 主动抛出异常。\n\n照着敲，感受抛出异常。",
+  "hint": "throw new Exception(\"错误信息\");",
+  "targetCode": "public class Main {\n    public static void checkAge(int age) {\n        if (age < 0 || age > 150) {\n            throw new IllegalArgumentException(\"！\");\n        }\n        System.out.println(\"：\" + age);\n    }\n\n    public static void main(String[] args) {\n        checkAge(200);\n    }\n}",
+  "encouragement": "throw 主动抛出异常！"
+}

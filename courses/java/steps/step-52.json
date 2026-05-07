@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "封装：private 修饰符",
+  "concept": "encapsulation",
+  "difficulty": "intermediate",
+  "instruction": "private 修饰的成员只能在类内部访问，起到保护作用。\n\n把 Student 的 name 和 age 设为 private，外部不能直接访问。",
+  "hint": "private String name; private int age;",
+  "starter": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.name = \"Tom\";\n        s.age = 18;\n    }\n}",
+  "answer": "class Student {\n    private String name;\n    private int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        // name  age  private，\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "private String name"
+  },
+  "encouragement": "private 保护数据！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "static 关键字",
+  "concept": "static 关键字",
+  "difficulty": "intermediate",
+  "instruction": "static 修饰的成员属于类，不属于对象，所有对象共享。\n\n定义 static 变量 count，统计创建了多少个 Student 对象。",
+  "hint": "static int count = 0; 在构造方法中 count++",
+  "starter": "class Student {\n    private String name;\n    private static int count = 0;\n\n    public Student(String name) {\n        \n    }\n\n    public static int getCount() {\n        return count;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student(\"Tom\");\n        Student s2 = new Student(\"Alice\");\n        System.out.println(Student.getCount());\n    }\n}",
+  "answer": "class Student {\n    private String name;\n    private static int count = 0;\n\n    public Student(String name) {\n        this.name = name;\n        count++;\n    }\n\n    public static int getCount() {\n        return count;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student(\"Tom\");\n        Student s2 = new Student(\"Alice\");\n        System.out.println(Student.getCount());\n    }\n}",
+  "expectedOutput": "2",
+  "validation": {
+    "type": "contains",
+    "value": "static int count"
+  },
+  "encouragement": "static 变量，所有对象共享！"
+}

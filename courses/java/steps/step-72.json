@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "HashSet 集合",
+  "concept": "HashSet",
+  "difficulty": "intermediate",
+  "instruction": "HashSet 是无序、不重复的集合。\n\n添加几个名字到 HashSet，包括一个重复的名字，输出集合大小。",
+  "hint": "Set 不允许重复元素",
+  "starter": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class Main {\n    public static void main(String[] args) {\n        Set<String> names = new HashSet<>();\n        \n    }\n}",
+  "answer": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class Main {\n    public static void main(String[] args) {\n        Set<String> names = new HashSet<>();\n        names.add(\"Tom\");\n        names.add(\"Alice\");\n        names.add(\"Tom\");\n        names.add(\"Bob\");\n        System.out.println(names.size());\n    }\n}",
+  "expectedOutput": "3",
+  "validation": {
+    "type": "contains",
+    "value": "Set<String> names"
+  },
+  "encouragement": "HashSet 不重复！"
+}

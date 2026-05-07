@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "封装：getter 和 setter",
+  "concept": "encapsulation",
+  "difficulty": "intermediate",
+  "instruction": "private 属性通过 public 的 getter/setter 方法访问。\n\n在 Student 类中添加 getName()、setName()、getAge()、setAge() 方法。",
+  "hint": "public String getName() { return name; }",
+  "starter": "class Student {\n    private String name;\n    private int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.setName(\"Tom\");\n        s.setAge(18);\n        System.out.println(s.getName());\n    }\n}",
+  "answer": "class Student {\n    private String name;\n    private int age;\n\n    public String getName() {\n        return name;\n    }\n\n    public void setName(String name) {\n        this.name = name;\n    }\n\n    public int getAge() {\n        return age;\n    }\n\n    public void setAge(int age) {\n        this.age = age;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.setName(\"Tom\");\n        s.setAge(18);\n        System.out.println(s.getName());\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "public String getName()"
+  },
+  "encouragement": "getter/setter，封装的基本功！"
+}

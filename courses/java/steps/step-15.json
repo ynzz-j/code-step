@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "认识 boolean 类型",
+  "concept": "data types",
+  "difficulty": "beginner",
+  "instruction": "boolean 类型只有两个值：true 和 false。\n\n请声明一个 boolean 变量 isFun，赋值为 true，然后输出它。",
+  "hint": "boolean isFun = true;",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        boolean isFun = true;\n        System.out.println(isFun);\n    }\n}",
+  "expectedOutput": "true",
+  "validation": {
+    "type": "contains",
+    "value": "boolean isFun = true"
+  },
+  "encouragement": "boolean 只有 true 和 false 两个值！"
+}

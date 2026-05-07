@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "方法的返回值",
+  "concept": "方法返回值",
+  "difficulty": "intermediate",
+  "instruction": "方法可以返回值，使用 return 语句。\n\n照着敲，注意返回类型和 return 的配合。",
+  "hint": "void 表示无返回值，int 表示返回整数",
+  "targetCode": "public class Main {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n\n    public static void main(String[] args) {\n        int result = add(3, 5);\n        System.out.println(result);\n    }\n}",
+  "encouragement": "return 返回值，方法变成计算器！"
+}

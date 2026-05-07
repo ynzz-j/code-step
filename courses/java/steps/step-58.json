@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "子类添加独有方法",
+  "concept": "inheritance",
+  "difficulty": "intermediate",
+  "instruction": "子类可以添加自己独有的属性和方法。\n\nDog 类添加 bark() 方法，输出 \"汪汪汪\"。",
+  "hint": "public void bark() { System.out.println(\"Woof woof!\"); }",
+  "starter": "class Animal {\n    String name = \"Animal\";\n}\n\nclass Dog extends Animal {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        d.bark();\n    }\n}",
+  "answer": "class Animal {\n    String name = \"Animal\";\n}\n\nclass Dog extends Animal {\n    public void bark() {\n        System.out.println(\"Woof woof!\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        d.bark();\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "public void bark()"
+  },
+  "encouragement": "子类添加自己的方法！"
+}

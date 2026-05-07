@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "HashMap 增删改查",
+  "concept": "HashMap",
+  "difficulty": "intermediate",
+  "instruction": "put() 添加/修改，get() 获取，remove() 删除。\n\n创建 HashMap，添加水果价格，修改苹果的价格，然后获取香蕉的价格。",
+  "hint": "scores.put(\"Apple\", 5); scores.get(\"Apple\");",
+  "starter": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> prices = new HashMap<>();\n        \n    }\n}",
+  "answer": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> prices = new HashMap<>();\n        prices.put(\"Apple\", 5);\n        prices.put(\"Banana\", 3);\n        prices.put(\"Orange\", 4);\n        prices.put(\"Apple\", 6);\n        System.out.println(prices.get(\"Banana\"));\n    }\n}",
+  "expectedOutput": "3",
+  "validation": {
+    "type": "contains",
+    "value": "prices.get(\"Banana\")"
+  },
+  "encouragement": "HashMap 增删改查全能！"
+}

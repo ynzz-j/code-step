@@ -1,0 +1,180 @@
+{
+  "id": "java",
+  "title": "Java 基础课程",
+  "description": "从零开始学习 Java 编程",
+  "language": "java",
+  "difficulty": "beginner",
+  "courses": [
+    {
+      "id": "java-hello",
+      "title": "Java 入门：Hello World",
+      "description": "学习 Java 程序的基本结构，写出你的第一个程序",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": ["基础语法", "main 方法", "输出语句"],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/step-01.json",
+        "steps/step-02.json",
+        "steps/step-03.json",
+        "steps/step-04.json",
+        "steps/step-05.json",
+        "steps/step-06.json",
+        "steps/step-07.json",
+        "steps/step-08.json"
+      ]
+    },
+    {
+      "id": "java-vars",
+      "title": "变量与数据类型",
+      "description": "掌握 Java 中的变量声明、赋值和基本数据类型",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": ["变量", "数据类型", "运算符"],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/step-09.json",
+        "steps/step-10.json",
+        "steps/step-11.json",
+        "steps/step-12.json",
+        "steps/step-13.json",
+        "steps/step-14.json",
+        "steps/step-15.json",
+        "steps/step-16.json",
+        "steps/step-17.json",
+        "steps/step-18.json"
+      ]
+    },
+    {
+      "id": "java-if-for",
+      "title": "条件与循环",
+      "description": "使用 if/else 和循环控制程序流程",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["if/else", "for 循环", "while 循环", "break", "continue"],
+      "estimatedMinutes": 25,
+      "steps": [
+        "steps/step-19.json",
+        "steps/step-20.json",
+        "steps/step-21.json",
+        "steps/step-22.json",
+        "steps/step-23.json",
+        "steps/step-24.json",
+        "steps/step-25.json",
+        "steps/step-26.json",
+        "steps/step-27.json",
+        "steps/step-28.json",
+        "steps/step-29.json",
+        "steps/step-30.json"
+      ]
+    },
+    {
+      "id": "java-method",
+      "title": "方法与函数",
+      "description": "学习方法的定义、参数、返回值和方法重载",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["方法定义", "参数", "返回值", "方法重载", "递归"],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/step-31.json",
+        "steps/step-32.json",
+        "steps/step-33.json",
+        "steps/step-34.json",
+        "steps/step-35.json",
+        "steps/step-36.json",
+        "steps/step-37.json",
+        "steps/step-38.json",
+        "steps/step-39.json",
+        "steps/step-40.json"
+      ]
+    },
+    {
+      "id": "java-array",
+      "title": "数组基础",
+      "description": "掌握 Java 数组的声明、初始化和使用",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["数组声明", "数组初始化", "数组遍历", "数组应用"],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/step-41.json",
+        "steps/step-42.json",
+        "steps/step-43.json",
+        "steps/step-44.json",
+        "steps/step-45.json",
+        "steps/step-46.json",
+        "steps/step-47.json",
+        "steps/step-48.json"
+      ]
+    },
+    {
+      "id": "java-oop",
+      "title": "面向对象编程",
+      "description": "掌握类、对象、封装、继承和多态",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["类与对象", "封装", "构造方法", "继承", "多态", "static", "final"],
+      "estimatedMinutes": 40,
+      "steps": [
+        "steps/step-49.json",
+        "steps/step-50.json",
+        "steps/step-51.json",
+        "steps/step-52.json",
+        "steps/step-53.json",
+        "steps/step-54.json",
+        "steps/step-55.json",
+        "steps/step-56.json",
+        "steps/step-57.json",
+        "steps/step-58.json",
+        "steps/step-59.json",
+        "steps/step-60.json",
+        "steps/step-61.json",
+        "steps/step-62.json",
+        "steps/step-63.json"
+      ]
+    },
+    {
+      "id": "java-collection",
+      "title": "集合框架",
+      "description": "掌握 ArrayList、HashMap、HashSet 等常用集合",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["ArrayList", "HashMap", "HashSet", "集合遍历", "集合排序"],
+      "estimatedMinutes": 30,
+      "steps": [
+        "steps/step-64.json",
+        "steps/step-65.json",
+        "steps/step-66.json",
+        "steps/step-67.json",
+        "steps/step-68.json",
+        "steps/step-69.json",
+        "steps/step-70.json",
+        "steps/step-71.json",
+        "steps/step-72.json",
+        "steps/step-73.json",
+        "steps/step-74.json",
+        "steps/step-75.json"
+      ]
+    },
+    {
+      "id": "java-exception",
+      "title": "异常处理",
+      "description": "掌握 try-catch、throw、throws 等异常处理机制",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": ["异常基础", "try-catch", "finally", "throw", "throws"],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/step-76.json",
+        "steps/step-77.json",
+        "steps/step-78.json",
+        "steps/step-79.json",
+        "steps/step-80.json",
+        "steps/step-81.json",
+        "steps/step-82.json",
+        "steps/step-83.json"
+      ]
+    }
+  ]
+}

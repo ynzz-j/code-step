@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "print 和 println 的区别",
+  "concept": "print statement",
+  "difficulty": "beginner",
+  "instruction": "print 不换行，println 会换行。\n\n请先用 print 输出 \"Hello \"，再用 println 输出 \"World\"。",
+  "hint": "注意 print 没有 ln",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        System.out.print(\"Hello \");\n        System.out.println(\"World\");\n    }\n}",
+  "expectedOutput": "Hello World",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.print("
+  },
+  "encouragement": "注意到区别了吗？print 不换行！"
+}

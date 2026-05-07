@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "try-catch 捕获异常",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "用 try-catch 捕获异常，程序不会中断。\n\n照着敲，感受异常捕获。",
+  "hint": "try 尝试执行，catch 捕获异常",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        try {\n            int a = 10;\n            int b = 0;\n            System.out.println(a / b);\n        } catch (ArithmeticException e) {\n            System.out.println(\"Error: divisor cannot be zero\");\n        }\n    }\n}",
+  "encouragement": "异常捕获，程序不崩溃！"
+}

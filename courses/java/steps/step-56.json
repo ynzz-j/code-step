@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "this 关键字",
+  "concept": "this 关键字",
+  "difficulty": "intermediate",
+  "instruction": "this 指向当前对象，用于区分成员变量和局部变量。\n\n定义一个带参构造方法，用 this 区分同名的成员变量和参数。",
+  "hint": "this.name = name; 用 this 指向成员变量",
+  "starter": "class Student {\n    private String name;\n    private int age;\n\n    public Student(String name, int age) {\n        \n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student(\"Tom\", 18);\n        System.out.println(s.getName());\n    }\n}",
+  "answer": "class Student {\n    private String name;\n    private int age;\n\n    public Student(String name, int age) {\n        this.name = name;\n        this.age = age;\n    }\n\n    public String getName() {\n        return name;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student(\"Tom\", 18);\n        System.out.println(s.getName());\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "this.name = name"
+  },
+  "encouragement": "this 指向当前对象，区分同名变量！"
+}

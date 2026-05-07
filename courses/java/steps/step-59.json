@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "super 关键字",
+  "concept": "super 关键字",
+  "difficulty": "intermediate",
+  "instruction": "super 用于调用父类的构造方法或成员。\n\n子类构造方法中用 super(name) 调用父类构造方法。",
+  "hint": "super(name); 在子类构造方法第一行调用父类构造",
+  "starter": "class Animal {\n    private String name;\n    public Animal(String name) {\n        this.name = name;\n    }\n    public String getName() {\n        return name;\n    }\n}\n\nclass Dog extends Animal {\n    public Dog(String name) {\n        \n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog(\"Max\");\n        System.out.println(d.getName());\n    }\n}",
+  "answer": "class Animal {\n    private String name;\n    public Animal(String name) {\n        this.name = name;\n    }\n    public String getName() {\n        return name;\n    }\n}\n\nclass Dog extends Animal {\n    public Dog(String name) {\n        super(name);\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog(\"Max\");\n        System.out.println(d.getName());\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "super(name)"
+  },
+  "encouragement": "super 调用父类构造方法！"
+}

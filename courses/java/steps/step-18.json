@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习：个人名片",
+  "concept": "综合",
+  "difficulty": "beginner",
+  "instruction": "综合练习：请用变量存储你的姓名（String）、年龄（int），然后输出一句完整的自我介绍。",
+  "hint": "用 + 拼接字符串和变量",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        String name = \"Tom\";\n        int age = 20;\n        System.out.println(\"I am \" + name + \", age \" + age + \"\");\n    }\n}",
+  "expectedOutput": "I am Tom, age 20",
+  "validation": {
+    "type": "contains",
+    "value": "String name"
+  },
+  "encouragement": "变量拼接字符串，你掌握得很棒！"
+}

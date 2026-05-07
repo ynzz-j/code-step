@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "if-else 结构",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "if-else 表示「如果...否则...」。\n\n声明 int score = 75，如果 score >= 60 输出 \"及格\"，否则输出 \"不及格\"。",
+  "hint": "else 后面不需要再写条件",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int score = 75;\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int score = 75;\n        if (score >= 60) {\n            System.out.println(\"Pass\");\n        } else {\n            System.out.println(\"Fail\");\n        }\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "else"
+  },
+  "encouragement": "if-else 两分支，你掌握了！"
+}

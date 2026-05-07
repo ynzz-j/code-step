@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "声明多个变量",
+  "concept": "variables",
+  "difficulty": "beginner",
+  "instruction": "可以在同一行声明多个同类型的变量，用逗号分隔。\n\n请声明三个 int 变量 a、b、c，分别赋值为 1、2、3，然后输出它们的和。",
+  "hint": "int a = 1, b = 2, c = 3;",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int a = 1, b = 2, c = 3;\n        System.out.println(a + b + c);\n    }\n}",
+  "expectedOutput": "6",
+  "validation": {
+    "type": "contains",
+    "value": "int a = 1, b = 2, c = 3"
+  },
+  "encouragement": "多变量声明，代码更简洁！"
+}

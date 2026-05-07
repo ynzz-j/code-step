@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "理解 Java 程序结构",
+  "concept": "基础语法",
+  "difficulty": "beginner",
+  "instruction": "每个 Java 程序都由一个类组成。类是 Java 程序的基本单位。\n\n请在编辑器中写一个空的 Main 类。",
+  "hint": "public class Main { }",
+  "starter": "",
+  "answer": "public class Main {\n\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "class Main"
+  },
+  "encouragement": "类名必须与文件名相同！"
+}

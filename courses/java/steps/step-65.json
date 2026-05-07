@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "添加元素",
+  "concept": "ArrayList",
+  "difficulty": "intermediate",
+  "instruction": "使用 add() 方法添加元素到列表末尾。\n\n创建 ArrayList<String>，添加 \"苹果\"、\"香蕉\"、\"橙子\" 三个水果。",
+  "hint": "list.add(\"Apple\");",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        System.out.println(list.size());\n    }\n}",
+  "expectedOutput": "3",
+  "validation": {
+    "type": "contains",
+    "value": "list.add(\"Apple\")"
+  },
+  "encouragement": "add() 添加元素成功！"
+}

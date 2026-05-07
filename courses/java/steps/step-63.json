@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "final 关键字",
+  "concept": "final 关键字",
+  "difficulty": "intermediate",
+  "instruction": "final 修饰的变量是常量，不能被修改；修饰的方法不能被重写；修饰的类不能被继承。\n\n定义 final 常量 PI = 3.14159。",
+  "hint": "final double PI = 3.14159;",
+  "starter": "class MathUtils {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(MathUtils.PI);\n    }\n}",
+  "answer": "class MathUtils {\n    public static final double PI = 3.14159;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(MathUtils.PI);\n    }\n}",
+  "expectedOutput": "3.14159",
+  "validation": {
+    "type": "contains",
+    "value": "final double PI"
+  },
+  "encouragement": "final 常量，不可改变！"
+}

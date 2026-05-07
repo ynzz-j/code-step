@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "算术运算符",
+  "concept": "operators",
+  "difficulty": "beginner",
+  "instruction": "Java 支持基本的算术运算符：+ - * / \n\n请声明两个 int 变量 a=10, b=3，然后输出 a + b、a - b、a * b 和 a / b 的结果。",
+  "hint": "除法 / 对于整数会舍去小数部分",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 3;\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 3;\n        System.out.println(a + b);\n        System.out.println(a - b);\n        System.out.println(a * b);\n        System.out.println(a / b);\n    }\n}",
+  "expectedOutput": "13\n7\n30\n3",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println(a / b)"
+  },
+  "encouragement": "整数除法会舍去小数部分！"
+}

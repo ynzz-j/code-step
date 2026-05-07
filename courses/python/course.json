@@ -1,0 +1,21 @@
+{
+  "id": "python",
+  "title": "Python 基础课程",
+  "description": "从零开始学习 Python 编程",
+  "language": "python",
+  "difficulty": "beginner",
+  "courses": [
+    {
+      "id": "python-hello",
+      "title": "Python 入门：Hello World",
+      "description": "学习 Python 的基础语法，输出你的第一行代码",
+      "language": "python",
+      "difficulty": "beginner",
+      "concepts": ["基础语法", "print 函数"],
+      "estimatedMinutes": 10,
+      "steps": [
+        "steps/step-01.json"
+      ]
+    }
+  ]
+}

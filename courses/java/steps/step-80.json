@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "finally 语句块",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "finally 块无论是否发生异常都会执行，常用于资源释放。\n\n添加 finally，输出 \"程序结束\"。",
+  "hint": "finally 写在所有 catch 之后",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        try {\n            int a = 10 / 0;\n        } catch (Exception e) {\n            System.out.println(\"Exception caught\");\n        }\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        try {\n            int a = 10 / 0;\n        } catch (Exception e) {\n            System.out.println(\"Exception caught\");\n        } finally {\n            System.out.println(\"Program ends\");\n        }\n    }\n}",
+  "expectedOutput": "\n",
+  "validation": {
+    "type": "contains",
+    "value": "finally"
+  },
+  "encouragement": "finally 总是执行！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "方法递归",
+  "concept": "方法递归",
+  "difficulty": "intermediate",
+  "instruction": "递归：方法调用自己。使用递归计算阶乘 5! = 5×4×3×2×1。\n\n递归需要终止条件。",
+  "hint": "factorial(5) = 5 * factorial(4)，终止条件是 n <= 1",
+  "starter": "public class Main {\n    public static int factorial(int n) {\n        \n    }\n\n    public static void main(String[] args) {\n        System.out.println(factorial(5));\n    }\n}",
+  "answer": "public class Main {\n    public static int factorial(int n) {\n        if (n <= 1) {\n            return 1;\n        }\n        return n * factorial(n - 1);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(factorial(5));\n    }\n}",
+  "expectedOutput": "120",
+  "validation": {
+    "type": "contains",
+    "value": "return n * factorial(n - 1)"
+  },
+  "encouragement": "递归，掌握了！"
+}

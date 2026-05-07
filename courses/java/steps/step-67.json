@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "遍历 ArrayList",
+  "concept": "ArrayList",
+  "difficulty": "intermediate",
+  "instruction": "用 for 循环或增强 for 循环遍历 ArrayList。\n\n用增强 for 循环输出所有水果。",
+  "hint": "for (String fruit : list) { System.out.println(fruit); }",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Orange\");\n        for (String fruit : list) {\n            System.out.println(fruit);\n        }\n    }\n}",
+  "expectedOutput": "\n\n",
+  "validation": {
+    "type": "contains",
+    "value": "for (String fruit : list)"
+  },
+  "encouragement": "增强 for 循环遍历列表！"
+}

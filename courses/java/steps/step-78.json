@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "练习异常捕获",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "数组访问越界也是一种异常（ArrayIndexOutOfBoundsException）。\n\n用 try-catch 捕获数组越界异常。",
+  "hint": "catch (ArrayIndexOutOfBoundsException e)",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {1, 2, 3};\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {1, 2, 3};\n        try {\n            System.out.println(arr[5]);\n        } catch (ArrayIndexOutOfBoundsException e) {\n            System.out.println(\"！\");\n        }\n    }\n}",
+  "expectedOutput": "！",
+  "validation": {
+    "type": "contains",
+    "value": "catch (ArrayIndexOutOfBoundsException"
+  },
+  "encouragement": "数组越界也能捕获！"
+}

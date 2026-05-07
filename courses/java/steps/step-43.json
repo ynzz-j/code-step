@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "访问数组元素",
+  "concept": "Arrays",
+  "difficulty": "intermediate",
+  "instruction": "数组元素通过下标访问，下标从 0 开始。\n\n声明 int[] arr = {10, 20, 30, 40, 50}; 然后输出第一个和第三个元素。",
+  "hint": "arr[0] 是第一个，arr[2] 是第三个",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {10, 20, 30, 40, 50};\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {10, 20, 30, 40, 50};\n        System.out.println(arr[0]);\n        System.out.println(arr[2]);\n    }\n}",
+  "expectedOutput": "10\n30",
+  "validation": {
+    "type": "contains",
+    "value": "arr[0]"
+  },
+  "encouragement": "下标从 0 开始！"
+}

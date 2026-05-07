@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "break 和 continue",
+  "concept": "循环控制",
+  "difficulty": "intermediate",
+  "instruction": "break 跳出整个循环，continue 跳过本次循环。\n\n用 for 循环输出 1-10，但跳过 5，用 break 在 i > 8 时停止。",
+  "hint": "continue 跳过本次，break 跳出循环",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            \n        }\n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            if (i == 5) {\n                continue;\n            }\n            if (i > 8) {\n                break;\n            }\n            System.out.println(i);\n        }\n    }\n}",
+  "expectedOutput": "1\n2\n3\n4\n6\n7\n8",
+  "validation": {
+    "type": "contains",
+    "value": "continue"
+  },
+  "encouragement": "break 和 continue 控制循环的利器！"
+}

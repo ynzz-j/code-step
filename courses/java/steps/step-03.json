@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "输出第一行文字",
+  "concept": "输出语句",
+  "difficulty": "beginner",
+  "instruction": "在 main 方法中使用 System.out.println() 输出文字。\n\n在引号中填入你想输出的内容。",
+  "hint": "System.out.println(\"Hello\");",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello\");\n    }\n}",
+  "expectedOutput": "Hello",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println("
+  },
+  "encouragement": "这是你第一个输出语句！"
+}

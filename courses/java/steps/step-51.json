@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "访问对象的属性和方法",
+  "concept": "class and object",
+  "difficulty": "intermediate",
+  "instruction": "用 对象.属性 和 对象.方法() 访问成员。\n\n创建 Student 对象，给 name 和 age 赋值，然后输出。",
+  "hint": "s1.name = \"Tom\"; s1.age = 18;",
+  "starter": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student();\n        \n    }\n}",
+  "answer": "class Student {\n    String name;\n    int age;\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Student s1 = new Student();\n        s1.name = \"Tom\";\n        s1.age = 18;\n        System.out.println(s1.name);\n        System.out.println(s1.age);\n    }\n}",
+  "expectedOutput": "\n18",
+  "validation": {
+    "type": "contains",
+    "value": "s1.name"
+  },
+  "encouragement": "对象属性访问成功！"
+}

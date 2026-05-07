@@ -1,0 +1,49 @@
+{
+  "app": {
+    "name": "CodeStep",
+    "tagline": "Learn to Code Step by Step"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "courses": "Courses"
+  },
+  "welcome": {
+    "title": "CodeStep",
+    "subtitle": "Learn to code step by step, build solid programming foundations in the AI era",
+    "description": "Through a \"step-by-step, hands-on typing, instant verification\" learning approach, help you build real programming skills and muscle memory.",
+    "startButton": "Start Learning",
+    "aboutButton": "Learn More"
+  },
+  "courses": {
+    "title": "Choose a Course",
+    "subtitle": "Pick a course to start your coding journey",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "learn": {
+    "exit": "Exit",
+    "prevStep": "Previous",
+    "nextStep": "Next",
+    "hint": "Hint",
+    "reset": "Reset",
+    "run": "Run",
+    "targetCode": "Target Code (Read-only)",
+    "yourInput": "Your Input",
+    "expectedOutput": "Expected Output"
+  },
+  "stats": {
+    "wpm": "WPM",
+    "accuracy": "Accuracy",
+    "errors": "Errors"
+  },
+  "complete": {
+    "title": "Course Completed!",
+    "description": "Congratulations on completing all steps! Keep practicing.",
+    "continueButton": "Continue Learning",
+    "homeButton": "Back to Home"
+  }
+}

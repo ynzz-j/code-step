@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "输出计算结果",
+  "concept": "print statement",
+  "difficulty": "beginner",
+  "instruction": "System.out.println() 可以直接输出表达式的计算结果。\n\n请输出 10 + 20 的结果。",
+  "hint": "System.out.println(10 + 20);",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(10 + 20);\n    }\n}",
+  "expectedOutput": "30",
+  "validation": {
+    "type": "contains",
+    "value": "System.out.println(10 + 20)"
+  },
+  "encouragement": "Java 可以直接做数学计算！"
+}

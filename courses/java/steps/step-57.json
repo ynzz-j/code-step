@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "继承：基本语法",
+  "concept": "inheritance",
+  "difficulty": "intermediate",
+  "instruction": "继承用 extends 关键字，子类继承父类。\n\n定义 Animal 类（父类），然后定义继承它的 Dog 类（子类）。",
+  "hint": "class Dog extends Animal { }",
+  "starter": "class Animal {\n    String name = \"Animal\";\n}\n\nclass Dog extends Animal {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        System.out.println(d.name);\n    }\n}",
+  "answer": "class Animal {\n    String name = \"Animal\";\n}\n\nclass Dog extends Animal {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        System.out.println(d.name);\n    }\n}",
+  "expectedOutput": "",
+  "validation": {
+    "type": "contains",
+    "value": "extends Animal"
+  },
+  "encouragement": "继承，子类拥有父类的属性！"
+}

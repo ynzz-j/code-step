@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "for 循环的三个表达式",
+  "concept": "循环",
+  "difficulty": "intermediate",
+  "instruction": "for 循环括号里有三部分：初始化、条件和增量。\n\n请用 for 循环输出 0、2、4、6、8（偶数）。",
+  "hint": "i += 2 每次加 2",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 0; i <= 8; i += 2) {\n            System.out.println(i);\n        }\n    }\n}",
+  "expectedOutput": "0\n2\n4\n6\n8",
+  "validation": {
+    "type": "contains",
+    "value": "i += 2"
+  },
+  "encouragement": "i += 2 是 i = i + 2 的简写！"
+}

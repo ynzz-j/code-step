@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeStep - 一步步学编程</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0f1117; color: #e1e4e8; min-height: 100vh; }
+    .code-font { font-family: 'JetBrains Mono', monospace; }
+    
+    /* ========== Welcome Page Styles ========== */
+    .hero-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(240,136,62,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    /* ========== Card Animations ========== */
+    .step-card { 
+      background: #161b22; 
+      border: 1px solid #30363d; 
+      border-radius: 12px; 
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      cursor: pointer; 
+    }
+    .step-card:hover { 
+      border-color: #f0883e; 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 20px #00000044; 
+    }
+    
+    /* ========== Buttons ========== */
+    .btn-primary { 
+      background: #f0883e; 
+      color: #0f1117; 
+      font-weight: 600; 
+      padding: 10px 24px; 
+      border-radius: 8px; 
+      border: none; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      font-size: 14px; 
+    }
+    .btn-primary:hover { background: #e07c2f; transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-secondary { 
+      background: transparent; 
+      color: #8b949e; 
+      padding: 10px 24px; 
+      border-radius: 8px; 
+      border: 1px solid #30363d; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      font-size: 14px; 
+    }
+    .btn-secondary:hover { border-color: #8b949e; color: #e1e4e8; }
+    
+    /* ========== Progress Dots ========== */
+    .progress-dots { display: flex; gap: 6px; align-items: center; }
+    .progress-dot { 
+      width: 8px; 
+      height: 8px; 
+      border-radius: 50%; 
+      background: #30363d; 
+      transition: all 0.3s ease; 
+    }
+    .progress-dot.completed { background: #3fb950; }
+    .progress-dot.current { background: #f0883e; transform: scale(1.3); }
+    .progress-dot.future { background: #30363d; }
+    
+    /* ========== Concept Tags ========== */
+    .concept-tag { 
+      display: inline-block; 
+      background: #21262d; 
+      color: #8b949e; 
+      padding: 4px 10px; 
+      border-radius: 6px; 
+      font-size: 12px; 
+      font-family: 'JetBrains Mono', monospace; 
+      margin: 2px; 
+    }
+    
+    /* ========== Step Type Tags ========== */
+    .type-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      margin: 2px;
+    }
+    .type-tag.coding { background: #21262d; color: #8b949e; }
+    .type-tag.typing { background: #0d2117; color: #3fb950; border: 1px solid #3fb95044; }
+    
+    /* ========== Feedback Animations ========== */
+    .feedback-correct { 
+      background: #0d2117; 
+      border: 1px solid #3fb950; 
+      color: #3fb950; 
+      border-radius: 8px; 
+      padding: 12px 16px; 
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
+    .feedback-incorrect { 
+      background: #2d1014; 
+      border: 1px solid #f85149; 
+      color: #f85149; 
+      border-radius: 8px; 
+      padding: 12px 16px; 
+      animation: shake 0.4s ease; 
+    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    
+    /* ========== Hint Box ========== */
+    .hint-box { 
+      background: #161b22; 
+      border-left: 3px solid #f0883e; 
+      border-radius: 0 8px 8px 0; 
+      padding: 12px 16px; 
+      margin-top: 12px; 
+    }
+    
+    /* ========== Page Transitions ========== */
+    .page { display: none; }
+    .page.active { display: block; }
+    .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* ========== Pulse Animation ========== */
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    /* ========== CodeMirror Custom ========== */
+    .CodeMirror { 
+      height: auto !important; 
+      font-family: 'JetBrains Mono', monospace !important; 
+      font-size: 14px !important; 
+      line-height: 1.6 !important; 
+      border-radius: 8px; 
+    }
+    
+    /* ========== Typing Mode Styles ========== */
+    #target-editor-wrapper {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+      margin-bottom: 12px;
+    }
+    #target-editor-wrapper .CodeMirror {
+      min-height: auto !important;
+      background: #1e1e1e !important;
+    }
+    #typing-editor-wrapper {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #30363d;
+      transition: border-color 0.2s;
+    }
+    #typing-editor-wrapper.error { border-color: #f85149; }
+    #typing-editor-wrapper.correct { border-color: #3fb950; }
+    #typing-editor-wrapper .CodeMirror {
+      min-height: 150px !important;
+    }
+    
+    /* ========== Focus Mode ========== */
+    .focus-mode .header-bar { display: none !important; }
+    .focus-mode .instruction-panel { display: none !important; }
+    .focus-mode .learn-container { 
+      max-width: 800px !important; 
+      margin: 0 auto; 
+      padding: 40px 20px !important; 
+    }
+    .focus-mode .editor-toolbar { display: none !important; }
+    .focus-mode .nav-buttons { display: none !important; }
+    .focus-mode .shortcut-hint { display: none !important; }
+    
+    /* ========== Learn Page Layout ========== */
+    .learn-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    /* ========== Preview Terminal ========== */
+    .preview-terminal {
+      background: #000;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      overflow: hidden;
+    }
+    .terminal-header {
+      background: #161b22;
+      padding: 8px 12px;
+      display: flex;
+      gap: 6px;
+    }
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .terminal-body {
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #3fb950;
+      min-height: 40px;
+    }
+    
+    /* ========== Success Animation ========== */
+    @keyframes successPulse {
+      0% { box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(63, 185, 80, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(63, 185, 80, 0); }
+    }
+    .success-pulse { animation: successPulse 0.6s ease; }
+    
+    /* ========== Keyboard Hints ========== */
+    .kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 11px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #8b949e;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* ========== Stats Panel ========== */
+    .stats-panel {
+      display: flex;
+      gap: 16px;
+      padding: 12px 16px;
+      background: #161b22;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 600;
+      color: #e1e4e8;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+    .stat-value.wpm { color: #f0883e; }
+    .stat-value.accuracy { color: #3fb950; }
+    .stat-value.errors { color: #f85149; }
+  </style>
+</head>
+<body>
+  <!-- Page: Welcome -->
+  <div id="page-welcome" class="page active min-h-[100dvh] flex items-center justify-center px-4 relative overflow-hidden">
+    <div class="hero-glow" style="top: 20%; left: 30%;"></div>
+    <div class="hero-glow" style="bottom: 20%; right: 20%;"></div>
+    <div class="max-w-2xl w-full text-center fade-in relative z-10">
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #f0883e, #e07c2f);">
+            <span class="code-font font-bold text-xl" style="color: #0f1117;">C</span>
+          </div>
+          <span class="code-font text-2xl font-bold" style="color: #e1e4e8;">CodeStep</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: #e1e4e8; letter-spacing: -0.02em;">
+          在 AI 浪潮中<br>回归编程本质
+        </h1>
+        <p class="text-lg mb-8" style="color: #8b949e; line-height: 1.7;">
+          一步步手敲代码，扎实掌握编程基础。<br>像学习语言一样学习编程。
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="btn-primary text-base px-8 py-3" onclick="showPage('courses')">开始学习</button>
+        <button class="btn-secondary text-base px-8 py-3" onclick="showPage('about')">了解理念</button>
+      </div>
+      <div class="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto">
+        <div class="text-center"><div class="text-2xl font-bold" style="color: #f0883e;">5</div><div class="text-sm" style="color: #8b949e;">课程章节</div></div>
+        <div class="text-center"><div class="text-2xl font-bold" style="color: #f0883e;">42</div><div class="text-sm" style="color: #8b949e;">练习步骤</div></div>
+        <div class="text-center"><div class="text-2xl font-bold" style="color: #f0883e;">100%</div><div class="text-sm" style="color: #8b949e;">动手实践</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: About -->
+  <div id="page-about" class="page min-h-[100dvh] flex items-center justify-center px-4">
+    <div class="max-w-2xl w-full fade-in">
+      <button class="btn-secondary mb-8" onclick="showPage('welcome')">← 返回</button>
+      <h2 class="text-3xl font-bold mb-6" style="color: #e1e4e8;">我们的理念</h2>
+      <div class="space-y-6" style="color: #8b949e; line-height: 1.8;">
+        <p>AI 正在改变编程的方式，但编程的基础本质从未改变。</p>
+        <p>我们相信，真正热爱编程的人，需要静下心来，一行一行地理解代码。不是让 AI 帮你写，而是你自己亲手写出来。</p>
+        <p>CodeStep 的设计灵感来自语言学习——先理解概念，再动手实践，每一步都得到即时反馈，逐步建立编程思维。</p>
+        <div class="step-card p-5 mt-8">
+          <div class="code-font text-sm" style="color: #f0883e;">两种练习模式</div>
+          <div class="code-font text-sm mt-2" style="color: #e1e4e8;">
+            <div class="mb-2"><span style="color: #8b949e;">coding</span> — 自由编程，理解概念</div>
+            <div><span style="color: #3fb950;">typing</span> — 照着敲，建立肌肉记忆</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary mt-8" onclick="showPage('courses')">查看课程</button>
+    </div>
+  </div>
+
+  <!-- Page: Course List -->
+  <div id="page-courses" class="page min-h-[100dvh] px-4 py-8">
+    <div class="max-w-4xl mx-auto fade-in">
+      <div class="flex items-center justify-between mb-8">
+        <div><h2 class="text-2xl font-bold" style="color: #e1e4e8;">Java 基础课程</h2><p class="mt-1" style="color: #8b949e;">选择章节开始学习</p></div>
+        <button class="btn-secondary" onclick="showPage('welcome')">返回</button>
+      </div>
+      <div class="space-y-4" id="course-list"></div>
+    </div>
+  </div>
+
+  <!-- Page: Learn (Immersive Layout) -->
+  <div id="page-learn" class="page min-h-[100dvh] flex flex-col" style="background: #0f1117;">
+    <!-- Header Bar -->
+    <div class="header-bar flex items-center justify-between px-4 py-3" style="background: #161b22; border-bottom: 1px solid #21262d;">
+      <div class="flex items-center gap-3">
+        <button class="btn-secondary !py-1 !px-3" style="font-size: 13px;" onclick="leaveCourse()">← 退出</button>
+        <span class="code-font font-semibold" style="color: #e1e4e8;" id="course-title">课程</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <!-- Progress Dots -->
+        <div class="progress-dots" id="progress-dots"></div>
+        <!-- Step Counter -->
+        <span class="code-font" style="color: #8b949e; font-size: 13px;" id="step-indicator">1 / 10</span>
+      </div>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="learn-container flex-1 flex flex-col lg:flex-row gap-6">
+      <!-- Left: Instructions Panel -->
+      <div class="instruction-panel w-full lg:w-[380px] flex-shrink-0">
+        <div class="step-card p-6" style="position: sticky; top: 24px;">
+          <!-- Concept Tags -->
+          <div class="flex items-center gap-2 mb-3">
+            <span class="concept-tag" id="step-concept">概念</span>
+            <span class="concept-tag" id="step-difficulty">难度</span>
+            <span class="type-tag coding" id="step-type-tag">coding</span>
+          </div>
+          
+          <!-- Step Title -->
+          <h3 class="text-xl font-bold mb-3" style="color: #e1e4e8;" id="step-title">步骤标题</h3>
+          
+          <!-- Instruction -->
+          <div style="color: #8b949e; line-height: 1.7; font-size: 14px;" id="step-instruction">步骤说明</div>
+          
+          <!-- Hint Box -->
+          <div class="hint-box hidden" id="hint-box">
+            <div style="color: #8b949e; font-size: 13px;"><strong style="color: #f0883e;">提示：</strong><span id="hint-text"></span></div>
+          </div>
+          <button class="text-sm mt-3" style="color: #f0883e; background: none; border: none; cursor: pointer;" id="show-hint-btn" onclick="showHint()">需要提示？<span class="kbd">Tab</span></button>
+          
+          <!-- Encouragement -->
+          <div class="mt-6 pt-4" style="border-top: 1px solid #21262d;">
+            <div class="flex items-center gap-2 text-sm" style="color: #8b949e;">
+              <div class="w-2 h-2 rounded-full pulse-dot" style="background: #3fb950;"></div>
+              <span id="encouragement">加油，你可以的！</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right: Editor Panel -->
+      <div class="flex-1 flex flex-col min-h-[500px]">
+        <!-- Preview Terminal -->
+        <div class="preview-terminal mb-4" id="output-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dot" style="background: #f85149;"></div>
+            <div class="terminal-dot" style="background: #f0883e;"></div>
+            <div class="terminal-dot" style="background: #3fb950;"></div>
+            <span class="ml-3 text-xs" style="color: #8b949e; font-family: 'JetBrains Mono', monospace;">Output</span>
+          </div>
+          <div class="terminal-body" id="expected-output">
+            <span style="color: #8b949e;">运行结果将显示在这里...</span>
+          </div>
+        </div>
+        
+        <!-- Stats Panel (Typing mode only) -->
+        <div class="stats-panel mb-4 hidden" id="stats-panel">
+          <div class="stat-item">
+            <div class="stat-value wpm" id="stat-wpm">0</div>
+            <div class="stat-label">WPM</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value accuracy" id="stat-accuracy">100%</div>
+            <div class="stat-label">准确率</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value errors" id="stat-errors">0</div>
+            <div class="stat-label">错误数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-progress">0%</div>
+            <div class="stat-label">进度</div>
+          </div>
+        </div>
+        
+        <!-- Editor Toolbar -->
+        <div class="editor-toolbar flex items-center justify-between mb-3" id="editor-toolbar">
+          <div class="flex items-center gap-2">
+            <span class="code-font text-sm" style="color: #8b949e;" id="editor-label">Main.java</span>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn-secondary !py-1 !px-3 !text-xs" onclick="resetCode()">重置 <span class="kbd">R</span></button>
+            <button class="btn-secondary !py-1 !px-3 !text-xs" onclick="showSolution()">答案 <span class="kbd">A</span></button>
+          </div>
+        </div>
+        
+        <!-- Coding Mode: Single Editor -->
+        <div id="coding-editor-container">
+          <div id="editor-wrapper" class="flex-1" style="min-height: 200px; border-radius: 8px; overflow: hidden;"></div>
+        </div>
+        
+        <!-- Typing Mode: Target + Input Editors -->
+        <div id="typing-editor-container" class="hidden">
+          <!-- Target Code Display -->
+          <div class="mb-3">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="code-font text-xs" style="color: #3fb950;">目标代码</span>
+              <span class="text-xs" style="color: #8b949e;">照着敲，不要粘贴</span>
+            </div>
+            <div id="target-editor-wrapper">
+              <textarea id="target-code-display"></textarea>
+            </div>
+          </div>
+          
+          <!-- User Input Editor -->
+          <div class="flex items-center gap-2 mb-2">
+            <span class="code-font text-xs" style="color: #f0883e;">你的输入</span>
+            <span class="text-xs" style="color: #8b949e;">逐字符验证</span>
+          </div>
+          <div id="typing-editor-wrapper">
+            <textarea id="typing-code-input"></textarea>
+          </div>
+        </div>
+        
+        <!-- Feedback Area -->
+        <div id="feedback-area" class="mt-4" style="min-height: 50px;"></div>
+        
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons flex items-center justify-between mt-4">
+          <button class="btn-secondary" id="prev-btn" onclick="prevStep()"><span class="kbd">↑</span> 上一步</button>
+          <button class="btn-primary" id="next-btn" onclick="nextStep()">下一步 <span class="kbd">↓</span></button>
+        </div>
+        
+        <!-- Shortcut Hints -->
+        <div class="shortcut-hint mt-4 text-center" style="color: #8b949e; font-size: 12px;">
+          <span class="kbd">Enter</span> 验证代码 &nbsp;|&nbsp; <span class="kbd">F</span> 专注模式 &nbsp;|&nbsp; <span class="kbd">Esc</span> 退出
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Complete -->
+  <div id="page-complete" class="page min-h-[100dvh] flex items-center justify-center px-4">
+    <div class="max-w-md w-full text-center fade-in">
+      <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 success-pulse" style="background: #0d2117;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h2 class="text-3xl font-bold mb-2" style="color: #e1e4e8;">章节完成！</h2>
+      <p class="mb-6" style="color: #8b949e;" id="complete-message">你已经完成了所有步骤。</p>
+      <div class="step-card p-5 mb-6">
+        <div class="flex justify-between items-center mb-2"><span style="color: #8b949e; font-size: 14px;">完成步骤</span><span class="code-font font-semibold" style="color: #3fb950;" id="complete-steps">0 / 0</span></div>
+        <div class="progress-dots justify-center" id="complete-dots"></div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button class="btn-primary" onclick="showPage('courses')">继续学习</button>
+        <button class="btn-secondary" onclick="restartCourse()">重新学习</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ========== Data ==========
+const courses = [
+  { id: 'java-hello', title: 'Java 入门：Hello World', desc: '学习 Java 程序的基本结构，写出你的第一个程序', steps: 8, difficulty: '入门', concepts: ['基础语法', 'main 方法', '输出语句'] },
+  { id: 'java-vars', title: '变量与数据类型', desc: '掌握 Java 中的变量声明、赋值和基本数据类型', steps: 10, difficulty: '入门', concepts: ['变量', '数据类型', '运算符'] },
+  { id: 'java-control', title: '条件与循环', desc: '使用 if/else 和循环控制程序流程', steps: 12, difficulty: '基础', concepts: ['if/else', 'for 循环', 'while 循环'] },
+  { id: 'java-methods', title: '方法的定义与调用', desc: '学会封装代码逻辑，编写可复用的方法', steps: 8, difficulty: '基础', concepts: ['方法定义', '参数传递', '返回值'] },
+  { id: 'java-oop', title: '面向对象入门', desc: '理解类和对象，迈出 OOP 第一步', steps: 10, difficulty: '进阶', concepts: ['类', '对象', '封装'] }
+];
+
+const courseSteps = {
+'java-hello': [
+  // Coding 模式（自由编程）
+  { type: 'coding', title: '理解 Java 程序结构', concept: '基础语法', difficulty: '入门', instruction: '每个 Java 程序都由一个类组成。类是 Java 程序的基本单位。请在编辑器中写一个空的 Main 类。', hint: 'public class Main { }', expectedOutput: '', starter: '', answer: 'public class Main {\n\n}', validate: (c) => c.includes('class Main') },
+  
+  // Typing 模式（打字练习）
+  { type: 'typing', title: '添加 main 方法', concept: 'main 方法', difficulty: '入门', instruction: 'main 方法是 Java 程序的入口。请照着敲一遍，记住这个固定写法！', hint: '这是 Java 最常用的代码片段', expectedOutput: '', targetCode: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', validate: (code, target) => code === target },
+  
+  // Coding 模式
+  { type: 'coding', title: '输出第一行文字', concept: '输出语句', difficulty: '入门', instruction: '在 main 方法中使用 System.out.println() 输出文字。在引号中填入你想输出的内容。', hint: 'System.out.println("Hello");', expectedOutput: 'Hello', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello");\n    }\n}', validate: (c) => c.includes('System.out.println(') },
+  
+  // Typing 模式
+  { type: 'typing', title: '输出多行内容', concept: '输出语句', difficulty: '入门', instruction: '使用两个 println() 分别输出 "Hello" 和 "World"。照着敲！', hint: '', expectedOutput: 'Hello\nWorld', targetCode: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello");\n        System.out.println("World");\n    }\n}', validate: (code, target) => code === target },
+  
+  // Coding 模式
+  { type: 'coding', title: 'print 和 println 的区别', concept: '输出语句', difficulty: '入门', instruction: 'print 不换行，println 会换行。请先用 print 输出 "Hello "，再用 println 输出 "World"。', hint: '注意 print 没有 ln', expectedOutput: 'Hello World', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.print("Hello ");\n        System.out.println("World");\n    }\n}', validate: (c) => c.includes('System.out.print(') && c.includes('System.out.println(') },
+  
+  // Coding 模式
+  { type: 'coding', title: '输出数字', concept: '输出语句', difficulty: '入门', instruction: 'System.out.println() 可以直接输出数字，不需要放在引号里。请输出数字 2024。', hint: 'System.out.println(2024); 注意没有引号', expectedOutput: '2024', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println(2024);\n    }\n}', validate: (c) => c.includes('System.out.println(2024)') },
+  
+  // Coding 模式
+  { type: 'coding', title: '输出计算结果', concept: '输出语句', difficulty: '入门', instruction: 'System.out.println() 可以直接输出表达式的计算结果。请输出 10 + 20 的结果。', hint: 'System.out.println(10 + 20);', expectedOutput: '30', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println(10 + 20);\n    }\n}', validate: (c) => c.includes('System.out.println(10 + 20)') },
+  
+  // Typing 模式 - 综合练习
+  { type: 'typing', title: '完整 Hello World', concept: '综合练习', difficulty: '入门', instruction: '综合练习：请照着敲完这个完整的 Java 程序。这是你的第一个作品！', hint: '注意注释用 //，字符串用双引号', expectedOutput: '你好，Java！', targetCode: '// 我的第一个 Java 程序\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("你好，Java！");\n    }\n}', validate: (code, target) => code === target }
+],
+'java-vars': [
+  // Coding 模式
+  { type: 'coding', title: '声明 int 类型变量', concept: '变量', difficulty: '入门', instruction: '在 Java 中，变量需要先声明类型再使用。请在 main 方法中声明一个 int 类型的变量 x，并赋值为 10。', hint: 'int x = 10;', expectedOutput: '', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}', validate: (c) => c.includes('int x = 10') },
+  
+  // Coding 模式
+  { type: 'coding', title: '输出变量的值', concept: '变量', difficulty: '入门', instruction: '声明变量后，可以用 System.out.println() 输出变量的值。注意输出变量时不要加引号。', hint: 'System.out.println(x);', expectedOutput: '10', starter: 'public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n        System.out.println(x);\n    }\n}', validate: (c) => c.includes('System.out.println(x)') },
+  
+  // Coding 模式
+  { type: 'coding', title: '变量的重新赋值', concept: '变量', difficulty: '入门', instruction: '变量的值可以被修改。对变量重新赋值不需要再写类型名。先将 x 赋值为 10，再改成 20，然后输出 x。', hint: 'x = 20; 前面不需要写 int', expectedOutput: '20', starter: 'public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        int x = 10;\n        x = 20;\n        System.out.println(x);\n    }\n}', validate: (c) => c.includes('x = 20') && c.includes('System.out.println(x)') },
+  
+  // Coding 模式
+  { type: 'coding', title: '声明多个变量', concept: '变量', difficulty: '入门', instruction: '可以在同一行声明多个同类型的变量，用逗号分隔。请声明三个 int 变量 a、b、c，分别赋值为 1、2、3，然后输出它们的和。', hint: 'int a = 1, b = 2, c = 3;', expectedOutput: '6', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        int a = 1, b = 2, c = 3;\n        System.out.println(a + b + c);\n    }\n}', validate: (c) => c.includes('int a = 1, b = 2, c = 3') },
+  
+  // Coding 模式
+  { type: 'coding', title: '认识 double 类型', concept: '数据类型', difficulty: '入门', instruction: 'double 类型用于存储小数（浮点数）。请声明一个 double 变量 price，赋值为 9.99，然后输出它。', hint: 'double price = 9.99;', expectedOutput: '9.99', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        double price = 9.99;\n        System.out.println(price);\n    }\n}', validate: (c) => c.includes('double price = 9.99') },
+  
+  // Coding 模式
+  { type: 'coding', title: '认识 String 类型', concept: '数据类型', difficulty: '入门', instruction: 'String 用于存储文本（字符串）。注意 String 的首字母是大写的 S。请声明一个 String 变量 name，赋值为 "Java"，然后输出。', hint: 'String name = "Java"; 注意字符串用双引号', expectedOutput: 'Java', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        String name = "Java";\n        System.out.println(name);\n    }\n}', validate: (c) => c.includes('String name = "Java"') },
+  
+  // Coding 模式
+  { type: 'coding', title: '认识 boolean 类型', concept: '数据类型', difficulty: '入门', instruction: 'boolean 类型只有两个值：true 和 false。请声明一个 boolean 变量 isFun，赋值为 true，然后输出它。', hint: 'boolean isFun = true;', expectedOutput: 'true', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        boolean isFun = true;\n        System.out.println(isFun);\n    }\n}', validate: (c) => c.includes('boolean isFun = true') },
+  
+  // Coding 模式
+  { type: 'coding', title: '字符串拼接', concept: '运算符', difficulty: '入门', instruction: '在 Java 中，用 + 可以拼接字符串。请声明 String 变量 firstName 和 lastName，然后用 + 拼接并输出全名。', hint: 'System.out.println(firstName + lastName);', expectedOutput: 'CodeStep', starter: 'public class Main {\n    public static void main(String[] args) {\n        String firstName = "Code";\n        String lastName = "Step";\n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        String firstName = "Code";\n        String lastName = "Step";\n        System.out.println(firstName + lastName);\n    }\n}', validate: (c) => c.includes('System.out.println(firstName + lastName)') },
+  
+  // Coding 模式
+  { type: 'coding', title: '算术运算符', concept: '运算符', difficulty: '入门', instruction: 'Java 支持基本的算术运算符：+ - * /。请声明两个 int 变量 a=10, b=3，然后输出 a + b、a - b、a * b 和 a / b 的结果。', hint: '除法 / 对于整数会舍去小数部分', expectedOutput: '13\n7\n30\n3', starter: 'public class Main {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 3;\n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 3;\n        System.out.println(a + b);\n        System.out.println(a - b);\n        System.out.println(a * b);\n        System.out.println(a / b);\n    }\n}', validate: (c) => c.includes('System.out.println(a / b)') },
+  
+  // Coding 模式
+  { type: 'coding', title: '综合练习：个人名片', concept: '综合', difficulty: '入门', instruction: '综合练习：请用变量存储你的姓名（String）、年龄（int），然后输出一句完整的自我介绍。', hint: '用 + 拼接字符串和变量', expectedOutput: '我叫小明，今年20岁', starter: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}', answer: 'public class Main {\n    public static void main(String[] args) {\n        String name = "小明";\n        int age = 20;\n        System.out.println("我叫" + name + "，今年" + age + "岁");\n    }\n}', validate: (c) => c.includes('String name') && c.includes('int age') && c.includes('System.out.println') }
+]};
+
+// ========== State ==========
+let editor = null;
+let typingEditor = null;
+let targetEditor = null;
+let currentCourse = null;
+let currentStep = 0;
+let completedSteps = new Set();
+let isFocusMode = false;
+let autoValidateTimeout = null;
+
+// Typing mode stats
+let typingStats = {
+  startTime: null,
+  totalChars: 0,
+  correctChars: 0,
+  errors: 0,
+  lastCorrect: true
+};
+
+// ========== Editor Initialization ==========
+function initEditor() {
+  // Main editor for coding mode
+  editor = CodeMirror(document.getElementById('editor-wrapper'), {
+    mode: 'text/x-java',
+    theme: 'dracula',
+    lineNumbers: true,
+    indentUnit: 4,
+    smartIndent: true,
+    tabSize: 4,
+    indentWithTabs: false,
+    lineWrapping: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    extraKeys: {
+      'Ctrl-Enter': runCode,
+      'Cmd-Enter': runCode,
+      'Tab': 'autocomplete'
+    }
+  });
+  
+  editor.on('change', () => {
+    const fb = document.getElementById('feedback-area');
+    if (fb.querySelector('.feedback-correct')) {
+      fb.innerHTML = '';
+      document.getElementById('next-btn').style.opacity = '0.6';
+    }
+    
+    clearTimeout(autoValidateTimeout);
+    autoValidateTimeout = setTimeout(() => {
+      autoValidate();
+    }, 500);
+  });
+}
+
+function initTypingEditor() {
+  if (typingEditor) return;
+  
+  typingEditor = CodeMirror(document.getElementById('typing-code-input'), {
+    mode: 'text/x-java',
+    theme: 'dracula',
+    lineNumbers: false,
+    indentUnit: 4,
+    tabSize: 4,
+    indentWithTabs: false,
+    lineWrapping: true,
+    styleActiveLine: false,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    extraKeys: {
+      'Ctrl-Enter': () => {},
+      'Cmd-Enter': () => {},
+      'Tab': false
+    }
+  });
+  
+  typingEditor.on('change', () => {
+    highlightTypingErrors();
+    updateTypingStats();
+    checkTypingComplete();
+  });
+}
+
+function initTargetEditor(code) {
+  if (targetEditor) {
+    targetEditor.setValue(code);
+    return;
+  }
+  
+  targetEditor = CodeMirror.fromTextArea(document.getElementById('target-code-display'), {
+    mode: 'text/x-java',
+    theme: 'dracula',
+    lineNumbers: true,
+    readOnly: true,
+    lineWrapping: true,
+    viewportMargin: Infinity
+  });
+  
+  targetEditor.setValue(code);
+}
+
+function getEditorValue() { return editor ? editor.getValue() : ''; }
+function setEditorValue(val) { if (editor) editor.setValue(val); }
+function getTypingValue() { return typingEditor ? typingEditor.getValue() : ''; }
+function setTypingValue(val) { if (typingEditor) typingEditor.setValue(val); }
+
+// ========== Typing Mode Functions ==========
+function highlightTypingErrors() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  if (step.type !== 'typing') return;
+  
+  const typed = getTypingValue();
+  const target = step.targetCode;
+  const wrapper = document.getElementById('typing-editor-wrapper');
+  
+  // Compare character by character
+  let correct = true;
+  for (let i = 0; i < typed.length; i++) {
+    if (typed[i] !== target[i]) {
+      correct = false;
+      break;
+    }
+  }
+  
+  // Update border color
+  wrapper.classList.remove('error', 'correct');
+  if (typed.length > 0) {
+    wrapper.classList.add(correct ? 'correct' : 'error');
+  }
+  
+  // Highlight errors in editor
+  if (typingEditor) {
+    const marks = typingEditor.getAllMarks();
+    marks.forEach(m => m.clear());
+    
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== target[i]) {
+        const start = typingEditor.posFromIndex(i);
+        const end = typingEditor.posFromIndex(i + 1);
+        typingEditor.markText(start, end, { className: 'cm-error-char' });
+      } else {
+        const start = typingEditor.posFromIndex(i);
+        const end = typingEditor.posFromIndex(i + 1);
+        typingEditor.markText(start, end, { className: 'cm-correct-char' });
+      }
+    }
+    
+    // Add CSS for highlighted characters
+    const styleId = 'typing-highlight-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .cm-error-char { background: rgba(248, 81, 73, 0.3) !important; color: #f85149 !important; text-decoration: underline wavy #f85149; }
+        .cm-correct-char { color: #3fb950 !important; }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+}
+
+function updateTypingStats() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  if (step.type !== 'typing') return;
+  
+  const typed = getTypingValue();
+  const target = step.targetCode;
+  
+  // Initialize stats on first input
+  if (!typingStats.startTime && typed.length > 0) {
+    typingStats.startTime = Date.now();
+  }
+  
+  // Count errors
+  let errors = 0;
+  for (let i = 0; i < typed.length; i++) {
+    if (typed[i] !== target[i]) {
+      errors++;
+    }
+  }
+  
+  // Calculate WPM (words = characters / 5, time in minutes)
+  let wpm = 0;
+  let accuracy = 100;
+  const elapsed = typingStats.startTime ? (Date.now() - typingStats.startTime) / 1000 / 60 : 0;
+  if (elapsed > 0.1) {
+    wpm = Math.round((typed.length / 5) / elapsed);
+  }
+  if (typed.length > 0) {
+    accuracy = Math.round(((typed.length - errors) / typed.length) * 100);
+  }
+  
+  // Calculate progress
+  const progress = Math.round((typed.length / target.length) * 100);
+  
+  // Update display
+  document.getElementById('stat-wpm').textContent = wpm;
+  document.getElementById('stat-accuracy').textContent = accuracy + '%';
+  document.getElementById('stat-errors').textContent = errors;
+  document.getElementById('stat-progress').textContent = progress + '%';
+  
+  typingStats.errors = errors;
+}
+
+function checkTypingComplete() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  if (step.type !== 'typing') return;
+  
+  const typed = getTypingValue();
+  const target = step.targetCode;
+  
+  if (typed === target) {
+    showCorrectFeedback();
+  }
+}
+
+// ========== Auto Validation ==========
+function autoValidate() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  if (step.type === 'typing') return; // Typing mode has its own validation
+  
+  const code = getEditorValue().trim();
+  if (!code || code.length < 5) return;
+  
+  if (step.validate(code)) {
+    showCorrectFeedback();
+  }
+}
+
+// ========== Navigation ==========
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.classList.remove('focus-mode');
+  });
+  document.getElementById('page-' + pageId).classList.add('active');
+  if (pageId === 'courses') renderCourseList();
+}
+
+function renderCourseList() {
+  const container = document.getElementById('course-list');
+  container.innerHTML = '';
+  courses.forEach((course, idx) => {
+    const card = document.createElement('div');
+    card.className = 'step-card p-5 fade-in';
+    card.style.animationDelay = (idx * 0.1) + 's';
+    card.innerHTML = `
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="concept-tag">${course.difficulty}</span>
+            ${course.concepts.map(c => `<span class="concept-tag">${c}</span>`).join('')}
+          </div>
+          <h3 class="font-semibold text-lg" style="color: #e1e4e8;">${course.title}</h3>
+          <p class="mt-1 text-sm" style="color: #8b949e;">${course.desc}</p>
+          <div class="flex items-center gap-4 mt-3 text-sm" style="color: #8b949e;">
+            <span class="code-font">${course.steps} 个步骤</span>
+          </div>
+        </div>
+        <div class="ml-4 flex-shrink-0">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: #21262d;">
+            <span style="color: #8b949e; font-size: 18px;">→</span>
+          </div>
+        </div>
+      </div>`;
+    card.onclick = () => enterCourse(course.id);
+    container.appendChild(card);
+  });
+}
+
+function enterCourse(courseId) {
+  currentCourse = courseId;
+  currentStep = 0;
+  completedSteps = new Set();
+  resetTypingStats();
+  
+  const course = courses.find(c => c.id === courseId);
+  document.getElementById('course-title').textContent = course.title;
+  showPage('learn');
+  
+  if (!editor) initEditor();
+  if (!typingEditor) initTypingEditor();
+  
+  loadStep();
+}
+
+function loadStep() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  
+  // Reset typing stats for new step
+  resetTypingStats();
+  
+  // Update instruction panel
+  document.getElementById('step-title').textContent = step.title;
+  document.getElementById('step-concept').textContent = step.concept;
+  document.getElementById('step-difficulty').textContent = step.difficulty;
+  document.getElementById('step-instruction').textContent = step.instruction;
+  document.getElementById('hint-text').textContent = step.hint || '';
+  document.getElementById('hint-box').classList.add('hidden');
+  document.getElementById('show-hint-btn').style.display = step.hint ? '' : 'none';
+  
+  // Update type tag
+  const typeTag = document.getElementById('step-type-tag');
+  typeTag.textContent = step.type;
+  typeTag.className = 'type-tag ' + step.type;
+  
+  // Update expected output
+  const outputEl = document.getElementById('expected-output');
+  if (step.expectedOutput) {
+    outputEl.innerHTML = `<span style="color: #8b949e;">$</span> ${step.expectedOutput}`;
+  } else {
+    outputEl.innerHTML = `<span style="color: #8b949e;">运行结果将显示在这里...</span>`;
+  }
+  
+  // Show/hide appropriate editor based on step type
+  const codingContainer = document.getElementById('coding-editor-container');
+  const typingContainer = document.getElementById('typing-editor-container');
+  const statsPanel = document.getElementById('stats-panel');
+  
+  if (step.type === 'typing') {
+    // Typing mode
+    codingContainer.classList.add('hidden');
+    typingContainer.classList.remove('hidden');
+    statsPanel.classList.remove('hidden');
+    
+    // Initialize target editor
+    initTargetEditor(step.targetCode);
+    setTypingValue('');
+    
+    // Focus typing editor
+    setTimeout(() => {
+      if (typingEditor) {
+        typingEditor.focus();
+        typingEditor.setCursor(0);
+      }
+    }, 100);
+  } else {
+    // Coding mode
+    codingContainer.classList.remove('hidden');
+    typingContainer.classList.add('hidden');
+    statsPanel.classList.add('hidden');
+    
+    setEditorValue(step.starter || '');
+    
+    // Focus main editor
+    setTimeout(() => {
+      if (editor) {
+        editor.focus();
+      }
+    }, 100);
+  }
+  
+  // Update progress
+  updateProgressDots();
+  document.getElementById('step-indicator').textContent = (currentStep + 1) + ' / ' + steps.length;
+  
+  // Reset feedback
+  document.getElementById('feedback-area').innerHTML = '';
+  document.getElementById('next-btn').style.opacity = '0.6';
+  document.getElementById('prev-btn').disabled = currentStep === 0;
+  updateEncouragement();
+}
+
+function resetTypingStats() {
+  typingStats = {
+    startTime: null,
+    totalChars: 0,
+    correctChars: 0,
+    errors: 0,
+    lastCorrect: true
+  };
+  
+  document.getElementById('stat-wpm').textContent = '0';
+  document.getElementById('stat-accuracy').textContent = '100%';
+  document.getElementById('stat-errors').textContent = '0';
+  document.getElementById('stat-progress').textContent = '0%';
+}
+
+function updateProgressDots() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const container = document.getElementById('progress-dots');
+  container.innerHTML = '';
+  
+  steps.forEach((_, idx) => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    if (completedSteps.has(idx)) {
+      dot.classList.add('completed');
+    } else if (idx === currentStep) {
+      dot.classList.add('current');
+    }
+    container.appendChild(dot);
+  });
+}
+
+function runCode() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  
+  if (step.type === 'typing') return; // Typing mode doesn't need this
+  
+  const code = getEditorValue();
+  const fb = document.getElementById('feedback-area');
+  
+  if (step.validate(code)) {
+    showCorrectFeedback();
+  } else {
+    fb.innerHTML = '<div class="feedback-incorrect"><div class="flex items-center gap-2"><span class="font-semibold">还不够正确</span></div><div class="mt-1 text-sm" style="color: #f85149cc;">再检查一下代码，参考提示试试看。</div></div>';
+  }
+}
+
+function showCorrectFeedback() {
+  const fb = document.getElementById('feedback-area');
+  completedSteps.add(currentStep);
+  fb.innerHTML = '<div class="feedback-correct success-pulse"><div class="flex items-center gap-2"><span class="font-semibold">正确！</span></div><div class="mt-1 text-sm" style="color: #3fb950cc;">代码验证通过，自动进入下一步...</div></div>';
+  
+  updateProgressDots();
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.opacity = '1';
+  
+  setTimeout(() => {
+    nextStep();
+  }, 1500);
+}
+
+function nextStep() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  if (currentStep >= steps.length - 1) { showComplete(); return; }
+  currentStep++;
+  loadStep();
+}
+
+function prevStep() {
+  if (currentStep > 0) { currentStep--; loadStep(); }
+}
+
+function showHint() {
+  document.getElementById('hint-box').classList.remove('hidden');
+  document.getElementById('show-hint-btn').style.display = 'none';
+}
+
+function resetCode() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  
+  if (step.type === 'typing') {
+    setTypingValue('');
+    resetTypingStats();
+    highlightTypingErrors();
+    if (typingEditor) typingEditor.focus();
+  } else {
+    setEditorValue(step.starter || '');
+    document.getElementById('feedback-area').innerHTML = '';
+    document.getElementById('next-btn').style.opacity = '0.6';
+    if (editor) editor.focus();
+  }
+}
+
+function showSolution() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  
+  if (step.type === 'typing') {
+    setTypingValue(step.targetCode);
+    highlightTypingErrors();
+    checkTypingComplete();
+  } else {
+    setEditorValue(step.answer);
+    document.getElementById('feedback-area').innerHTML = '<div style="background:#1a1f2e; border:1px solid #f0883e44; border-radius:8px; padding:12px 16px;"><div class="text-sm" style="color:#f0883e;">已填入参考答案，按 <span class="kbd">Enter</span> 继续。</div></div>';
+  }
+}
+
+function showComplete() {
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  document.getElementById('complete-steps').textContent = steps.length + ' / ' + steps.length;
+  document.getElementById('complete-message').textContent = '你已经完成了「' + courses.find(c => c.id === currentCourse).title + '」的所有步骤！';
+  
+  const dotsContainer = document.getElementById('complete-dots');
+  dotsContainer.innerHTML = '';
+  steps.forEach(() => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot completed';
+    dot.style.width = '12px';
+    dot.style.height = '12px';
+    dotsContainer.appendChild(dot);
+  });
+  
+  showPage('complete');
+}
+
+function restartCourse() { enterCourse(currentCourse); }
+function leaveCourse() { 
+  exitFocusMode();
+  showPage('courses'); 
+}
+
+// ========== Focus Mode ==========
+function toggleFocusMode() {
+  isFocusMode = !isFocusMode;
+  const learnPage = document.getElementById('page-learn');
+  
+  if (isFocusMode) {
+    learnPage.classList.add('focus-mode');
+  } else {
+    learnPage.classList.remove('focus-mode');
+  }
+}
+
+function exitFocusMode() {
+  isFocusMode = false;
+  document.getElementById('page-learn').classList.remove('focus-mode');
+}
+
+// ========== Keyboard Shortcuts ==========
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('page-learn').classList.contains('active')) return;
+  
+  const steps = courseSteps[currentCourse] || courseSteps['java-hello'];
+  const step = steps[currentStep];
+  
+  // For typing mode, only handle Escape
+  if (step && step.type === 'typing') {
+    if (e.key === 'Escape' && isFocusMode) {
+      e.preventDefault();
+      exitFocusMode();
+    }
+    return;
+  }
+  
+  const isTyping = editor && editor.hasFocus();
+  
+  switch(e.key) {
+    case 'Enter':
+      if (e.ctrlKey || e.metaKey || !isTyping) {
+        e.preventDefault();
+        runCode();
+      }
+      break;
+    case 'Tab':
+      if (!isTyping) {
+        e.preventDefault();
+        showHint();
+      }
+      break;
+    case 'Escape':
+      if (isFocusMode) {
+        e.preventDefault();
+        exitFocusMode();
+      }
+      break;
+    case 'f':
+    case 'F':
+      if (!isTyping) {
+        e.preventDefault();
+        toggleFocusMode();
+      }
+      break;
+    case 'r':
+    case 'R':
+      if (!isTyping && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        resetCode();
+      }
+      break;
+    case 'a':
+    case 'A':
+      if (!isTyping && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        showSolution();
+      }
+      break;
+    case 'ArrowUp':
+      if (!isTyping) {
+        e.preventDefault();
+        prevStep();
+      }
+      break;
+    case 'ArrowDown':
+      if (!isTyping) {
+        e.preventDefault();
+        nextStep();
+      }
+      break;
+  }
+});
+
+function updateEncouragement() {
+  const msgs = [
+    '加油，你可以的！',
+    '动手敲代码是最好的学习方式',
+    '每一步都在建立你的编程思维',
+    '不要急，理解比速度更重要',
+    'Bug 是学习的一部分',
+    '你已经比昨天更进步了',
+    '坚持就是胜利！',
+    '代码会骗人，但理解不会'
+  ];
+  document.getElementById('encouragement').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+}
+
+// ========== Init ==========
+renderCourseList();
+</script>
+</body>
+</html>

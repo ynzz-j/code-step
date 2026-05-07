@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：统计一组分数中及格（>=60）的数量。\n\nArrayList<Integer> scores = {55, 78, 92, 45, 67, 88}; 统计及格人数并输出。",
+  "hint": "遍历列表，统计 >= 60 的数量",
+  "starter": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<Integer> scores = new ArrayList<>();\n        scores.add(55);\n        scores.add(78);\n        scores.add(92);\n        scores.add(45);\n        scores.add(67);\n        scores.add(88);\n        \n    }\n}",
+  "answer": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<Integer> scores = new ArrayList<>();\n        scores.add(55);\n        scores.add(78);\n        scores.add(92);\n        scores.add(45);\n        scores.add(67);\n        scores.add(88);\n        int count = 0;\n        for (int score : scores) {\n            if (score >= 60) {\n                count++;\n            }\n        }\n        System.out.println(count);\n    }\n}",
+  "expectedOutput": "4",
+  "validation": {
+    "type": "contains",
+    "value": "if (score >= 60)"
+  },
+  "encouragement": "集合综合运用，掌握了！"
+}

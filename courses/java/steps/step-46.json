@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "增强 for 循环",
+  "concept": "array iteration",
+  "difficulty": "intermediate",
+  "instruction": "Java 5 引入了增强 for 循环（for-each），更简洁。\n\n语法：for (类型 变量 : 数组) { }\n\n用增强 for 循环输出 arr = {1, 2, 3, 4, 5} 的所有元素。",
+  "hint": "for (int num : arr) { System.out.println(num); }",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {1, 2, 3, 4, 5};\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] arr = {1, 2, 3, 4, 5};\n        for (int num : arr) {\n            System.out.println(num);\n        }\n    }\n}",
+  "expectedOutput": "1\n2\n3\n4\n5",
+  "validation": {
+    "type": "contains",
+    "value": "for (int num : arr)"
+  },
+  "encouragement": "for-each 循环，简洁优雅！"
+}

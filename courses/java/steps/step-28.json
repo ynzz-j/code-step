@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "while vs for",
+  "concept": "循环",
+  "difficulty": "intermediate",
+  "instruction": "for 循环适合已知循环次数的场景，while 循环适合条件驱动。\n\n用 while 循环输出 5、4、3、2、1、0（倒计时）。",
+  "hint": "先定义 i = 5，条件 i >= 0，每次 i--",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int i = 5;\n        while (i >= 0) {\n            System.out.println(i);\n            i--;\n        }\n    }\n}",
+  "expectedOutput": "5\n4\n3\n2\n1\n0",
+  "validation": {
+    "type": "contains",
+    "value": "while"
+  },
+  "encouragement": "倒计时完成！while 循环也很强大！"
+}

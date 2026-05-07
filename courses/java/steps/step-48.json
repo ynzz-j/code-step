@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：找出数组中的最大值和最小值。\n\nint[] nums = {23, 45, 12, 67, 34, 89, 11}; 输出最大值和最小值。",
+  "hint": "设 max = nums[0]，遍历比较",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int[] nums = {23, 45, 12, 67, 34, 89, 11};\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] nums = {23, 45, 12, 67, 34, 89, 11};\n        int max = nums[0];\n        int min = nums[0];\n        for (int i = 1; i < nums.length; i++) {\n            if (nums[i] > max) {\n                max = nums[i];\n            }\n            if (nums[i] < min) {\n                min = nums[i];\n            }\n        }\n        System.out.println(max);\n        System.out.println(min);\n    }\n}",
+  "expectedOutput": "89\n11",
+  "validation": {
+    "type": "contains",
+    "value": "if (nums[i] > max)"
+  },
+  "encouragement": "数组极值查找，掌握了！"
+}

@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-accent: #0ea5e9;
+  }
+
+  body {
+    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-sans antialiased;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  * {
+    @apply border-gray-700;
+  }
+}
+
+@layer components {
+  .cm-correct-char {
+    @apply text-success-400 bg-success-500/10;
+  }
+
+  .cm-error-char {
+    @apply text-error-400 bg-error-500/20 underline decoration-wavy decoration-error-500;
+  }
+
+  .cm-cursor-char {
+    @apply bg-primary-500/30 border-l-2 border-primary-400;
+  }
+}
+
+/* CodeMirror 主题覆盖 */
+.cm-editor {
+  height: 100%;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.cm-editor .cm-content {
+  padding: 12px 0;
+}
+
+.cm-editor .cm-line {
+  padding: 0 16px;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}

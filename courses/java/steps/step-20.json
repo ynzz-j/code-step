@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "第一个 if 语句",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "声明一个 int 变量 age = 18，然后用 if 判断：如果 age >= 18，就输出 \"成年人\"。",
+  "hint": "if (age >= 18) { System.out.println(\"成年人\"); }",
+  "starter": "public class Main {\n    public static void main(String[] args) {\n        int age = 18;\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int age = 18;\n        if (age >= 18) {\n            System.out.println(\"Adult\");\n        }\n    }\n}",
+  "expectedOutput": "Adult",
+  "validation": {
+    "type": "contains",
+    "value": "if (age >= 18)"
+  },
+  "encouragement": "条件判断成功了！"
+}

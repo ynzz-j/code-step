@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "声明异常 throws",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "方法可以用 throws 声明会抛出的异常，调用者需要处理。\n\n定义一个 divide 方法，throws 声明 ArithmeticException。",
+  "hint": "public int divide(int a, int b) throws ArithmeticException",
+  "starter": "public class Main {\n    public static int divide(int a, int b) {\n        return a / b;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(divide(10, 0));\n    }\n}",
+  "answer": "public class Main {\n    public static int divide(int a, int b) throws ArithmeticException {\n        return a / b;\n    }\n\n    public static void main(String[] args) {\n        try {\n            System.out.println(divide(10, 0));\n        } catch (ArithmeticException e) {\n            System.out.println(\"divisor cannot be zero\");\n        }\n    }\n}",
+  "expectedOutput": "divisor cannot be zero",
+  "validation": {
+    "type": "contains",
+    "value": "throws ArithmeticException"
+  },
+  "encouragement": "throws 声明异常，调用者处理！"
+}

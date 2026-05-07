@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "定义并调用方法",
+  "concept": "方法基础",
+  "difficulty": "intermediate",
+  "instruction": "定义一个 sayHello 方法，然后在 main 中调用它。\n\n方法定义后，用 方法名() 来调用。",
+  "hint": "sayHello(); 在 main 方法中调用",
+  "starter": "public class Main {\n    public static void sayHello() {\n        System.out.println(\"Hello!\");\n    }\n\n    public static void main(String[] args) {\n        \n    }\n}",
+  "answer": "public class Main {\n    public static void sayHello() {\n        System.out.println(\"Hello!\");\n    }\n\n    public static void main(String[] args) {\n        sayHello();\n    }\n}",
+  "expectedOutput": "Hello!",
+  "validation": {
+    "type": "contains",
+    "value": "sayHello();"
+  },
+  "encouragement": "方法调用成功！代码复用开始了！"
+}

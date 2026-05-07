@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多个 catch",
+  "concept": "Exception Handling",
+  "difficulty": "intermediate",
+  "instruction": "一个 try 可以有多个 catch，捕获不同类型的异常。\n\n照着敲，注意异常类型的顺序。",
+  "hint": "子异常在前，父异常在后",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        try {\n            int[] arr = {1, 2, 3};\n            System.out.println(arr[5]);\n        } catch (ArithmeticException e) {\n            System.out.println(\"ArithmeticException\");\n        } catch (ArrayIndexOutOfBoundsException e) {\n            System.out.println(\"ArrayIndexOutOfBoundsException\");\n        } catch (Exception e) {\n            System.out.println(\"Other Exception\");\n        }\n    }\n}",
+  "encouragement": "多个 catch，捕获不同异常！"
+}

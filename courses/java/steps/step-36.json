@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "返回值练习",
+  "concept": "方法返回值",
+  "difficulty": "intermediate",
+  "instruction": "定义一个方法 isEven，判断一个整数是否是偶数，返回 boolean。\n\n在 main 中调用它，输出 result。",
+  "hint": "偶数就是 n % 2 == 0",
+  "starter": "public class Main {\n    public static boolean isEven(int n) {\n        \n    }\n\n    public static void main(String[] args) {\n        boolean result = isEven(7);\n        System.out.println(result);\n    }\n}",
+  "answer": "public class Main {\n    public static boolean isEven(int n) {\n        return n % 2 == 0;\n    }\n\n    public static void main(String[] args) {\n        boolean result = isEven(7);\n        System.out.println(result);\n    }\n}",
+  "expectedOutput": "false",
+  "validation": {
+    "type": "contains",
+    "value": "return n % 2 == 0"
+  },
+  "encouragement": "布尔返回值，用 return 直接返回比较结果！"
+}
