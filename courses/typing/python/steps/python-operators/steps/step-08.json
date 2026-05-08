@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "运算符综合",
+  "concept": "综合练习",
+  "difficulty": "beginner",
+  "instruction": "综合练习：使用多种运算符计算。\n\n请照着敲！",
+  "hint": "先想清楚计算顺序",
+  "targetCode": "a = 10\nb = 3\nc = 2\nresult = (a + b) * c - a / 2\nprint('Result:', result)\nis_valid = a > b and b > c\nprint('Valid:', is_valid)",
+  "encouragement": "运算符你都会了！"
+}

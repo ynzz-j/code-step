@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "调用父类",
+  "concept": "super 函数",
+  "difficulty": "advanced",
+  "instruction": "用 super() 调用父类的方法。\n\n请照着敲！",
+  "hint": "super().__init__()",
+  "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)\n        self.breed = breed\n\nd = Dog('Buddy', 'Labrador')\nprint(d.name)\nprint(d.breed)",
+  "encouragement": "super() 复用父类逻辑！"
+}

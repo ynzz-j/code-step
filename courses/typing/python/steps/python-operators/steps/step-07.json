@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "运算优先级",
+  "concept": "优先级",
+  "difficulty": "beginner",
+  "instruction": "运算有优先级：括号 > 幂 > 乘除 > 加减。\n\n请照着敲！",
+  "hint": "不确定时用括号",
+  "targetCode": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(2 ** 2 * 3)\nprint(10 - 2 ** 2)",
+  "encouragement": "括号可以改变优先级！"
+}

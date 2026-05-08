@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "zip",
+  "concept": "zip 合并",
+  "difficulty": "hell",
+  "instruction": "zip 把多个序列合并。\n\n请照着敲！",
+  "hint": "生成元组",
+  "targetCode": "names = ['Alice', 'Bob', 'Charlie']\nages = [18, 20, 22]\nfor name, age in zip(names, ages):\n    print(f'{name}: {age}')",
+  "encouragement": "zip 同时遍历多个序列！"
+}

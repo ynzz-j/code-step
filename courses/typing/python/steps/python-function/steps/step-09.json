@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "文档字符串",
+  "concept": "docstring",
+  "difficulty": "intermediate",
+  "instruction": "函数第一行的字符串是文档。\n\n请照着敲！",
+  "hint": "三引号字符串",
+  "targetCode": "def add(a, b):\n    '''Add two numbers'''\n    return a + b\n\nprint(add.__doc__)\nprint(add(3, 5))",
+  "encouragement": "好文档让代码更易读！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "默认 参数",
+  "concept": "默认 值",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const greet = (name = \"World\") => {\n  console.log(`Hello, ${name}!`);\n};\ngreet();",
+  "encouragement": "默认 参数 ！"
+}

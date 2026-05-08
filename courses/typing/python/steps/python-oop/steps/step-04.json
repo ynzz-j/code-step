@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "self 参数",
+  "concept": "自身引用",
+  "difficulty": "advanced",
+  "instruction": "self 指向当前对象。\n\n请照着敲！",
+  "hint": "每个方法第一个参数",
+  "targetCode": "class Counter:\n    def __init__(self):\n        self.count = 0\n    def increment(self):\n        self.count += 1\n\nc = Counter()\nc.increment()\nprint(c.count)",
+  "encouragement": "self 让对象访问自己的属性！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Computed 属性",
+  "concept": "对象",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const key = \"name\";\nconst obj = { [key]: \"Alice\" };\nconsole.log(obj);",
+  "encouragement": "[表达式]！"
+}

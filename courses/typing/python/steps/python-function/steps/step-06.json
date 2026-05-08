@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "关键字参数",
+  "concept": "关键字参数",
+  "difficulty": "intermediate",
+  "instruction": "可以用参数名指定参数值。\n\n请照着敲！",
+  "hint": "参数名=值",
+  "targetCode": "def greet(name, msg='Hello'):\n    print(msg + ', ' + name)\n\ngreet(name='Alice')\ngreet(msg='Hi', name='Bob')",
+  "encouragement": "关键字参数顺序无关！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "遍历键",
+  "concept": "keys 方法",
+  "difficulty": "advanced",
+  "instruction": "用 keys() 遍历所有键。\n\n请照着敲！",
+  "hint": "for key in dict.keys()",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor key in person.keys():\n    print(key)",
+  "encouragement": "遍历是处理字典的基础！"
+}

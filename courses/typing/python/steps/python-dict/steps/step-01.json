@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "创建字典",
+  "concept": "字典定义",
+  "difficulty": "advanced",
+  "instruction": "字典用花括号，键值对用冒号分隔。\n\n请照着敲！",
+  "hint": "{key: value}",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(person)\nprint(person['name'])",
+  "encouragement": "字典是键值对的容器！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "实例属性",
+  "concept": "实例变量",
+  "difficulty": "advanced",
+  "instruction": "每个对象有独立的实例属性。\n\n请照着敲！",
+  "hint": "通过 self.属性名 定义",
+  "targetCode": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\nd1 = Dog('Buddy')\nd2 = Dog('Max')\nprint(d1.name)\nprint(d2.name)",
+  "encouragement": "实例属性属于对象！"
+}

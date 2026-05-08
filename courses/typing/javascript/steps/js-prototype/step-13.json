@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Mixin 模式",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const canEat = {\n  eat() { return \"Eating...\"; }\n};\nconst canWalk = {\n  walk() { return \"Walking...\"; }\n};\nconst person = { name: \"Alice\" };\nObject.assign(person, canEat, canWalk);\nconsole.log(person.eat());\nconsole.log(person.walk());",
+  "encouragement": "通过混入添加功能，无需继承！"
+}

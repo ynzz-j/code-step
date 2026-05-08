@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "变量 05",
+  "concept": "变量",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "console.log(typeof 42);\nconsole.log(typeof \"hello\");\nconsole.log(typeof true);",
+  "encouragement": "变量存储数据！"
+}

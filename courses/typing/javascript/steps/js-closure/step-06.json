@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "闭包 06",
+  "concept": "闭包",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function createCounter() {\n  let count = 0;\n  return function() {\n    count++;\n    return count;\n  };\n}\nconst counter = createCounter();\nconsole.log(counter());\nconsole.log(counter());",
+  "encouragement": "闭包捕获外部变量！"
+}

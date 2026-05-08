@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "生成器管道",
+  "concept": "流水线处理",
+  "difficulty": "hell",
+  "instruction": "多个生成器可以链式处理。\n\n请照着敲！",
+  "hint": "像管道一样处理",
+  "targetCode": "def numbers():\n    for i in range(10):\n        yield i\n\ndef double(gen):\n    for n in gen:\n        yield n * 2\n\ndef filter_odd(gen):\n    for n in gen:\n        if n % 2 == 0:\n            yield n\n\nfor i in filter_odd(double(numbers())):\n    print(i)",
+  "encouragement": "生成器管道很优雅！"
+}

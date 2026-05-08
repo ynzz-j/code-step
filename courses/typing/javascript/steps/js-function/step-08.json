@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "forEach 方法",
+  "concept": "函数",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const fruits = [\"apple\", \"banana\", \"cherry\"];\nfruits.forEach(fruit => console.log(fruit));",
+  "encouragement": "是一个 数组 方法！"
+}

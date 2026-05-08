@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Cloure v 类",
+  "concept": "Cloure v 类",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "// Closure approach\nfunction createCounter() {\n  let count = 0;\n  return { inc: () => ++count };\n}\n// Class approach\nclass Counter {\n  constructor() { this.count = 0; }\n  inc() { return ++this.count; }\n}\nconst c1 = createCounter();\nconst c2 = new Counter();\nconsole.log(c1.inc(), c2.inc());",
+  "encouragement": "模式 ！"
+}

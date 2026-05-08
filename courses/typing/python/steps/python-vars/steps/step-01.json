@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "创建变量",
+  "concept": "变量赋值",
+  "difficulty": "beginner",
+  "instruction": "Python 中变量不需要声明类型，直接赋值即可。\n\n请照着敲一遍！",
+  "hint": "变量名 = 值",
+  "targetCode": "name = 'Alice'\nage = 18\nprint(name)\nprint(age)",
+  "encouragement": "变量在赋值时自动创建！"
+}

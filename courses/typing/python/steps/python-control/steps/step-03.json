@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多条件判断",
+  "concept": "多分支",
+  "difficulty": "intermediate",
+  "instruction": "elif 用于处理多个条件。\n\n请照着敲！",
+  "hint": "elif = else if",
+  "targetCode": "score = 85\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('D')",
+  "encouragement": "多分支让代码更清晰！"
+}

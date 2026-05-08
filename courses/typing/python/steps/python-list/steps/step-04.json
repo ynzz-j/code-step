@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "修改元素",
+  "concept": "列表赋值",
+  "difficulty": "intermediate",
+  "instruction": "可以通过索引修改列表元素。\n\n请照着敲！",
+  "hint": "直接赋值即可",
+  "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfruits[0] = 'orange'\nprint(fruits)\nfruits[-1] = 'grape'\nprint(fruits)",
+  "encouragement": "列表是可变的！"
+}

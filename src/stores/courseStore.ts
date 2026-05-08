@@ -2,9 +2,30 @@ import { create } from 'zustand';
 import type { Course, CourseMetadata, Step, TypingStats, CourseCategory, Difficulty } from '@/types';
 import { courseService } from '@/services/courseService';
 
+// 连击空闲超时（3s 无输入视为中断）
+const COMBO_IDLE_TIMEOUT_MS = 3000;
+let comboTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+function clearComboTimeout() {
+  if (comboTimeoutId !== null) {
+    clearTimeout(comboTimeoutId);
+    comboTimeoutId = null;
+  }
+}
+
+function startComboTimeout(onTimeout: () => void) {
+  clearComboTimeout();
+  comboTimeoutId = setTimeout(onTimeout, COMBO_IDLE_TIMEOUT_MS);
+}
+
 interface CourseProgressInfo {
   completedSteps: number[];
   currentStep: number;
+}
+
+interface ComboState {
+  currentCombo: number;
+  maxCombo: number;
 }
 
 interface CourseStore {
@@ -24,6 +45,8 @@ interface CourseStore {
   error: string | null;
   // 课程进度映射
   courseProgress: Record<string, CourseProgressInfo>;
+  // 连击状态
+  combo: ComboState;
 
   loadCourses: () => Promise<void>;
   startCourse: (courseId: string) => Promise<void>;
@@ -39,6 +62,11 @@ interface CourseStore {
   setLanguage: (lang: string | 'all') => void;
   setDifficulty: (difficulty: Difficulty | 'all') => void;
   getCourseProgress: (courseId: string) => CourseProgressInfo | null;
+  // 连击 actions
+  incrementCombo: () => void;
+  resetCombo: () => void;
+  getMaxCombo: () => number;
+  resetAllCombo: () => void;
 }
 
 export const useCourseStore = create<CourseStore>((set, get) => ({
@@ -57,6 +85,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   isLoading: false,
   error: null,
   courseProgress: {},
+  combo: { currentCombo: 0, maxCombo: 0 },
 
   loadCourses: async () => {
     set({ isLoading: true, error: null });
@@ -106,6 +135,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
 
   startCourse: async (courseId: string) => {
     console.log('startCourse called with:', courseId);
+    clearComboTimeout();
     set({ isLoading: true, error: null });
     try {
       const course = await courseService.getCourse(courseId);
@@ -125,6 +155,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
         typingStartTime: Date.now(),
         courseStartTime: Date.now(),
         isLoading: false,
+        combo: { currentCombo: 0, maxCombo: 0 },
       });
     } catch (error) {
       console.error('Failed to load course:', error);
@@ -198,7 +229,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   },
 
   recordTypingKeystroke: (isCorrect: boolean) => {
-    const { typingStats, typingStartTime } = get();
+    const { typingStats, typingStartTime, combo } = get();
     const now = Date.now();
     const total = typingStats.totalKeystrokes + 1;
     const correct = isCorrect ? typingStats.correctKeystrokes + 1 : typingStats.correctKeystrokes;
@@ -207,9 +238,35 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     const elapsedMin = (now - startTime) / 60000;
     const wpm = elapsedMin > 0 ? Math.round((correct / 5) / elapsedMin) : 0;
     const accuracy = total > 0 ? Math.round((correct / total) * 100) : 100;
+
+    // 更新连击状态
+    let newCombo: ComboState;
+    if (isCorrect) {
+      const nextCombo = combo.currentCombo + 1;
+      newCombo = {
+        currentCombo: nextCombo,
+        maxCombo: Math.max(combo.maxCombo, nextCombo),
+      };
+      // 正确输入：重置 3s 空闲定时器
+      startComboTimeout(() => {
+        const current = get().combo;
+        if (current.currentCombo > 0) {
+          set({ combo: { currentCombo: 0, maxCombo: current.maxCombo } });
+        }
+      });
+    } else {
+      newCombo = {
+        currentCombo: 0,
+        maxCombo: combo.maxCombo,
+      };
+      // 错误输入：清除空闲定时器
+      clearComboTimeout();
+    }
+
     set({
       typingStats: { ...typingStats, totalKeystrokes: total, correctKeystrokes: correct, errors, wpm, accuracy },
       typingStartTime: startTime,
+      combo: newCombo,
     });
   },
 
@@ -237,5 +294,31 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
   getCourseProgress: (courseId: string) => {
     const { courseProgress } = get();
     return courseProgress[courseId] || null;
+  },
+
+  // 连击 actions
+  incrementCombo: () => {
+    const { combo } = get();
+    const nextCombo = combo.currentCombo + 1;
+    set({
+      combo: {
+        currentCombo: nextCombo,
+        maxCombo: Math.max(combo.maxCombo, nextCombo),
+      },
+    });
+  },
+
+  resetCombo: () => {
+    const { combo } = get();
+    set({ combo: { currentCombo: 0, maxCombo: combo.maxCombo } });
+  },
+
+  getMaxCombo: () => {
+    return get().combo.maxCombo;
+  },
+
+  resetAllCombo: () => {
+    clearComboTimeout();
+    set({ combo: { currentCombo: 0, maxCombo: 0 } });
   },
 }));

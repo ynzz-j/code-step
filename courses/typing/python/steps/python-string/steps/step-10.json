@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串综合",
+  "concept": "综合练习",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：综合使用字符串方法。\n\n请照着敲！",
+  "hint": "方法可以链式调用",
+  "targetCode": "s = '  Hello, World!  '\ns = s.strip().upper()\nprint(s)\nprint(s.replace('WORLD', 'Python'))\nprint(len(s))",
+  "encouragement": "字符串方法你都掌握了！"
+}

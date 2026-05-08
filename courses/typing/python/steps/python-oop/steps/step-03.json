@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "构造函数",
+  "concept": "初始化方法",
+  "difficulty": "advanced",
+  "instruction": "__init__ 在创建对象时自动调用。\n\n请照着敲！",
+  "hint": "self 表示对象本身",
+  "targetCode": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\nd = Dog('Buddy')\nprint(d.name)",
+  "encouragement": "__init__ 是 Python 的构造函数！"
+}

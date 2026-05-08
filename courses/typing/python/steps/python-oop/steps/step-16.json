@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "属性装饰器",
+  "concept": "property",
+  "difficulty": "advanced",
+  "instruction": "@property 让方法像属性一样访问。\n\n请照着敲！",
+  "hint": "定义时用 @property",
+  "targetCode": "class Circle:\n    def __init__(self, radius):\n        self._radius = radius\n    @property\n    def radius(self):\n        return self._radius\n\nc = Circle(5)\nprint(c.radius)",
+  "encouragement": "property 让接口更优雅！"
+}

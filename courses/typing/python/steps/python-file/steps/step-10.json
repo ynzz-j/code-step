@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "JSON 文件",
+  "concept": "json 模块",
+  "difficulty": "advanced",
+  "instruction": "用 json 模块读写 JSON。\n\n请照着敲！",
+  "hint": "dump 和 load",
+  "targetCode": "import json\ndata = {'name': 'Alice', 'age': 18}\nwith open('data.json', 'w') as f:\n    json.dump(data, f)\nwith open('data.json', 'r') as f:\n    loaded = json.load(f)\nprint(loaded)",
+  "encouragement": "JSON 是数据交换的标准！"
+}

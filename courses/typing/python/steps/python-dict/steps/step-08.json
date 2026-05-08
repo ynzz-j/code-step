@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "遍历值",
+  "concept": "values 方法",
+  "difficulty": "advanced",
+  "instruction": "用 values() 遍历所有值。\n\n请照着敲！",
+  "hint": "for value in dict.values()",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor value in person.values():\n    print(value)",
+  "encouragement": "values() 获取所有值！"
+}

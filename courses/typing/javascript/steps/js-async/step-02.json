@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "setTimeout 定时器",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "setTimeout(() => {\n  console.log(\"Hello\");\n}, 100);",
+  "encouragement": "用于延时执行！"
+}

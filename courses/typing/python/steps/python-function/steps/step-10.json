@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数综合",
+  "concept": "综合练习",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：写一个计算器函数。\n\n请照着敲！",
+  "hint": "用参数控制操作",
+  "targetCode": "def calc(a, b, op='+'):\n    if op == '+':\n        return a + b\n    elif op == '-':\n        return a - b\n    elif op == '*':\n        return a * b\n    else:\n        return a / b\n\nprint(calc(10, 5))\nprint(calc(10, 5, '*'))",
+  "encouragement": "函数你都掌握了！"
+}

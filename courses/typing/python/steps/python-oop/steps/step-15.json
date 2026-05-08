@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "私有属性",
+  "concept": "封装",
+  "difficulty": "advanced",
+  "instruction": "用下划线前缀表示私有属性。\n\n请照着敲！",
+  "hint": "_属性名 表示私有",
+  "targetCode": "class Dog:\n    def __init__(self, name):\n        self._name = name\n\nd = Dog('Buddy')\nprint(d._name)",
+  "encouragement": "私有属性是约定，不是强制！"
+}

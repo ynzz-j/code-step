@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "遍历列表",
+  "concept": "循环遍历",
+  "difficulty": "intermediate",
+  "instruction": "用 for 循环遍历列表。\n\n请照着敲！",
+  "hint": "for 元素 in 列表",
+  "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(fruit)",
+  "encouragement": "遍历是处理列表的基础！"
+}

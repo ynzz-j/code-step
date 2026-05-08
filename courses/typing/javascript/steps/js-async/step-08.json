@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Promie.",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function main() {\n  const results = await Promise.all([\n    Promise.resolve(1),\n    Promise.resolve(2)\n  ]);\n  console.log(results);\n}\nmain();",
+  "encouragement": "异步编程处理等待！"
+}

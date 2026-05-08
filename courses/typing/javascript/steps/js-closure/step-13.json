@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Private 变量",
+  "concept": "闭包",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function createAccount(initial) {\n  let balance = initial;\n  return {\n    deposit(amount) { balance += amount; },\n    withdraw(amount) { balance -= amount; },\n    getBalance() { return balance; }\n  };\n}\nconst account = createAccount(100);\naccount.deposit(50);\nconsole.log(account.getBalance());",
+  "encouragement": "闭包捕获外部变量！"
+}

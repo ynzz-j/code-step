@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "返回值",
+  "concept": "return",
+  "difficulty": "intermediate",
+  "instruction": "使用 return 返回结果。\n\n请照着敲！",
+  "hint": "return 结束函数执行",
+  "targetCode": "def add(a, b):\n    return a + b\n\nresult = add(3, 5)\nprint(result)",
+  "encouragement": "return 让函数产出结果！"
+}

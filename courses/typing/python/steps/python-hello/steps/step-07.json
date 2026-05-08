@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多行字符串",
+  "concept": "三引号字符串",
+  "difficulty": "beginner",
+  "instruction": "使用三个引号 ''' 或 \"\"\" 可以输入多行字符串。\n\n请照着敲！",
+  "hint": "三个引号开始，三个引号结束",
+  "targetCode": "text = '''Line 1\nLine 2\nLine 3'''\nprint(text)",
+  "encouragement": "三引号是 Python 的特殊语法！"
+}

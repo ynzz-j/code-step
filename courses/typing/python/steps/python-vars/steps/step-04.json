@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串",
+  "concept": "字符串类型",
+  "difficulty": "beginner",
+  "instruction": "字符串是用引号包裹的文本。\n\n请照着敲一遍！",
+  "hint": "单引号或双引号都可以",
+  "targetCode": "s1 = 'Hello'\ns2 = \"World\"\ns3 = 'Python'\nprint(s1)\nprint(s2)\nprint(s3)",
+  "encouragement": "字符串是编程中最常用的类型！"
+}

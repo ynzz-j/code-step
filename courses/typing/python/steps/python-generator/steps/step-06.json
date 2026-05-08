@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "停止迭代",
+  "concept": "StopIteration",
+  "difficulty": "hell",
+  "instruction": "生成器用完会抛出 StopIteration。\n\n请照着敲！",
+  "hint": "捕获异常或用 for 循环",
+  "targetCode": "def numbers():\n    yield 1\n    yield 2\n\ngen = numbers()\nprint(next(gen))\nprint(next(gen))\ntry:\n    print(next(gen))\nexcept StopIteration:\n    print('Done!')",
+  "encouragement": "StopIteration 表示迭代结束！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数作为参数",
+  "concept": "高阶函数",
+  "difficulty": "hell",
+  "instruction": "函数可以作为参数传递。\n\n请照着敲！",
+  "hint": "把函数当参数用",
+  "targetCode": "def add(a, b):\n    return a + b\n\ndef apply(func, x, y):\n    return func(x, y)\n\nresult = apply(add, 3, 5)\nprint(result)",
+  "encouragement": "高阶函数是装饰器的基础！"
+}

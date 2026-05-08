@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Module (导出/导入)",
+  "concept": "ES 模块",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "// In module: export const PI = 3.14159;\n// In main: import { PI } from './module';\nconst PI = 3.14159;\nconsole.log(PI);",
+  "encouragement": "代码 ！"
+}

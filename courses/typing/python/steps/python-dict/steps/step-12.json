@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "创建集合",
+  "concept": "集合定义",
+  "difficulty": "advanced",
+  "instruction": "集合用花括号，但没有键值对。\n\n请照着敲！",
+  "hint": "无序且不重复",
+  "targetCode": "s = {1, 2, 3, 3, 3}\nprint(s)\nnums = set([1, 2, 2, 3])\nprint(nums)",
+  "encouragement": "集合自动去重！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Lexical 作用域",
+  "concept": "lexical 作用域",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const outer = \"outer\";\nfunction parent() {\n  const inner = \"inner\";\n  function child() {\n    console.log(outer, inner);\n  }\n  child();\n}\nparent();",
+  "encouragement": "作用域 作用域 ！"
+}

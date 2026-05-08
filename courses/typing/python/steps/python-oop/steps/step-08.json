@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类的继承",
+  "concept": "继承",
+  "difficulty": "advanced",
+  "instruction": "子类继承父类的属性和方法。\n\n请照着敲！",
+  "hint": "class 子类(父类):",
+  "targetCode": "class Animal:\n    def speak(self):\n        print('...')\n\nclass Dog(Animal):\n    def speak(self):\n        print('Woof!')\n\nd = Dog()\nd.speak()",
+  "encouragement": "继承让代码复用！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "计时装饰器",
+  "concept": "计时功能",
+  "difficulty": "hell",
+  "instruction": "创建测量执行时间的装饰器。\n\n请照着敲！",
+  "hint": "使用 time 模块",
+  "targetCode": "import time\nfrom functools import wraps\n\ndef timing(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f'Took {end-start:.4f}s')\n        return result\n    return wrapper\n\n@timing\ndef slow_func():\n    time.sleep(0.1)\n    return 'Done'\n\nprint(slow_func())",
+  "encouragement": "计时装饰器很实用！"
+}

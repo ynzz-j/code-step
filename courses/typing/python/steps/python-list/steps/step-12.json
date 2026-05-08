@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表综合",
+  "concept": "综合练习",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：综合使用列表方法。\n\n请照着敲！",
+  "hint": "创建、处理、排序",
+  "targetCode": "nums = [5, 2, 8, 1, 9]\nnums.append(3)\nnums.sort()\nprint(nums)\nprint('Sum:', sum(nums))\nprint('Max:', max(nums))",
+  "encouragement": "列表方法你都掌握了！"
+}

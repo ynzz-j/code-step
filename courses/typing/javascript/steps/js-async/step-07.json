@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "等待 关键字",
+  "concept": "等待",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function main() {\n  const result = await Promise.resolve(42);\n  console.log(result);\n}\nmain();",
+  "encouragement": "等待 异步 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "单例装饰器",
+  "concept": "单例模式",
+  "difficulty": "hell",
+  "instruction": "创建确保类只有一个实例的装饰器。\n\n请照着敲！",
+  "hint": "缓存实例",
+  "targetCode": "from functools import wraps\n\ndef singleton(cls):\n    instances = {}\n    @wraps(cls)\n    def wrapper(*args, **kwargs):\n        if cls not in instances:\n            instances[cls] = cls(*args, **kwargs)\n        return instances[cls]\n    return wrapper\n\n@singleton\nclass Database:\n    def __init__(self):\n        print('Database created')\n\nd1 = Database()\nd2 = Database()\nprint(d1 is d2)",
+  "encouragement": "单例模式确保唯一实例！"
+}

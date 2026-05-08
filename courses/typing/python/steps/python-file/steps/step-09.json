@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "检查文件",
+  "concept": "路径检查",
+  "difficulty": "advanced",
+  "instruction": "用 os.path 检查文件是否存在。\n\n请照着敲！",
+  "hint": "返回 True 或 False",
+  "targetCode": "import os\nprint(os.path.exists('test.txt'))\nprint(os.path.isfile('test.txt'))\nprint(os.path.isdir('test.txt'))",
+  "encouragement": "检查后再操作是好习惯！"
+}

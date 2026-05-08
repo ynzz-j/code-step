@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@staticmethod",
+  "concept": "静态方法",
+  "difficulty": "advanced",
+  "instruction": "@staticmethod 是不依赖类/对象的纯函数。\n\n请照着敲！",
+  "hint": "没有 self 或 cls",
+  "targetCode": "class Math:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\nprint(Math.add(3, 5))",
+  "encouragement": "静态方法只是碰巧在类里！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Str 拼接",
+  "concept": "Str 拼接",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "console.log(\"Hello\" + \" \" + \"World\");",
+  "encouragement": "变量存储数据！"
+}

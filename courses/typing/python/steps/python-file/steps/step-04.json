@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "逐行读取",
+  "concept": "逐行读取",
+  "difficulty": "advanced",
+  "instruction": "readline() 每次读取一行。\n\n请照着敲！",
+  "hint": "适合大文件",
+  "targetCode": "f = open('test.txt', 'r')\nline1 = f.readline()\nprint(line1)\nf.close()",
+  "encouragement": "逐行读取节省内存！"
+}

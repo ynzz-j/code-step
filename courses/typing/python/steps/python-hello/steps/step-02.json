@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多行输出",
+  "concept": "print",
+  "difficulty": "beginner",
+  "instruction": "print() 可以连续调用来输出多行内容。\n\n请照着敲！",
+  "hint": "每个 print() 输出一行",
+  "targetCode": "print('Line 1')\nprint('Line 2')\nprint('Line 3')",
+  "encouragement": "你学会了多行输出！"
+}

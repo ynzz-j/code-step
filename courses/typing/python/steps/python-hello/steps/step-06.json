@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "单行注释",
+  "concept": "注释",
+  "difficulty": "beginner",
+  "instruction": "使用 # 添加注释，注释不会影响代码执行。\n\n请照着敲！",
+  "hint": "# 后面的内容是注释",
+  "targetCode": "# This is a comment\nprint('Hello')  # print Hello",
+  "encouragement": "注释是写给自己的提示！"
+}

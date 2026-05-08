@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "filter",
+  "concept": "filter 函数",
+  "difficulty": "hell",
+  "instruction": "filter 过滤元素。\n\n请照着敲！",
+  "hint": "返回生成器",
+  "targetCode": "nums = [1, 2, 3, 4, 5]\nevens = filter(lambda x: x % 2 == 0, nums)\nfor n in evens:\n    print(n)",
+  "encouragement": "filter 选择性产生值！"
+}

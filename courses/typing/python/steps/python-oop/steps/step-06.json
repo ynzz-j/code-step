@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类属性",
+  "concept": "类变量",
+  "difficulty": "advanced",
+  "instruction": "类属性所有对象共享。\n\n请照着敲！",
+  "hint": "在类内部直接定义",
+  "targetCode": "class Dog:\n    species = 'Canis'\n    def __init__(self, name):\n        self.name = name\n\nd = Dog('Buddy')\nprint(Dog.species)\nprint(d.species)",
+  "encouragement": "类属性被所有对象共享！"
+}

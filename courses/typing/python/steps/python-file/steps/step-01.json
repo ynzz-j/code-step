@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "打开文件",
+  "concept": "open 函数",
+  "difficulty": "advanced",
+  "instruction": "用 open() 打开文件。\n\n请照着敲！",
+  "hint": "文件路径和模式",
+  "targetCode": "f = open('test.txt', 'w')\nf.write('Hello')\nf.close()",
+  "encouragement": "文件操作是基础技能！"
+}

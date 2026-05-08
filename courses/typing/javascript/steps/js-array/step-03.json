@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "puh 和",
+  "concept": "数组",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const nums = [1, 2, 3];\nnums.push(4);\nconsole.log(nums.pop());",
+  "encouragement": "/ 数组！"
+}

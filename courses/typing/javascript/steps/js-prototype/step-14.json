@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "方法",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Animal {\n  speak() { return \"Sound\"; }\n}\nclass Cat extends Animal {\n  speak() { return \"Meow!\"; }\n}\nconst cat = new Cat();\nconsole.log(cat.speak());",
+  "encouragement": "方法 ！"
+}

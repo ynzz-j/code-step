@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类语法",
+  "concept": "类",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Person {\n  constructor(name) {\n    this.name = name;\n  }\n  greet() {\n    return `Hi, I'm ${this.name}`;\n  }\n}\nconst p = new Person(\"Alice\");\nconsole.log(p.greet());",
+  "encouragement": "6 类是语法糖！"
+}

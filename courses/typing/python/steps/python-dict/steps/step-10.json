@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字典长度",
+  "concept": "len 函数",
+  "difficulty": "advanced",
+  "instruction": "len() 返回字典的键值对数量。\n\n请照着敲！",
+  "hint": "键值对个数",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(len(person))\nperson['city'] = 'Beijing'\nprint(len(person))",
+  "encouragement": "len() 统计键值对！"
+}

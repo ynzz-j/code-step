@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "大小写",
+  "concept": "大小写方法",
+  "difficulty": "intermediate",
+  "instruction": "upper() 和 lower() 转换大小写。\n\n请照着敲！",
+  "hint": "返回新字符串",
+  "targetCode": "s = 'Hello World'\nprint(s.upper())\nprint(s.lower())\nprint('ABC'.lower())",
+  "encouragement": "大小写转换很实用！"
+}

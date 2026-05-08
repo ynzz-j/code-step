@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "装饰器本质",
+  "concept": "装饰器原理",
+  "difficulty": "hell",
+  "instruction": "装饰器本质是高阶函数。\n\n请照着敲！",
+  "hint": "@ 是语法糖",
+  "targetCode": "def decorator(func):\n    def wrapper():\n        print('Decorated!')\n        func()\n    return wrapper\n\ndef greet():\n    print('Hello!')\n\ngreet = decorator(greet)\ngreet()",
+  "encouragement": "@ 就是这行赋值的语法糖！"
+}

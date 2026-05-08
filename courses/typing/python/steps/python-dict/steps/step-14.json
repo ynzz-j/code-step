@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "集合增删",
+  "concept": "add/remove",
+  "difficulty": "advanced",
+  "instruction": "add() 添加，remove() 删除元素。\n\n请照着敲！",
+  "hint": "add 添加，remove 删除",
+  "targetCode": "s = {1, 2, 3}\ns.add(4)\nprint(s)\ns.remove(2)\nprint(s)",
+  "encouragement": "集合操作很灵活！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对象 解构",
+  "concept": "对象 解构",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const { name, age } = { name: \"Alice\", age: 30 };\nconsole.log(`${name}: ${age}`);",
+  "encouragement": "对象 解构 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类型检查",
+  "concept": "类型判断",
+  "difficulty": "advanced",
+  "instruction": "isinstance() 检查对象类型。\n\n请照着敲！",
+  "hint": "返回 True 或 False",
+  "targetCode": "class Dog:\n    pass\n\nclass Cat:\n    pass\n\nd = Dog()\nc = Cat()\nprint(isinstance(d, Dog))\nprint(isinstance(c, Dog))",
+  "encouragement": "isinstance() 做类型检查！"
+}

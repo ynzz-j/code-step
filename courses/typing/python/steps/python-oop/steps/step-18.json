@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "OOP 综合",
+  "concept": "综合练习",
+  "difficulty": "advanced",
+  "instruction": "综合练习：创建一个完整的类继承体系。\n\n请照着敲！",
+  "hint": "结合所有 OOP 概念",
+  "targetCode": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        pass\n\nclass Dog(Animal):\n    def speak(self):\n        return f'{self.name} says Woof!'\n\nclass Cat(Animal):\n    def speak(self):\n        return f'{self.name} says Meow!'\n\nd = Dog('Buddy')\nc = Cat('Whiskers')\nprint(d.speak())\nprint(c.speak())",
+  "encouragement": "面向对象你都掌握了！"
+}

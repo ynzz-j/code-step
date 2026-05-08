@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Promie.catch()",
+  "concept": "error h和",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "Promise.reject(new Error(\"Failed!\"))\n  .catch(err => console.log(err.message));",
+  "encouragement": "() 和 异步 ！"
+}

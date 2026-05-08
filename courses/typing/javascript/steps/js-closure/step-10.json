@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "thi 回调",
+  "concept": "闭包",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const obj = {\n  name: \"Alice\",\n  greet() {\n    console.log(`Hi, I'm ${this.name}`);\n  }\n};\nsetTimeout(obj.greet, 10);",
+  "encouragement": "回调 ！"
+}

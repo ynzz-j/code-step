@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "if 语句",
+  "concept": "条件判断",
+  "difficulty": "intermediate",
+  "instruction": "if 语句根据条件决定是否执行代码。\n\n请照着敲！",
+  "hint": "注意冒号",
+  "targetCode": "age = 18\nif age >= 18:\n    print('Adult')",
+  "encouragement": "条件判断是程序的基础！"
+}

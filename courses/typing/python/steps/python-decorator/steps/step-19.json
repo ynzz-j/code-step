@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类方法装饰器",
+  "concept": "方法装饰器",
+  "difficulty": "hell",
+  "instruction": "装饰器可以用于类方法。\n\n请照着敲！",
+  "hint": "self 参数也要转发",
+  "targetCode": "from functools import wraps\n\ndef log_method(func):\n    @wraps(func)\n    def wrapper(self, *args, **kwargs):\n        print(f'Calling {func.__name__}')\n        return func(self, *args, **kwargs)\n    return wrapper\n\nclass Calculator:\n    @log_method\n    def add(self, a, b):\n        return a + b\n\nc = Calculator()\nprint(c.add(3, 5))",
+  "encouragement": "方法装饰器需要注意 self！"
+}

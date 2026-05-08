@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "添加修改",
+  "concept": "赋值操作",
+  "difficulty": "advanced",
+  "instruction": "通过赋值可以添加或修改字典项。\n\n请照着敲！",
+  "hint": "不存在的键会添加",
+  "targetCode": "person = {'name': 'Alice'}\nperson['age'] = 18\nprint(person)\nperson['name'] = 'Bob'\nprint(person)",
+  "encouragement": "字典是可变的！"
+}

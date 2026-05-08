@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多重继承",
+  "concept": "多继承",
+  "difficulty": "advanced",
+  "instruction": "Python 支持多继承。\n\n请照着敲！",
+  "hint": "逗号分隔多个父类",
+  "targetCode": "class A:\n    def method(self):\n        print('A')\n\nclass B:\n    def method(self):\n        print('B')\n\nclass C(A, B):\n    pass\n\nc = C()\nc.method()",
+  "encouragement": "多继承功能强大但要慎用！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "print 函数",
+  "concept": "print",
+  "difficulty": "beginner",
+  "instruction": "Python 使用 print() 函数来输出内容。\n\n请照着敲一遍，记住这个固定写法！",
+  "hint": "print() 是 Python 最常用的输出函数",
+  "targetCode": "print('Hello, World!')",
+  "encouragement": "太棒了！你写下了第一行 Python 代码！"
+}

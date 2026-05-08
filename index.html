@@ -5,9 +5,46 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CodeStep - 一步步学编程</title>
+    <style>
+      /* 防止白屏的加载动画 */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #111827; }
+      #root { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+      .loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .loader-text {
+        color: #9CA3AF;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.05em;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #374151;
+        border-top-color: #3B82F6;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      /* React 挂载后隐藏加载器 */
+      .app-loaded .loader { display: none; }
+    </style>
   </head>
   <body class="bg-gray-900 text-gray-100">
-    <div id="root"></div>
+    <div id="root">
+      <!-- 加载动画（React 挂载后会被替换） -->
+      <div class="loader">
+        <div class="spinner"></div>
+        <span class="loader-text">CodeStep 加载中...</span>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

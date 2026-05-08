@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "原型 Bet",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Stack {\n  constructor() {\n    this.items = [];\n  }\n  push(item) {\n    this.items.push(item);\n  }\n  pop() {\n    return this.items.pop();\n  }\n  get size() {\n    return this.items.length;\n  }\n}\nconst s = new Stack();\ns.push(1);\ns.push(2);\nconsole.log(s.pop(), s.size);",
+  "encouragement": "6 类 ！"
+}

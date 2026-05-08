@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "__slots__",
+  "concept": "内存优化",
+  "difficulty": "advanced",
+  "instruction": "__slots__ 限制对象的属性。\n\n请照着敲！",
+  "hint": "节省内存",
+  "targetCode": "class Point:\n    __slots__ = ['x', 'y']\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\np = Point(1, 2)\nprint(p.x, p.y)",
+  "encouragement": "__slots__ 是性能优化技巧！"
+}

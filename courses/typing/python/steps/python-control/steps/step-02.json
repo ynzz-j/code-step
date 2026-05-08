@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "if-else 结构",
+  "concept": "双分支",
+  "difficulty": "intermediate",
+  "instruction": "if-else 处理两个分支的情况。\n\n请照着敲！",
+  "hint": "else 后面也有冒号",
+  "targetCode": "age = 16\nif age >= 18:\n    print('Adult')\nelse:\n    print('Minor')",
+  "encouragement": "双分支结构很常见！"
+}

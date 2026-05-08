@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "幂运算",
+  "concept": "指数运算",
+  "difficulty": "beginner",
+  "instruction": "使用 ** 可以进行幂运算（次方）。\n\n请照着敲！",
+  "hint": "** 表示乘方",
+  "targetCode": "print(2 ** 3)\nprint(5 ** 2)\nprint(10 ** 0)\nprint(2 ** 10)",
+  "encouragement": "** 是 Python 的幂运算符！"
+}

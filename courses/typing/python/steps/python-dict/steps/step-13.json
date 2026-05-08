@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "集合运算",
+  "concept": "集合运算",
+  "difficulty": "advanced",
+  "instruction": "集合支持交、并、差运算。\n\n请照着敲！",
+  "hint": "& | -",
+  "targetCode": "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a & b)\nprint(a | b)\nprint(a - b)",
+  "encouragement": "集合运算是数学的体现！"
+}

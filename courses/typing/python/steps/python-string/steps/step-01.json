@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串索引",
+  "concept": "索引访问",
+  "difficulty": "intermediate",
+  "instruction": "字符串可以用索引访问单个字符。\n\n请照着敲！",
+  "hint": "从 0 开始",
+  "targetCode": "s = 'Hello'\nprint(s[0])\nprint(s[1])\nprint(s[-1])",
+  "encouragement": "字符串索引从零开始！"
+}

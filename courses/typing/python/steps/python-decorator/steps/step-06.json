@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "第一个装饰器",
+  "concept": "装饰器",
+  "difficulty": "hell",
+  "instruction": "装饰器在不修改原函数的情况下增强功能。\n\n请照着敲！",
+  "hint": "@装饰器名 用在函数定义前",
+  "targetCode": "def decorator(func):\n    def wrapper():\n        print('Before')\n        func()\n        print('After')\n    return wrapper\n\n@decorator\ndef say_hello():\n    print('Hello!')\n\nsay_hello()",
+  "encouragement": "装饰器是 Python 的魔法！"
+}

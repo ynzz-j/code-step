@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "访问字典",
+  "concept": "键访问",
+  "difficulty": "advanced",
+  "instruction": "通过键访问字典的值。\n\n请照着敲！",
+  "hint": "dict[key]",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(person['name'])\nprint(person['age'])",
+  "encouragement": "字典的访问很快！"
+}

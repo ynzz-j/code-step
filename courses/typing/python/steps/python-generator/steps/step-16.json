@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "map",
+  "concept": "map 函数",
+  "difficulty": "hell",
+  "instruction": "map 对每个元素应用函数。\n\n请照着敲！",
+  "hint": "返回生成器",
+  "targetCode": "nums = [1, 2, 3, 4, 5]\nsquares = map(lambda x: x**2, nums)\nfor s in squares:\n    print(s)",
+  "encouragement": "map 是函数式的生成器！"
+}

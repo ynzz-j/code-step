@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Promie.fally()",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "Promise.resolve(5)\n  .then(n => n * 2)\n  .finally(() => console.log(\"Done\"));",
+  "encouragement": "异步编程处理等待！"
+}

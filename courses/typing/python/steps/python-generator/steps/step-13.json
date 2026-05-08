@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "itertools 模块",
+  "concept": "itertools",
+  "difficulty": "hell",
+  "instruction": "itertools 提供了很多生成器函数。\n\n请照着敲！",
+  "hint": "count, cycle, chain",
+  "targetCode": "import itertools\n\nfor i in itertools.count(start=0, step=2):\n    if i > 10:\n        break\n    print(i)",
+  "encouragement": "itertools 是生成器的工具箱！"
+}

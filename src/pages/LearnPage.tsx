@@ -1,19 +1,25 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCourseStore } from '@/stores/courseStore';
 import { InstructionPanel } from '@/components/learn/InstructionPanel';
 import { ProgressDots } from '@/components/learn/ProgressDots';
 import { TypingEditor } from '@/components/editor/TypingEditor';
+import { ComboDisplay } from '@/components/learn/ComboDisplay';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import type { TypingStep } from '@/types';
 
 export function LearnPage() {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
+  const [isShaking, setIsShaking] = useState(false);
+  const prevComboRef = useRef(0);
+  // 步骤输入完成标记（独立于 store 的 currentStepCompleted）
+  const [stepInputDone, setStepInputDone] = useState(false);
   const {
     currentCourse,
     currentStepIndex,
     currentStepCompleted,
+    combo,
     startCourse,
     nextStep,
     prevStep,
@@ -29,8 +35,22 @@ export function LearnPage() {
     }
   }, [courseId, startCourse]);
 
+  // 切换步骤时重置输入完成标记
+  useEffect(() => {
+    setStepInputDone(false);
+  }, [currentStepIndex]);
+
+  // 连击中断时触发屏幕震动
+  useEffect(() => {
+    if (combo.currentCombo === 0 && prevComboRef.current > 0) {
+      setIsShaking(true);
+      const timer = setTimeout(() => setIsShaking(false), 350);
+      return () => clearTimeout(timer);
+    }
+    prevComboRef.current = combo.currentCombo;
+  }, [combo.currentCombo]);
+
   const currentStep = currentCourse?.steps[currentStepIndex];
-  const isLastStep = currentCourse && currentStepIndex === currentCourse.steps.length - 1;
 
   // 一期只做 typing 模式，所有步骤都转换为 typing
   const typingStep: TypingStep | null = useMemo(() => {
@@ -46,11 +66,25 @@ export function LearnPage() {
     } as unknown as TypingStep;
   }, [currentStep]);
 
-  const handleStepComplete = () => {
+  // TypingEditor 打完字时的回调：只标记输入完成，不触发跳转
+  const handleTypingComplete = () => {
+    setStepInputDone(true);
+  };
+
+  // 用户主动确认进入下一步
+  const handleGoNext = () => {
+    if (!stepInputDone && !currentStepCompleted) return;
+
+    // 标记步骤完成到 store
     if (!currentStepCompleted) {
       markStepCompleted();
     }
-    if (isLastStep) {
+
+    // 判断是否是最后一步（从 store 实时读取，避免闭包问题）
+    const { currentCourse: course, currentStepIndex: idx } = useCourseStore.getState();
+    const isLast = course && idx === course.steps.length - 1;
+
+    if (isLast) {
       navigate(`/complete/${courseId}`);
     } else {
       nextStep();
@@ -60,11 +94,12 @@ export function LearnPage() {
   useKeyboardShortcuts(
     {
       arrowup: prevStep,
-      pagedown: currentStepCompleted ? nextStep : undefined,
-      arrowdown: currentStepCompleted ? handleStepComplete : undefined,
+      pagedown: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
+      arrowdown: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
       pageup: prevStep,
-      j: currentStepCompleted ? handleStepComplete : undefined,
+      j: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
       k: prevStep,
+      tab: undefined,
       escape: () => navigate('/courses'),
     },
     !!currentCourse,
@@ -90,8 +125,11 @@ export function LearnPage() {
     );
   }
 
+  const canGoNext = stepInputDone || currentStepCompleted;
+  const isLastStep = currentCourse && currentStepIndex === currentCourse.steps.length - 1;
+
   return (
-    <div className="flex flex-col h-full animate-fade-in">
+    <div className={`flex flex-col h-full animate-fade-in ${isShaking ? 'animate-screen-shake' : ''}`}>
       {/* 顶部导航栏 */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800/30 border-b border-gray-700/50">
         <button
@@ -106,17 +144,39 @@ export function LearnPage() {
         <ProgressDots total={currentCourse.steps.length} current={currentStepIndex} />
       </div>
 
+      {/* 连击展示区 */}
+      <ComboDisplay />
+
       {/* 主内容区 */}
       <div className="flex-1 flex overflow-hidden">
         <InstructionPanel step={currentStep} />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col relative">
           {typingStep && (
             <TypingEditor
               step={typingStep}
-              onComplete={markStepCompleted}
+              onComplete={handleTypingComplete}
               onKeystroke={recordTypingKeystroke}
               onReset={resetTypingStats}
             />
+          )}
+
+          {/* 步骤输入完成提示（覆盖在编辑器上方） */}
+          {stepInputDone && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm z-10 animate-fade-in">
+              <div className="flex flex-col items-center gap-4 p-8 rounded-2xl bg-gray-800/90 border border-success-500/30 shadow-lg">
+                <div className="text-4xl">&#10003;</div>
+                <h3 className="text-xl font-bold text-success-400">步骤完成！</h3>
+                <p className="text-sm text-gray-400">
+                  {isLastStep ? '恭喜完成全部课程！' : '按 ↓ 或 J 键继续'}
+                </p>
+                <button
+                  onClick={handleGoNext}
+                  className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  {isLastStep ? '查看结果' : '下一步 ↓'}
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -134,11 +194,11 @@ export function LearnPage() {
           {currentStepIndex + 1} / {currentCourse.steps.length}
         </span>
         <button
-          onClick={handleStepComplete}
-          disabled={!currentStepCompleted}
+          onClick={handleGoNext}
+          disabled={!canGoNext}
           className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          下一步 ↓
+          {isLastStep ? '完成' : '下一步 ↓'}
         </button>
       </div>
     </div>

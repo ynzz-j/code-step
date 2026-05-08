@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "方法覆盖",
+  "concept": "重写",
+  "difficulty": "advanced",
+  "instruction": "子类可以覆盖父类的方法。\n\n请照着敲！",
+  "hint": "同名方法自动覆盖",
+  "targetCode": "class Animal:\n    def speak(self):\n        print('...')\n\nclass Cat(Animal):\n    def speak(self):\n        print('Meow!')\n\nc = Cat()\nc.speak()",
+  "encouragement": "方法覆盖实现多态！"
+}

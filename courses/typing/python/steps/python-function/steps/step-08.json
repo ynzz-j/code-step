@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "局部变量",
+  "concept": "作用域",
+  "difficulty": "intermediate",
+  "instruction": "函数内部的是局部变量。\n\n请照着敲！",
+  "hint": "局部变量只在函数内有效",
+  "targetCode": "def test():\n    x = 10\n    print('Inside:', x)\n\ntest()\nprint('Outside:', x)",
+  "encouragement": "局部变量安全又干净！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对象.key/值/",
+  "concept": "对象",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const obj = { a: 1, b: 2 };\nconsole.log(Object.keys(obj));",
+  "encouragement": "对象./值/ ！"
+}

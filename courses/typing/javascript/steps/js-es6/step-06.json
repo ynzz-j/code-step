@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类 继承",
+  "concept": "ES6",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Person {\n  constructor(name) {\n    this.name = name;\n  }\n}\nclass Student extends Person {\n  constructor(name, grade) {\n    super(name);\n    this.grade = grade;\n  }\n}\nconst s = new Student(\"Bob\", \"A\");\nconsole.log(`${s.name}: ${s.grade}`);",
+  "encouragement": "继承 ！"
+}

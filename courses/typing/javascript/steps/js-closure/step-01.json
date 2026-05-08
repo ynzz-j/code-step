@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Global 作用域",
+  "concept": "lobal 作用域",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const globalVar = \"I'm global\";\nfunction test() {\n  console.log(globalVar);\n}\ntest();",
+  "encouragement": "作用域 是一个 ！"
+}

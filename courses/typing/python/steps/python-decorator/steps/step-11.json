@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类装饰器",
+  "concept": "类作为装饰器",
+  "difficulty": "hell",
+  "instruction": "类也可以作为装饰器。\n\n请照着敲！",
+  "hint": "实现 __call__ 方法",
+  "targetCode": "class Decorator:\n    def __init__(self, func):\n        self.func = func\n    def __call__(self, *args, **kwargs):\n        print('Decorated!')\n        return self.func(*args, **kwargs)\n\n@Decorator\ndef add(a, b):\n    return a + b\n\nprint(add(3, 5))",
+  "encouragement": "类装饰器用 __call__！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对象.创建",
+  "concept": "创建",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const obj1 = { a: 1 };\nconst obj2 = { b: 2 };\nconst merged = Object.assign({}, obj1, obj2);\nconsole.log(merged);",
+  "encouragement": "对象.创建 是一个 对象！"
+}

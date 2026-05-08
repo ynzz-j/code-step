@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "ome 方法",
+  "concept": "数组",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const nums = [1, 3, 5];\nconst hasEven = nums.some(n => n % 2 === 0);\nconsole.log(hasEven);",
+  "encouragement": "数组存放有序元素！"
+}

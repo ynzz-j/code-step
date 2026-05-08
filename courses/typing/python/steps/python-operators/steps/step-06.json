@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "复合赋值",
+  "concept": "赋值运算符",
+  "difficulty": "beginner",
+  "instruction": "+= -= *= /= 是复合赋值运算符。\n\n请照着敲！",
+  "hint": "x += 1 等价于 x = x + 1",
+  "targetCode": "x = 10\nx += 5\nprint(x)\nx *= 2\nprint(x)\nx -= 10\nprint(x)",
+  "encouragement": "复合赋值让代码更简洁！"
+}

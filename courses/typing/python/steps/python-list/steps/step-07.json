@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "删除元素",
+  "concept": "remove 方法",
+  "difficulty": "intermediate",
+  "instruction": "remove() 删除指定的元素。\n\n请照着敲！",
+  "hint": "删除第一个匹配的",
+  "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfruits.remove('banana')\nprint(fruits)\nfruits.remove('apple')\nprint(fruits)",
+  "encouragement": "remove 按值删除！"
+}

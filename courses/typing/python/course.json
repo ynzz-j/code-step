@@ -1,0 +1,365 @@
+{
+  "id": "python",
+  "title": "Python 基础课程",
+  "description": "从零开始学习 Python 编程",
+  "language": "python",
+  "difficulty": "beginner",
+  "courses": [
+    {
+      "id": "python-hello",
+      "title": "Python 入门：Hello World",
+      "description": "学习 Python 的基础语法，输出你的第一行代码",
+      "language": "python",
+      "difficulty": "beginner",
+      "concepts": [
+        "基础语法",
+        "print 函数",
+        "注释"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/python-hello/steps/step-01.json",
+        "steps/python-hello/steps/step-02.json",
+        "steps/python-hello/steps/step-03.json",
+        "steps/python-hello/steps/step-04.json",
+        "steps/python-hello/steps/step-05.json",
+        "steps/python-hello/steps/step-06.json",
+        "steps/python-hello/steps/step-07.json",
+        "steps/python-hello/steps/step-08.json"
+      ]
+    },
+    {
+      "id": "python-vars",
+      "title": "变量与数据类型",
+      "description": "掌握 Python 中的变量声明和基本数据类型",
+      "language": "python",
+      "difficulty": "beginner",
+      "concepts": [
+        "变量",
+        "整数",
+        "浮点数",
+        "字符串",
+        "布尔值"
+      ],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/python-vars/steps/step-01.json",
+        "steps/python-vars/steps/step-02.json",
+        "steps/python-vars/steps/step-03.json",
+        "steps/python-vars/steps/step-04.json",
+        "steps/python-vars/steps/step-05.json",
+        "steps/python-vars/steps/step-06.json",
+        "steps/python-vars/steps/step-07.json",
+        "steps/python-vars/steps/step-08.json",
+        "steps/python-vars/steps/step-09.json",
+        "steps/python-vars/steps/step-10.json"
+      ]
+    },
+    {
+      "id": "python-operators",
+      "title": "运算符",
+      "description": "学习 Python 中的算术运算符、比较运算符和逻辑运算符",
+      "language": "python",
+      "difficulty": "beginner",
+      "concepts": [
+        "算术运算符",
+        "比较运算符",
+        "逻辑运算符",
+        "赋值运算符"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/python-operators/steps/step-01.json",
+        "steps/python-operators/steps/step-02.json",
+        "steps/python-operators/steps/step-03.json",
+        "steps/python-operators/steps/step-04.json",
+        "steps/python-operators/steps/step-05.json",
+        "steps/python-operators/steps/step-06.json",
+        "steps/python-operators/steps/step-07.json",
+        "steps/python-operators/steps/step-08.json"
+      ]
+    },
+    {
+      "id": "python-control",
+      "title": "控制流程",
+      "description": "学习 if/elif/else 条件语句和 for/while 循环",
+      "language": "python",
+      "difficulty": "intermediate",
+      "concepts": [
+        "if 语句",
+        "elif 语句",
+        "for 循环",
+        "while 循环",
+        "break",
+        "continue"
+      ],
+      "estimatedMinutes": 25,
+      "steps": [
+        "steps/python-control/steps/step-01.json",
+        "steps/python-control/steps/step-02.json",
+        "steps/python-control/steps/step-03.json",
+        "steps/python-control/steps/step-04.json",
+        "steps/python-control/steps/step-05.json",
+        "steps/python-control/steps/step-06.json",
+        "steps/python-control/steps/step-07.json",
+        "steps/python-control/steps/step-08.json",
+        "steps/python-control/steps/step-09.json",
+        "steps/python-control/steps/step-10.json",
+        "steps/python-control/steps/step-11.json",
+        "steps/python-control/steps/step-12.json"
+      ]
+    },
+    {
+      "id": "python-function",
+      "title": "函数",
+      "description": "学习 Python 函数的定义、参数、返回值和默认参数",
+      "language": "python",
+      "difficulty": "intermediate",
+      "concepts": [
+        "函数定义",
+        "参数",
+        "返回值",
+        "默认参数",
+        "关键字参数"
+      ],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/python-function/steps/step-01.json",
+        "steps/python-function/steps/step-02.json",
+        "steps/python-function/steps/step-03.json",
+        "steps/python-function/steps/step-04.json",
+        "steps/python-function/steps/step-05.json",
+        "steps/python-function/steps/step-06.json",
+        "steps/python-function/steps/step-07.json",
+        "steps/python-function/steps/step-08.json",
+        "steps/python-function/steps/step-09.json",
+        "steps/python-function/steps/step-10.json"
+      ]
+    },
+    {
+      "id": "python-string",
+      "title": "字符串处理",
+      "description": "掌握 Python 字符串的切片、格式化和常用方法",
+      "language": "python",
+      "difficulty": "intermediate",
+      "concepts": [
+        "字符串切片",
+        "字符串格式化",
+        "常用方法",
+        "字符串拼接"
+      ],
+      "estimatedMinutes": 20,
+      "steps": [
+        "steps/python-string/steps/step-01.json",
+        "steps/python-string/steps/step-02.json",
+        "steps/python-string/steps/step-03.json",
+        "steps/python-string/steps/step-04.json",
+        "steps/python-string/steps/step-05.json",
+        "steps/python-string/steps/step-06.json",
+        "steps/python-string/steps/step-07.json",
+        "steps/python-string/steps/step-08.json",
+        "steps/python-string/steps/step-09.json",
+        "steps/python-string/steps/step-10.json"
+      ]
+    },
+    {
+      "id": "python-list",
+      "title": "列表与元组",
+      "description": "学习 Python 列表和元组的创建、索引、切片和常用操作",
+      "language": "python",
+      "difficulty": "intermediate",
+      "concepts": [
+        "列表创建",
+        "列表索引",
+        "列表切片",
+        "列表方法",
+        "元组"
+      ],
+      "estimatedMinutes": 25,
+      "steps": [
+        "steps/python-list/steps/step-01.json",
+        "steps/python-list/steps/step-02.json",
+        "steps/python-list/steps/step-03.json",
+        "steps/python-list/steps/step-04.json",
+        "steps/python-list/steps/step-05.json",
+        "steps/python-list/steps/step-06.json",
+        "steps/python-list/steps/step-07.json",
+        "steps/python-list/steps/step-08.json",
+        "steps/python-list/steps/step-09.json",
+        "steps/python-list/steps/step-10.json",
+        "steps/python-list/steps/step-11.json",
+        "steps/python-list/steps/step-12.json"
+      ]
+    },
+    {
+      "id": "python-dict",
+      "title": "字典与集合",
+      "description": "掌握 Python 字典和集合的创建、操作和推导式",
+      "language": "python",
+      "difficulty": "advanced",
+      "concepts": [
+        "字典创建",
+        "字典操作",
+        "集合操作",
+        "字典推导式",
+        "集合推导式"
+      ],
+      "estimatedMinutes": 30,
+      "steps": [
+        "steps/python-dict/steps/step-01.json",
+        "steps/python-dict/steps/step-02.json",
+        "steps/python-dict/steps/step-03.json",
+        "steps/python-dict/steps/step-04.json",
+        "steps/python-dict/steps/step-05.json",
+        "steps/python-dict/steps/step-06.json",
+        "steps/python-dict/steps/step-07.json",
+        "steps/python-dict/steps/step-08.json",
+        "steps/python-dict/steps/step-09.json",
+        "steps/python-dict/steps/step-10.json",
+        "steps/python-dict/steps/step-11.json",
+        "steps/python-dict/steps/step-12.json",
+        "steps/python-dict/steps/step-13.json",
+        "steps/python-dict/steps/step-14.json",
+        "steps/python-dict/steps/step-15.json"
+      ]
+    },
+    {
+      "id": "python-oop",
+      "title": "面向对象编程",
+      "description": "深入学习 Python 的类、对象、继承和多态",
+      "language": "python",
+      "difficulty": "advanced",
+      "concepts": [
+        "类定义",
+        "对象创建",
+        "继承",
+        "多态",
+        "特殊方法",
+        "类属性"
+      ],
+      "estimatedMinutes": 40,
+      "steps": [
+        "steps/python-oop/steps/step-01.json",
+        "steps/python-oop/steps/step-02.json",
+        "steps/python-oop/steps/step-03.json",
+        "steps/python-oop/steps/step-04.json",
+        "steps/python-oop/steps/step-05.json",
+        "steps/python-oop/steps/step-06.json",
+        "steps/python-oop/steps/step-07.json",
+        "steps/python-oop/steps/step-08.json",
+        "steps/python-oop/steps/step-09.json",
+        "steps/python-oop/steps/step-10.json",
+        "steps/python-oop/steps/step-11.json",
+        "steps/python-oop/steps/step-12.json",
+        "steps/python-oop/steps/step-13.json",
+        "steps/python-oop/steps/step-14.json",
+        "steps/python-oop/steps/step-15.json",
+        "steps/python-oop/steps/step-16.json",
+        "steps/python-oop/steps/step-17.json",
+        "steps/python-oop/steps/step-18.json"
+      ]
+    },
+    {
+      "id": "python-file",
+      "title": "文件操作",
+      "description": "学习 Python 文件的读取、写入和 with 语句",
+      "language": "python",
+      "difficulty": "advanced",
+      "concepts": [
+        "文件读取",
+        "文件写入",
+        "with 语句",
+        "文件路径",
+        "JSON 文件"
+      ],
+      "estimatedMinutes": 25,
+      "steps": [
+        "steps/python-file/steps/step-01.json",
+        "steps/python-file/steps/step-02.json",
+        "steps/python-file/steps/step-03.json",
+        "steps/python-file/steps/step-04.json",
+        "steps/python-file/steps/step-05.json",
+        "steps/python-file/steps/step-06.json",
+        "steps/python-file/steps/step-07.json",
+        "steps/python-file/steps/step-08.json",
+        "steps/python-file/steps/step-09.json",
+        "steps/python-file/steps/step-10.json",
+        "steps/python-file/steps/step-11.json",
+        "steps/python-file/steps/step-12.json"
+      ]
+    },
+    {
+      "id": "python-decorator",
+      "title": "装饰器",
+      "description": "深入理解闭包、高阶函数和装饰器模式",
+      "language": "python",
+      "difficulty": "hell",
+      "concepts": [
+        "闭包",
+        "高阶函数",
+        "装饰器",
+        "@装饰器语法",
+        "带参数的装饰器"
+      ],
+      "estimatedMinutes": 45,
+      "steps": [
+        "steps/python-decorator/steps/step-01.json",
+        "steps/python-decorator/steps/step-02.json",
+        "steps/python-decorator/steps/step-03.json",
+        "steps/python-decorator/steps/step-04.json",
+        "steps/python-decorator/steps/step-05.json",
+        "steps/python-decorator/steps/step-06.json",
+        "steps/python-decorator/steps/step-07.json",
+        "steps/python-decorator/steps/step-08.json",
+        "steps/python-decorator/steps/step-09.json",
+        "steps/python-decorator/steps/step-10.json",
+        "steps/python-decorator/steps/step-11.json",
+        "steps/python-decorator/steps/step-12.json",
+        "steps/python-decorator/steps/step-13.json",
+        "steps/python-decorator/steps/step-14.json",
+        "steps/python-decorator/steps/step-15.json",
+        "steps/python-decorator/steps/step-16.json",
+        "steps/python-decorator/steps/step-17.json",
+        "steps/python-decorator/steps/step-18.json",
+        "steps/python-decorator/steps/step-19.json",
+        "steps/python-decorator/steps/step-20.json"
+      ]
+    },
+    {
+      "id": "python-generator",
+      "title": "生成器与迭代器",
+      "description": "掌握 Python 的 yield、迭代器协议和生成器表达式",
+      "language": "python",
+      "difficulty": "hell",
+      "concepts": [
+        "生成器",
+        "yield",
+        "迭代器协议",
+        "生成器表达式",
+        "iter()",
+        "next()"
+      ],
+      "estimatedMinutes": 40,
+      "steps": [
+        "steps/python-generator/steps/step-01.json",
+        "steps/python-generator/steps/step-02.json",
+        "steps/python-generator/steps/step-03.json",
+        "steps/python-generator/steps/step-04.json",
+        "steps/python-generator/steps/step-05.json",
+        "steps/python-generator/steps/step-06.json",
+        "steps/python-generator/steps/step-07.json",
+        "steps/python-generator/steps/step-08.json",
+        "steps/python-generator/steps/step-09.json",
+        "steps/python-generator/steps/step-10.json",
+        "steps/python-generator/steps/step-11.json",
+        "steps/python-generator/steps/step-12.json",
+        "steps/python-generator/steps/step-13.json",
+        "steps/python-generator/steps/step-14.json",
+        "steps/python-generator/steps/step-15.json",
+        "steps/python-generator/steps/step-16.json",
+        "steps/python-generator/steps/step-17.json",
+        "steps/python-generator/steps/step-18.json"
+      ]
+    }
+  ]
+}

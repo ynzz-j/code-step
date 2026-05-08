@@ -5,11 +5,26 @@ import type { TypingStep } from '@/types';
 
 let audioCtx: AudioContext | null = null;
 
-function getAudioContext(): AudioContext {
+function initAudioContext() {
   if (!audioCtx) {
     audioCtx = new AudioContext();
   }
+  // 确保 AudioContext 处于运行状态（浏览器 autoplay policy 要求用户交互后启动）
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
   return audioCtx;
+}
+
+// 在模块加载时就尝试初始化（如果已经在用户交互上下文中）
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', () => {
+    initAudioContext();
+  }, { once: true });
+}
+
+function getAudioContext(): AudioContext {
+  return initAudioContext();
 }
 
 function playTypeSound(correct: boolean) {
@@ -36,9 +51,22 @@ interface TypingEditorProps {
 }
 
 export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingEditorProps) {
+  const typedRef = useRef('');
   const [typed, setTyped] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const completedRef = useRef(false);
+
+  // 组件挂载时预初始化音效（需用户已交互）
+  useEffect(() => {
+    const timer = setTimeout(() => initAudioContext(), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 点击编辑器区域时也确保音效就绪
+  const handleContainerClick = useCallback(() => {
+    initAudioContext();
+  }, []);
 
   // 使用现成的 useTypingStats hook
   const { wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, recordKeystroke, reset: resetStats } = useTypingStats();
@@ -47,6 +75,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
     setTyped('');
     setCursorPosition(0);
     resetStats();
+    completedRef.current = false;
     onReset?.();
     containerRef.current?.focus();
   }, [step, onReset, resetStats]);
@@ -54,9 +83,9 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const targetCode = step?.targetCode || "";
 
-    // 防御性检查
+    // 防御性检查：无目标代码时直接返回
     if (!targetCode) {
-      return <span className="text-gray-500">暂无内容</span>;
+      return;
     }
 
     // 只对我们处理的特殊键调用preventDefault
@@ -138,10 +167,15 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
   }, [handleKeyDown]);
 
   useEffect(() => {
-    if (typed === step.targetCode && cursorPosition === step.targetCode.length && cursorPosition > 0) {
+    typedRef.current = typed;
+  }, [typed]);
+
+  useEffect(() => {
+    if (typed === step.targetCode && typed.length > 0 && !completedRef.current) {
+      completedRef.current = true;
       onComplete();
     }
-  }, [typed, cursorPosition, step.targetCode, onComplete]);
+  }, [typed, step.targetCode, onComplete]);
 
   const renderCode = () => {
     const chars: JSX.Element[] = [];
@@ -196,7 +230,10 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
         ref={containerRef}
         tabIndex={0}
         className="flex-1 overflow-auto p-6 bg-gray-900/30 focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-text"
-        onClick={() => containerRef.current?.focus()}
+        onClick={() => {
+          initAudioContext();
+          containerRef.current?.focus();
+        }}
       >
         <div className="text-xs text-gray-500 mb-4 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>

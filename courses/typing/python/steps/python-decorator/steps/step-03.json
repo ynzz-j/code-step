@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "返回函数",
+  "concept": "函数返回",
+  "difficulty": "hell",
+  "instruction": "函数可以返回另一个函数。\n\n请照着敲！",
+  "hint": "返回函数对象",
+  "targetCode": "def outer():\n    def inner():\n        return 'Inner!'\n    return inner\n\nf = outer()\nprint(f())",
+  "encouragement": "函数可以嵌套定义！"
+}

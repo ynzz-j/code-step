@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "uper 关键字",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    return `${this.name} makes a sound`;\n  }\n}\nclass Dog extends Animal {\n  speak() {\n    return super.speak() + \" - Woof!\";\n  }\n}\nconst d = new Dog(\"Buddy\");\nconsole.log(d.speak());",
+  "encouragement": "方法！"
+}

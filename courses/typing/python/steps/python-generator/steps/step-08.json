@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对比列表推导",
+  "concept": "内存对比",
+  "difficulty": "hell",
+  "instruction": "生成器表达式比列表推导式省内存。\n\n请照着敲！",
+  "hint": "用 sys.getsizeof 对比",
+  "targetCode": "import sys\nlst = [x**2 for x in range(1000)]\ngen = (x**2 for x in range(1000))\nprint(f'List: {sys.getsizeof(lst)} bytes')\nprint(f'Gen: {sys.getsizeof(gen)} bytes')",
+  "encouragement": "生成器更省内存！"
+}

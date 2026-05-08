@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Error H和l uin try/",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function main() {\n  try {\n    throw new Error(\"Oops!\");\n  } catch (e) {\n    console.log(e.message);\n  }\n}\nmain();",
+  "encouragement": "/ 和 异步 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Getter/Setter 原型",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Temperature {\n  constructor(celsius) {\n    this.celsius = celsius;\n  }\n  get fahrenheit() {\n    return this.celsius * 9/5 + 32;\n  }\n  set fahrenheit(f) {\n    this.celsius = (f - 32) * 5/9;\n  }\n}\nconst t = new Temperature(0);\nconsole.log(t.fahrenheit);",
+  "encouragement": "原型实现继承！"
+}

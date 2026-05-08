@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "文件综合",
+  "concept": "综合练习",
+  "difficulty": "advanced",
+  "instruction": "综合练习：读写 JSON 配置文件。\n\n请照着敲！",
+  "hint": "完整的数据读写流程",
+  "targetCode": "import json\nconfig = {'theme': 'dark', 'volume': 80}\nwith open('config.json', 'w') as f:\n    json.dump(config, f, indent=2)\nwith open('config.json', 'r') as f:\n    loaded = json.load(f)\nprint(f'Theme: {loaded[\"theme\"]}')\nprint(f'Volume: {loaded[\"volume\"]}')",
+  "encouragement": "文件操作你都掌握了！"
+}

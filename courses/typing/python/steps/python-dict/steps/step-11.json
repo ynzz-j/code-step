@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字典推导式",
+  "concept": "推导式",
+  "difficulty": "advanced",
+  "instruction": "字典推导式快速创建字典。\n\n请照着敲！",
+  "hint": "{k: v for k, v in items}",
+  "targetCode": "nums = [1, 2, 3]\nsquares = {x: x**2 for x in nums}\nprint(squares)\nwords = ['a', 'bb', 'ccc']\nlens = {w: len(w) for w in words}\nprint(lens)",
+  "encouragement": "字典推导式很强大！"
+}

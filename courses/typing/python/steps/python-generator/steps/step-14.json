@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "enumerate",
+  "concept": "枚举",
+  "difficulty": "hell",
+  "instruction": "enumerate 同时返回索引和值。\n\n请照着敲！",
+  "hint": "生成器函数",
+  "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfor i, fruit in enumerate(fruits, start=1):\n    print(f'{i}. {fruit}')",
+  "encouragement": "enumerate 是内置生成器！"
+}

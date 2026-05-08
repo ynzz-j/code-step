@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "属性和方法",
+  "concept": "类成员",
+  "difficulty": "advanced",
+  "instruction": "类可以包含属性和方法。\n\n请照着敲！",
+  "hint": "缩进表示属于类",
+  "targetCode": "class Dog:\n    def bark(self):\n        print('Woof!')\n\nd = Dog()\nd.bark()",
+  "encouragement": "方法是类的行为！"
+}

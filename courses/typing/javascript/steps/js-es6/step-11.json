@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "ES6 特性 11",
+  "concept": "ES6",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const a = null;\nconst b = 0;\nconsole.log(a ?? \"default\");\nconsole.log(b ?? \"default\");",
+  "encouragement": "?? || 默认！"
+}

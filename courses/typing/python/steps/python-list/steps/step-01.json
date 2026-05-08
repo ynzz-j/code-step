@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "创建列表",
+  "concept": "列表定义",
+  "difficulty": "intermediate",
+  "instruction": "列表用方括号创建，可以包含任意类型。\n\n请照着敲！",
+  "hint": "列表元素用逗号分隔",
+  "targetCode": "nums = [1, 2, 3, 4, 5]\nprint(nums)\nfruits = ['apple', 'banana']\nprint(fruits)\nmixed = [1, 'hello', True]\nprint(mixed)",
+  "encouragement": "列表是 Python 最常用的数据结构！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "yield from",
+  "concept": "委托生成",
+  "difficulty": "hell",
+  "instruction": "yield from 委托给另一个生成器。\n\n请照着敲！",
+  "hint": "简化嵌套生成器",
+  "targetCode": "def gen1():\n    yield 1\n    yield 2\n\ndef gen2():\n    yield from gen1()\n    yield 3\n\nfor i in gen2():\n    print(i)",
+  "encouragement": "yield from 是 Python 3.3+ 的特性！"
+}

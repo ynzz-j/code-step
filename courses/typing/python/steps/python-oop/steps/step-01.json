@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "定义类",
+  "concept": "类定义",
+  "difficulty": "advanced",
+  "instruction": "使用 class 定义类。\n\n请照着敲！",
+  "hint": "class 类名:",
+  "targetCode": "class Dog:\n    pass\n\nd = Dog()\nprint(type(d))",
+  "encouragement": "类是最重要的 OOP 概念！"
+}

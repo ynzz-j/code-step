@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "生成器特点",
+  "concept": "惰性求值",
+  "difficulty": "hell",
+  "instruction": "生成器按需产生值。\n\n请照着敲！",
+  "hint": "每次只产生一个值",
+  "targetCode": "def lazy_range(n):\n    for i in range(n):\n        print(f'Producing {i}')\n        yield i\n\ngen = lazy_range(5)\nprint(next(gen))\nprint(next(gen))",
+  "encouragement": "生成器按需计算！"
+}

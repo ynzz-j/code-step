@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Parallel uin Promie.",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function main() {\n  const nums = [1, 2, 3];\n  const doubled = await Promise.all(nums.map(n => Promise.resolve(n * 2)));\n  console.log(doubled);\n}\nmain();",
+  "encouragement": "异步编程处理等待！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串拼接",
+  "concept": "字符串连接",
+  "difficulty": "beginner",
+  "instruction": "使用 + 可以拼接字符串。\n\n请照着敲一遍！",
+  "hint": "字符串 + 字符串",
+  "targetCode": "first = 'Hello'\nsecond = 'World'\nresult = first + ', ' + second + '!'\nprint(result)",
+  "encouragement": "字符串拼接很实用！"
+}

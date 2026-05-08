@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "比较运算",
+  "concept": "比较运算符",
+  "difficulty": "beginner",
+  "instruction": "比较运算的结果是布尔值：== != > < >= <=\n\n请照着敲！",
+  "hint": "结果是 True 或 False",
+  "targetCode": "a = 10\nb = 5\nprint(a == b)\nprint(a != b)\nprint(a > b)\nprint(a < b)",
+  "encouragement": "比较运算返回布尔值！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "原型 继承",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function Person(name) {\n  this.name = name;\n}\nPerson.prototype.greet = function() {\n  return `Hi, I'm ${this.name}`;\n};\nfunction Student(name, grade) {\n  Person.call(this, name);\n  this.grade = grade;\n}\nStudent.prototype = Object.create(Person.prototype);\nconst s = new Student(\"Alice\", \"A\");\nconsole.log(s.greet());",
+  "encouragement": "原型 继承！"
+}

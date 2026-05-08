@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "模块 模式",
+  "concept": "模块",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const myModule = (function() {\n  let privateVar = 0;\n  function privateMethod() {\n    privateVar++;\n  }\n  return {\n    publicMethod() {\n      privateMethod();\n      return privateVar;\n    }\n  };\n})();\nconsole.log(myModule.publicMethod());\nconsole.log(myModule.publicMethod());",
+  "encouragement": "模块 模式 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "个人信息",
+  "concept": "综合练习",
+  "difficulty": "beginner",
+  "instruction": "综合练习：创建一个包含多种类型变量的程序。\n\n请照着敲一遍！",
+  "hint": "各种类型都用到",
+  "targetCode": "name = 'Alice'\nage = 20\nheight = 1.65\nis_student = True\nprint('Name:', name)\nprint('Age:', age)\nprint('Height:', height)\nprint('Student:', is_student)",
+  "encouragement": "变量类型你都掌握了！"
+}

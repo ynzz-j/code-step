@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "参数检查装饰器",
+  "concept": "参数验证",
+  "difficulty": "hell",
+  "instruction": "装饰器可以验证参数。\n\n请照着敲！",
+  "hint": "在调用前检查",
+  "targetCode": "from functools import wraps\n\ndef validate_positive(func):\n    @wraps(func)\n    def wrapper(*args):\n        if any(a < 0 for a in args):\n            raise ValueError('Args must be positive')\n        return func(*args)\n    return wrapper\n\n@validate_positive\ndef add(a, b):\n    return a + b\n\nprint(add(3, 5))",
+  "encouragement": "参数验证装饰器很实用！"
+}

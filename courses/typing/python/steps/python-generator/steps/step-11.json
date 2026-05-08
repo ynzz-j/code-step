@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "无限生成器",
+  "concept": "无限序列",
+  "difficulty": "hell",
+  "instruction": "生成器可以产生无限序列。\n\n请照着敲！",
+  "hint": "没有终止条件",
+  "targetCode": "def infinite_count():\n    i = 0\n    while True:\n        yield i\n        i += 1\n\ncounter = infinite_count()\nprint(next(counter))\nprint(next(counter))\nprint(next(counter))",
+  "encouragement": "生成器让无限序列成为可能！"
+}

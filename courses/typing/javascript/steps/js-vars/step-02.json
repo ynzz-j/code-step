@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "变量 02",
+  "concept": "cont 声明",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const PI = 3.14159;\nconsole.log(PI);",
+  "encouragement": "赋值！"
+}

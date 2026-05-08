@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "map 方法",
+  "concept": "函数",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const nums = [1, 2, 3];\nconst doubled = nums.map(n => n * 2);\nconsole.log(doubled);",
+  "encouragement": "() 数组！"
+}

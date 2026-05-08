@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "CSV 文件",
+  "concept": "csv 模块",
+  "difficulty": "advanced",
+  "instruction": "用 csv 模块读写 CSV。\n\n请照着敲！",
+  "hint": "reader 和 writer",
+  "targetCode": "import csv\nwith open('data.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerow(['Name', 'Age'])\n    writer.writerow(['Alice', 18])\nprint('CSV written!')",
+  "encouragement": "CSV 是表格数据的格式！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多个装饰器",
+  "concept": "装饰器叠加",
+  "difficulty": "hell",
+  "instruction": "一个函数可以有多个装饰器。\n\n请照着敲！",
+  "hint": "从上到下执行",
+  "targetCode": "def deco1(func):\n    def wrapper():\n        print('deco1')\n        func()\n    return wrapper\n\ndef deco2(func):\n    def wrapper():\n        print('deco2')\n        func()\n    return wrapper\n\n@deco1\n@deco2\ndef greet():\n    print('Hello!')\n\ngreet()",
+  "encouragement": "装饰器按顺序执行！"
+}

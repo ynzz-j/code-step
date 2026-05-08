@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "装饰器工厂",
+  "concept": "参数化装饰器",
+  "difficulty": "hell",
+  "instruction": "创建可配置参数的装饰器。\n\n请照着敲！",
+  "hint": "外层函数接收配置",
+  "targetCode": "from functools import wraps\n\ndef repeat(times):\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                func(*args, **kwargs)\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet():\n    print('Hello!')\n\ngreet()",
+  "encouragement": "装饰器工厂让装饰器可配置！"
+}

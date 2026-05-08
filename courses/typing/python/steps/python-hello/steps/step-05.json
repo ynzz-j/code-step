@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "变量输出",
+  "concept": "变量",
+  "difficulty": "beginner",
+  "instruction": "可以使用 print() 输出变量的值。\n\n请照着敲！",
+  "hint": "变量不需要引号",
+  "targetCode": "name = 'Alice'\nage = 18\nprint(name)\nprint(age)",
+  "encouragement": "变量让代码更灵活！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Function 参数",
+  "concept": "参数",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function greet(name) {\n  console.log(`Hello, ${name}!`);\n}\ngreet(\"Alice\");",
+  "encouragement": "参数 ！"
+}

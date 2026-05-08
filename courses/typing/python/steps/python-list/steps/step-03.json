@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表切片",
+  "concept": "列表切片",
+  "difficulty": "intermediate",
+  "instruction": "切片可以获取列表的一部分。\n\n请照着敲！",
+  "hint": "s[start:end] 不包括 end",
+  "targetCode": "nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])\nprint(nums[:3])\nprint(nums[3:])",
+  "encouragement": "切片让截取列表变得简单！"
+}

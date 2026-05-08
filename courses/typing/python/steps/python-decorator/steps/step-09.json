@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "保留函数信息",
+  "concept": "functools.wraps",
+  "difficulty": "hell",
+  "instruction": "用 @wraps 保留原函数的信息。\n\n请照着敲！",
+  "hint": "从 functools 导入",
+  "targetCode": "from functools import wraps\n\ndef decorator(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print('Called')\n        return func(*args, **kwargs)\n    return wrapper\n\n@decorator\ndef add(a, b):\n    '''Add two numbers'''\n    return a + b\n\nprint(add(3, 5))\nprint(add.__name__)\nprint(add.__doc__)",
+  "encouragement": "@wraps 保留元数据！"
+}

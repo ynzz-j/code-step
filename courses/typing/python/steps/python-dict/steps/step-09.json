@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "遍历键值对",
+  "concept": "items 方法",
+  "difficulty": "advanced",
+  "instruction": "用 items() 同时遍历键和值。\n\n请照着敲！",
+  "hint": "for k, v in dict.items()",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor key, value in person.items():\n    print(f'{key}: {value}')",
+  "encouragement": "items() 是遍历字典的最佳方式！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "f-string",
+  "concept": "字符串格式化",
+  "difficulty": "intermediate",
+  "instruction": "f-string 是现代的字符串格式化方式。\n\n请照着敲！",
+  "hint": "f'...{}...'",
+  "targetCode": "name = 'Alice'\nage = 18\nprint(f'Name: {name}')\nprint(f'Age: {age}')\nprint(f'{name} is {age} years old')",
+  "encouragement": "f-string 是 Python 3.6+ 的福利！"
+}

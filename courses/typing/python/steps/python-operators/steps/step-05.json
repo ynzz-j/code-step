@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "逻辑运算",
+  "concept": "逻辑运算符",
+  "difficulty": "beginner",
+  "instruction": "and/or/not 是逻辑运算符。\n\n请照着敲！",
+  "hint": "and: 都真才真, or: 一真则真, not: 取反",
+  "targetCode": "a = True\nb = False\nprint(a and b)\nprint(a or b)\nprint(not a)\nprint(not b)",
+  "encouragement": "逻辑运算是程序的基础！"
+}

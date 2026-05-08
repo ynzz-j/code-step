@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Re创建 变量",
+  "concept": "re赋值",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "let x = 10;\nconsole.log(x);\nx = 20;\nconsole.log(x);",
+  "encouragement": "赋值！"
+}

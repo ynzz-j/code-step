@@ -3,6 +3,22 @@ import { Link } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import type { UserLearningSummary, CourseProgressSummary } from '@/types/user';
 
+type StatusFilter = 'all' | 'in_progress' | 'completed';
+
+const LANGUAGES = [
+  { value: 'all' as const, label: '全部' },
+  { value: 'java' as const, label: 'Java' },
+  { value: 'python' as const, label: 'Python' },
+  { value: 'javascript' as const, label: 'JavaScript' },
+  { value: 'cpp' as const, label: 'C++' },
+];
+
+const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
+  { value: 'all', label: '全部' },
+  { value: 'in_progress', label: '进行中' },
+  { value: 'completed', label: '已完成' },
+];
+
 function ProgressBar({ percent }: { percent: number }) {
   const isComplete = percent >= 100;
   const isStarted = percent > 0;
@@ -119,6 +135,8 @@ function EmptyState() {
 export function UserCenterPage() {
   const [summary, setSummary] = useState<UserLearningSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
 
   useEffect(() => {
     loadSummary();
@@ -150,23 +168,83 @@ export function UserCenterPage() {
 
   const courseProgress = summary?.courseProgress ?? [];
 
+  // 筛选逻辑
+  const filteredProgress = courseProgress.filter((p) => {
+    if (selectedLanguage !== 'all' && p.language !== selectedLanguage) return false;
+    if (selectedStatus === 'in_progress') return p.progressPercent > 0 && p.progressPercent < 100;
+    if (selectedStatus === 'completed') return p.progressPercent >= 100;
+    return true;
+  });
+
+  // 统计各语言数量
+  const langCounts: Record<string, number> = { all: courseProgress.length };
+  for (const lang of LANGUAGES) {
+    if (lang.value !== 'all') {
+      langCounts[lang.value] = courseProgress.filter((p) => p.language === lang.value).length;
+    }
+  }
+
   return (
     <div className="h-full overflow-y-auto px-6 py-8">
       <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-100 mb-2">学习中心</h1>
-          <p className="text-gray-400">追踪你的学习进度，继续未完成的课程</p>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-100 mb-2">学习中心</h1>
+        <p className="text-gray-400">追踪你的学习进度，继续未完成的课程</p>
+      </div>
 
-        {courseProgress.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="space-y-4">
-            {courseProgress.map((progress) => (
-              <CourseProgressCard key={progress.courseId} progress={progress} />
+      {/* 筛选栏 */}
+      {courseProgress.length > 0 && (
+        <div className="mb-6 space-y-3">
+          {/* 语言筛选 */}
+          <div className="flex flex-wrap gap-2">
+            {LANGUAGES.map((lang) =>
+              langCounts[lang.value] > 0 || lang.value === 'all' ? (
+                <button
+                  key={lang.value}
+                  onClick={() => setSelectedLanguage(lang.value)}
+                  className={`px-2.5 py-1 rounded text-xs font-medium transition-colors border ${
+                    selectedLanguage === lang.value
+                      ? 'border-primary-500/50 bg-primary-500/10 text-primary-400'
+                      : 'border-gray-700/50 bg-gray-800/30 text-gray-500 hover:border-gray-600/50 hover:text-gray-400'
+                  }`}
+                >
+                  {lang.label}
+                  {lang.value !== 'all' && (
+                    <span className="ml-1 opacity-60">({langCounts[lang.value] || 0})</span>
+                  )}
+                </button>
+              ) : null,
+            )}
+          </div>
+
+          {/* 状态筛选 */}
+          <div className="flex flex-wrap gap-2">
+            {STATUS_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setSelectedStatus(opt.value)}
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                  selectedStatus === opt.value
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-200'
+                }`}
+              >
+                {opt.label}
+              </button>
             ))}
           </div>
-        )}
+        </div>
+      )}
+
+      {filteredProgress.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div className="space-y-4">
+          {filteredProgress.map((progress) => (
+            <CourseProgressCard key={progress.courseId} progress={progress} />
+          ))}
+        </div>
+      )}
       </div>
     </div>
   );

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数参数",
+  "concept": "参数传递",
+  "difficulty": "intermediate",
+  "instruction": "函数可以接受参数。\n\n请照着敲！",
+  "hint": "参数写在括号里",
+  "targetCode": "def greet(name):\n    print('Hello, ' + name + '!')\n\ngreet('Alice')\ngreet('Bob')",
+  "encouragement": "参数让函数更灵活！"
+}

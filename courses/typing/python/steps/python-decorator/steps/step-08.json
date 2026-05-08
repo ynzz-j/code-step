@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "装饰器带参数",
+  "concept": "装饰器参数",
+  "difficulty": "hell",
+  "instruction": "装饰器函数可以带参数。\n\n请照着敲！",
+  "hint": "需要三层函数",
+  "targetCode": "def decorator(text):\n    def _decorator(func):\n        def wrapper():\n            print(text)\n            func()\n        return wrapper\n    return _decorator\n\n@decorator('===START===')\ndef greet():\n    print('Hello!')\n\ngreet()",
+  "encouragement": "三层函数装饰器！"
+}

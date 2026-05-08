@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "添加元素",
+  "concept": "append 方法",
+  "difficulty": "intermediate",
+  "instruction": "append() 在末尾添加元素。\n\n请照着敲！",
+  "hint": "一次添加一个",
+  "targetCode": "fruits = ['apple', 'banana']\nfruits.append('cherry')\nprint(fruits)\nfruits.append('orange')\nprint(fruits)",
+  "encouragement": "append 是最常用的方法！"
+}

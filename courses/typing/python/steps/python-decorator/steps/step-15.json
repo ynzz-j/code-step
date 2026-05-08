@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "缓存装饰器",
+  "concept": "记忆化",
+  "difficulty": "hell",
+  "instruction": "创建缓存结果的装饰器。\n\n请照着敲！",
+  "hint": "存储已计算的结果",
+  "targetCode": "from functools import wraps\n\ndef memoize(func):\n    cache = {}\n    @wraps(func)\n    def wrapper(*args):\n        if args not in cache:\n            cache[args] = func(*args)\n        return cache[args]\n    return wrapper\n\n@memoize\ndef fib(n):\n    if n < 2:\n        return n\n    return fib(n-1) + fib(n-2)\n\nprint(fib(10))",
+  "encouragement": "缓存大幅提升性能！"
+}

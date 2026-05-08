@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "send 方法",
+  "concept": "双向通信",
+  "difficulty": "hell",
+  "instruction": "生成器可以用 send() 发送值。\n\n请照着敲！",
+  "hint": "第一次用 None",
+  "targetCode": "def coro():\n    result = yield 'Ready'\n    yield result\n\nc = coro()\nprint(next(c))\nprint(c.send('Hello!'))",
+  "encouragement": "send() 实现双向通信！"
+}

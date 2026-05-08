@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "while 循环",
+  "concept": "条件循环",
+  "difficulty": "intermediate",
+  "instruction": "while 循环在条件为真时反复执行。\n\n请照着敲！",
+  "hint": "注意避免死循环",
+  "targetCode": "count = 0\nwhile count < 5:\n    print(count)\n    count += 1",
+  "encouragement": "while 循环很灵活！"
+}

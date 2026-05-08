@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串切片",
+  "concept": "切片操作",
+  "difficulty": "intermediate",
+  "instruction": "使用切片可以获取子串。\n\n请照着敲！",
+  "hint": "s[start:end] 不包括 end",
+  "targetCode": "s = 'Hello World'\nprint(s[0:5])\nprint(s[6:11])\nprint(s[:5])\nprint(s[6:])",
+  "encouragement": "切片是字符串的精华！"
+}

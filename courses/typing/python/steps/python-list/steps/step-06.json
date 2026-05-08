@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "插入元素",
+  "concept": "insert 方法",
+  "difficulty": "intermediate",
+  "instruction": "insert() 在指定位置插入元素。\n\n请照着敲！",
+  "hint": "insert(位置, 元素)",
+  "targetCode": "fruits = ['apple', 'banana']\nfruits.insert(1, 'cherry')\nprint(fruits)\nfruits.insert(0, 'orange')\nprint(fruits)",
+  "encouragement": "insert 让插入更灵活！"
+}

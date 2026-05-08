@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字典集合综合",
+  "concept": "综合练习",
+  "difficulty": "advanced",
+  "instruction": "综合练习：综合使用字典和集合。\n\n请照着敲！",
+  "hint": "结合之前学的方法",
+  "targetCode": "words = ['apple', 'banana', 'apple', 'cherry', 'banana']\nunique = set(words)\nprint('Unique words:', unique)\ncount = {w: words.count(w) for w in unique}\nprint('Count:', count)",
+  "encouragement": "字典和集合你都掌握了！"
+}

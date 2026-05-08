@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "日志装饰器",
+  "concept": "日志功能",
+  "difficulty": "hell",
+  "instruction": "创建记录调用的装饰器。\n\n请照着敲！",
+  "hint": "记录函数调用信息",
+  "targetCode": "from functools import wraps\n\ndef log(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'Calling {func.__name__}')\n        result = func(*args, **kwargs)\n        print(f'{func.__name__} returned {result}')\n        return result\n    return wrapper\n\n@log\ndef add(a, b):\n    return a + b\n\nprint(add(3, 5))",
+  "encouragement": "日志装饰器便于调试！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "闭包",
+  "concept": "闭包",
+  "difficulty": "hell",
+  "instruction": "闭包是记住外部变量的函数。\n\n请照着敲！",
+  "hint": "内部函数记住外部变量",
+  "targetCode": "def outer(x):\n    def inner():\n        return x * 2\n    return inner\n\ndouble = outer(5)\nprint(double())",
+  "encouragement": "闭包让函数记住状态！"
+}

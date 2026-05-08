@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表推导式",
+  "concept": "推导式",
+  "difficulty": "intermediate",
+  "instruction": "列表推导式是创建列表的简洁方式。\n\n请照着敲！",
+  "hint": "[expr for item in list]",
+  "targetCode": "nums = [1, 2, 3, 4, 5]\nsquares = [x**2 for x in nums]\nprint(squares)\nevens = [x for x in nums if x % 2 == 0]\nprint(evens)",
+  "encouragement": "列表推导式是 Python 的特色！"
+}

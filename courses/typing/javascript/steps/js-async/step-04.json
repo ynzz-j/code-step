@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Promie.then()",
+  "concept": "链式调用",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "Promise.resolve(5)\n  .then(n => n * 2)\n  .then(result => console.log(result));",
+  "encouragement": ".() 异步 操作！"
+}

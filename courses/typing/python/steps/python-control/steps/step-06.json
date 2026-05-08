@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "range 范围",
+  "concept": "数字序列",
+  "difficulty": "intermediate",
+  "instruction": "range(start, end) 生成数字序列。\n\n请照着敲！",
+  "hint": "不包括 end",
+  "targetCode": "for i in range(1, 6):\n    print(i)",
+  "encouragement": "range 是 Python 的神器！"
+}

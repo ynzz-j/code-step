@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "手动迭代",
+  "concept": "next 函数",
+  "difficulty": "hell",
+  "instruction": "用 next() 手动获取下一个值。\n\n请照着敲！",
+  "hint": "用 next() 取值",
+  "targetCode": "def numbers():\n    yield 1\n    yield 2\n    yield 3\n\ngen = numbers()\nprint(next(gen))\nprint(next(gen))\nprint(next(gen))",
+  "encouragement": "next() 控制生成器！"
+}

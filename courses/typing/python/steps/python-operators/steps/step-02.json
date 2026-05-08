@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "整除与取模",
+  "concept": "整除取模",
+  "difficulty": "beginner",
+  "instruction": "// 是整除，% 是取模（取余数）。\n\n请照着敲！",
+  "hint": "// 得到整数，% 得到余数",
+  "targetCode": "a = 17\nb = 5\nprint(a // b)\nprint(a % b)\nprint(10 // 3)\nprint(10 % 3)",
+  "encouragement": "整除和取模很实用！"
+}

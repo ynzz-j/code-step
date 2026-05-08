@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "读取文件",
+  "concept": "读取模式",
+  "difficulty": "advanced",
+  "instruction": "'r' 模式读取文件。\n\n请照着敲！",
+  "hint": "read() 读取全部",
+  "targetCode": "f = open('test.txt', 'r')\ncontent = f.read()\nprint(content)\nf.close()",
+  "encouragement": "读取文件获取数据！"
+}

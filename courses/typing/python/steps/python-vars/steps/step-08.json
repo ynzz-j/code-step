@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "None 空值",
+  "concept": "空值",
+  "difficulty": "beginner",
+  "instruction": "Python 用 None 表示空值或未知。\n\n请照着敲一遍！",
+  "hint": "None 要大写",
+  "targetCode": "value = None\nprint(value)\nname = 'Alice'\nprint(name)",
+  "encouragement": "None 是 Python 的空值！"
+}

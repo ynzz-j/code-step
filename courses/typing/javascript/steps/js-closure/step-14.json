@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "闭包 14",
+  "concept": "factory 模式",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function createPerson(name) {\n  return {\n    getName() { return name; },\n    setName(n) { name = n; }\n  };\n}\nconst p = createPerson(\"Alice\");\nconsole.log(p.getName());\np.setName(\"Bob\");\nconsole.log(p.getName());",
+  "encouragement": "闭包捕获外部变量！"
+}

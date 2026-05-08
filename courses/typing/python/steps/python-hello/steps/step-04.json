@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "输出数字",
+  "concept": "数字输出",
+  "difficulty": "beginner",
+  "instruction": "print() 不仅可以输出字符串，还可以直接输出数字。\n\n请照着敲！",
+  "hint": "数字不需要引号",
+  "targetCode": "print(42)\nprint(3.14)\nprint(100 + 200)",
+  "encouragement": "数字计算结果直接输出！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "逐行写入",
+  "concept": "writelines",
+  "difficulty": "advanced",
+  "instruction": "writelines() 写入多行。\n\n请照着敲！",
+  "hint": "需要手动加换行",
+  "targetCode": "lines = ['Line 1\\n', 'Line 2\\n', 'Line 3\\n']\nwith open('test.txt', 'w') as f:\n    f.writelines(lines)\nprint('Written!')",
+  "encouragement": "writelines 批量写入！"
+}

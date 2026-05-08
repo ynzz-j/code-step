@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "安全访问",
+  "concept": "get 方法",
+  "difficulty": "advanced",
+  "instruction": "get() 安全访问，不怕键不存在。\n\n请照着敲！",
+  "hint": "get(key, default)",
+  "targetCode": "person = {'name': 'Alice'}\nprint(person.get('name'))\nprint(person.get('age'))\nprint(person.get('age', 0))",
+  "encouragement": "get() 避免 KeyError！"
+}

@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCourseStore } from '@/stores/courseStore';
 import { CategoryFilter } from '@/components/courses/CategoryFilter';
 import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, ALL_DIFFICULTIES, type CourseMetadata, type Difficulty } from '@/types';
+import { invoke } from '@tauri-apps/api/core';
 
 // 难度颜色映射
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -26,7 +27,7 @@ function CourseCard({ course }: { course: CourseMetadata }) {
   const getCourseProgress = useCourseStore((s) => s.getCourseProgress);
 
   const progress = getCourseProgress(course.id);
-  const completedCount = progress?.completedSteps.length || 0;
+  const completedCount = progress?.completedSteps?.length || 0;
   const currentStep = progress?.currentStep || 0;
   const progressPercent = course.stepsCount > 0 ? Math.round((completedCount / course.stepsCount) * 100) : 0;
   const hasProgress = completedCount > 0 || currentStep > 0;
@@ -97,9 +98,23 @@ export function CoursesPage() {
   const { filteredCourses, courses, loadCourses, selectedCategory, selectedLanguage, selectedDifficulty } =
     useCourseStore();
 
+  const [debugInfo, setDebugInfo] = useState<any>(null);
+
   useEffect(() => {
     loadCourses();
   }, [loadCourses]);
+
+  // 加载调试信息
+  useEffect(() => {
+    (async () => {
+      try {
+        const info = await invoke('debug_courses');
+        setDebugInfo(info);
+      } catch (e) {
+        setDebugInfo({ error: String(e) });
+      }
+    })();
+  }, []);
 
   const displayCourses =
     filteredCourses.length > 0 || (selectedCategory === 'all' && selectedLanguage === 'all' && selectedDifficulty === 'all')

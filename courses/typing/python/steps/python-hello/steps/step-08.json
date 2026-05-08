@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Hello World 完整版",
+  "concept": "综合练习",
+  "difficulty": "beginner",
+  "instruction": "综合练习：请照着敲完这个完整的程序。\n\n这是你的第一个作品！",
+  "hint": "注意引号和括号",
+  "targetCode": "# My first Python program\nname = 'Python'\nprint('Hello, ' + name + '!')\nprint('Welcome to coding!')",
+  "encouragement": "恭喜你完成了 Python 入门课程！"
+}

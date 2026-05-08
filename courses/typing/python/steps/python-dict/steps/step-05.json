@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "删除键值",
+  "concept": "del 语句",
+  "difficulty": "advanced",
+  "instruction": "del 删除字典中的键值对。\n\n请照着敲！",
+  "hint": "del dict[key]",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\ndel person['age']\nprint(person)",
+  "encouragement": "del 彻底删除键值对！"
+}

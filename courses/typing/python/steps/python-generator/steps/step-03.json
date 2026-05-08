@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "生成器函数",
+  "concept": "yield",
+  "difficulty": "hell",
+  "instruction": "使用 yield 的函数是生成器。\n\n请照着敲！",
+  "hint": "yield 返回值并暂停",
+  "targetCode": "def count_to(n):\n    i = 0\n    while i < n:\n        yield i\n        i += 1\n\nfor i in count_to(5):\n    print(i)",
+  "encouragement": "yield 让函数变成迭代器！"
+}

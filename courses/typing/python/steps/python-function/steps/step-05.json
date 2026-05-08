@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "默认参数",
+  "concept": "默认值",
+  "difficulty": "intermediate",
+  "instruction": "参数可以有默认值。\n\n请照着敲！",
+  "hint": "默认参数在最后",
+  "targetCode": "def greet(name, msg='Hello'):\n    print(msg + ', ' + name + '!')\n\ngreet('Alice')\ngreet('Bob', 'Hi')",
+  "encouragement": "默认参数让调用更简单！"
+}

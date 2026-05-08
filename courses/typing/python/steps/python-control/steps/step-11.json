@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "嵌套循环",
+  "concept": "双层循环",
+  "difficulty": "intermediate",
+  "instruction": "循环内部还可以再放循环。\n\n请照着敲！",
+  "hint": "注意缩进",
+  "targetCode": "for i in range(3):\n    for j in range(2):\n        print(i, j)",
+  "encouragement": "嵌套循环威力强大！"
+}

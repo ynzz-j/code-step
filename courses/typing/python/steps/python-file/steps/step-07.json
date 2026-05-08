@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "追加写入",
+  "concept": "追加模式",
+  "difficulty": "advanced",
+  "instruction": "'a' 模式追加内容。\n\n请照着敲！",
+  "hint": "不覆盖，追加到末尾",
+  "targetCode": "with open('test.txt', 'a') as f:\n    f.write(' More text')\nprint('Appended!')",
+  "encouragement": "追加模式保留原内容！"
+}

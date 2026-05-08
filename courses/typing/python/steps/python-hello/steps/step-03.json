@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "单引号与双引号",
+  "concept": "字符串引号",
+  "difficulty": "beginner",
+  "instruction": "Python 中字符串可以用单引号或双引号。\n\n两种写法效果相同，照着敲！",
+  "hint": "单引号和双引号都可以",
+  "targetCode": "print('single quote')\nprint(\"double quote\")",
+  "encouragement": "引号只是风格问题！"
+}

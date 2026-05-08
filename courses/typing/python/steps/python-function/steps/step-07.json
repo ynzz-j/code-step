@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "返回多个值",
+  "concept": "多元组返回",
+  "difficulty": "intermediate",
+  "instruction": "函数可以返回多个值（实际是元组）。\n\n请照着敲！",
+  "hint": "用逗号分隔",
+  "targetCode": "def get_info():\n    return 'Alice', 18\n\nname, age = get_info()\nprint(name)\nprint(age)",
+  "encouragement": "元组让多值返回很方便！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "索引Of 和",
+  "concept": "fd 索引",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const letters = [\"a\", \"b\", \"a\", \"c\"];\nconsole.log(letters.indexOf(\"a\"));\nconsole.log(letters.lastIndexOf(\"a\"));",
+  "encouragement": "索引/ ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "包含判断",
+  "concept": "in 运算符",
+  "difficulty": "intermediate",
+  "instruction": "用 in 判断是否包含子串。\n\n请照着敲！",
+  "hint": "返回 True 或 False",
+  "targetCode": "s = 'Hello World'\nprint('World' in s)\nprint('Python' in s)\nprint('Hello' in s)",
+  "encouragement": "in 是字符串的守护神！"
+}

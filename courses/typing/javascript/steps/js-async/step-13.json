@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Sequential 异步",
+  "concept": "等待 循环",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function main() {\n  for (const n of [1, 2, 3]) {\n    const result = await Promise.resolve(n * 2);\n    console.log(result);\n  }\n}\nmain();",
+  "encouragement": "等待 循环！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Shorth和 方法 语法",
+  "concept": "方法 horth和",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const calc = {\n  value: 0,\n  add(n) { this.value += n; },\n  subtract(n) { this.value -= n; }\n};\ncalc.add(5);\ncalc.subtract(2);\nconsole.log(calc.value);",
+  "encouragement": "和 语法 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "__str__ 方法",
+  "concept": "字符串表示",
+  "difficulty": "advanced",
+  "instruction": "__str__ 定义 print 时的输出。\n\n请照着敲！",
+  "hint": "返回字符串",
+  "targetCode": "class Dog:\n    def __init__(self, name):\n        self.name = name\n    def __str__(self):\n        return f'Dog: {self.name}'\n\nd = Dog('Buddy')\nprint(d)",
+  "encouragement": "__str__ 让对象可读！"
+}

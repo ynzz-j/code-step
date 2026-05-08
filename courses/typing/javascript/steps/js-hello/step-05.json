@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "入门程序 05",
+  "concept": "数字",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "console.log(42);",
+  "encouragement": "太棒了！你写下了第一行 JavaScript 代码！"
+}

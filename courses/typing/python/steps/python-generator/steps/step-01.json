@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表的局限",
+  "concept": "内存问题",
+  "difficulty": "hell",
+  "instruction": "列表会占用大量内存。\n\n请照着敲！",
+  "hint": "列表是一次性创建的",
+  "targetCode": "import sys\nnums = range(1000000)\nlst = list(range(1000000))\nprint(f'Range: {sys.getsizeof(nums)} bytes')\nprint(f'List: {sys.getsizeof(lst)} bytes')",
+  "encouragement": "列表虽方便但占内存！"
+}

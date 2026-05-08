@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Undefed 和",
+  "concept": "变量",
+  "difficulty": "beginner",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "let a;\nconst b = null;\nconsole.log(a);\nconsole.log(b);",
+  "encouragement": "变量存储数据！"
+}

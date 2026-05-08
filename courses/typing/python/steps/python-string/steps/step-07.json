@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串查找",
+  "concept": "find 方法",
+  "difficulty": "intermediate",
+  "instruction": "find() 查找子串位置。\n\n请照着敲！",
+  "hint": "找不到返回 -1",
+  "targetCode": "s = 'Hello World'\nprint(s.find('World'))\nprint(s.find('Python'))\nprint(s.find('o'))",
+  "encouragement": "find() 返回子串位置！"
+}

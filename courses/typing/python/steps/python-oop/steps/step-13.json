@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "@classmethod",
+  "concept": "类方法",
+  "difficulty": "advanced",
+  "instruction": "@classmethod 装饰器创建类方法。\n\n请照着敲！",
+  "hint": "cls 参数代替 self",
+  "targetCode": "class Person:\n    count = 0\n    def __init__(self):\n        Person.count += 1\n    @classmethod\n    def total(cls):\n        return cls.count\n\np1 = Person()\np2 = Person()\nprint(Person.total())",
+  "encouragement": "类方法是所有对象共享的！"
+}

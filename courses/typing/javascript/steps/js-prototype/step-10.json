@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对象.create()",
+  "concept": "对象.",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const personProto = {\n  greet() {\n    return `Hi, I'm ${this.name}`;\n  }\n};\nconst p = Object.create(personProto);\np.name = \"Alice\";\nconsole.log(p.greet());",
+  "encouragement": "对象.() 原型 ！"
+}

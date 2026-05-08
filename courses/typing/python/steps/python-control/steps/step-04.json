@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "嵌套条件",
+  "concept": "嵌套判断",
+  "difficulty": "intermediate",
+  "instruction": "可以在 if 内部再写 if。\n\n请照着敲！",
+  "hint": "注意缩进层次",
+  "targetCode": "age = 20\nhas_ticket = True\nif age >= 18:\n    if has_ticket:\n        print('Can enter')",
+  "encouragement": "嵌套让判断更细致！"
+}

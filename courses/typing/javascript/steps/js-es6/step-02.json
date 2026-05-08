@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "剩余 参数",
+  "concept": "剩余",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const [first, ...rest] = [1, 2, 3, 4, 5];\nconsole.log(first);\nconsole.log(rest);",
+  "encouragement": "剩余 元素！"
+}

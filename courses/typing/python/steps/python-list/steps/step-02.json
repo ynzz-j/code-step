@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "访问元素",
+  "concept": "列表索引",
+  "difficulty": "intermediate",
+  "instruction": "通过索引访问列表元素。\n\n请照着敲！",
+  "hint": "索引从 0 开始",
+  "targetCode": "fruits = ['apple', 'banana', 'cherry']\nprint(fruits[0])\nprint(fruits[1])\nprint(fruits[-1])",
+  "encouragement": "索引让你精确定位！"
+}

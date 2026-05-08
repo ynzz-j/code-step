@@ -1,0 +1,282 @@
+{
+  "id": "java-typing",
+  "title": "Java 打字练习课程",
+  "description": "通过打字练习掌握 Java 编程 - 从基础语法到 Spring IoC 源码",
+  "language": "java",
+  "difficulty": "beginner",
+  "courses": [
+    {
+      "id": "java-syntax-basic",
+      "title": "程序基本结构",
+      "description": "学习 Java 程序的基本结构",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": [
+        "class",
+        "main 方法",
+        "输出语句"
+      ],
+      "estimatedMinutes": 10,
+      "steps": [
+        "steps/java-syntax-basic/steps/step-01.json",
+        "steps/java-syntax-basic/steps/step-02.json",
+        "steps/java-syntax-basic/steps/step-03.json"
+      ]
+    },
+    {
+      "id": "java-syntax-cond",
+      "title": "条件语句",
+      "description": "掌握 if/else 条件语句",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": [
+        "if",
+        "else",
+        "else-if"
+      ],
+      "estimatedMinutes": 8,
+      "steps": [
+        "steps/java-syntax-cond/steps/step-01.json",
+        "steps/java-syntax-cond/steps/step-02.json"
+      ]
+    },
+    {
+      "id": "java-syntax-loop",
+      "title": "循环语句",
+      "description": "掌握 for 和 while 循环",
+      "language": "java",
+      "difficulty": "beginner",
+      "concepts": [
+        "for 循环",
+        "while 循环",
+        "do-while"
+      ],
+      "estimatedMinutes": 12,
+      "steps": [
+        "steps/java-syntax-loop/steps/step-01.json",
+        "steps/java-syntax-loop/steps/step-02.json",
+        "steps/java-syntax-loop/steps/step-03.json"
+      ]
+    },
+    {
+      "id": "java-syntax-method",
+      "title": "方法定义",
+      "description": "学习方法的定义、参数和返回值",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": [
+        "方法",
+        "参数",
+        "返回值",
+        "方法重载"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/java-syntax-method/steps/step-01.json",
+        "steps/java-syntax-method/steps/step-02.json",
+        "steps/java-syntax-method/steps/step-03.json",
+        "steps/java-syntax-method/steps/step-04.json"
+      ]
+    },
+    {
+      "id": "java-syntax-array",
+      "title": "数组操作",
+      "description": "掌握数组的声明和遍历",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": [
+        "数组声明",
+        "数组初始化",
+        "数组遍历"
+      ],
+      "estimatedMinutes": 10,
+      "steps": [
+        "steps/java-syntax-array/steps/step-01.json",
+        "steps/java-syntax-array/steps/step-02.json"
+      ]
+    },
+    {
+      "id": "java-oop-patterns",
+      "title": "面向对象模式",
+      "description": "掌握类、构造方法和继承",
+      "language": "java",
+      "difficulty": "basic",
+      "concepts": [
+        "类",
+        "构造方法",
+        "继承",
+        "多态"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/java-oop-patterns/steps/step-01.json",
+        "steps/java-oop-patterns/steps/step-02.json",
+        "steps/java-oop-patterns/steps/step-03.json"
+      ]
+    },
+    {
+      "id": "java-collection-list",
+      "title": "List 集合",
+      "description": "掌握 ArrayList 的操作",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": [
+        "ArrayList",
+        "add",
+        "get",
+        "size"
+      ],
+      "estimatedMinutes": 8,
+      "steps": [
+        "steps/java-collection-list/steps/step-01.json"
+      ]
+    },
+    {
+      "id": "java-collection-map",
+      "title": "Map 集合",
+      "description": "掌握 HashMap 的操作",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": [
+        "HashMap",
+        "put",
+        "get",
+        "keySet"
+      ],
+      "estimatedMinutes": 12,
+      "steps": [
+        "steps/java-collection-map/steps/step-01.json",
+        "steps/java-collection-map/steps/step-02.json"
+      ]
+    },
+    {
+      "id": "java-exception",
+      "title": "异常处理",
+      "description": "掌握 try-catch 和异常处理",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": [
+        "try-catch",
+        "throw",
+        "throws",
+        "finally"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/java-exception/steps/step-01.json",
+        "steps/java-exception/steps/step-02.json",
+        "steps/java-exception/steps/step-03.json",
+        "steps/java-exception/steps/step-04.json"
+      ]
+    },
+    {
+      "id": "java-poly",
+      "title": "接口与抽象类",
+      "description": "掌握接口和抽象类",
+      "language": "java",
+      "difficulty": "intermediate",
+      "concepts": [
+        "接口",
+        "抽象类",
+        "implements"
+      ],
+      "estimatedMinutes": 10,
+      "steps": [
+        "steps/java-poly/steps/step-01.json",
+        "steps/java-poly/steps/step-02.json"
+      ]
+    },
+    {
+      "id": "spring-boot-basics",
+      "title": "Spring Boot 基础",
+      "description": "掌握 Spring Boot 核心概念",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": [
+        "@SpringBootApplication",
+        "@Component",
+        "@Autowired",
+        "@Configuration"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/spring-boot-basics/steps/step-01.json",
+        "steps/spring-boot-basics/steps/step-02.json",
+        "steps/spring-boot-basics/steps/step-03.json",
+        "steps/spring-boot-basics/steps/step-04.json"
+      ]
+    },
+    {
+      "id": "spring-boot-api",
+      "title": "Web API 开发",
+      "description": "掌握使用 Spring Boot 开发 REST API",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": [
+        "@RestController",
+        "@GetMapping",
+        "@PostMapping",
+        "@RequestBody"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/spring-boot-api/steps/step-01.json",
+        "steps/spring-boot-api/steps/step-02.json",
+        "steps/spring-boot-api/steps/step-03.json",
+        "steps/spring-boot-api/steps/step-04.json"
+      ]
+    },
+    {
+      "id": "spring-boot-rest",
+      "title": "RESTful API 设计",
+      "description": "掌握 RESTful API 设计模式",
+      "language": "java",
+      "difficulty": "advanced",
+      "concepts": [
+        "@PathVariable",
+        "@RequestParam",
+        "CRUD API",
+        "Result"
+      ],
+      "estimatedMinutes": 15,
+      "steps": [
+        "steps/spring-boot-rest/steps/step-01.json",
+        "steps/spring-boot-rest/steps/step-02.json",
+        "steps/spring-boot-rest/steps/step-03.json",
+        "steps/spring-boot-rest/steps/step-04.json"
+      ]
+    },
+    {
+      "id": "spring-ioc-core",
+      "title": "Spring IoC 核心 - 地狱模式",
+      "description": "通过打字练习掌握 Spring IoC 原理，深入理解 Spring 框架源码",
+      "language": "java",
+      "difficulty": "hell",
+      "concepts": [
+        "BeanFactory",
+        "ApplicationContext",
+        "refresh",
+        "BeanDefinition",
+        "BeanPostProcessor",
+        "三级缓存",
+        "循环依赖"
+      ],
+      "estimatedMinutes": 60,
+      "steps": [
+        "steps/spring-ioc-core/steps/step-01.json",
+        "steps/spring-ioc-core/steps/step-02.json",
+        "steps/spring-ioc-core/steps/step-03.json",
+        "steps/spring-ioc-core/steps/step-04.json",
+        "steps/spring-ioc-core/steps/step-05.json",
+        "steps/spring-ioc-core/steps/step-06.json",
+        "steps/spring-ioc-core/steps/step-07.json",
+        "steps/spring-ioc-core/steps/step-08.json",
+        "steps/spring-ioc-core/steps/step-09.json",
+        "steps/spring-ioc-core/steps/step-10.json",
+        "steps/spring-ioc-core/steps/step-11.json",
+        "steps/spring-ioc-core/steps/step-12.json",
+        "steps/spring-ioc-core/steps/step-13.json"
+      ]
+    }
+  ]
+}

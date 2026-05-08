@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数是对象",
+  "concept": "一等公民",
+  "difficulty": "hell",
+  "instruction": "Python 中函数也是对象。\n\n请照着敲！",
+  "hint": "函数可以赋值给变量",
+  "targetCode": "def greet():\n    return 'Hello!'\n\nf = greet\nprint(f())\nprint(type(f))",
+  "encouragement": "函数是 Python 的一等公民！"
+}

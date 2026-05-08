@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "多个参数",
+  "concept": "多参数",
+  "difficulty": "intermediate",
+  "instruction": "函数可以有多个参数。\n\n请照着敲！",
+  "hint": "参数用逗号分隔",
+  "targetCode": "def add(a, b):\n    print(a + b)\n\nadd(3, 5)\nadd(10, 20)",
+  "encouragement": "多参数处理复杂逻辑！"
+}

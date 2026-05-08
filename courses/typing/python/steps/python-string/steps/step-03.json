@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串长度",
+  "concept": "len 函数",
+  "difficulty": "intermediate",
+  "instruction": "使用 len() 获取字符串长度。\n\n请照着敲！",
+  "hint": "len() 返回字符数",
+  "targetCode": "s = 'Hello'\nprint(len(s))\ns2 = 'Python'\nprint(len(s2))",
+  "encouragement": "len() 是常用函数！"
+}

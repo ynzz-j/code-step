@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数声明",
+  "concept": "函数关键字",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function greet() {\n  console.log(\"Hello!\");\n}\ngreet();",
+  "encouragement": "代码！"
+}

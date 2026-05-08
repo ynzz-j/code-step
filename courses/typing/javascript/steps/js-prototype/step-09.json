@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "hasOwnProperty 方法",
+  "concept": "原型链",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Person {\n  constructor(name) {\n    this.name = name;\n  }\n  greet() { return \"Hi!\"; }\n}\nconst p = new Person(\"Alice\");\nconsole.log(p.hasOwnProperty(\"name\"));\nconsole.log(p.hasOwnProperty(\"greet\"));",
+  "encouragement": "区分自有属性和继承属性！"
+}

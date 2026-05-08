@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "异步/等待 Bet",
+  "concept": "异步",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "async function fetchData() {\n  try {\n    const data = await Promise.resolve({ user: \"Alice\" });\n    return data;\n  } catch (error) {\n    console.log(\"Error caught:\", error.message);\n  }\n}\nfetchData().then(d => console.log(d.user));",
+  "encouragement": "/ 异步 ！"
+}

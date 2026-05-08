@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Str 类",
+  "concept": "字符串",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s = \"Hello, C++!\";\n    cout << s << endl;\n    return 0;\n}",
+  "encouragement": ":: 和 ！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串替换",
+  "concept": "replace 方法",
+  "difficulty": "intermediate",
+  "instruction": "replace() 可以替换字符串中的内容。\n\n请照着敲！",
+  "hint": "返回新字符串",
+  "targetCode": "s = 'Hello World'\nprint(s.replace('World', 'Python'))\nprint(s.replace('o', '0'))",
+  "encouragement": "replace 让修改字符串很简单！"
+}

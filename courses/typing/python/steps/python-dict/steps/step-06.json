@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "弹出键值",
+  "concept": "pop 方法",
+  "difficulty": "advanced",
+  "instruction": "pop() 删除并返回值。\n\n请照着敲！",
+  "hint": "删除并返回",
+  "targetCode": "person = {'name': 'Alice', 'age': 18}\nage = person.pop('age')\nprint('Age:', age)\nprint(person)",
+  "encouragement": "pop 删值又取值！"
+}

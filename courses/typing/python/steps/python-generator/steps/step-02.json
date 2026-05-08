@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "迭代器协议",
+  "concept": "迭代器",
+  "difficulty": "hell",
+  "instruction": "迭代器必须实现 __iter__ 和 __next__。\n\n请照着敲！",
+  "hint": "手动实现迭代器",
+  "targetCode": "class Counter:\n    def __init__(self, n):\n        self.n = n\n        self.i = 0\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.i < self.n:\n            result = self.i\n            self.i += 1\n            return result\n        raise StopIteration\n\nfor i in Counter(5):\n    print(i)",
+  "encouragement": "迭代器协议是 Python 的核心！"
+}

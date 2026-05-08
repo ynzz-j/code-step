@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "原型链 08",
+  "concept": "原型",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "class Person {}\nclass Student extends Person {}\nconst s = new Student();\nconsole.log(s instanceof Student);\nconsole.log(s instanceof Person);\nconsole.log(s instanceof Object);",
+  "encouragement": "原型 ！"
+}

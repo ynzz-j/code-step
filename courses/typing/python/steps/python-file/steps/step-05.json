@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "读取所有行",
+  "concept": "行列表",
+  "difficulty": "advanced",
+  "instruction": "readlines() 返回所有行的列表。\n\n请照着敲！",
+  "hint": "返回列表",
+  "targetCode": "f = open('test.txt', 'r')\nlines = f.readlines()\nfor line in lines:\n    print(line.strip())\nf.close()",
+  "encouragement": "readlines() 方便遍历！"
+}

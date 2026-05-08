@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "生成器表达式",
+  "concept": "表达式语法",
+  "difficulty": "hell",
+  "instruction": "生成器表达式用圆括号。\n\n请照着敲！",
+  "hint": "(expr for item in iter)",
+  "targetCode": "squares = (x**2 for x in range(5))\nprint(type(squares))\nfor s in squares:\n    print(s)",
+  "encouragement": "生成器表达式是语法糖！"
+}

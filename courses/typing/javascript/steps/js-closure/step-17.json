@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "记忆化",
+  "concept": "闭包",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function memoize(fn) {\n  const cache = {};\n  return function(n) {\n    if (cache[n] === undefined) {\n      cache[n] = fn(n);\n    }\n    return cache[n];\n  };\n}\nconst double = memoize(n => n * 2);\nconsole.log(double(5));\nconsole.log(double(5));",
+  "encouragement": "记忆化可以加速昂贵的计算！"
+}

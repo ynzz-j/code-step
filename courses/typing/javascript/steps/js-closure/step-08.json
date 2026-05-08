@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Cloure 循环",
+  "concept": "循环 Cloure",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "const counters = [];\nfor (let i = 0; i < 3; i++) {\n  counters.push(function() { return i; });\n}\nconsole.log(counters[0]());\nconsole.log(counters[1]());\nconsole.log(counters[2]());",
+  "encouragement": "作用域 ！"
+}

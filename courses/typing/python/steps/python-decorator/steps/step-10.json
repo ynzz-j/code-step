@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "通用参数",
+  "concept": "参数转发",
+  "difficulty": "hell",
+  "instruction": "用 *args **kwargs 转发任意参数。\n\n请照着敲！",
+  "hint": "*args 任意位置参数，**kwargs 任意关键字参数",
+  "targetCode": "def decorator(func):\n    def wrapper(*args, **kwargs):\n        print('Args:', args)\n        print('Kwargs:', kwargs)\n        return func(*args, **kwargs)\n    return wrapper\n\n@decorator\ndef add(a, b):\n    return a + b\n\nprint(add(3, 5))\nprint(add(a=3, b=5))",
+  "encouragement": "*args **kwargs 让装饰器通用！"
+}

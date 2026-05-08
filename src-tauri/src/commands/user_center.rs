@@ -4,6 +4,19 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+// ===================== 课程模式配置 =====================
+const COURSE_MODE_TYPING: &str = "typing";
+const COURSE_MODE_CODING: &str = "coding";
+const CURRENT_MODE: &str = COURSE_MODE_TYPING;
+
+fn get_mode_dir() -> &'static str {
+    match CURRENT_MODE {
+        COURSE_MODE_CODING => "coding",
+        _ => "typing",
+    }
+}
+// =====================================================
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CourseProgressSummary {
     #[serde(rename = "courseId")]
@@ -29,18 +42,30 @@ pub struct UserLearningSummary {
     pub course_progress: Vec<CourseProgressSummary>,
 }
 
-// 语言包格式（旧）
+// ===================== 课程 JSON 格式定义 =====================
+// 格式1: 语言包格式 - courses/typing/{language}/course.json
 #[derive(Debug, Deserialize)]
-struct CourseJson {
+struct LanguageCourseFile {
+    id: String,
+    title: String,
+    description: Option<String>,
+    language: String,
+    difficulty: Option<String>,
     courses: Vec<InnerCourse>,
 }
 
-// 单课程格式（新）
+// 格式2: 单课程格式 - courses/typing/courses/{courseId}/course.json
 #[derive(Debug, Deserialize)]
-struct SingleCourseJson {
+struct SingleCourseFile {
     id: String,
     title: String,
+    description: Option<String>,
     language: Option<String>,
+    difficulty: Option<String>,
+    concepts: Option<Vec<String>>,
+    estimated_minutes: Option<u32>,
+    estimatedMinutes: Option<u32>,
+    category: Option<String>,
     steps: Vec<String>,
 }
 
@@ -48,7 +73,29 @@ struct SingleCourseJson {
 struct InnerCourse {
     id: String,
     title: String,
+    description: Option<String>,
     language: String,
+    difficulty: Option<String>,
+    concepts: Vec<String>,
+    estimated_minutes: Option<u32>,
+    estimatedMinutes: Option<u32>,
+    category: Option<String>,
+    steps: Vec<String>,
+}
+// =============================================================
+
+// 语言包格式（旧/兼容）
+#[derive(Debug, Deserialize)]
+struct CourseJson {
+    courses: Vec<InnerCourse>,
+}
+
+// 单课程格式（新/兼容）
+#[derive(Debug, Deserialize)]
+struct SingleCourseJson {
+    id: String,
+    title: String,
+    language: Option<String>,
     steps: Vec<String>,
 }
 
@@ -67,12 +114,13 @@ fn get_courses_dir() -> PathBuf {
             let courses_path = root.join("courses");
             eprintln!("[DEBUG] Checking root: {:?}, courses: {:?}", root, courses_path);
             if courses_path.exists() {
-                // 一期: courses/java-typing/
-                let lang_dir = courses_path.join("java-typing");
-                if lang_dir.exists() {
-                    eprintln!("[DEBUG] Using lang_dir: {:?}", lang_dir);
-                    return lang_dir;
+                // 检查 typing/coding 目录
+                let mode_dir = courses_path.join(get_mode_dir());
+                if mode_dir.exists() {
+                    eprintln!("[DEBUG] Using mode_dir: {:?}", mode_dir);
+                    return mode_dir;
                 }
+                // 如果 mode_dir 不存在，使用 courses 根目录
                 eprintln!("[DEBUG] Using courses_path: {:?}", courses_path);
                 return courses_path;
             }
@@ -89,9 +137,9 @@ fn get_courses_dir() -> PathBuf {
     for base in possible_paths {
         let courses_path = base.join("courses");
         if courses_path.exists() {
-            let lang_dir = courses_path.join("java-typing");
-            if lang_dir.exists() {
-                return lang_dir;
+            let mode_dir = courses_path.join(get_mode_dir());
+            if mode_dir.exists() {
+                return mode_dir;
             }
             return courses_path;
         }
@@ -101,11 +149,47 @@ fn get_courses_dir() -> PathBuf {
     PathBuf::from("courses")
 }
 
-// 扫描课程元数据（支持新旧两种路径结构）
+// 扫描课程元数据（支持当前路径结构）
+// 当前结构: courses/typing/{language}/course.json (语言包格式)
+// 兼容旧结构: courses/typing/courses/{courseId}/course.json (单课程格式)
 fn scan_course_metadata(courses_dir: &Path) -> HashMap<String, (String, String, u32)> {
     let mut metadata: HashMap<String, (String, String, u32)> = HashMap::new();
 
-    // 一期结构: courses/java-typing/courses/{courseId}/course.json (单课程格式)
+    // 当前结构: courses/typing/{language}/course.json (语言包格式)
+    if let Ok(entries) = fs::read_dir(courses_dir) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+            // 跳过 courses 子目录（单课程格式）
+            if path.file_name() == Some(std::ffi::OsStr::new("courses")) {
+                continue;
+            }
+            let course_file = path.join("course.json");
+            if course_file.exists() {
+                if let Ok(content) = fs::read_to_string(&course_file) {
+                    // 尝试解析为语言包格式 (LanguageCourseFile)
+                    if let Ok(lang_course) = serde_json::from_str::<LanguageCourseFile>(&content) {
+                        for inner_course in lang_course.courses {
+                            let steps_count = inner_course.steps.len() as u32;
+                            metadata.insert(
+                                inner_course.id.clone(),
+                                (
+                                    inner_course.title.clone(),
+                                    lang_course.language.clone(),
+                                    steps_count,
+                                ),
+                            );
+                        }
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+
+    // 兼容: courses/typing/courses/{courseId}/course.json (单课程格式)
     let courses_subdir = courses_dir.join("courses");
     if courses_subdir.exists() {
         if let Ok(entries) = fs::read_dir(&courses_subdir) {
@@ -117,7 +201,7 @@ fn scan_course_metadata(courses_dir: &Path) -> HashMap<String, (String, String, 
                         if let Ok(content) = fs::read_to_string(&course_file) {
                             // 优先尝试单课程格式
                             if let Ok(single_course) =
-                                serde_json::from_str::<SingleCourseJson>(&content)
+                                serde_json::from_str::<SingleCourseFile>(&content)
                             {
                                 metadata.insert(
                                     single_course.id.clone(),
@@ -143,32 +227,6 @@ fn scan_course_metadata(courses_dir: &Path) -> HashMap<String, (String, String, 
                                         ),
                                     );
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // 旧结构兼容: courses/{language}/course.json (语言包格式)
-    if let Ok(entries) = fs::read_dir(courses_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if path.is_dir() && !path.join("courses").exists() {
-                let course_file = path.join("course.json");
-                if course_file.exists() {
-                    if let Ok(content) = fs::read_to_string(&course_file) {
-                        if let Ok(lang_course) = serde_json::from_str::<CourseJson>(&content) {
-                            for inner_course in lang_course.courses {
-                                metadata.insert(
-                                    inner_course.id.clone(),
-                                    (
-                                        inner_course.title,
-                                        inner_course.language,
-                                        inner_course.steps.len() as u32,
-                                    ),
-                                );
                             }
                         }
                     }

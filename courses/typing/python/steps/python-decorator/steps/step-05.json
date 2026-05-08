@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "闭包变量绑定",
+  "concept": "变量绑定",
+  "difficulty": "hell",
+  "instruction": "闭包绑定了外部作用域的变量。\n\n请照着敲！",
+  "hint": "x 被闭包记住",
+  "targetCode": "def make_multiplier(n):\n    def multiplier(x):\n        return x * n\n    return multiplier\n\ntimes3 = make_multiplier(3)\ntimes5 = make_multiplier(5)\nprint(times3(10))\nprint(times5(10))",
+  "encouragement": "闭包创建了工厂函数！"
+}

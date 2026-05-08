@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "生成器综合",
+  "concept": "综合练习",
+  "difficulty": "hell",
+  "instruction": "综合练习：处理大数据文件的模拟。\n\n请照着敲！",
+  "hint": "模拟大文件读取",
+  "targetCode": "def read_lines(filename):\n    with open(filename, 'r') as f:\n        for line in f:\n            yield line.strip()\n\ndef filter_lines(lines, keyword):\n    for line in lines:\n        if keyword.lower() in line.lower():\n            yield line\n\n# 模拟\nlines = (f'Line {i}' for i in range(100))\nfiltered = filter_lines(lines, '5')\nfor line in filtered:\n    print(line)",
+  "encouragement": "生成器你都掌握了！"
+}

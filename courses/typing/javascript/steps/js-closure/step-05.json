@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "What 是一个",
+  "concept": "Cloure 基础",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，记住这个固定写法！",
+  "hint": "注意代码格式和语法",
+  "targetCode": "function outer() {\n  const x = 10;\n  return function inner() {\n    return x;\n  };\n}\nconst fn = outer();\nconsole.log(fn());",
+  "encouragement": "闭包捕获外部变量！"
+}

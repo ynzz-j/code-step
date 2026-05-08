@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "控制流综合",
+  "concept": "综合练习",
+  "difficulty": "intermediate",
+  "instruction": "综合练习：结合条件和循环。\n\n请照着敲！",
+  "hint": "先判断，再循环",
+  "targetCode": "numbers = [1, 2, 3, 4, 5]\nfor n in numbers:\n    if n % 2 == 0:\n        print(n, 'is even')",
+  "encouragement": "控制流你都掌握了！"
+}

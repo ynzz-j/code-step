@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表长度",
+  "concept": "len 函数",
+  "difficulty": "intermediate",
+  "instruction": "len() 返回列表长度。\n\n请照着敲！",
+  "hint": "元素个数",
+  "targetCode": "nums = [1, 2, 3, 4, 5]\nprint(len(nums))\nfruits = ['apple', 'banana']\nprint(len(fruits))",
+  "encouragement": "len() 统计元素个数！"
+}

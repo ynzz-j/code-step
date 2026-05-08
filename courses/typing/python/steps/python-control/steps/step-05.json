@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "for 循环",
+  "concept": "遍历循环",
+  "difficulty": "intermediate",
+  "instruction": "for 循环用于遍历序列。\n\n请照着敲！",
+  "hint": "range() 生成数字序列",
+  "targetCode": "for i in range(5):\n    print(i)",
+  "encouragement": "循环让重复变得简单！"
+}
