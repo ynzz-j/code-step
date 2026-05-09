@@ -7,11 +7,20 @@ export interface ValidationResult {
 
 export function evaluateValidation(code: string, rule: ValidationRule): ValidationResult {
   switch (rule.type) {
-    case 'contains':
+    case 'contains': {
+      // 支持 keywords 数组：所有关键词都必须出现
+      if (rule.keywords && rule.keywords.length > 0) {
+        const missing = rule.keywords.filter(kw => !code.includes(kw));
+        if (missing.length > 0) {
+          return { passed: false, message: `代码应包含：${missing.join(', ')}` };
+        }
+        return { passed: true, message: '代码包含了所有必要关键词' };
+      }
       if (!rule.value) return { passed: true, message: '无校验内容' };
       return code.includes(rule.value)
         ? { passed: true, message: `代码包含 "${rule.value}"` }
         : { passed: false, message: `代码应包含 "${rule.value}"` };
+    }
 
     case 'regex':
       if (!rule.pattern) return { passed: true, message: '无正则模式' };

@@ -37,6 +37,7 @@ export interface CodingStep extends BaseStep {
   starter?: string;
   answer: string;
   validation: ValidationRule;
+  stdin?: string;
 }
 
 export interface TypingStep extends BaseStep {

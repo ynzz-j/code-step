@@ -8,9 +8,10 @@
   "starter": "# 请在下面写出你的代码\nname = input()\n",
   "answer": "name = input()\nprint(\"Hello\")\nprint(name)",
   "expectedOutput": "Hello\nWorld",
+  "stdin": "World\n",
   "encouragement": "你学会和程序对话了！",
   "validation": {
     "type": "contains",
-    "value": "print("
+    "keywords": ["input(", "print("]
   }
 }

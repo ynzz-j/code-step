@@ -8,9 +8,10 @@
   "starter": "name = input()\nage = input()\n# 请在下面写出输出代码\n",
   "answer": "name = input()\nage = input()\nprint(\"My name is \" + name)\nprint(\"I am \" + age + \" years old\")",
   "expectedOutput": "My name is Tom\nI am 18 years old",
+  "stdin": "Tom\n18\n",
   "encouragement": "太棒了！你完成了第一个完整程序！",
   "validation": {
     "type": "contains",
-    "value": "print("
+    "keywords": ["input(", "print("]
   }
 }

@@ -33,15 +33,16 @@ impl Executor {
         &self,
         language: &str,
         code: &str,
+        stdin: Option<&str>,
     ) -> Result<ExecutionResult, ExecutionError> {
         let id = uuid::Uuid::new_v4().to_string();
         let temp_dir = std::env::temp_dir().join(format!("codestep_exec_{}", id));
         std::fs::create_dir_all(&temp_dir)?;
 
         let result = match language {
-            "java" => self.execute_java_with_timeout(&temp_dir, code).await,
-            "python" => self.execute_python_with_timeout(&temp_dir, code).await,
-            "javascript" => self.execute_javascript_with_timeout(&temp_dir, code).await,
+            "java" => self.execute_java_with_timeout(&temp_dir, code, stdin).await,
+            "python" => self.execute_python_with_timeout(&temp_dir, code, stdin).await,
+            "javascript" => self.execute_javascript_with_timeout(&temp_dir, code, stdin).await,
             _ => Err(ExecutionError::UnsupportedLanguage(language.to_string())),
         };
 
@@ -56,6 +57,7 @@ impl Executor {
         &self,
         temp_dir: &std::path::Path,
         code: &str,
+        stdin: Option<&str>,
     ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("Main.java");
         std::fs::write(&file_path, code)?;
@@ -106,7 +108,7 @@ impl Executor {
         let run_start = Instant::now();
         let run_result = tokio::time::timeout(
             std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
-            self.run_java(temp_dir),
+            self.run_java(temp_dir, stdin),
         )
         .await;
 
@@ -160,14 +162,17 @@ impl Executor {
     async fn run_java(
         &self,
         temp_dir: &std::path::Path,
+        stdin: Option<&str>,
     ) -> Result<std::process::Output, std::io::Error> {
-        tokio::process::Command::new("java")
-            .current_dir(temp_dir)
+        let mut cmd = tokio::process::Command::new("java");
+        cmd.current_dir(temp_dir)
             .arg("Main")
             .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
+            .stderr(Stdio::piped());
+        if stdin.is_some() {
+            cmd.stdin(Stdio::piped());
+        }
+        run_command(cmd, stdin).await
     }
 
     // ============ Python ============
@@ -176,6 +181,7 @@ impl Executor {
         &self,
         temp_dir: &std::path::Path,
         code: &str,
+        stdin: Option<&str>,
     ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("main.py");
         std::fs::write(&file_path, code)?;
@@ -183,11 +189,7 @@ impl Executor {
         let start = Instant::now();
         let run_result = tokio::time::timeout(
             std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
-            tokio::process::Command::new("python")
-                .arg(&file_path)
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .output(),
+            run_with_stdin("python", &file_path, stdin),
         )
         .await;
 
@@ -232,6 +234,7 @@ impl Executor {
         &self,
         temp_dir: &std::path::Path,
         code: &str,
+        stdin: Option<&str>,
     ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("main.js");
         std::fs::write(&file_path, code)?;
@@ -239,11 +242,7 @@ impl Executor {
         let start = Instant::now();
         let run_result = tokio::time::timeout(
             std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
-            tokio::process::Command::new("node")
-                .arg(&file_path)
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .output(),
+            run_with_stdin("node", &file_path, stdin),
         )
         .await;
 
@@ -280,5 +279,37 @@ impl Executor {
                 error_type: ExecutionErrorType::Timeout,
             }),
         }
+    }
+}
+
+/// 执行命令，可选写入 stdin 后等待输出
+async fn run_with_stdin(
+    program: &str,
+    file_path: &std::path::Path,
+    stdin: Option<&str>,
+) -> Result<std::process::Output, std::io::Error> {
+    let mut cmd = tokio::process::Command::new(program);
+    cmd.arg(file_path)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    if stdin.is_some() {
+        cmd.stdin(Stdio::piped());
+    }
+    run_command(cmd, stdin).await
+}
+
+async fn run_command(
+    mut cmd: tokio::process::Command,
+    stdin: Option<&str>,
+) -> Result<std::process::Output, std::io::Error> {
+    if let Some(input) = stdin {
+        let mut child = cmd.spawn()?;
+        use tokio::io::AsyncWriteExt;
+        if let Some(mut child_stdin) = child.stdin.take() {
+            child_stdin.write_all(input.as_bytes()).await?;
+        }
+        child.wait_with_output().await
+    } else {
+        cmd.output().await
     }
 }

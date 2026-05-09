@@ -67,6 +67,7 @@ export function CodeEditor({ step, language, onComplete }: CodeEditorProps) {
       const result = await invoke<ExecutionResult>('execute_code', {
         language,
         code,
+        stdin: step.stdin || null,
       });
       setExecResult(result);
 
