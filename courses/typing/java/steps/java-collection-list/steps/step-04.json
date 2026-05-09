@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "ArrayList 遍历",
+  "concept": "Collections Framework",
+  "difficulty": "intermediate",
+  "instruction": "使用 for 循环或增强 for 循环遍历 ArrayList。\n\n请照着敲，学习如何遍历列表。",
+  "hint": "增强 for 循环: for (String item : list)",
+  "targetCode": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Cherry\");\n        for (String fruit : list) {\n            System.out.println(fruit);\n        }\n    }\n}",
+  "encouragement": "遍历列表，完成！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "检查文件是否存在",
+  "concept": "文件路径",
+  "difficulty": "advanced",
+  "instruction": "使用 os 模块检查文件是否存在。\\n\\n导入 os 模块，使用 os.path.exists() 检查。\\n\\n检查 data.txt 是否存在并输出结果。",
+  "hint": "import os 然后 os.path.exists('data.txt')",
+  "starter": "import os\\n\\n# 请在下面写出检查文件是否存在的代码\\n",
+  "answer": "import os\\n\\nif os.path.exists('data.txt'):\\n    print('File exists')\\nelse:\\n    print('File not found')",
+  "expectedOutput": "File exists",
+  "encouragement": "检查文件存在性可以避免错误！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

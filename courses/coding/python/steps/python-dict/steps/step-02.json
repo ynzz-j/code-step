@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "访问字典值",
+  "concept": "字典操作",
+  "difficulty": "advanced",
+  "instruction": "创建学生字典，访问并输出 name 和 age。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n\n使用方括号和键名访问值。",
+  "hint": "student[\"name\"] 获取名字",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出访问代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\nprint(student[\"name\"])\nprint(student[\"age\"])",
+  "expectedOutput": "Tom\n18",
+  "encouragement": "字典让数据访问很直观！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

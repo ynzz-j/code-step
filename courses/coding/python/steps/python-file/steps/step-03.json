@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "写入文件",
+  "concept": "文件写入",
+  "difficulty": "advanced",
+  "instruction": "创建新文件 output.txt 并写入 \"Hello Python\"。\\n\\n使用 open() 的 'w' 模式（写入模式）。\\n\\n使用 write() 方法写入内容。",
+  "hint": "open('output.txt', 'w') 创建并写入文件",
+  "starter": "# 请在下面写出写入文件的代码\\n",
+  "answer": "with open('output.txt', 'w') as f:\\n    f.write('Hello Python')\\nprint('File written successfully')",
+  "expectedOutput": "File written successfully",
+  "encouragement": "写入文件让数据可以持久化！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

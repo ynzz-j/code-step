@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除元素 - pop",
+  "concept": "列表方法",
+  "difficulty": "intermediate",
+  "instruction": "使用 pop 方法删除并返回指定位置的元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n删除最后一个元素并输出它，然后输出剩余列表。",
+  "hint": "pop() 不带参数删除最后一个",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出删除代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nlast = fruits.pop()\nprint(last)\nprint(fruits)",
+  "expectedOutput": "orange\n['apple', 'banana']",
+  "encouragement": "pop 可以同时删除和获取元素！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

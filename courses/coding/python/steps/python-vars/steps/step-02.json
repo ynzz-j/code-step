@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "整数变量",
+  "concept": "整数类型",
+  "difficulty": "beginner",
+  "instruction": "创建变量存储年龄 18，然后输出。\n\n整数不需要引号。",
+  "hint": "age = 18 然后 print(age)",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "age = 18\nprint(age)",
+  "expectedOutput": "18",
+  "encouragement": "数字可以直接赋值！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

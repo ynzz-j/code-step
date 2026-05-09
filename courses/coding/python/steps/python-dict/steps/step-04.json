@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "添加新键值对",
+  "concept": "字典操作",
+  "difficulty": "advanced",
+  "instruction": "向学生字典中添加新键值对 city=\"Beijing\"，然后输出。\n\nstudent = {\"name\": \"Tom\", \"age\": 18}",
+  "hint": "直接用新的键赋值即可添加",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18}\n# 请在下面写出添加代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18}\nstudent[\"city\"] = \"Beijing\"\nprint(student)",
+  "expectedOutput": "{'name': 'Tom', 'age': 18, 'city': 'Beijing'}",
+  "encouragement": "字典可以动态添加新键！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

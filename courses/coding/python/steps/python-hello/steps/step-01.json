@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "Hello World",
+  "concept": "print 函数",
+  "difficulty": "beginner",
+  "instruction": "使用 print 函数输出 Hello World。\n\nprint 是 Python 中最常用的输出函数。\n\n示例：\nprint(\"Hello\")\n输出：Hello",
+  "hint": "直接使用 print 函数，在括号里放入要输出的内容",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "print(\"Hello World\")",
+  "expectedOutput": "Hello World",
+  "encouragement": "太棒了！你写出了第一个 Python 程序！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

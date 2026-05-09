@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "send() 方法",
+  "concept": "send",
+  "difficulty": "hell",
+  "instruction": "使用 send() 向生成器发送值。\\n\\n创建生成器，使用 (yield) 接收发送的值。\\n\\n第一次用 next()，然后用 send(\"Hello\")。",
+  "hint": "value = yield 可以接收 send 的值",
+  "starter": "def gen():\\n    value = yield\\n    print(f\"Received: {value}\")\\n\\ng = gen()\\nnext(g)  # 启动生成器\\n\\n# 请在下面写出 send 代码\\n",
+  "answer": "def gen():\\n    value = yield\\n    print(f\"Received: {value}\")\\n\\ng = gen()\\nnext(g)\\ng.send(\"Hello\")",
+  "expectedOutput": "Received: Hello",
+  "encouragement": "send() 让生成器可以接收值！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

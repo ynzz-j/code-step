@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "实例方法",
+  "concept": "实例方法",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，包含 bark 方法，输出 \"Woof!\"。\n\n创建 Dog 对象并调用 bark 方法。",
+  "hint": "方法的第一个参数是 self",
+  "starter": "class Dog:\n    def __init__(self, name):\n        self.name = name\n    # 请在下面写出 bark 方法\n\ndog = Dog(\"Buddy\")\ndog.bark()",
+  "answer": "class Dog:\n    def __init__(self, name):\n        self.name = name\n    def bark(self):\n        print(\"Woof!\") \n\ndog = Dog(\"Buddy\")\ndog.bark()",
+  "expectedOutput": "Woof!",
+  "encouragement": "方法让对象有行为！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

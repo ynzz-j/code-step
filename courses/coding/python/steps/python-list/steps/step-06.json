@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除元素 - remove",
+  "concept": "列表方法",
+  "difficulty": "intermediate",
+  "instruction": "使用 remove 方法删除指定元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n删除 \"banana\"，然后输出列表。",
+  "hint": "remove(元素值)",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出删除代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nfruits.remove(\"banana\")\nprint(fruits)",
+  "expectedOutput": "['apple', 'orange']",
+  "encouragement": "remove 按值删除元素！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

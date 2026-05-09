@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "逻辑运算符 - and",
+  "concept": "逻辑运算符",
+  "difficulty": "intermediate",
+  "instruction": "判断是否可以通过考试。\n\nscore = 85\nattendance = True\n\n条件：分数 >= 60 且 出勤 = True\n满足则输出 \"pass\"，否则输出 \"fail\"",
+  "hint": "用 and 连接两个条件",
+  "starter": "score = 85\nattendance = True\n# 请在下面写出判断代码\n",
+  "answer": "score = 85\nattendance = True\nif score >= 60 and attendance:\n    print(\"pass\")\nelse:\n    print(\"fail\")",
+  "expectedOutput": "pass",
+  "encouragement": "and 表示两个条件都要满足！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

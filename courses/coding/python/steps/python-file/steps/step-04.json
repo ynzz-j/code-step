@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "追加写入",
+  "concept": "文件写入",
+  "difficulty": "advanced",
+  "instruction": "向文件 output.txt 追加内容 \"New line\"。\\n\\n使用 open() 的 'a' 模式（追加模式）。\\n\\n追加不会覆盖原有内容。",
+  "hint": "open('output.txt', 'a') 追加写入",
+  "starter": "# 请在下面写出追加写入的代码\\n",
+  "answer": "with open('output.txt', 'a') as f:\\n    f.write('\\nNew line')\\nprint('Content appended successfully')",
+  "expectedOutput": "Content appended successfully",
+  "encouragement": "追加模式让你在文件末尾添加内容！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

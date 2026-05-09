@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "检查键是否存在",
+  "concept": "字典操作",
+  "difficulty": "advanced",
+  "instruction": "检查 \"name\" 和 \"city\" 是否在字典中。\n\nstudent = {\"name\": \"Tom\", \"age\": 18}\n\n输出两个检查结果（True/False）。",
+  "hint": "用 in 关键字检查键是否存在",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18}\n# 请在下面写出检查代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18}\nprint(\"name\" in student)\nprint(\"city\" in student)",
+  "expectedOutput": "True\nFalse",
+  "encouragement": "检查键是否存在可以避免错误！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

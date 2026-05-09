@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "输出多行内容",
+  "concept": "print 函数",
+  "difficulty": "beginner",
+  "instruction": "使用 print 函数输出两行内容。\n\n第一行输出 Hello\n第二行输出 Python\n\n提示：调用两次 print 即可。",
+  "hint": "两次调用 print，每次输出不同的内容",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "print(\"Hello\")\nprint(\"Python\")",
+  "expectedOutput": "Hello\nPython",
+  "encouragement": "很好！你已经掌握了一次输出多行的方法！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

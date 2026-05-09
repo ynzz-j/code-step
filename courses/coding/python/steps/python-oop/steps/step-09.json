@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "继承",
+  "concept": "继承",
+  "difficulty": "advanced",
+  "instruction": "定义 Animal 父类，包含 eat 方法输出 \"Eating\"。\n\n定义 Dog 子类继承 Animal。\n\n创建 Dog 对象并调用 eat 方法。\n\n子类会继承父类的方法。",
+  "hint": "class Dog(Animal): 表示继承",
+  "starter": "class Animal:\n    def eat(self):\n        print(\"Eating\")\n\n# 请在下面写出 Dog 类（继承 Animal）\n\ndog = Dog()\ndog.eat()",
+  "answer": "class Animal:\n    def eat(self):\n        print(\"Eating\")\n\nclass Dog(Animal):\n    pass\n\ndog = Dog()\ndog.eat()",
+  "expectedOutput": "Eating",
+  "encouragement": "继承让代码可以复用！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

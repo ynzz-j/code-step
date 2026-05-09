@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Stream map 转换",
+  "concept": "Stream API",
+  "difficulty": "intermediate",
+  "instruction": "map() 方法用于将每个元素转换成另一种形式。\\n\\n照着敲，学习使用 map。",
+  "hint": "map(x -> transform(x)) 将元素转换",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> words = new ArrayList<>();\n        words.add(\"hello\");\n        words.add(\"world\");\n        words.add(\"java\");\n        \n        words.stream()\n                .map(String::toUpperCase)\n                .forEach(System.out::println);\n    }\n}",
+  "encouragement": "map 转换元素！"
+}

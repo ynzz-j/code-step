@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "创建字典",
+  "concept": "字典创建",
+  "difficulty": "advanced",
+  "instruction": "创建一个学生信息字典并输出。\n\n包含：name=\"Tom\", age=18, grade=90\n\n字典用花括号 {} 创建，键值对用冒号分隔。",
+  "hint": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}",
+  "starter": "# 请在下面写出代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\nprint(student)",
+  "expectedOutput": "{'name': 'Tom', 'age': 18, 'grade': 90}",
+  "encouragement": "字典用键来快速查找值！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

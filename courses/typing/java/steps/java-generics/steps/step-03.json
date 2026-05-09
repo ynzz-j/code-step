@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "泛型限定",
+  "concept": "Generics Bounded",
+  "difficulty": "intermediate",
+  "instruction": "使用 extends 关键字限定泛型类型的上限（必须是某个类的子类或实现某个接口）。\n\n照着敲，学习有界泛型。",
+  "hint": "<T extends Number> 表示 T 必须是 Number 或其子类",
+  "targetCode": "public class Main {\n    \n    public static <T extends Number> double sum(T[] array) {\n        double total = 0.0;\n        for (T num : array) {\n            total += num.doubleValue();\n        }\n        return total;\n    }\n    \n    public static void main(String[] args) {\n        Integer[] intArray = {1, 2, 3, 4, 5};\n        Double[] doubleArray = {1.1, 2.2, 3.3};\n        \n        System.out.println(\"Integer sum: \" + sum(intArray));\n        System.out.println(\"Double sum: \" + sum(doubleArray));\n    }\n}",
+  "encouragement": "有界泛型，安全又灵活！"
+}

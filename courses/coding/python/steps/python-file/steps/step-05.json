@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "with 语句",
+  "concept": "with 语句",
+  "difficulty": "advanced",
+  "instruction": "使用 with 语句读取文件 data.txt 并输出内容。\\n\\nwith 语句会自动关闭文件，不需要手动调用 close()。\\n\\n这是推荐的文件操作方式。",
+  "hint": "with open('data.txt', 'r') as f:",
+  "starter": "# 请在下面使用 with 语句读取文件\\n",
+  "answer": "with open('data.txt', 'r') as f:\\n    content = f.read()\\nprint(content)",
+  "expectedOutput": "Hello Python",
+  "encouragement": "with 语句让文件操作更安全！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

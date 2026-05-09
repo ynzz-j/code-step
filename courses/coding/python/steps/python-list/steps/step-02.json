@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "访问列表元素",
+  "concept": "列表索引",
+  "difficulty": "intermediate",
+  "instruction": "创建一个水果列表，输出第一个和最后一个元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n索引从 0 开始。\n最后一个元素可以用 -1 索引。",
+  "hint": "fruits[0] 是第一个，fruits[-1] 是最后一个",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nprint(fruits[0])\nprint(fruits[-1])",
+  "expectedOutput": "apple\norange",
+  "encouragement": "索引让你快速访问元素！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

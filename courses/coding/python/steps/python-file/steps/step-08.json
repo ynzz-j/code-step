@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "JSON 文件读取",
+  "concept": "JSON 文件",
+  "difficulty": "advanced",
+  "instruction": "使用 json 模块读取 JSON 文件。\\n\\n导入 json 模块，使用 json.load() 读取。\\n\\n假设 data.json 内容为：\\n{\"name\": \"Tom\", \"age\": 18}",
+  "hint": "import json 然后 json.load(file)",
+  "starter": "import json\\n\\n# 请在下面写出读取 JSON 文件的代码\\n",
+  "answer": "import json\\n\\nwith open('data.json', 'r') as f:\\n    data = json.load(f)\\nprint(data)\\nprint(data['name'])",
+  "expectedOutput": "{'name': 'Tom', 'age': 18}\\nTom",
+  "encouragement": "JSON 是 Web 开发中最常用的数据格式！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

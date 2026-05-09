@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器与协程",
+  "concept": "协程",
+  "difficulty": "hell",
+  "instruction": "使用生成器实现简单协程。\\n\\n创建协程 accumulator，可以累加发送的值。\\n\\n调用：send(10), send(20), send(30)，输出累加和。",
+  "hint": "使用 while True 和 value = yield total",
+  "starter": "def accumulator():\\n    total = 0\\n    while True:\\n        # 请在下面写出协程代码\\n\\nacc = accumulator()\\nnext(acc)\\nprint(acc.send(10))\\nprint(acc.send(20))\\nprint(acc.send(30))",
+  "answer": "def accumulator():\\n    total = 0\\n    while True:\\n        value = yield total\\n        total += value\\n\\nacc = accumulator()\\nnext(acc)\\nprint(acc.send(10))\\nprint(acc.send(20))\\nprint(acc.send(30))",
+  "expectedOutput": "10\\n30\\n60",
+  "encouragement": "生成器可以实现协程！",
+  "validation": {
+    "type": "contains",
+    "value": "while "
+  }
+}

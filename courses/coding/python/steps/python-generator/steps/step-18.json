@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "hell",
+  "instruction": "创建一个完整的生成器管道。\\n\\n1. 生成器 data_source：生成 1 到 5\\n2. 生成器 filter_even：过滤偶数\\n3. 生成器 square：将每个值平方\\n\\n最终输出：4, 16（2 和 4 的平方）",
+  "hint": "链式调用三个生成器",
+  "starter": "def data_source():\\n    for i in range(1, 6):\\n        yield i\\n\\ndef filter_even(numbers):\\n    for n in numbers:\\n        if n % 2 == 0:\\n            yield n\\n\\ndef square(numbers):\\n    # 请在下面写出 square 生成器\\n\\n# 构建管道\\npipeline = square(filter_even(data_source()))\\nfor x in pipeline:\\n    print(x)",
+  "answer": "def data_source():\\n    for i in range(1, 6):\\n        yield i\\n\\ndef filter_even(numbers):\\n    for n in numbers:\\n        if n % 2 == 0:\\n            yield n\\n\\ndef square(numbers):\\n    for n in numbers:\\n        yield n ** 2\\n\\n# 构建管道\\npipeline = square(filter_even(data_source()))\\nfor x in pipeline:\\n    print(x)",
+  "expectedOutput": "4\\n16",
+  "encouragement": "太棒了！你掌握了生成器的精髓！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

@@ -1,6 +1,6 @@
 {
   "type": "typing",
-  "title": "HashMap 的创建",
+  "title": "HashMap 创建和添加",
   "concept": "HashMap",
   "difficulty": "intermediate",
   "instruction": "HashMap 存储键值对（key-value）。\n\n照着敲，感受 HashMap 的创建方式。",

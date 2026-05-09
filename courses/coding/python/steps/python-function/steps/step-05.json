@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "默认参数",
+  "concept": "默认参数",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 power，计算指数。\n\npower(2, 3) 表示 2 的 3 次方。\n\n第二个参数 n 默认值为 2。\n\npower(3) 应该返回 9（3 的平方）。",
+  "hint": "在参数定义时给默认值：def power(base, n=2)",
+  "starter": "# 请在下面写出函数定义代码\n",
+  "answer": "def power(base, n=2):\n    return base ** n\n\nprint(power(3))",
+  "expectedOutput": "9",
+  "encouragement": "默认参数让函数调用更简洁！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

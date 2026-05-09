@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数式接口",
+  "concept": "Functional Interface",
+  "difficulty": "intermediate",
+  "instruction": "函数式接口是只有一个抽象方法的接口，可以用 Lambda 表达式实现。\\n\\n照着敲，学习函数式接口。",
+  "hint": "@FunctionalInterface 注解确保接口只有一个抽象方法",
+  "targetCode": "@FunctionalInterface\ninterface Calculator {\n    int calculate(int a, int b);\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Calculator add = (a, b) -> a + b;\n        Calculator multiply = (a, b) -> a * b;\n        \n        System.out.println(\"Add: \" + add.calculate(5, 3));\n        System.out.println(\"Multiply: \" + multiply.calculate(5, 3));\n    }\n}",
+  "encouragement": "函数式接口，Lambda 的基础！"
+}

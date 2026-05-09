@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器处理大文件",
+  "concept": "生成器应用",
+  "difficulty": "hell",
+  "instruction": "使用生成器逐行读取大文件。\\n\\n创建生成器函数 read_large_file，逐行读取文件。\\n\\n使用 with 语句和 yield 逐行返回。",
+  "hint": "在 with 语句里 for line in f: yield line",
+  "starter": "def read_large_file(file_path):\\n    # 请在下面写出生成器代码\\n\\n# 假设 data.txt 有三行内容\\nfor line in read_large_file('data.txt'):\\n    print(line.strip())",
+  "answer": "def read_large_file(file_path):\\n    with open(file_path, 'r') as f:\\n        for line in f:\\n            yield line\\n\\n# 假设 data.txt 有三行内容\\nfor line in read_large_file('data.txt'):\\n    print(line.strip())",
+  "expectedOutput": "Line1\\nLine2\\nLine3",
+  "encouragement": "生成器让你惰性处理大文件！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

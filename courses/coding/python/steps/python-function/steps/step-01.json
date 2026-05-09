@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "定义函数",
+  "concept": "函数定义",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 greet，输出 \"Hello\"。\n\ndef 关键字用于定义函数。\n\n示例：\ndef say_hi():\n    print(\"Hi\")",
+  "hint": "用 def 定义函数，函数名后加括号和冒号",
+  "starter": "# 请在下面写出函数定义代码\n",
+  "answer": "def greet():\n    print(\"Hello\")\n\ngreet()",
+  "expectedOutput": "Hello",
+  "encouragement": "函数让代码可以重复使用！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

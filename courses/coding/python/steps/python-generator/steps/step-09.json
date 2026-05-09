@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器的状态",
+  "concept": "生成器",
+  "difficulty": "hell",
+  "instruction": "演示生成器的状态保持。\\n\\n创建生成器函数，yield 后打印 \"after yield\"。\\n\\ndef gen():\\n    yield 1\\n    print(\"after yield\")\\n    yield 2\\n\\n调用两次 next()，观察输出。",
+  "hint": "生成器在 yield 处暂停，下次从暂停处继续",
+  "starter": "def gen():\\n    yield 1\\n    print(\"after yield\")\\n    yield 2\\n\\ng = gen()\\n\\n# 请在下面写出调用代码\\n",
+  "answer": "def gen():\\n    yield 1\\n    print(\"after yield\")\\n    yield 2\\n\\ng = gen()\\nprint(next(g))\\nprint(next(g))",
+  "expectedOutput": "1\\nafter yield\\n2",
+  "encouragement": "生成器在 yield 处暂停！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

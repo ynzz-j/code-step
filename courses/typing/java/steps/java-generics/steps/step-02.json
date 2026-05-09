@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "泛型方法",
+  "concept": "Generics",
+  "difficulty": "intermediate",
+  "instruction": "泛型方法在方法级别使用类型参数，更加灵活。\n\n照着敲，学习如何定义泛型方法。",
+  "hint": "泛型方法：public <T> void method(T t) { }",
+  "targetCode": "public class Main {\n    \n    public static <T> void printArray(T[] array) {\n        for (T element : array) {\n            System.out.println(element);\n        }\n    }\n    \n    public static void main(String[] args) {\n        Integer[] intArray = {1, 2, 3, 4, 5};\n        String[] strArray = {\"Hello\", \"Generics\", \"Java\"};\n        \n        printArray(intArray);\n        printArray(strArray);\n    }\n}",
+  "encouragement": "泛型方法，灵活复用！"
+}

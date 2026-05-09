@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "实例属性",
+  "concept": "实例属性",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，在 __init__ 中初始化 name 和 age。\n\n创建两个 Dog 对象，修改其中一个的 age，然后输出两个对象的 age。\n\ndog1 = Dog(\"Buddy\", 3)\ndog2 = Dog(\"Max\", 5)\n\n将 dog1 的 age 改为 4。",
+  "hint": "用点号访问和修改属性：dog1.age = 4",
+  "starter": "class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\ndog1 = Dog(\"Buddy\", 3)\ndog2 = Dog(\"Max\", 5)\n# 请在下面修改 dog1 的 age\n",
+  "answer": "class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\ndog1 = Dog(\"Buddy\", 3)\ndog2 = Dog(\"Max\", 5)\ndog1.age = 4\nprint(dog1.age)\nprint(dog2.age)",
+  "expectedOutput": "4\n5",
+  "encouragement": "每个对象有自己的属性！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

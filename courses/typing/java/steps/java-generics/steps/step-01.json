@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "泛型类定义",
+  "concept": "Generics",
+  "difficulty": "intermediate",
+  "instruction": "泛型类允许在类创建时指定类型参数，提高类型安全性。\n\n照着敲，学习如何定义和使用泛型类。",
+  "hint": "泛型类：class Box<T> { }",
+  "targetCode": "class Box<T> {\n    private T item;\n    \n    public void setItem(T item) {\n        this.item = item;\n    }\n    \n    public T getItem() {\n        return item;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Box<String> stringBox = new Box<>();\n        stringBox.setItem(\"Hello Generics\");\n        System.out.println(stringBox.getItem());\n    }\n}",
+  "encouragement": "泛型类，类型安全！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "elif 多重判断",
+  "concept": "elif 语句",
+  "difficulty": "intermediate",
+  "instruction": "判断成绩等级。\n\nscore = 85\n- score >= 90: 输出 \"A\"\n- score >= 80: 输出 \"B\"\n- score >= 70: 输出 \"C\"\n- 否则: 输出 \"D\"",
+  "hint": "elif 是 else if 的缩写",
+  "starter": "score = 85\n# 请在下面写出判断代码\n",
+  "answer": "score = 85\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelif score >= 70:\n    print(\"C\")\nelse:\n    print(\"D\")",
+  "expectedOutput": "B",
+  "encouragement": "多重判断用 elif！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "读取 CSV 文件",
+  "concept": "CSV 文件",
+  "difficulty": "advanced",
+  "instruction": "使用 csv 模块读取 CSV 文件。\\n\\n导入 csv 模块，使用 csv.reader() 读取。\\n\\n假设 data.csv 内容为：\\nname,age\\nTom,18\\nAlice,20",
+  "hint": "import csv 然后 csv.reader(file)",
+  "starter": "import csv\\n\\n# 请在下面写出读取 CSV 文件的代码\\n",
+  "answer": "import csv\\n\\nwith open('data.csv', 'r') as f:\\n    reader = csv.reader(f)\\n    for row in reader:\\n        print(row)",
+  "expectedOutput": "['name', 'age']\\n['Tom', '18']\\n['Alice', '20']",
+  "encouragement": "CSV 是常用的数据交换格式！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

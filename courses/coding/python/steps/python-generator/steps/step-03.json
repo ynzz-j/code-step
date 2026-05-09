@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "遍历生成器",
+  "concept": "生成器",
+  "difficulty": "hell",
+  "instruction": "使用 for 循环遍历生成器。\\n\\ndef gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\n用 for 循环输出所有值。",
+  "hint": "for x in gen(): print(x)",
+  "starter": "def gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\n# 请在下面写出遍历代码\\n",
+  "answer": "def gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\nfor x in gen():\\n    print(x)",
+  "expectedOutput": "1\\n2\\n3",
+  "encouragement": "for 循环自动处理生成器！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

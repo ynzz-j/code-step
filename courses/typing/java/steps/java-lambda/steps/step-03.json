@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "方法引用",
+  "concept": "Method Reference",
+  "difficulty": "intermediate",
+  "instruction": "方法引用是 Lambda 表达式的简化写法，当 Lambda 只是调用某个方法时可以使用。\\n\\n照着敲，学习方法引用。",
+  "hint": "方法引用语法: 类名::方法名",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>();\n        list.add(\"apple\");\n        list.add(\"banana\");\n        list.add(\"cherry\");\n        \n        // Lambda 写法\n        list.forEach(item -> System.out.println(item));\n        \n        // 方法引用写法\n        list.forEach(System.out::println);\n        \n        // 静态方法引用\n        list.stream()\n             .map(String::toUpperCase)\n             .forEach(System.out::println);\n    }\n}",
+  "encouragement": "方法引用，Lambda 的语法糖！"
+}

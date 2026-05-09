@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器 vs 普通函数",
+  "concept": "生成器",
+  "difficulty": "hell",
+  "instruction": "对比普通函数和生成器函数。\\n\\n普通函数：返回列表 [1, 2, 3]\\n生成器函数：使用 yield 返回 1, 2, 3\\n\\n输出两个函数的结果类型。",
+  "hint": "普通函数返回 list，生成器返回 generator",
+  "starter": "def normal():\\n    return [1, 2, 3]\\n\\ndef gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\n# 请在下面输出两个函数的返回值类型\\n",
+  "answer": "def normal():\\n    return [1, 2, 3]\\n\\ndef gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\nprint(type(normal()))\\nprint(type(gen()))",
+  "expectedOutput": "<class 'list'>\\n<class 'generator'>",
+  "encouragement": "生成器不会一次性生成所有值！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

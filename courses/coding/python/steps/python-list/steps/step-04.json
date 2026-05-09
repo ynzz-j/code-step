@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "添加元素 - append",
+  "concept": "列表方法",
+  "difficulty": "intermediate",
+  "instruction": "使用 append 方法向列表末尾添加元素。\n\nfruits = [\"apple\", \"banana\"]\n\n添加 \"orange\" 到列表末尾，然后输出。",
+  "hint": "用 append() 方法",
+  "starter": "fruits = [\"apple\", \"banana\"]\n# 请在下面写出添加代码\n",
+  "answer": "fruits = [\"apple\", \"banana\"]\nfruits.append(\"orange\")\nprint(fruits)",
+  "expectedOutput": "['apple', 'banana', 'orange']",
+  "encouragement": "append 是最常用的列表方法！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

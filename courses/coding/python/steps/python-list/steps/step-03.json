@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "修改列表元素",
+  "concept": "列表操作",
+  "difficulty": "intermediate",
+  "instruction": "修改列表中的第二个元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n将第二个元素改为 \"grape\"，然后输出整个列表。",
+  "hint": "用索引赋值：fruits[1] = \"grape\"",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出修改代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nfruits[1] = \"grape\"\nprint(fruits)",
+  "expectedOutput": "['apple', 'grape', 'orange']",
+  "encouragement": "列表是可变的！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

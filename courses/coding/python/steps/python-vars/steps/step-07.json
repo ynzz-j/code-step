@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "字符串拼接",
+  "concept": "字符串",
+  "difficulty": "beginner",
+  "instruction": "将两个字符串变量拼接并输出。\n\nfirst = \"Hello\"\nsecond = \"World\"\n\n使用 + 号拼接字符串。",
+  "hint": "用 + 号连接两个字符串",
+  "starter": "first = \"Hello\"\nsecond = \"World\"\n# 请在下面写出拼接代码\n",
+  "answer": "first = \"Hello\"\nsecond = \"World\"\nresult = first + second\nprint(result)",
+  "expectedOutput": "HelloWorld",
+  "encouragement": "字符串拼接很常用！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

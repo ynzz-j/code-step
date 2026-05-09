@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "简单计算",
+  "concept": "print 函数",
+  "difficulty": "beginner",
+  "instruction": "输出 2 + 3 的结果。\n\nPython 可以直接计算数学表达式。",
+  "hint": "直接在 print 中写 2 + 3",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "print(2 + 3)",
+  "expectedOutput": "5",
+  "encouragement": "太棒了！Python 是个出色的计算器！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

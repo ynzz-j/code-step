@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "next() 函数",
+  "concept": "next() 函数",
+  "difficulty": "hell",
+  "instruction": "使用 next() 函数获取迭代器的下一个值。\\n\\nnumbers = [1, 2, 3]\\nit = iter(numbers)\\n\\n获取所有值并输出。\\n\\n提示：使用默认值避免 StopIteration。",
+  "hint": "next(it, None) 在迭代器耗尽时返回 None",
+  "starter": "numbers = [1, 2, 3]\\nit = iter(numbers)\\n\\n# 请在下面写出代码\\n",
+  "answer": "numbers = [1, 2, 3]\\nit = iter(numbers)\\n\\nwhile True:\\n    value = next(it, None)\\n    if value is None:\\n        break\\n    print(value)",
+  "expectedOutput": "1\\n2\\n3",
+  "encouragement": "next() 让你手动控制迭代！",
+  "validation": {
+    "type": "contains",
+    "value": "while "
+  }
+}

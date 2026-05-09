@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "HashMap 遍历 keySet",
+  "concept": "HashMap",
+  "difficulty": "intermediate",
+  "instruction": "用 keySet() 获取所有键，然后通过键获取值。\n\n照着敲，用 keySet 遍历 HashMap。",
+  "hint": "for (String key : map.keySet())",
+  "targetCode": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> scores = new HashMap<>();\n        scores.put(\"Chinese\", 85);\n        scores.put(\"Math\", 92);\n        scores.put(\"English\", 78);\n\n        for (String subject : scores.keySet()) {\n            System.out.println(subject + \": \" + scores.get(subject));\n        }\n    }\n}",
+  "encouragement": "keySet 遍历所有键！"
+}

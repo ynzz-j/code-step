@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器实现斐波那契数列",
+  "concept": "生成器应用",
+  "difficulty": "hell",
+  "instruction": "使用生成器实现斐波那契数列。\\n\\n生成前 10 个斐波那契数。\\n\\n斐波那契数列：0, 1, 1, 2, 3, 5, 8, 13, 21, 34...",
+  "hint": "a, b = b, a + b 更新斐波那契数",
+  "starter": "def fibonacci(n):\\n    a, b = 0, 1\\n    for _ in range(n):\\n        # 请在下面写出 yield 代码\\n\\nfor num in fibonacci(10):\\n    print(num)",
+  "answer": "def fibonacci(n):\\n    a, b = 0, 1\\n    for _ in range(n):\\n        yield a\\n        a, b = b, a + b\\n\\nfor num in fibonacci(10):\\n    print(num)",
+  "expectedOutput": "0\\n1\\n1\\n2\\n3\\n5\\n8\\n13\\n21\\n34",
+  "encouragement": "生成器完美适合无限序列！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

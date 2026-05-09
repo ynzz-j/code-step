@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "比较运算符",
+  "concept": "比较运算符",
+  "difficulty": "intermediate",
+  "instruction": "判断两个数是否相等。\n\na = 10\nb = 10\n\n如果相等，输出 \"equal\"\n\n注意：判断相等用 ==，而不是 =",
+  "hint": "用 == 判断相等",
+  "starter": "a = 10\nb = 10\n# 请在下面写出判断代码\n",
+  "answer": "a = 10\nb = 10\nif a == b:\n    print(\"equal\")",
+  "expectedOutput": "equal",
+  "encouragement": "记住：== 是判断，= 是赋值！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

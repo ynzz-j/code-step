@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "for 循环遍历列表",
+  "concept": "for 循环",
+  "difficulty": "intermediate",
+  "instruction": "遍历并输出列表中的每个元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n逐个输出每个水果名。",
+  "hint": "直接用 for 遍历列表",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出循环代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nfor fruit in fruits:\n    print(fruit)",
+  "expectedOutput": "apple\nbanana\norange",
+  "encouragement": "Python 的 for 循环很直观！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

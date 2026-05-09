@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "方法重写",
+  "concept": "方法重写",
+  "difficulty": "advanced",
+  "instruction": "定义 Animal 父类和 Dog 子类。\n\nAnimal 有 speak 方法，输出 \"Animal speaks\"。\nDog 重写 speak 方法，输出 \"Woof!\"。\n\n创建 Dog 对象并调用 speak。",
+  "hint": "在子类中定义同名方法即可重写",
+  "starter": "class Animal:\n    def speak(self):\n        print(\"Animal speaks\")\n\n# 请在下面写出 Dog 类并重写 speak 方法\n\ndog = Dog()\ndog.speak()",
+  "answer": "class Animal:\n    def speak(self):\n        print(\"Animal speaks\")\n\nclass Dog(Animal):\n    def speak(self):\n        print(\"Woof!\")\n\ndog = Dog()\ndog.speak()",
+  "expectedOutput": "Woof!",
+  "encouragement": "方法重写让子类有不同行为！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

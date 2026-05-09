@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "advanced",
+  "instruction": "综合使用字典操作。\n\n1. 创建空字典 scores\n2. 添加数学=90, 英语=85, 物理=88\n3. 修改英语成绩为 95\n4. 删除物理成绩\n5. 输出最终字典\n\n预期输出：{\"数学\": 90, \"英语\": 95}",
+  "hint": "按顺序使用赋值、修改、删除操作",
+  "starter": "scores = {}\n# 请在下面写出操作代码\n",
+  "answer": "scores = {}\nscores[\"数学\"] = 90\nscores[\"英语\"] = 85\nscores[\"物理\"] = 88\nscores[\"英语\"] = 95\ndel scores[\"物理\"]\nprint(scores)",
+  "expectedOutput": "{'\\u6570\\u5b66': 90, '\\u82f1\\u8bed': 95}",
+  "encouragement": "太棒了！你掌握了字典的所有核心操作！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

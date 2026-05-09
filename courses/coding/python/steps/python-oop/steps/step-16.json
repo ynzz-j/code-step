@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "特殊方法 __repr__",
+  "concept": "特殊方法",
+  "difficulty": "advanced",
+  "instruction": "定义 Point 类。\n\n包含 x 和 y 属性。\n\n实现 __repr__ 方法，返回：\n\"Point(x, y)\"\n\n创建 Point 对象，在列表中使用并输出。",
+  "hint": "__repr__ 用于调试和开发",
+  "starter": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    # 请在下面写出 __repr__ 方法\n\npoints = [Point(1, 2), Point(3, 4)]\nprint(points)",
+  "answer": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return f\"Point({self.x}, {self.y})\"\n\npoints = [Point(1, 2), Point(3, 4)]\nprint(points)",
+  "expectedOutput": "[Point(1, 2), Point(3, 4)]",
+  "encouragement": "__repr__ 让对象在容器中显示更友好！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除文件",
+  "concept": "文件路径",
+  "difficulty": "advanced",
+  "instruction": "使用 os 模块删除文件。\\n\\n导入 os 模块，使用 os.remove() 删除。\\n\\n删除 output.txt 文件。",
+  "hint": "os.remove('output.txt')",
+  "starter": "import os\\n\\n# 请在下面写出删除文件的代码\\n",
+  "answer": "import os\\n\\nif os.path.exists('output.txt'):\\n    os.remove('output.txt')\\n    print('File deleted successfully')\\nelse:\\n    print('File not found')",
+  "expectedOutput": "File deleted successfully",
+  "encouragement": "删除文件让你清理不需要的数据！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

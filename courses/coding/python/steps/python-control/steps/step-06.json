@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "逻辑运算符 - or",
+  "concept": "逻辑运算符",
+  "difficulty": "intermediate",
+  "instruction": "判断是否可以打折。\n\nis_vip = False\nis_member = True\n\n条件：VIP会员 或者 会员\n满足则输出 \"discount\"，否则输出 \"no discount\"",
+  "hint": "用 or 连接两个条件",
+  "starter": "is_vip = False\nis_member = True\n# 请在下面写出判断代码\n",
+  "answer": "is_vip = False\nis_member = True\nif is_vip or is_member:\n    print(\"discount\")\nelse:\n    print(\"no discount\")",
+  "expectedOutput": "discount",
+  "encouragement": "or 表示满足任一条件即可！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

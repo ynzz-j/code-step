@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "列表遍历",
+  "concept": "列表遍历",
+  "difficulty": "intermediate",
+  "instruction": "使用 for 循环遍历列表并输出每个元素。\n\nfruits = [\"apple\", \"banana\", \"orange\"]\n\n逐个输出每个水果名。",
+  "hint": "for fruit in fruits:",
+  "starter": "fruits = [\"apple\", \"banana\", \"orange\"]\n# 请在下面写出遍历代码\n",
+  "answer": "fruits = [\"apple\", \"banana\", \"orange\"]\nfor fruit in fruits:\n    print(fruit)",
+  "expectedOutput": "apple\nbanana\norange",
+  "encouragement": "遍历是处理列表的基础操作！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

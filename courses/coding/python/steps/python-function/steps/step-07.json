@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "返回值多个值",
+  "concept": "函数返回值",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 calc，返回和与差。\n\ncalc(10, 3) 返回 (13, 7)\n\n使用 return a + b, a - b 返回多个值",
+  "hint": "用逗号分隔多个返回值",
+  "starter": "# 请在下面写出函数定义代码\n",
+  "answer": "def calc(a, b):\n    return a + b, a - b\n\ns, d = calc(10, 3)\nprint(s)\nprint(d)",
+  "expectedOutput": "13\n7",
+  "encouragement": "Python 可以返回多个值！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

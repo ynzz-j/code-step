@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "列表切片",
+  "concept": "列表切片",
+  "difficulty": "intermediate",
+  "instruction": "使用切片获取列表的部分元素。\n\nnumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n获取前 3 个元素（索引 0-2）并输出。",
+  "hint": "切片语法：numbers[起始:结束]，不包含结束索引",
+  "starter": "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n# 请在下面写出切片代码\n",
+  "answer": "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nprint(numbers[0:3])",
+  "expectedOutput": "[0, 1, 2]",
+  "encouragement": "切片是 Python 的强大功能！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

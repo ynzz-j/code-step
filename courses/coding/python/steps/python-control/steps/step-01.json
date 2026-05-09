@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "if 语句基础",
+  "concept": "if 语句",
+  "difficulty": "intermediate",
+  "instruction": "判断年龄是否大于 18。\n\nage = 20\n如果 age > 18，输出 \"adult\"\n\n注意：Python 用缩进表示代码块。",
+  "hint": "if 条件后加冒号，下一行缩进写要执行的代码",
+  "starter": "age = 20\n# 请在下面写出判断代码\n",
+  "answer": "age = 20\nif age > 18:\n    print(\"adult\")",
+  "expectedOutput": "adult",
+  "encouragement": "条件判断是编程的基础！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

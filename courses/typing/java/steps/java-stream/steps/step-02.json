@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Stream filter 过滤",
+  "concept": "Stream API",
+  "difficulty": "intermediate",
+  "instruction": "filter() 方法用于过滤元素，只保留满足条件的元素。\\n\\n照着敲，学习使用 filter。",
+  "hint": "filter(x -> condition) 保留满足条件的元素",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> numbers = new ArrayList<>();\n        numbers.add(1);\n        numbers.add(2);\n        numbers.add(3);\n        numbers.add(4);\n        numbers.add(5);\n        \n        numbers.stream()\n                .filter(n -> n % 2 == 0)\n                .forEach(n -> System.out.println(n));\n    }\n}",
+  "encouragement": "filter 过滤元素！"
+}

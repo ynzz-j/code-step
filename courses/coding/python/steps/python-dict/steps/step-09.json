@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "遍历字典",
+  "concept": "字典遍历",
+  "difficulty": "advanced",
+  "instruction": "遍历字典并输出每个键值对。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n\n输出格式：\nname: Tom\nage: 18\ngrade: 90",
+  "hint": "用 for key in student: 遍历键",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出遍历代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\nfor key in student:\n    print(f\"{key}: {student[key]}\")",
+  "expectedOutput": "name: Tom\nage: 18\ngrade: 90",
+  "encouragement": "遍历字典很常用！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

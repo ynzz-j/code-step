@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "beginner",
+  "instruction": "创建一个自我介绍程序。\n\n1. 存储名字：name = \"Tom\"\n2. 存储年龄：age = 18\n3. 存储身高：height = 1.75\n4. 输出：Tom is 18 years old, 1.75m tall",
+  "hint": "用 f-string 或字符串拼接都可以",
+  "starter": "name = \"Tom\"\nage = 18\nheight = 1.75\n# 请在下面写出输出代码\n",
+  "answer": "name = \"Tom\"\nage = 18\nheight = 1.75\nprint(f\"{name} is {age} years old, {height}m tall\")",
+  "expectedOutput": "Tom is 18 years old, 1.75m tall",
+  "encouragement": "完美！你掌握了变量的基本用法！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

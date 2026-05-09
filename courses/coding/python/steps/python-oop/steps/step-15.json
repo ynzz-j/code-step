@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "特殊方法 __str__",
+  "concept": "特殊方法",
+  "difficulty": "advanced",
+  "instruction": "定义 Book 类。\n\n包含 title 和 author 属性。\n\n实现 __str__ 方法，返回格式化字符串：\n\"Book: [title] by [author]\"\n\n创建 Book 对象并输出。",
+  "hint": "__str__ 在使用 print 对象时自动调用",
+  "starter": "class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n    \n    # 请在下面写出 __str__ 方法\n\nbook = Book(\"1984\", \"George Orwell\")\nprint(book)",
+  "answer": "class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n    \n    def __str__(self):\n        return f\"Book: {self.title} by {self.author}\"\n\nbook = Book(\"1984\", \"George Orwell\")\nprint(book)",
+  "expectedOutput": "Book: 1984 by George Orwell",
+  "encouragement": "__str__ 让你控制对象如何被打印！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

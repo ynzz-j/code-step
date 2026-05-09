@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "ArrayList 添加元素",
+  "concept": "Collections Framework",
+  "difficulty": "intermediate",
+  "instruction": "使用 add() 方法向 ArrayList 添加元素。\n\n请照着敲，学习如何添加元素。",
+  "hint": "add() 方法用于添加元素到列表末尾",
+  "targetCode": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Cherry\");\n        System.out.println(list.size());\n    }\n}",
+  "encouragement": "元素添加成功！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "类方法",
+  "concept": "类方法",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，添加类方法 get_species，返回 species 属性。\n\n使用 @classmethod 装饰器和 cls 参数。\n\n调用：print(Dog.get_species())",
+  "hint": "类方法的第一个参数是 cls",
+  "starter": "class Dog:\n    species = \"Canis familiaris\"\n    # 请在下面写出类方法\n\nprint(Dog.get_species())",
+  "answer": "class Dog:\n    species = \"Canis familiaris\"\n    @classmethod\n    def get_species(cls):\n        return cls.species\n\nprint(Dog.get_species())",
+  "expectedOutput": "Canis familiaris",
+  "encouragement": "类方法操作类本身！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

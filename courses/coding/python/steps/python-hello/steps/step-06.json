@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "input 提示语",
+  "concept": "input 函数",
+  "difficulty": "beginner",
+  "instruction": "使用 input 的提示语功能。\n\n在 input 中放入提示语：\nPlease input your name:\n\n然后输出 Hello 和输入的名字。",
+  "hint": "input(\"提示语\") 会在输入前显示提示",
+  "starter": "name = \nprint(\"Hello\")\nprint(name)",
+  "answer": "name = input(\"Please input your name:\\n\")\nprint(\"Hello\")\nprint(name)",
+  "expectedOutput": "Please input your name:\nHello\nWorld",
+  "encouragement": "带提示语的输入更友好！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

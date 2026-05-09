@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "定义类",
+  "concept": "类定义",
+  "difficulty": "advanced",
+  "instruction": "定义一个 Dog 类，输出 \"Dog class created\"。\n\n使用 class 关键字定义类。\n\n示例：\nclass Cat:\n    pass",
+  "hint": "class Dog: 然后写类体",
+  "starter": "# 请在下面写出类定义代码\n",
+  "answer": "class Dog:\n    pass\n\nprint(\"Dog class created\")",
+  "expectedOutput": "Dog class created",
+  "encouragement": "类是创建对象的模板！",
+  "validation": {
+    "type": "contains",
+    "value": "class "
+  }
+}

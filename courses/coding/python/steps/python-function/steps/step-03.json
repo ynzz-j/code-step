@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "多个参数",
+  "concept": "函数参数",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 add，接收 a 和 b 两个参数，输出它们的和。\n\n示例：\ndef add(a, b):\n    print(a + b)",
+  "hint": "用逗号分隔多个参数",
+  "starter": "# 请在下面写出函数定义代码\n",
+  "answer": "def add(a, b):\n    print(a + b)\n\nadd(3, 5)",
+  "expectedOutput": "8",
+  "encouragement": "多个参数让函数功能更强大！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

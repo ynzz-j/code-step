@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "获取所有值",
+  "concept": "字典方法",
+  "difficulty": "advanced",
+  "instruction": "使用 values 方法获取字典的所有值并输出。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}",
+  "hint": "values() 返回所有值的视图",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\nprint(list(student.values()))",
+  "expectedOutput": "['Tom', 18, 90]",
+  "encouragement": "values 让你获取所有值！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

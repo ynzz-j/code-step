@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "类型转换 - str",
+  "concept": "类型转换",
+  "difficulty": "beginner",
+  "instruction": "将整数 18 转换为字符串并输出。\n\n使用 str() 函数可以将其他类型转换为字符串。\n\n示例：\nnum = 18\ntext = str(num)",
+  "hint": "用 str() 将数字转为字符串",
+  "starter": "num = 18\n# 请在下面写出转换代码\n",
+  "answer": "num = 18\ntext = str(num)\nprint(text)",
+  "expectedOutput": "18",
+  "encouragement": "类型转换是很有用的技能！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

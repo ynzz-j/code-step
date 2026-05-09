@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "多态",
+  "concept": "多态",
+  "difficulty": "advanced",
+  "instruction": "定义 Animal、Dog、Cat 三个类。\n\nAnimal 有 speak 方法（输出 \"...\"）\nDog 重写 speak（输出 \"Woof!\"）\nCat 重写 speak（输出 \"Meow!\"）\n\n定义函数 let_animal_speak(animal)，调用 animal.speak()\n\n用 Dog 和 Cat 对象分别调用该函数。",
+  "hint": "多态让不同对象对同一方法有不同实现",
+  "starter": "class Animal:\n    def speak(self):\n        print(\"...\")\n\nclass Dog(Animal):\n    def speak(self):\n        print(\"Woof!\")\n\n# 请在下面写出 Cat 类和 let_animal_speak 函数\n",
+  "answer": "class Animal:\n    def speak(self):\n        print(\"...\")\n\nclass Dog(Animal):\n    def speak(self):\n        print(\"Woof!\")\n\nclass Cat(Animal):\n    def speak(self):\n        print(\"Meow!\")\n\ndef let_animal_speak(animal):\n    animal.speak()\n\nlet_animal_speak(Dog())\nlet_animal_speak(Cat())",
+  "expectedOutput": "Woof!\nMeow!",
+  "encouragement": "多态让代码更灵活！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

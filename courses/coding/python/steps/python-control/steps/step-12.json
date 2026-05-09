@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "intermediate",
+  "instruction": "找出 1 到 10 中的所有偶数并输出。\n\n使用循环和条件判断。\n\n提示：偶数能被 2 整除（i % 2 == 0）",
+  "hint": "用 for 循环遍历 1 到 10，判断是否是偶数",
+  "starter": "# 请在下面写出代码\n",
+  "answer": "for i in range(1, 11):\n    if i % 2 == 0:\n        print(i)",
+  "expectedOutput": "2\n4\n6\n8\n10",
+  "encouragement": "完美！你掌握了控制流程！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

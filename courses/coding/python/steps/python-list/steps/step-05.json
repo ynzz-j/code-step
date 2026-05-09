@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "插入元素 - insert",
+  "concept": "列表方法",
+  "difficulty": "intermediate",
+  "instruction": "使用 insert 方法在指定位置插入元素。\n\nfruits = [\"apple\", \"orange\"]\n\n在索引 1 处插入 \"banana\"，然后输出。",
+  "hint": "insert(索引, 元素)",
+  "starter": "fruits = [\"apple\", \"orange\"]\n# 请在下面写出插入代码\n",
+  "answer": "fruits = [\"apple\", \"orange\"]\nfruits.insert(1, \"banana\")\nprint(fruits)",
+  "expectedOutput": "['apple', 'banana', 'orange']",
+  "encouragement": "insert 让你精确控制插入位置！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

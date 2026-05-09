@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "ArrayList 访问和修改",
+  "concept": "Collections Framework",
+  "difficulty": "intermediate",
+  "instruction": "使用 get() 方法获取元素，set() 方法修改元素。\n\n请照着敲，学习如何访问和修改元素。",
+  "hint": "get(index) 获取元素，set(index, value) 修改元素",
+  "targetCode": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Cherry\");\n        System.out.println(list.get(0));\n        list.set(1, \"Blueberry\");\n        System.out.println(list.get(1));\n    }\n}",
+  "encouragement": "访问和修改元素，掌握了！"
+}

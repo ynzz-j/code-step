@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器与装饰器结合",
+  "concept": "生成器进阶",
+  "difficulty": "hell",
+  "instruction": "创建装饰器 log_calls，记录生成器调用。\\n\\n装饰器在生成器被调用时打印日志。\\n\\n使用 @log_calls 装饰生成器函数。",
+  "hint": "装饰器内部需要包装生成器函数",
+  "starter": "def log_calls(func):\\n    def wrapper(*args, **kwargs):\\n        print(f\"Calling {func.__name__}\")\\n        return func(*args, **kwargs)\\n    return wrapper\\n\\n# 请在下面使用装饰器\\n",
+  "answer": "def log_calls(func):\\n    def wrapper(*args, **kwargs):\\n        print(f\"Calling {func.__name__}\")\\n        return func(*args, **kwargs)\\n    return wrapper\\n\\n@log_calls\\ndef gen(n):\\n    for i in range(n):\\n        yield i\\n\\nfor x in gen(3):\\n    print(x)",
+  "expectedOutput": "Calling gen\\n0\\n1\\n2",
+  "encouragement": "装饰器增强生成器功能！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

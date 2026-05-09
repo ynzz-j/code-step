@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "合并字典 - update",
+  "concept": "字典方法",
+  "difficulty": "advanced",
+  "instruction": "使用 update 方法合并两个字典。\n\ndict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\n\n将 dict2 合并到 dict1，然后输出 dict1。",
+  "hint": "dict1.update(dict2)",
+  "starter": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\n# 请在下面写出合并代码\n",
+  "answer": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\ndict1.update(dict2)\nprint(dict1)",
+  "expectedOutput": "{'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+  "encouragement": "update 让合并字典很简单！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

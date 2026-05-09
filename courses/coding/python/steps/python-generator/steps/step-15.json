@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器的性能优势",
+  "concept": "生成器性能",
+  "difficulty": "hell",
+  "instruction": "对比列表推导式和生成器表达式的内存使用。\\n\\n创建包含 1 到 1000000 的列表和生成器。\\n\\n输出两者的类型。\\n\\n提示：生成器更省内存。",
+  "hint": "列表推导式用 []，生成器表达式用 ()",
+  "starter": "# 请在下面写出对比代码\\n",
+  "answer": "lst = [x for x in range(1000000)]\\ngen = (x for x in range(1000000))\\n\\nprint(type(lst))\\nprint(type(gen))\\nprint(f\"List size: {len(lst)}\")\\nprint(\"Generator: lazy evaluation\")",
+  "expectedOutput": "<class 'list'>\\n<class 'generator'>\\nList size: 1000000\\nGenerator: lazy evaluation",
+  "encouragement": "生成器节省内存！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

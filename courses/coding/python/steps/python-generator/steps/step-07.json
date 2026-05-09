@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "iter() 函数",
+  "concept": "iter() 函数",
+  "difficulty": "hell",
+  "instruction": "使用 iter() 函数从可迭代对象获取迭代器。\\n\\nnumbers = [1, 2, 3]\\n\\n获取迭代器，然后调用 next() 三次。",
+  "hint": "it = iter(numbers) 然后 next(it)",
+  "starter": "numbers = [1, 2, 3]\\n\\n# 请在下面写出代码\\n",
+  "answer": "numbers = [1, 2, 3]\\nit = iter(numbers)\\nprint(next(it))\\nprint(next(it))\\nprint(next(it))",
+  "expectedOutput": "1\\n2\\n3",
+  "encouragement": "iter() 获取迭代器！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

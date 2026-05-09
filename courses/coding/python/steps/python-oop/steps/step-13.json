@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "封装 - 私有属性",
+  "concept": "封装",
+  "difficulty": "advanced",
+  "instruction": "定义 BankAccount 类。\n\n在 __init__ 中初始化私有属性 __balance = 0。\n\n添加 deposit 方法增加余额，add_interest 方法计算利息（不输出）\n\n创建账户，存钱，然后尝试从外部访问 __balance。\n\n注意：私有属性在类外不能直接访问。",
+  "hint": "双下划线开头的属性是私有的",
+  "starter": "class BankAccount:\n    def __init__(self):\n        # 请在下面初始化私有属性\n    \n    def deposit(self, amount):\n        self.__balance += amount\n\naccount = BankAccount()\naccount.deposit(100)\n# 尝试访问私有属性（会报错）\nprint(account.__balance)",
+  "answer": "class BankAccount:\n    def __init__(self):\n        self.__balance = 0\n    \n    def deposit(self, amount):\n        self.__balance += amount\n\naccount = BankAccount()\naccount.deposit(100)\ntry:\n    print(account.__balance)\nexcept AttributeError:\n    print(\"Cannot access private attribute\")",
+  "expectedOutput": "Cannot access private attribute",
+  "encouragement": "封装保护数据不被随意修改！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "多变量赋值",
+  "concept": "变量",
+  "difficulty": "beginner",
+  "instruction": "使用一行代码给多个变量赋值。\n\na = 1\nb = 2\nc = 3\n\n简写：a, b, c = 1, 2, 3\n\n请用简写方式赋值，然后输出三个变量的和。",
+  "hint": "用逗号分隔变量名和值",
+  "starter": "# 请在下面写出简写代码\n",
+  "answer": "a, b, c = 1, 2, 3\nprint(a + b + c)",
+  "expectedOutput": "6",
+  "encouragement": "Python 语法很简洁！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

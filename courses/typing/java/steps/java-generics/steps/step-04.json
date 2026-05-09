@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "通配符 ?",
+  "concept": "Generics Wildcard",
+  "difficulty": "intermediate",
+  "instruction": "通配符 ? 表示未知类型。<? extends T> 是上界通配符，<? super T> 是下界通配符。\n\n照着敲，学习通配符的使用。",
+  "hint": "List<? extends Number> 可以接受 Number 或其子类的 List",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    \n    public static double sumList(List<? extends Number> list) {\n        double total = 0.0;\n        for (Number num : list) {\n            total += num.doubleValue();\n        }\n        return total;\n    }\n    \n    public static void main(String[] args) {\n        List<Integer> intList = new ArrayList<>();\n        intList.add(1);\n        intList.add(2);\n        intList.add(3);\n        \n        List<Double> doubleList = new ArrayList<>();\n        doubleList.add(1.1);\n        doubleList.add(2.2);\n        \n        System.out.println(\"Integer list sum: \" + sumList(intList));\n        System.out.println(\"Double list sum: \" + sumList(doubleList));\n    }\n}",
+  "encouragement": "通配符，让泛型更通用！"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "布尔值",
+  "concept": "布尔类型",
+  "difficulty": "beginner",
+  "instruction": "创建布尔变量 is_student = True，然后输出。\n\n布尔类型只有两个值：True 和 False。",
+  "hint": "is_student = True 然后 print(is_student)",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "is_student = True\nprint(is_student)",
+  "expectedOutput": "True",
+  "encouragement": "布尔值用于表示真/假！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

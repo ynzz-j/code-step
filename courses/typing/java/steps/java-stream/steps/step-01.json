@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Stream 创建",
+  "concept": "Stream API",
+  "difficulty": "intermediate",
+  "instruction": "Stream API 是 Java 8 引入的函数式编程特性。可以从集合、数组创建 Stream。\\n\\n照着敲，学习创建 Stream。",
+  "hint": "集合.stream() 创建 Stream",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.stream.Stream;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Cherry\");\n        \n        Stream<String> stream = list.stream();\n        System.out.println(\"Stream created!\");\n    }\n}",
+  "encouragement": "Stream 创建成功！"
+}

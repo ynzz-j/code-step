@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "构造函数 __init__",
+  "concept": "__init__",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，使用 __init__ 初始化 name 和 age 属性。\n\n创建对象：dog = Dog(\"Buddy\", 3)\n输出：name = Buddy, age = 3",
+  "hint": "__init__ 的第一个参数必须是 self",
+  "starter": "class Dog:\n    # 请在下面写出 __init__ 方法\n\n# 创建对象并输出属性\ndog = Dog(\"Buddy\", 3)\nprint(f\"name = {dog.name}, age = {dog.age}\")",
+  "answer": "class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\ndog = Dog(\"Buddy\", 3)\nprint(f\"name = {dog.name}, age = {dog.age}\")",
+  "expectedOutput": "name = Buddy, age = 3",
+  "encouragement": "__init__ 是对象的构造方法！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

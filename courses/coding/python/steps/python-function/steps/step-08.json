@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "函数作为参数",
+  "concept": "高阶函数",
+  "difficulty": "intermediate",
+  "instruction": "使用 map 函数对列表每个元素加倍。\n\nnumbers = [1, 2, 3, 4, 5]\n\n使用 map(lambda x: x * 2, numbers)\n\n将结果转为列表并输出",
+  "hint": "map 返回迭代器，需要用 list() 转换",
+  "starter": "numbers = [1, 2, 3, 4, 5]\n# 请在下面写出代码\n",
+  "answer": "numbers = [1, 2, 3, 4, 5]\nresult = list(map(lambda x: x * 2, numbers))\nprint(result)",
+  "expectedOutput": "[2, 4, 6, 8, 10]",
+  "encouragement": "高阶函数是函数式编程的基础！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

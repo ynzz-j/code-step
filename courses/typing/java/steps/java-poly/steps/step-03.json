@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "接口 vs 抽象类",
+  "concept": "interface vs abstract class",
+  "difficulty": "intermediate",
+  "instruction": "接口支持多继承，抽象类不支持。一个类可以实现多个接口，但只能继承一个抽象类。\n\n照着敲，理解两者的区别。",
+  "hint": "implements 可以实现多个接口",
+  "targetCode": "interface Swimmable {\n    void swim();\n}\n\ninterface Flyable {\n    void fly();\n}\n\nabstract class Animal {\n    String name;\n    abstract void makeSound();\n}\n\nclass Duck extends Animal implements Swimmable, Flyable {\n    public Duck(String name) {\n        this.name = name;\n    }\n    \n    @Override\n    void makeSound() {\n        System.out.println(name + \" says: Quack!\");\n    }\n    \n    @Override\n    public void swim() {\n        System.out.println(name + \" is swimming...\");\n    }\n    \n    @Override\n    public void fly() {\n        System.out.println(name + \" is flying...\");\n    }\n}",
+  "encouragement": "接口多继承，抽象类单继承！"
+}

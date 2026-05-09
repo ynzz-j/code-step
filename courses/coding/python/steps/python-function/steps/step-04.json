@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "返回值",
+  "concept": "函数返回值",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 multiply，返回两个数的乘积。\n\n使用 return 关键字返回值。\n\n示例：\ndef multiply(a, b):\n    return a * b",
+  "hint": "用 return 返回结果，而不是 print",
+  "starter": "# 请在下面写出函数定义代码\nresult = multiply(4, 5)\nprint(result)",
+  "answer": "def multiply(a, b):\n    return a * b\n\nresult = multiply(4, 5)\nprint(result)",
+  "expectedOutput": "20",
+  "encouragement": "return 让函数可以返回计算结果！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

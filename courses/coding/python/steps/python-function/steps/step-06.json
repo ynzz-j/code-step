@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "关键字参数",
+  "concept": "关键字参数",
+  "difficulty": "intermediate",
+  "instruction": "使用关键字参数调用函数。\n\n定义 greet 函数，参数 name 和 age。\n\n调用时使用 greet(age=18, name=\"Tom\")\n\n输出：Tom is 18 years old",
+  "hint": "调用时可以指定参数名，顺序不限",
+  "starter": "def greet(name, age):\n    print(f\"{name} is {age} years old\")\n\n# 请在下面用关键字参数调用\n",
+  "answer": "def greet(name, age):\n    print(f\"{name} is {age} years old\")\n\ngreet(age=18, name=\"Tom\")",
+  "expectedOutput": "Tom is 18 years old",
+  "encouragement": "关键字参数让代码更清晰！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

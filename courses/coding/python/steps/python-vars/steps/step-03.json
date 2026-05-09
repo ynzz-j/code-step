@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "浮点数",
+  "concept": "浮点数类型",
+  "difficulty": "beginner",
+  "instruction": "创建变量存储圆周率 3.14，然后输出。\n\n带小数点的数字叫浮点数。",
+  "hint": "pi = 3.14 然后 print(pi)",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "pi = 3.14\nprint(pi)",
+  "expectedOutput": "3.14",
+  "encouragement": "浮点数用于存储小数！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

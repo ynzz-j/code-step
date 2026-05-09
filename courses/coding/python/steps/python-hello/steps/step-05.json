@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "input 函数入门",
+  "concept": "input 函数",
+  "difficulty": "beginner",
+  "instruction": "读取用户输入的名字，并输出 Hello 和名字。\n\n使用 input() 可以获取用户输入。\n\n示例：\nname = input()\nprint(\"Hello\")\nprint(name)",
+  "hint": "先用 input() 获取输入，存入变量，然后输出",
+  "starter": "# 请在下面写出你的代码\nname = input()\n",
+  "answer": "name = input()\nprint(\"Hello\")\nprint(name)",
+  "expectedOutput": "Hello\nWorld",
+  "encouragement": "你学会和程序对话了！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

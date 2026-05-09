@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "列表推导式",
+  "concept": "列表推导式",
+  "difficulty": "intermediate",
+  "instruction": "使用列表推导式创建新列表。\n\nnumbers = [1, 2, 3, 4, 5]\n\n创建一个新列表，包含原列表中每个元素的平方。\n\n输出：[1, 4, 9, 16, 25]",
+  "hint": "[x**2 for x in numbers]",
+  "starter": "numbers = [1, 2, 3, 4, 5]\n# 请在下面写出列表推导式代码\n",
+  "answer": "numbers = [1, 2, 3, 4, 5]\nsquares = [x**2 for x in numbers]\nprint(squares)",
+  "expectedOutput": "[1, 4, 9, 16, 25]",
+  "encouragement": "列表推导式是 Python 的优雅特性！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

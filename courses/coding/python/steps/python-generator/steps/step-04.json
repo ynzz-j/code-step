@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器表达式",
+  "concept": "生成器表达式",
+  "difficulty": "hell",
+  "instruction": "使用生成器表达式创建生成器。\\n\\n生成器表达式类似列表推导式，但使用圆括号。\\n\\n创建生成器：(x**2 for x in range(1, 4))\\n输出前两个值。",
+  "hint": "gen = (x**2 for x in range(1, 4))",
+  "starter": "# 请在下面写出生成器表达式代码\\n",
+  "answer": "gen = (x**2 for x in range(1, 4))\\nprint(next(gen))\\nprint(next(gen))",
+  "expectedOutput": "1\\n4",
+  "encouragement": "生成器表达式更简洁！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

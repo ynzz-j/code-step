@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "接口的默认方法",
+  "concept": "default method",
+  "difficulty": "intermediate",
+  "instruction": "Java 8 允许接口包含默认方法（default method），实现类可以不重写直接使用。\n\n照着敲，学习默认方法的用法。",
+  "hint": "default 方法在接口中有方法体",
+  "targetCode": "interface Printable {\n    void print();\n    \n    default void printWithBorder() {\n        System.out.println(\"===============\");\n        print();\n        System.out.println(\"===============\");\n    }\n}\n\nclass Document implements Printable {\n    @Override\n    public void print() {\n        System.out.println(\"Printing document...\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Printable p = new Document();\n        p.printWithBorder();\n    }\n}",
+  "encouragement": "默认方法让接口可以进化！"
+}

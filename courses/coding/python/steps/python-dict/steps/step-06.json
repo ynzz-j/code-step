@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除键值对 - pop",
+  "concept": "字典方法",
+  "difficulty": "advanced",
+  "instruction": "使用 pop 方法删除 grade 键，并输出被删除的值。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}",
+  "hint": "pop 会返回被删除的值",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出 pop 代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\ngrade = student.pop(\"grade\")\nprint(grade)\nprint(student)",
+  "expectedOutput": "90\n{'name': 'Tom', 'age': 18}",
+  "encouragement": "pop 让你可以获取被删除的值！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

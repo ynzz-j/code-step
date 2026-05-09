@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "静态方法",
+  "concept": "静态方法",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，添加静态方法 is_dog，判断动物是否是狗。\n\nis_dog(\"dog\") 返回 True\nis_dog(\"cat\") 返回 False\n\n使用 @staticmethod 装饰器。",
+  "hint": "静态方法不需要 self 或 cls 参数",
+  "starter": "class Dog:\n    # 请在下面写出静态方法\n\nprint(Dog.is_dog(\"dog\"))\nprint(Dog.is_dog(\"cat\"))",
+  "answer": "class Dog:\n    @staticmethod\n    def is_dog(animal):\n        return animal == \"dog\"\n\nprint(Dog.is_dog(\"dog\"))\nprint(Dog.is_dog(\"cat\"))",
+  "expectedOutput": "True\nFalse",
+  "encouragement": "静态方法不依赖类或实例！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

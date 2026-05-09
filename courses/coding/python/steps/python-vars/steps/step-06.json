@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "类型转换 - int",
+  "concept": "类型转换",
+  "difficulty": "beginner",
+  "instruction": "将字符串 \"42\" 转换为整数并输出。\n\n使用 int() 函数可以将字符串转换为整数。\n\n注意：字符串必须是纯数字。",
+  "hint": "用 int() 将字符串转为整数",
+  "starter": "text = \"42\"\n# 请在下面写出转换代码\n",
+  "answer": "text = \"42\"\nnum = int(text)\nprint(num)",
+  "expectedOutput": "42",
+  "encouragement": "int() 让字符串变成数字！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "变量赋值",
+  "concept": "变量",
+  "difficulty": "beginner",
+  "instruction": "创建变量存储你的名字并输出。\n\n使用等号 = 给变量赋值。\n\n示例：\nname = \"Alice\"\nprint(name)",
+  "hint": "创建一个变量存储名字，然后用 print 输出",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "name = \"Alice\"\nprint(name)",
+  "expectedOutput": "Alice",
+  "encouragement": "变量就像一个盒子，用来存放数据！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "if-else 语句",
+  "concept": "if-else 语句",
+  "difficulty": "intermediate",
+  "instruction": "判断数字是正数还是负数。\n\nnum = -5\n如果 num >= 0，输出 \"positive\"\n否则输出 \"negative\"",
+  "hint": "else 也要加冒号，代码同样要缩进",
+  "starter": "num = -5\n# 请在下面写出判断代码\n",
+  "answer": "num = -5\nif num >= 0:\n    print(\"positive\")\nelse:\n    print(\"negative\")",
+  "expectedOutput": "negative",
+  "encouragement": "二选一的判断用 if-else！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

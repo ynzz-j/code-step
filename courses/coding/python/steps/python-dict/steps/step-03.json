@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "修改字典值",
+  "concept": "字典操作",
+  "difficulty": "advanced",
+  "instruction": "创建学生字典，将 grade 修改为 95，然后输出整个字典。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}",
+  "hint": "student[\"grade\"] = 95",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出修改代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\nstudent[\"grade\"] = 95\nprint(student)",
+  "expectedOutput": "{'name': 'Tom', 'age': 18, 'grade': 95}",
+  "encouragement": "字典的值是可修改的！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

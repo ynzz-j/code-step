@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "逐行读取",
+  "concept": "文件读取",
+  "difficulty": "advanced",
+  "instruction": "打开文件 data.txt 并逐行读取输出。\\n\\n使用 readlines() 方法或 for 循环逐行读取。\\n\\n假设 data.txt 内容为：\\nLine1\\nLine2\\nLine3",
+  "hint": "for line in f: 可以逐行读取",
+  "starter": "# 请在下面写出逐行读取的代码\\n",
+  "answer": "with open('data.txt', 'r') as f:\\n    for line in f:\\n        print(line.strip())",
+  "expectedOutput": "Line1\\nLine2\\nLine3",
+  "encouragement": "逐行读取适合大文件！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

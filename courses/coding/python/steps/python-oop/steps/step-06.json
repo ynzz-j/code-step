@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "类属性",
+  "concept": "类属性",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，添加类属性 species = \"Canis familiaris\"。\n\n创建两个 Dog 对象，输出它们的 species。\n\n类属性对所有实例共享。",
+  "hint": "类属性定义在方法外面",
+  "starter": "class Dog:\n    # 请在下面定义类属性\n    def __init__(self, name):\n        self.name = name\n\ndog1 = Dog(\"Buddy\")\ndog2 = Dog(\"Max\")\nprint(dog1.species)\nprint(dog2.species)",
+  "answer": "class Dog:\n    species = \"Canis familiaris\"\n    def __init__(self, name):\n        self.name = name\n\ndog1 = Dog(\"Buddy\")\ndog2 = Dog(\"Max\")\nprint(dog1.species)\nprint(dog2.species)",
+  "expectedOutput": "Canis familiaris\nCanis familiaris",
+  "encouragement": "类属性被所有实例共享！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

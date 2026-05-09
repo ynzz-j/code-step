@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "创建对象",
+  "concept": "对象创建",
+  "difficulty": "advanced",
+  "instruction": "定义 Dog 类，然后创建两个 Dog 对象并输出它们的类型。\n\n使用 type() 函数查看对象类型。",
+  "hint": "类名后加括号创建对象：dog1 = Dog()",
+  "starter": "class Dog:\n    pass\n\n# 请在下面写出创建对象的代码\n",
+  "answer": "class Dog:\n    pass\n\ndog1 = Dog()\ndog2 = Dog()\nprint(type(dog1))\nprint(type(dog2))",
+  "expectedOutput": "<class '__main__.Dog'>\n<class '__main__.Dog'>",
+  "encouragement": "对象是类的实例！",
+  "validation": {
+    "type": "contains",
+    "value": "class "
+  }
+}

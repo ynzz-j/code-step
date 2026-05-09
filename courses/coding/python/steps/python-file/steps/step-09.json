@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "JSON 文件写入",
+  "concept": "JSON 文件",
+  "difficulty": "advanced",
+  "instruction": "使用 json 模块将字典写入 JSON 文件。\\n\\n将 {\"name\": \"Tom\", \"age\": 18} 写入 output.json。",
+  "hint": "使用 json.dump() 写入",
+  "starter": "import json\\n\\ndata = {\"name\": \"Tom\", \"age\": 18}\\n\\n# 请在下面写出写入 JSON 文件的代码\\n",
+  "answer": "import json\\n\\ndata = {\"name\": \"Tom\", \"age\": 18}\\n\\nwith open('output.json', 'w') as f:\\n    json.dump(data, f)\\nprint('JSON file written successfully')",
+  "expectedOutput": "JSON file written successfully",
+  "encouragement": "JSON 写入让你轻松保存结构化数据！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

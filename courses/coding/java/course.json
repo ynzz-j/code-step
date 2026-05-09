@@ -1,9 +1,4 @@
 {
-  "id": "java",
-  "title": "Java 基础课程",
-  "description": "从零开始学习 Java 编程",
-  "language": "java",
-  "difficulty": "beginner",
   "courses": [
     {
       "id": "java-hello",
@@ -13,15 +8,13 @@
       "difficulty": "beginner",
       "concepts": ["基础语法", "main 方法", "输出语句"],
       "estimatedMinutes": 15,
+      "totalSteps": 5,
       "steps": [
-        "steps/step-01.json",
-        "steps/step-02.json",
-        "steps/step-03.json",
-        "steps/step-04.json",
-        "steps/step-05.json",
-        "steps/step-06.json",
-        "steps/step-07.json",
-        "steps/step-08.json"
+        "steps/java-hello/steps/step-01.json",
+        "steps/java-hello/steps/step-02.json",
+        "steps/java-hello/steps/step-03.json",
+        "steps/java-hello/steps/step-04.json",
+        "steps/java-hello/steps/step-05.json"
       ]
     },
     {
@@ -32,17 +25,18 @@
       "difficulty": "beginner",
       "concepts": ["变量", "数据类型", "运算符"],
       "estimatedMinutes": 20,
+      "totalSteps": 10,
       "steps": [
-        "steps/step-09.json",
-        "steps/step-10.json",
-        "steps/step-11.json",
-        "steps/step-12.json",
-        "steps/step-13.json",
-        "steps/step-14.json",
-        "steps/step-15.json",
-        "steps/step-16.json",
-        "steps/step-17.json",
-        "steps/step-18.json"
+        "steps/java-vars/steps/step-01.json",
+        "steps/java-vars/steps/step-02.json",
+        "steps/java-vars/steps/step-03.json",
+        "steps/java-vars/steps/step-04.json",
+        "steps/java-vars/steps/step-05.json",
+        "steps/java-vars/steps/step-06.json",
+        "steps/java-vars/steps/step-07.json",
+        "steps/java-vars/steps/step-08.json",
+        "steps/java-vars/steps/step-09.json",
+        "steps/java-vars/steps/step-10.json"
       ]
     },
     {
@@ -53,19 +47,15 @@
       "difficulty": "intermediate",
       "concepts": ["if/else", "for 循环", "while 循环", "break", "continue"],
       "estimatedMinutes": 25,
+      "totalSteps": 7,
       "steps": [
-        "steps/step-19.json",
-        "steps/step-20.json",
-        "steps/step-21.json",
-        "steps/step-22.json",
-        "steps/step-23.json",
-        "steps/step-24.json",
-        "steps/step-25.json",
-        "steps/step-26.json",
-        "steps/step-27.json",
-        "steps/step-28.json",
-        "steps/step-29.json",
-        "steps/step-30.json"
+        "steps/java-if-for/steps/step-01.json",
+        "steps/java-if-for/steps/step-02.json",
+        "steps/java-if-for/steps/step-03.json",
+        "steps/java-if-for/steps/step-04.json",
+        "steps/java-if-for/steps/step-05.json",
+        "steps/java-if-for/steps/step-06.json",
+        "steps/java-if-for/steps/step-07.json"
       ]
     },
     {
@@ -76,17 +66,14 @@
       "difficulty": "intermediate",
       "concepts": ["方法定义", "参数", "返回值", "方法重载", "递归"],
       "estimatedMinutes": 20,
+      "totalSteps": 6,
       "steps": [
-        "steps/step-31.json",
-        "steps/step-32.json",
-        "steps/step-33.json",
-        "steps/step-34.json",
-        "steps/step-35.json",
-        "steps/step-36.json",
-        "steps/step-37.json",
-        "steps/step-38.json",
-        "steps/step-39.json",
-        "steps/step-40.json"
+        "steps/java-method/steps/step-01.json",
+        "steps/java-method/steps/step-02.json",
+        "steps/java-method/steps/step-03.json",
+        "steps/java-method/steps/step-04.json",
+        "steps/java-method/steps/step-05.json",
+        "steps/java-method/steps/step-06.json"
       ]
     },
     {
@@ -97,15 +84,14 @@
       "difficulty": "intermediate",
       "concepts": ["数组声明", "数组初始化", "数组遍历", "数组应用"],
       "estimatedMinutes": 15,
+      "totalSteps": 6,
       "steps": [
-        "steps/step-41.json",
-        "steps/step-42.json",
-        "steps/step-43.json",
-        "steps/step-44.json",
-        "steps/step-45.json",
-        "steps/step-46.json",
-        "steps/step-47.json",
-        "steps/step-48.json"
+        "steps/java-array/steps/step-01.json",
+        "steps/java-array/steps/step-02.json",
+        "steps/java-array/steps/step-03.json",
+        "steps/java-array/steps/step-04.json",
+        "steps/java-array/steps/step-05.json",
+        "steps/java-array/steps/step-06.json"
       ]
     },
     {
@@ -116,22 +102,20 @@
       "difficulty": "intermediate",
       "concepts": ["类与对象", "封装", "构造方法", "继承", "多态", "static", "final"],
       "estimatedMinutes": 40,
+      "totalSteps": 12,
       "steps": [
-        "steps/step-49.json",
-        "steps/step-50.json",
-        "steps/step-51.json",
-        "steps/step-52.json",
-        "steps/step-53.json",
-        "steps/step-54.json",
-        "steps/step-55.json",
-        "steps/step-56.json",
-        "steps/step-57.json",
-        "steps/step-58.json",
-        "steps/step-59.json",
-        "steps/step-60.json",
-        "steps/step-61.json",
-        "steps/step-62.json",
-        "steps/step-63.json"
+        "steps/java-oop/steps/step-01.json",
+        "steps/java-oop/steps/step-02.json",
+        "steps/java-oop/steps/step-03.json",
+        "steps/java-oop/steps/step-04.json",
+        "steps/java-oop/steps/step-05.json",
+        "steps/java-oop/steps/step-06.json",
+        "steps/java-oop/steps/step-07.json",
+        "steps/java-oop/steps/step-08.json",
+        "steps/java-oop/steps/step-09.json",
+        "steps/java-oop/steps/step-10.json",
+        "steps/java-oop/steps/step-11.json",
+        "steps/java-oop/steps/step-12.json"
       ]
     },
     {
@@ -142,19 +126,17 @@
       "difficulty": "intermediate",
       "concepts": ["ArrayList", "HashMap", "HashSet", "集合遍历", "集合排序"],
       "estimatedMinutes": 30,
+      "totalSteps": 9,
       "steps": [
-        "steps/step-64.json",
-        "steps/step-65.json",
-        "steps/step-66.json",
-        "steps/step-67.json",
-        "steps/step-68.json",
-        "steps/step-69.json",
-        "steps/step-70.json",
-        "steps/step-71.json",
-        "steps/step-72.json",
-        "steps/step-73.json",
-        "steps/step-74.json",
-        "steps/step-75.json"
+        "steps/java-collection/steps/step-01.json",
+        "steps/java-collection/steps/step-02.json",
+        "steps/java-collection/steps/step-03.json",
+        "steps/java-collection/steps/step-04.json",
+        "steps/java-collection/steps/step-05.json",
+        "steps/java-collection/steps/step-06.json",
+        "steps/java-collection/steps/step-07.json",
+        "steps/java-collection/steps/step-08.json",
+        "steps/java-collection/steps/step-09.json"
       ]
     },
     {
@@ -165,15 +147,12 @@
       "difficulty": "intermediate",
       "concepts": ["异常基础", "try-catch", "finally", "throw", "throws"],
       "estimatedMinutes": 20,
+      "totalSteps": 4,
       "steps": [
-        "steps/step-76.json",
-        "steps/step-77.json",
-        "steps/step-78.json",
-        "steps/step-79.json",
-        "steps/step-80.json",
-        "steps/step-81.json",
-        "steps/step-82.json",
-        "steps/step-83.json"
+        "steps/java-exception/steps/step-01.json",
+        "steps/java-exception/steps/step-02.json",
+        "steps/java-exception/steps/step-03.json",
+        "steps/java-exception/steps/step-04.json"
       ]
     }
   ]

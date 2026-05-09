@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "打开文件读取",
+  "concept": "文件读取",
+  "difficulty": "advanced",
+  "instruction": "打开文件 data.txt 并读取全部内容输出。\\n\\n使用 open() 函数打开文件，read() 方法读取内容。\\n\\n注意：文件路径需要根据实际情况调整。这里假设文件存在。",
+  "hint": "f = open('data.txt', 'r') 然后 f.read()",
+  "starter": "# 请在下面写出读取文件的代码\\n# 假设 data.txt 内容为 'Hello Python'\\n",
+  "answer": "with open('data.txt', 'r') as f:\\n    content = f.read()\\nprint(content)",
+  "expectedOutput": "Hello Python",
+  "encouragement": "文件读取是数据处理的基础！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

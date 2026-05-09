@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "throw() 方法",
+  "concept": "生成器异常处理",
+  "difficulty": "hell",
+  "instruction": "使用 throw() 向生成器抛出异常。\\n\\n创建生成器，使用 try-except 捕获异常。\\n\\n在生成器内部捕获 ValueError 并输出错误信息。",
+  "hint": "throw(ExceptionType) 在生成器内部抛出异常",
+  "starter": "def gen():\\n    try:\\n        yield\\n    except ValueError as e:\\n        print(f\"Error: {e}\")\\n\\ng = gen()\\nnext(g)\\n\\n# 请在下面写出 throw 代码\\n",
+  "answer": "def gen():\\n    try:\\n        yield\\n    except ValueError as e:\\n        print(f\"Error: {e}\")\\n\\ng = gen()\\nnext(g)\\ng.throw(ValueError(\"Something went wrong\"))",
+  "expectedOutput": "Error: Something went wrong",
+  "encouragement": "throw() 让你在生成器内部处理异常！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

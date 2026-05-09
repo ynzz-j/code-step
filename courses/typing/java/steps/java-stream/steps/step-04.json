@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Stream collect 收集",
+  "concept": "Stream API",
+  "difficulty": "intermediate",
+  "instruction": "collect() 方法将 Stream 转换为集合（如 List、Set、Map）。\\n\\n照着敲，学习使用 collect。",
+  "hint": "Collectors.toList() 将 Stream 收集为 List",
+  "targetCode": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.stream.Collectors;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> numbers = new ArrayList<>();\n        numbers.add(1);\n        numbers.add(2);\n        numbers.add(3);\n        numbers.add(4);\n        numbers.add(5);\n        \n        List<Integer> evenNumbers = numbers.stream()\n                .filter(n -> n % 2 == 0)\n                .collect(Collectors.toList());\n        \n        System.out.println(evenNumbers);\n    }\n}",
+  "encouragement": "collect 收集结果！"
+}

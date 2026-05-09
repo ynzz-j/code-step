@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "HashMap 判断存在",
+  "concept": "HashMap",
+  "difficulty": "intermediate",
+  "instruction": "使用 containsKey() 判断是否包含某个键，containsValue() 判断是否包含某个值。\n\n照着敲，学习判断键值是否存在。",
+  "hint": "containsKey(key) 返回 boolean 值",
+  "targetCode": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> scores = new HashMap<>();\n        scores.put(\"Chinese\", 85);\n        scores.put(\"Math\", 92);\n        System.out.println(scores.containsKey(\"Math\"));\n        System.out.println(scores.containsValue(100));\n        System.out.println(scores.size());\n    }\n}",
+  "encouragement": "判断存在，掌握了！"
+}

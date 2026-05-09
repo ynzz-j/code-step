@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "super() 函数",
+  "concept": "super()",
+  "difficulty": "advanced",
+  "instruction": "定义 Animal 和 Dog 类。\n\nAnimal 的 __init__ 初始化 name。\nDog 的 __init__ 调用父类的 __init__，然后初始化 breed。\n\ndog = Dog(\"Buddy\", \"Golden Retriever\")\n输出：name = Buddy, breed = Golden Retriever",
+  "hint": "用 super().__init__(name) 调用父类构造方法",
+  "starter": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\n# 请在下面写出 Dog 类\n\ndog = Dog(\"Buddy\", \"Golden Retriever\")\nprint(f\"name = {dog.name}, breed = {dog.breed}\")",
+  "answer": "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)\n        self.breed = breed\n\ndog = Dog(\"Buddy\", \"Golden Retriever\")\nprint(f\"name = {dog.name}, breed = {dog.breed}\")",
+  "expectedOutput": "name = Buddy, breed = Golden Retriever",
+  "encouragement": "super() 让你调用父类方法！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

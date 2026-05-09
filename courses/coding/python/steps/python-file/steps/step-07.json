@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "写入 CSV 文件",
+  "concept": "CSV 文件",
+  "difficulty": "advanced",
+  "instruction": "使用 csv 模块写入 CSV 文件。\\n\\n写入以下内容到 output.csv：\\nname,age\\nTom,18\\nAlice,20",
+  "hint": "使用 csv.writer() 和 writerow()",
+  "starter": "import csv\\n\\n# 请在下面写出写入 CSV 文件的代码\\n",
+  "answer": "import csv\\n\\nwith open('output.csv', 'w', newline='') as f:\\n    writer = csv.writer(f)\\n    writer.writerow(['name', 'age'])\\n    writer.writerow(['Tom', 18])\\n    writer.writerow(['Alice', 20])\\nprint('CSV file written successfully')",
+  "expectedOutput": "CSV file written successfully",
+  "encouragement": "CSV 写入让你轻松导出数据！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

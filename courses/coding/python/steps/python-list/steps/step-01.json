@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "创建列表",
+  "concept": "列表创建",
+  "difficulty": "intermediate",
+  "instruction": "创建一个包含 1, 2, 3, 4, 5 的列表，并输出。\n\n列表用方括号 [] 创建。\n\n示例：\nnumbers = [1, 2, 3]\nprint(numbers)",
+  "hint": "用方括号包含元素，用逗号分隔",
+  "starter": "# 请在下面写出代码\n",
+  "answer": "numbers = [1, 2, 3, 4, 5]\nprint(numbers)",
+  "expectedOutput": "[1, 2, 3, 4, 5]",
+  "encouragement": "列表是 Python 最常用的数据结构！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

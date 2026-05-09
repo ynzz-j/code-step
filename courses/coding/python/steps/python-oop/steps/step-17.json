@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "运算符重载",
+  "concept": "运算符重载",
+  "difficulty": "advanced",
+  "instruction": "定义 Point 类。\n\n实现 __add__ 方法，让两个点可以相加：\nPoint(1, 2) + Point(3, 4) = Point(4, 6)\n\n输出结果：Point(4, 6)",
+  "hint": "__add__ 重载 + 运算符",
+  "starter": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __str__(self):\n        return f\"Point({self.x}, {self.y})\"\n    \n    # 请在下面写出 __add__ 方法\n\np1 = Point(1, 2)\np2 = Point(3, 4)\nprint(p1 + p2)",
+  "answer": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __str__(self):\n        return f\"Point({self.x}, {self.y})\"\n    \n    def __add__(self, other):\n        return Point(self.x + other.x, self.y + other.y)\n\np1 = Point(1, 2)\np2 = Point(3, 4)\nprint(p1 + p2)",
+  "expectedOutput": "Point(4, 6)",
+  "encouragement": "运算符重载让对象操作更直观！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

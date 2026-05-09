@@ -1,10 +1,11 @@
 {
   "type": "typing",
-  "title": "完整 Hello World",
-  "concept": "综合练习",
+  "title": "输出多行内容",
+  "concept": "输出语句",
   "difficulty": "beginner",
-  "instruction": "综合练习：请照着敲完这个完整的 Java 程序。\n\n这是你的第一个作品！",
-  "hint": "注意注释用 //，字符串用双引号",
-  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, Java!\");\n    }\n}",
-  "encouragement": "恭喜你完成了第一个 Java 程序！"
+  "instruction": "使用两个 println() 分别输出 \"Hello\" 和 \"World\"。\n\n照着敲！",
+  "hint": "每个 println() 输出一行",
+  "targetCode": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello\");\n        System.out.println(\"World\");\n    }\n}",
+  "expectedOutput": "Hello\nWorld",
+  "encouragement": "你学会了换行输出！"
 }

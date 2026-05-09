@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "filter 函数",
+  "concept": "高阶函数",
+  "difficulty": "intermediate",
+  "instruction": "使用 filter 函数筛选出偶数。\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n筛选出能被 2 整除的数。",
+  "hint": "filter 返回符合条件的元素",
+  "starter": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n# 请在下面写出代码\n",
+  "answer": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nresult = list(filter(lambda x: x % 2 == 0, numbers))\nprint(result)",
+  "expectedOutput": "[2, 4, 6, 8, 10]",
+  "encouragement": "filter 让你轻松筛选数据！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

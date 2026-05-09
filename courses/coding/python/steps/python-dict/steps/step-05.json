@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "删除键值对 - del",
+  "concept": "字典操作",
+  "difficulty": "advanced",
+  "instruction": "删除学生字典中的 age 键，然后输出。\n\nstudent = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}",
+  "hint": "del student[\"age\"]",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\n# 请在下面写出删除代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18, \"grade\": 90}\ndel student[\"age\"]\nprint(student)",
+  "expectedOutput": "{'name': 'Tom', 'grade': 90}",
+  "encouragement": "del 可以删除字典中的键值对！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

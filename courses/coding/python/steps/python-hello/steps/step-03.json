@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "数字输出",
+  "concept": "print 函数",
+  "difficulty": "beginner",
+  "instruction": "直接输出数字 42。\n\nPython 中可以直接输出数字，不需要引号。",
+  "hint": "print(42) 可以直接输出数字",
+  "starter": "# 请在下面写出你的代码\n",
+  "answer": "print(42)",
+  "expectedOutput": "42",
+  "encouragement": "没错！数字和字符串的处理方式不同！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "intermediate",
+  "instruction": "写一个计算器函数 calculate。\n\ncalculate(a, b, op) 接收两个数和一个运算符。\n\nop = \"+\" 返回 a + b\nop = \"-\" 返回 a - b\nop = \"*\" 返回 a * b\nop = \"/\" 返回 a / b\n\n其他运算符返回 None",
+  "hint": "用 if-elif-else 判断运算符",
+  "starter": "def calculate(a, b, op):\n    # 请在下面写出代码\n\nprint(calculate(10, 5, \"+\"))\nprint(calculate(10, 5, \"*\"))",
+  "answer": "def calculate(a, b, op):\n    if op == \"+\":\n        return a + b\n    elif op == \"-\":\n        return a - b\n    elif op == \"*\":\n        return a * b\n    elif op == \"/\":\n        return a / b\n    else:\n        return None\n\nprint(calculate(10, 5, \"+\"))\nprint(calculate(10, 5, \"*\"))",
+  "expectedOutput": "15\n50",
+  "encouragement": "太棒了！你掌握了函数的精髓！",
+  "validation": {
+    "type": "contains",
+    "value": "if "
+  }
+}

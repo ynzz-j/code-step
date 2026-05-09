@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "advanced",
+  "instruction": "创建一个完整的学生管理系统。\n\n定义 Student 类：\n- 属性：name, grades（列表）\n- 方法：add_grade(grade) 添加成绩\n- 方法：average() 返回平均成绩\n- __str__ 方法：返回 \"Student: name, Average: avg\"\n\n创建两个学生，添加成绩，输出他们的信息。\n\n预期输出：\nStudent: Alice, Average: 90.0\nStudent: Bob, Average: 85.0",
+  "hint": "用列表存储成绩，sum(grades)/len(grades) 计算平均",
+  "starter": "class Student:\n    # 请在下面写出完整的 Student 类\n\n# 创建学生并测试\nalice = Student(\"Alice\")\nalice.add_grade(90)\nalice.add_grade(95)\nalice.add_grade(85)\n\nbob = Student(\"Bob\")\nbob.add_grade(80)\nbob.add_grade(90)\n\nprint(alice)\nprint(bob)",
+  "answer": "class Student:\n    def __init__(self, name):\n        self.name = name\n        self.grades = []\n    \n    def add_grade(self, grade):\n        self.grades.append(grade)\n    \n    def average(self):\n        return sum(self.grades) / len(self.grades)\n    \n    def __str__(self):\n        return f\"Student: {self.name}, Average: {self.average()}\"\n\nalice = Student(\"Alice\")\nalice.add_grade(90)\nalice.add_grade(95)\nalice.add_grade(85)\n\nbob = Student(\"Bob\")\nbob.add_grade(80)\nbob.add_grade(90)\n\nprint(alice)\nprint(bob)",
+  "expectedOutput": "Student: Alice, Average: 90.0\nStudent: Bob, Average: 85.0",
+  "encouragement": "太棒了！你掌握了面向对象编程的核心！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

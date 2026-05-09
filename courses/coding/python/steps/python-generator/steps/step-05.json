@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "迭代器协议 - __iter__",
+  "concept": "迭代器协议",
+  "difficulty": "hell",
+  "instruction": "创建一个可迭代的类 MyRange。\\n\\n实现 __iter__ 方法，返回一个生成器。\\n\\nMyRange(3) 应该可迭代输出 0, 1, 2。",
+  "hint": "__iter__ 方法里使用 yield",
+  "starter": "class MyRange:\\n    def __init__(self, n):\\n        self.n = n\\n    \\n    # 请在下面写出 __iter__ 方法\\n\\nfor x in MyRange(3):\\n    print(x)",
+  "answer": "class MyRange:\\n    def __init__(self, n):\\n        self.n = n\\n    \\n    def __iter__(self):\\n        for i in range(self.n):\\n            yield i\\n\\nfor x in MyRange(3):\\n    print(x)",
+  "expectedOutput": "0\\n1\\n2",
+  "encouragement": "__iter__ 让对象可迭代！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

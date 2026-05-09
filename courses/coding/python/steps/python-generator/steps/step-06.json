@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "迭代器协议 - __next__",
+  "concept": "迭代器协议",
+  "difficulty": "hell",
+  "instruction": "创建一个迭代器类 Counter。\\n\\n实现 __next__ 方法，每次调用返回递增的数。\\n\\n从 0 开始，到 2 停止（抛出异常）。",
+  "hint": "__next__ 返回下一个值，结束时报 StopIteration",
+  "starter": "class Counter:\\n    def __init__(self):\\n        self.current = 0\\n    \\n    def __iter__(self):\\n        return self\\n    \\n    # 请在下面写出 __next__ 方法\\n\\nfor x in Counter():\\n    print(x)",
+  "answer": "class Counter:\\n    def __init__(self):\\n        self.current = 0\\n    \\n    def __iter__(self):\\n        return self\\n    \\n    def __next__(self):\\n        if self.current >= 3:\\n            raise StopIteration\\n        self.current += 1\\n        return self.current - 1\\n\\nfor x in Counter():\\n    print(x)",
+  "expectedOutput": "0\\n1\\n2",
+  "encouragement": "__next__ 让对象成为迭代器！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

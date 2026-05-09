@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "综合练习",
+  "concept": "综合应用",
+  "difficulty": "advanced",
+  "instruction": "综合使用文件操作。\\n\\n1. 创建 students.json 文件，写入学生数据：\\n   [{\"name\": \"Tom\", \"age\": 18}, {\"name\": \"Alice\", \"age\": 20}]\\n2. 读取该文件\\n3. 输出所有学生的姓名\\n\\n预期输出：\\nTom\\nAlice",
+  "hint": "先写入 JSON，再读取并处理",
+  "starter": "import json\\n\\n# 请在下面写出完整的代码\\n",
+  "answer": "import json\\n\\n# 写入数据\\ndata = [{\"name\": \"Tom\", \"age\": 18}, {\"name\": \"Alice\", \"age\": 20}]\\n\\nwith open('students.json', 'w') as f:\\n    json.dump(data, f)\\n\\n# 读取数据\\nwith open('students.json', 'r') as f:\\n    students = json.load(f)\\n\\n# 输出所有学生姓名\\nfor student in students:\\n    print(student['name'])",
+  "expectedOutput": "Tom\\nAlice",
+  "encouragement": "太棒了！你掌握了文件操作的核心！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

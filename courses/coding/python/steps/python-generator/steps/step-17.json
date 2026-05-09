@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "链式生成器",
+  "concept": "生成器进阶",
+  "difficulty": "hell",
+  "instruction": "创建链式生成器：一个生成器的输出作为另一个的输入。\\n\\ngen1 生成 1, 2, 3\\n gen2 将每个值平方\\n\\n输出：1, 4, 9",
+  "hint": "在 gen2 中遍历 gen1 的输出",
+  "starter": "def gen1():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\ndef gen2():\\n    # 请在下面写出链式代码\\n\\nfor x in gen2():\\n    print(x)",
+  "answer": "def gen1():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\ndef gen2():\\n    for x in gen1():\\n        yield x ** 2\\n\\nfor x in gen2():\\n    print(x)",
+  "expectedOutput": "1\\n4\\n9",
+  "encouragement": "链式生成器让数据处理更灵活！",
+  "validation": {
+    "type": "contains",
+    "value": "for "
+  }
+}

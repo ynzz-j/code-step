@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "生成器基础",
+  "concept": "生成器",
+  "difficulty": "hell",
+  "instruction": "创建一个简单的生成器函数，使用 yield 返回 1, 2, 3。\\n\\n生成器使用 yield 返回值，而不是 return。\\n\\n调用生成器函数返回生成器对象，用 next() 获取值。",
+  "hint": "def gen(): yield 1; yield 2; yield 3",
+  "starter": "# 请在下面写出生成器函数\\n",
+  "answer": "def gen():\\n    yield 1\\n    yield 2\\n    yield 3\\n\\ng = gen()\\nprint(next(g))\\nprint(next(g))\\nprint(next(g))",
+  "expectedOutput": "1\\n2\\n3",
+  "encouragement": "生成器让你惰性生成值！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

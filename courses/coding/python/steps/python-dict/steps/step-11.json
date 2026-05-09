@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "get 方法",
+  "concept": "字典方法",
+  "difficulty": "advanced",
+  "instruction": "使用 get 方法安全地获取字典值。\n\nstudent = {\"name\": \"Tom\", \"age\": 18}\n\n获取 name 和 city（不存在的键）。\n\nget 方法在键不存在时返回 None（而不是报错）。",
+  "hint": "get(key) 或 get(key, 默认值)",
+  "starter": "student = {\"name\": \"Tom\", \"age\": 18}\n# 请在下面写出 get 代码\n",
+  "answer": "student = {\"name\": \"Tom\", \"age\": 18}\nprint(student.get(\"name\"))\nprint(student.get(\"city\"))",
+  "expectedOutput": "Tom\nNone",
+  "encouragement": "get 方法让访问更安全！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

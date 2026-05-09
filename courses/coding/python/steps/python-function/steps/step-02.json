@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "带参数的函数",
+  "concept": "函数参数",
+  "difficulty": "intermediate",
+  "instruction": "定义一个函数 greet，接收 name 参数，输出 \"Hello, name\"。\n\n示例：\ndef greet(name):\n    print(\"Hello, \" + name)",
+  "hint": "函数名后的括号里放参数名",
+  "starter": "# 请在下面写出函数定义代码\n",
+  "answer": "def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(\"Alice\")",
+  "expectedOutput": "Hello, Alice",
+  "encouragement": "参数让函数更灵活！",
+  "validation": {
+    "type": "contains",
+    "value": "def "
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "单行注释",
+  "concept": "注释",
+  "difficulty": "beginner",
+  "instruction": "在代码中添加注释。\n\n使用 # 开头的文字是注释，不会被执行。\n\n请写出输出 Hello 的代码，并添加一行注释说明这是你的第一个程序。",
+  "hint": "# 后面的内容是注释",
+  "starter": "# 请写出代码\n",
+  "answer": "# This is my first program\nprint(\"Hello\")",
+  "expectedOutput": "Hello",
+  "encouragement": "好的注释让代码更易读！",
+  "validation": {
+    "type": "contains",
+    "value": "print("
+  }
+}

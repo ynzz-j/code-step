@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "遍历 HashMap",
+  "title": "HashMap 获取和删除",
   "concept": "HashMap",
   "difficulty": "intermediate",
-  "instruction": "用 keySet() 获取所有键，用 entrySet() 获取键值对。\n\n照着敲，用 entrySet 遍历 HashMap。",
-  "hint": "for (Map.Entry<String, Integer> entry : map.entrySet())",
-  "targetCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> scores = new HashMap<>();\n        scores.put(\"Chinese\", 85);\n        scores.put(\"Math\", 92);\n        scores.put(\"English\", 78);\n\n        for (Map.Entry<String, Integer> entry : scores.entrySet()) {\n            System.out.println(entry.getKey() + \": \" + entry.getValue());\n        }\n    }\n}",
-  "encouragement": "entrySet 遍历键值对！"
+  "instruction": "使用 get(key) 获取值，remove(key) 删除键值对。\n\n照着敲，学习获取和删除操作。",
+  "hint": "get() 返回对应的值，如果不存在返回 null",
+  "targetCode": "import java.util.HashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        HashMap<String, Integer> scores = new HashMap<>();\n        scores.put(\"Chinese\", 85);\n        scores.put(\"Math\", 92);\n        System.out.println(scores.get(\"Math\"));\n        scores.remove(\"Chinese\");\n        System.out.println(scores.size());\n    }\n}",
+  "encouragement": "获取和删除，掌握了！"
 }

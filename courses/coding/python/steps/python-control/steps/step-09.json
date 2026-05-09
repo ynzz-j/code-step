@@ -1,0 +1,16 @@
+{
+  "type": "coding",
+  "title": "while 循环",
+  "concept": "while 循环",
+  "difficulty": "intermediate",
+  "instruction": "使用 while 循环输出 1 到 5。\n\nwhile 循环在条件为真时重复执行。\n\n示例：\ni = 1\nwhile i <= 5:\n    print(i)\n    i += 1",
+  "hint": "记得在循环内部更新计数器，否则会无限循环",
+  "starter": "# 请在下面写出循环代码\n",
+  "answer": "i = 1\nwhile i <= 5:\n    print(i)\n    i += 1",
+  "expectedOutput": "1\n2\n3\n4\n5",
+  "encouragement": "while 循环让你根据条件决定循环次数！",
+  "validation": {
+    "type": "contains",
+    "value": "while "
+  }
+}
