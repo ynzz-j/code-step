@@ -1,0 +1,25 @@
+{
+  "id": "java-if-for",
+  "title": "条件与循环",
+  "description": "使用 if/else 和循环控制程序流程",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "if/else",
+    "for 循环",
+    "while 循环",
+    "break",
+    "continue"
+  ],
+  "estimatedMinutes": 25,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json"
+  ]
+}

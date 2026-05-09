@@ -1,0 +1,32 @@
+{
+  "id": "js-prototype",
+  "title": "原型与继承",
+  "description": "掌握 JavaScript 的原型链和继承模式",
+  "language": "javascript",
+  "category": "fundamentals",
+  "difficulty": "hell",
+  "concepts": [
+    "原型链",
+    "构造函数",
+    "class extends",
+    "继承"
+  ],
+  "estimatedMinutes": 35,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json",
+    "steps/step-13.json",
+    "steps/step-14.json",
+    "steps/step-15.json"
+  ]
+}

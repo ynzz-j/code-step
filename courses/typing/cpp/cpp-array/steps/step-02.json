@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "数组初始化",
+  "concept": "数组",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，掌握数组初始化！",
+  "hint": "可以用 {} 初始化",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a1[3] = {1, 2, 3};\n    int a2[] = {10, 20, 30, 40};\n    int a3[5] = {0};\n    cout << a1[0] << \" \" << a2[3] << \" \" << a3[4] << endl;\n    return 0;\n}",
+  "encouragement": "数组初始化有多种方式！"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "java-vars",
+  "title": "变量与数据类型",
+  "description": "掌握 Java 中的变量声明、赋值和基本数据类型",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "变量",
+    "数据类型",
+    "运算符"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json"
+  ]
+}

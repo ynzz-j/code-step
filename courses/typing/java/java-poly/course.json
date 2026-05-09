@@ -1,0 +1,20 @@
+{
+  "id": "java-poly",
+  "title": "接口与抽象类",
+  "description": "掌握接口和抽象类",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "接口",
+    "抽象类",
+    "implements"
+  ],
+  "estimatedMinutes": 10,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

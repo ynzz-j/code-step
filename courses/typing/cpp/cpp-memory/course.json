@@ -1,0 +1,23 @@
+{
+  "id": "cpp-memory",
+  "title": "动态内存",
+  "description": "学习 new/delete 和内存管理",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "hell",
+  "concepts": [
+    "new",
+    "delete",
+    "内存泄漏",
+    "智能指针"
+  ],
+  "estimatedMinutes": 40,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json"
+  ]
+}

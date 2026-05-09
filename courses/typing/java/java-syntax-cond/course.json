@@ -1,0 +1,18 @@
+{
+  "id": "java-syntax-cond",
+  "title": "条件语句",
+  "description": "掌握 if/else 条件语句",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "if",
+    "else",
+    "else-if"
+  ],
+  "estimatedMinutes": 8,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json"
+  ]
+}

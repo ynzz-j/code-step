@@ -1,0 +1,32 @@
+{
+  "id": "java-oop",
+  "title": "面向对象编程",
+  "description": "掌握类、对象、封装、继承和多态",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "类与对象",
+    "封装",
+    "构造方法",
+    "继承",
+    "多态",
+    "static",
+    "final"
+  ],
+  "estimatedMinutes": 40,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json"
+  ]
+}

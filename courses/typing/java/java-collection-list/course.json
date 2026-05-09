@@ -1,0 +1,21 @@
+{
+  "id": "java-collection-list",
+  "title": "List 集合",
+  "description": "掌握 ArrayList 的操作",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "ArrayList",
+    "add",
+    "get",
+    "size"
+  ],
+  "estimatedMinutes": 8,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

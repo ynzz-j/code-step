@@ -1,0 +1,19 @@
+{
+  "id": "java-syntax-basic",
+  "title": "程序基本结构",
+  "description": "学习 Java 程序的基本结构",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "class",
+    "main 方法",
+    "输出语句"
+  ],
+  "estimatedMinutes": 10,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json"
+  ]
+}

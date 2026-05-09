@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "友元函数",
+  "concept": "类",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，理解友元！",
+  "hint": "friend 可以访问 private",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nclass Box {\nprivate:\n    int width;\n    friend void show(Box& b);\npublic:\n    Box(int w) { width = w; }\n};\n\nvoid show(Box& b) {\n    cout << b.width << endl;\n}\n\nint main() {\n    Box b(10);\n    show(b);\n    return 0;\n}",
+  "encouragement": "友元打破封装！"
+}

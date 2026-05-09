@@ -1,0 +1,23 @@
+{
+  "id": "java-array",
+  "title": "数组基础",
+  "description": "掌握 Java 数组的声明、初始化和使用",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "数组声明",
+    "数组初始化",
+    "数组遍历",
+    "数组应用"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "内存泄漏示例",
+  "concept": "内存",
+  "difficulty": "hell",
+  "instruction": "请照着敲一遍，理解内存泄漏！",
+  "hint": "忘记 delete 导致泄漏",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nvoid leak() {\n    int* p = new int(42);\n    cout << *p << endl;\n    // 忘记 delete p; 导致内存泄漏\n}\n\nint main() {\n    leak();\n    cout << \"done\" << endl;\n    return 0;\n}",
+  "encouragement": "内存泄漏是严重问题！"
+}

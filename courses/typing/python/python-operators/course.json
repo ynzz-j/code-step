@@ -1,0 +1,25 @@
+{
+  "id": "python-operators",
+  "title": "运算符",
+  "description": "学习 Python 中的算术运算符、比较运算符和逻辑运算符",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "算术运算符",
+    "比较运算符",
+    "逻辑运算符",
+    "赋值运算符"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json"
+  ]
+}

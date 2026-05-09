@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串比较",
+  "concept": "字符串",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，掌握字符串比较！",
+  "hint": "用 == 或 .compare()",
+  "targetCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s1 = \"apple\";\n    string s2 = \"banana\";\n    if (s1 < s2) {\n        cout << \"apple < banana\" << endl;\n    }\n    return 0;\n}",
+  "encouragement": "字符串按字典序比较！"
+}

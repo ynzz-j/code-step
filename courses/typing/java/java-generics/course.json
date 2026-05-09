@@ -1,0 +1,20 @@
+{
+  "id": "java-generics",
+  "title": "泛型",
+  "description": "掌握 Java 泛型的使用",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "泛型",
+    "类型参数",
+    "通配符"
+  ],
+  "estimatedMinutes": 12,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

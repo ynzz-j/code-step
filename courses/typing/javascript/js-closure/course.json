@@ -1,0 +1,35 @@
+{
+  "id": "js-closure",
+  "title": "闭包与作用域",
+  "description": "深入理解 JavaScript 的闭包、作用域链和 this",
+  "language": "javascript",
+  "category": "fundamentals",
+  "difficulty": "hell",
+  "concepts": [
+    "闭包",
+    "作用域",
+    "this",
+    "执行上下文"
+  ],
+  "estimatedMinutes": 40,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json",
+    "steps/step-13.json",
+    "steps/step-14.json",
+    "steps/step-15.json",
+    "steps/step-16.json",
+    "steps/step-17.json",
+    "steps/step-18.json"
+  ]
+}

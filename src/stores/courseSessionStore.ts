@@ -13,6 +13,7 @@ interface CourseSessionState {
   completedSteps: Set<number>;
   courseProgress: Record<string, CourseProgressInfo>;
   courseStartTime: number | null;
+  currentMode: CourseMode | undefined;
   isLoading: boolean;
   error: string | null;
 }
@@ -35,11 +36,12 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
   completedSteps: new Set(),
   courseProgress: {},
   courseStartTime: null,
+  currentMode: undefined,
   isLoading: false,
   error: null,
 
   startCourse: async (courseId, mode) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null, currentMode: mode });
     try {
       const course = await courseService.getCourse(courseId, mode);
       const dbProgress = await courseService.getProgress(courseId);
@@ -61,7 +63,7 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
   },
 
   nextStep: () => {
-    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime } = get();
+    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime, currentMode } = get();
     if (!currentCourse) return;
     if (!completedSteps.has(currentStepIndex)) return;
     if (currentStepIndex >= currentCourse.steps.length - 1) return;
@@ -79,7 +81,7 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
 
     const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
     const completedArr = Array.from(completedSteps);
-    courseService.saveProgress(currentCourse.id, currentStepIndex, completedArr, timeSpent);
+    courseService.saveProgress(currentCourse.id, currentStepIndex, completedArr, timeSpent, currentMode);
   },
 
   prevStep: () => {
@@ -90,7 +92,7 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
   },
 
   markStepCompleted: () => {
-    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime } = get();
+    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime, currentMode } = get();
     if (!currentCourse) return;
 
     const newCompleted = new Set(completedSteps);
@@ -108,7 +110,7 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
     const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
 
     set({ completedSteps: newCompleted, courseProgress: newCourseProgress });
-    courseService.saveProgress(currentCourse.id, currentStepIndex, Array.from(newCompleted), timeSpent);
+    courseService.saveProgress(currentCourse.id, currentStepIndex, Array.from(newCompleted), timeSpent, currentMode);
   },
 
   resetProgress: () => {

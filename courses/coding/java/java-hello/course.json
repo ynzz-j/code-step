@@ -1,0 +1,21 @@
+{
+  "id": "java-hello",
+  "title": "Java 入门：Hello World",
+  "description": "学习 Java 程序的基本结构，写出你的第一个程序",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "基础语法",
+    "main 方法",
+    "输出语句"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "cpp-control",
+  "title": "控制流程",
+  "description": "学习 if/else、for、while 等控制语句",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "if",
+    "for",
+    "while",
+    "switch",
+    "break",
+    "continue"
+  ],
+  "estimatedMinutes": 25,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json"
+  ]
+}

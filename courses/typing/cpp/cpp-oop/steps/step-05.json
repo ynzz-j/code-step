@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "类的继承",
+  "concept": "类",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，理解继承！",
+  "hint": "子类 : public 父类",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    void eat() { cout << \"eating\" << endl; }\n};\n\nclass Dog : public Animal {\npublic:\n    void bark() { cout << \"barking\" << endl; }\n};\n\nint main() {\n    Dog d;\n    d.eat();\n    d.bark();\n    return 0;\n}",
+  "encouragement": "继承复用代码！"
+}

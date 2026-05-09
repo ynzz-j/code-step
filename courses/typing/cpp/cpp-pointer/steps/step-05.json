@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "二级指针",
+  "concept": "指针",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，理解指向指针的指针！",
+  "hint": "二级指针存一级指针地址",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 100;\n    int* p = &x;\n    int** pp = &p;\n    cout << **pp << endl;\n    return 0;\n}",
+  "encouragement": "二级指针有点绕，但很实用！"
+}

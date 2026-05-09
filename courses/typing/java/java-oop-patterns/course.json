@@ -1,0 +1,22 @@
+{
+  "id": "java-oop-patterns",
+  "title": "面向对象模式",
+  "description": "掌握类、构造方法和继承",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "basic",
+  "concepts": [
+    "类",
+    "构造方法",
+    "继承",
+    "多态"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

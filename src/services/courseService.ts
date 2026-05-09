@@ -116,13 +116,14 @@ class CourseService {
     }
   }
 
-  async saveProgress(courseId: string, currentStep: number, completedSteps: number[], timeSpent: number): Promise<void> {
+  async saveProgress(courseId: string, currentStep: number, completedSteps: number[], timeSpent: number, courseMode?: CourseMode): Promise<void> {
     try {
       await invoke('save_progress', {
         courseId,
         currentStep,
         completedSteps,
         timeSpent,
+        courseMode,
       });
     } catch (error) {
       console.error('Failed to save progress:', error);

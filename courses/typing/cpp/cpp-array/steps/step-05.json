@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "二维数组",
+  "concept": "数组",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，掌握二维数组！",
+  "hint": "用两个下标访问",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int mat[2][3] = {{1,2,3}, {4,5,6}};\n    for (int i = 0; i < 2; i++) {\n        for (int j = 0; j < 3; j++) {\n            cout << mat[i][j] << \" \";\n        }\n        cout << endl;\n    }\n    return 0;\n}",
+  "encouragement": "二维数组像表格！"
+}

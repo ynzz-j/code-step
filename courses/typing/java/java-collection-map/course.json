@@ -1,0 +1,22 @@
+{
+  "id": "java-collection-map",
+  "title": "Map 集合",
+  "description": "掌握 HashMap 的操作",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "HashMap",
+    "put",
+    "get",
+    "keySet"
+  ],
+  "estimatedMinutes": 12,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

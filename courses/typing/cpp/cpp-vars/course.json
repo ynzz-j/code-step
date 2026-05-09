@@ -1,0 +1,25 @@
+{
+  "id": "cpp-vars",
+  "title": "变量与数据类型",
+  "description": "掌握 C++ 中的变量声明和基本数据类型",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "int",
+    "double",
+    "char",
+    "bool"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "python-decorator",
+  "title": "装饰器",
+  "description": "深入理解闭包、高阶函数和装饰器模式",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "hell",
+  "concepts": [
+    "闭包",
+    "高阶函数",
+    "装饰器",
+    "@装饰器语法",
+    "带参数的装饰器"
+  ],
+  "estimatedMinutes": 45,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json",
+    "steps/step-13.json",
+    "steps/step-14.json",
+    "steps/step-15.json",
+    "steps/step-16.json",
+    "steps/step-17.json",
+    "steps/step-18.json",
+    "steps/step-19.json",
+    "steps/step-20.json"
+  ]
+}

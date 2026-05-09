@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "构造函数",
+  "concept": "类",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，理解构造函数！",
+  "hint": "类名() 即构造函数",
+  "targetCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Cat {\npublic:\n    string name;\n    Cat(string n) { name = n; }\n};\n\nint main() {\n    Cat c(\"Tom\");\n    cout << c.name << endl;\n    return 0;\n}",
+  "encouragement": "构造函数初始化对象！"
+}

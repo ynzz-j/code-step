@@ -1,0 +1,24 @@
+{
+  "id": "java-method",
+  "title": "方法与函数",
+  "description": "学习方法的定义、参数、返回值和方法重载",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "方法定义",
+    "参数",
+    "返回值",
+    "方法重载",
+    "递归"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json"
+  ]
+}

@@ -73,5 +73,11 @@ pub fn run_migrations(conn: &Connection) -> Result<(), rusqlite::Error> {
         );
         ",
     )?;
+
+    // 渐进式迁移: 为 course_progress 添加 course_mode 列（若不存在）
+    let _ = conn.execute_batch(
+        "ALTER TABLE course_progress ADD COLUMN course_mode TEXT;",
+    );
+
     Ok(())
 }

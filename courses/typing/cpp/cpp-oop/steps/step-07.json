@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "static 成员",
+  "concept": "类",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，理解 static 成员！",
+  "hint": "static 成员所有对象共享",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nclass Counter {\npublic:\n    static int count;\n    Counter() { count++; }\n};\n\nint Counter::count = 0;\n\nint main() {\n    Counter c1, c2, c3;\n    cout << Counter::count << endl;\n    return 0;\n}",
+  "encouragement": "static 成员是类共有的！"
+}

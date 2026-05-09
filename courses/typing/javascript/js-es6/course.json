@@ -1,0 +1,29 @@
+{
+  "id": "js-es6",
+  "title": "ES6+ 新特性",
+  "description": "学习现代 JavaScript 的新特性和语法",
+  "language": "javascript",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+    "解构",
+    "展开运算符",
+    "模块",
+    "class 语法"
+  ],
+  "estimatedMinutes": 30,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json"
+  ]
+}

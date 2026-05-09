@@ -1,0 +1,24 @@
+{
+  "id": "cpp-function",
+  "title": "函数",
+  "description": "学习 C++ 函数的定义、参数和返回值",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "函数定义",
+    "参数传递",
+    "返回值",
+    "递归",
+    "重载"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json"
+  ]
+}

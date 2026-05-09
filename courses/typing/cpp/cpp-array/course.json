@@ -1,0 +1,21 @@
+{
+  "id": "cpp-array",
+  "title": "数组",
+  "description": "掌握 C++ 数组的声明和使用",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "数组声明",
+    "数组遍历",
+    "二维数组"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "java-syntax-loop",
+  "title": "循环语句",
+  "description": "掌握 for 和 while 循环",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "concepts": [
+    "for 循环",
+    "while 循环",
+    "do-while"
+  ],
+  "estimatedMinutes": 12,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json"
+  ]
+}

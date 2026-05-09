@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "函数声明（原型）",
+  "concept": "函数",
+  "difficulty": "intermediate",
+  "instruction": "请照着敲一遍，理解函数原型！",
+  "hint": "声明在前，定义在后",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nvoid hello();  // 函数原型\n\nint main() {\n    hello();\n    return 0;\n}\n\nvoid hello() {\n    cout << \"Hello!\" << endl;\n}",
+  "encouragement": "原型让函数可乱序定义！"
+}

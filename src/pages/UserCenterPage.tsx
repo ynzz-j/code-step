@@ -71,7 +71,7 @@ function CourseProgressCard({ progress }: { progress: CourseProgressSummary }) {
 
   return (
     <Link
-      to={`/learn/${progress.courseId}`}
+      to={`/learn/${progress.courseId}?mode=${progress.courseMode}`}
       className={`block p-5 rounded-xl border transition-all hover:shadow-lg ${
         isComplete
           ? 'bg-success-500/5 border-success-500/20 hover:border-success-500/40'

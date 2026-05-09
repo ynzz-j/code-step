@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串长度与访问",
+  "concept": "字符串",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，掌握字符串操作！",
+  "hint": "用 .length() 和 [] 访问",
+  "targetCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s = \"C++\";\n    cout << \"len: \" << s.length() << endl;\n    cout << \"char: \" << s[0] << s[1] << s[2] << endl;\n    return 0;\n}",
+  "encouragement": "字符串操作很实用！"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字符串拼接",
+  "concept": "字符串",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，掌握字符串拼接！",
+  "hint": "用 + 拼接字符串",
+  "targetCode": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s1 = \"Hello\";\n    string s2 = \"World\";\n    string s = s1 + \", \" + s2 + \"!\";\n    cout << s << endl;\n    return 0;\n}",
+  "encouragement": "字符串拼接很常用！"
+}

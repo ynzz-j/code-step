@@ -1,0 +1,21 @@
+{
+  "id": "java-syntax-method",
+  "title": "方法定义",
+  "description": "学习方法的定义、参数和返回值",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "basic",
+  "concepts": [
+    "方法",
+    "参数",
+    "返回值",
+    "方法重载"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

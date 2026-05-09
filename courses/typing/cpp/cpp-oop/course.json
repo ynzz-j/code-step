@@ -1,0 +1,27 @@
+{
+  "id": "cpp-oop",
+  "title": "面向对象编程",
+  "description": "掌握 C++ 的类、对象、继承和多态",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+    "类",
+    "对象",
+    "继承",
+    "多态",
+    "构造函数",
+    "析构函数"
+  ],
+  "estimatedMinutes": 40,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "cpp-string",
+  "title": "字符串",
+  "description": "掌握 C++ 字符串的处理",
+  "language": "cpp",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+    "string类",
+    "字符串操作",
+    "拼接",
+    "比较"
+  ],
+  "estimatedMinutes": 20,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

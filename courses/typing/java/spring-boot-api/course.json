@@ -1,0 +1,21 @@
+{
+  "id": "spring-boot-api",
+  "title": "Web API 开发",
+  "description": "掌握使用 Spring Boot 开发 REST API",
+  "language": "java",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+    "@RestController",
+    "@GetMapping",
+    "@PostMapping",
+    "@RequestBody"
+  ],
+  "estimatedMinutes": 15,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json"
+  ]
+}

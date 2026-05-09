@@ -21,6 +21,8 @@ export interface CourseProgressSummary {
   lastStudiedAt: string | null;
   /** 总学习时长（分钟） */
   timeSpentMinutes: number;
+  /** 课程模式 */
+  courseMode: string;
 }
 
 /** 用户学习中心数据 */

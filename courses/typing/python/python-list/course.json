@@ -1,0 +1,30 @@
+{
+  "id": "python-list",
+  "title": "列表与元组",
+  "description": "学习 Python 列表和元组的创建、索引、切片和常用操作",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+    "列表创建",
+    "列表索引",
+    "列表切片",
+    "列表方法",
+    "元组"
+  ],
+  "estimatedMinutes": 25,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "python-dict",
+  "title": "字典与集合",
+  "description": "掌握 Python 字典和集合的创建、操作和推导式",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+    "字典创建",
+    "字典操作",
+    "集合操作",
+    "字典推导式",
+    "集合推导式"
+  ],
+  "estimatedMinutes": 30,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json",
+    "steps/step-13.json",
+    "steps/step-14.json",
+    "steps/step-15.json"
+  ]
+}

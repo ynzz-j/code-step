@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "指针与数组",
+  "concept": "指针",
+  "difficulty": "advanced",
+  "instruction": "请照着敲一遍，数组名就是指针！",
+  "hint": "数组名指向首元素",
+  "targetCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[] = {5, 10, 15};\n    int* p = arr;\n    for (int i = 0; i < 3; i++) {\n        cout << *(p + i) << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+  "encouragement": "指针和数组是近亲！"
+}

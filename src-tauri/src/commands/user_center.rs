@@ -25,6 +25,8 @@ pub struct CourseProgressSummary {
     pub last_studied_at: Option<String>,
     #[serde(rename = "timeSpentMinutes")]
     pub time_spent_minutes: u32,
+    #[serde(rename = "courseMode")]
+    pub course_mode: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -33,62 +35,16 @@ pub struct UserLearningSummary {
     pub course_progress: Vec<CourseProgressSummary>,
 }
 
-// ===================== 课程 JSON 格式定义 =====================
-// 格式1: 语言包格式 - courses/typing/{language}/course.json
-#[derive(Debug, Deserialize)]
-struct LanguageCourseFile {
-    id: String,
-    title: String,
-    description: Option<String>,
-    language: String,
-    difficulty: Option<String>,
-    courses: Vec<InnerCourse>,
-}
-
-// 格式2: 单课程格式 - courses/typing/courses/{courseId}/course.json
+// ===================== 课程 JSON 格式 =====================
+// 唯一支持的格式：单课程目录 courses/{mode}/{language}/{courseId}/course.json
 #[derive(Debug, Deserialize)]
 struct SingleCourseFile {
     id: String,
     title: String,
-    description: Option<String>,
     language: Option<String>,
-    difficulty: Option<String>,
-    concepts: Option<Vec<String>>,
-    estimated_minutes: Option<u32>,
-    estimatedMinutes: Option<u32>,
-    category: Option<String>,
-    steps: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct InnerCourse {
-    id: String,
-    title: String,
-    description: Option<String>,
-    language: String,
-    difficulty: Option<String>,
-    concepts: Vec<String>,
-    estimated_minutes: Option<u32>,
-    estimatedMinutes: Option<u32>,
-    category: Option<String>,
     steps: Vec<String>,
 }
 // =============================================================
-
-// 语言包格式（旧/兼容）
-#[derive(Debug, Deserialize)]
-struct CourseJson {
-    courses: Vec<InnerCourse>,
-}
-
-// 单课程格式（新/兼容）
-#[derive(Debug, Deserialize)]
-struct SingleCourseJson {
-    id: String,
-    title: String,
-    language: Option<String>,
-    steps: Vec<String>,
-}
 
 fn find_courses_root() -> Option<PathBuf> {
     if let Ok(exe_path) = std::env::current_exe() {
@@ -121,92 +77,51 @@ fn get_courses_dir_for(mode: &str) -> Option<PathBuf> {
     if mode_dir.exists() {
         Some(mode_dir)
     } else {
-        Some(root)
+        None
     }
 }
 
-// 扫描课程元数据（支持当前路径结构）
-// 当前结构: courses/typing/{language}/course.json (语言包格式)
-// 兼容旧结构: courses/typing/courses/{courseId}/course.json (单课程格式)
-fn scan_course_metadata(courses_dir: &Path) -> HashMap<String, (String, String, u32)> {
-    let mut metadata: HashMap<String, (String, String, u32)> = HashMap::new();
+/// 扫描一个 mode 目录下所有课程的元数据。
+/// 结构：{mode_dir}/{language}/{courseId}/course.json
+/// 返回 (courseId -> (title, language, totalSteps, mode))
+fn scan_course_metadata(mode_dir: &Path, mode: &str) -> HashMap<String, (String, String, u32, String)> {
+    let mut metadata: HashMap<String, (String, String, u32, String)> = HashMap::new();
 
-    // 当前结构: courses/typing/{language}/course.json (语言包格式)
-    if let Ok(entries) = fs::read_dir(courses_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if !path.is_dir() {
-                continue;
-            }
-            // 跳过 courses 子目录（单课程格式）
-            if path.file_name() == Some(std::ffi::OsStr::new("courses")) {
-                continue;
-            }
-            let course_file = path.join("course.json");
-            if course_file.exists() {
-                if let Ok(content) = fs::read_to_string(&course_file) {
-                    // 尝试解析为语言包格式 (LanguageCourseFile)
-                    if let Ok(lang_course) = serde_json::from_str::<LanguageCourseFile>(&content) {
-                        for inner_course in lang_course.courses {
-                            let steps_count = inner_course.steps.len() as u32;
-                            metadata.insert(
-                                inner_course.id.clone(),
-                                (
-                                    inner_course.title.clone(),
-                                    lang_course.language.clone(),
-                                    steps_count,
-                                ),
-                            );
-                        }
-                        continue;
-                    }
-                }
-            }
+    let Ok(lang_entries) = fs::read_dir(mode_dir) else {
+        return metadata;
+    };
+    for lang_entry in lang_entries.flatten() {
+        let lang_dir = lang_entry.path();
+        if !lang_dir.is_dir() {
+            continue;
         }
-    }
+        let lang_fallback = lang_dir
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("")
+            .to_string();
 
-    // 兼容: courses/typing/courses/{courseId}/course.json (单课程格式)
-    let courses_subdir = courses_dir.join("courses");
-    if courses_subdir.exists() {
-        if let Ok(entries) = fs::read_dir(&courses_subdir) {
-            for entry in entries.flatten() {
-                let path = entry.path();
-                if path.is_dir() {
-                    let course_file = path.join("course.json");
-                    if course_file.exists() {
-                        if let Ok(content) = fs::read_to_string(&course_file) {
-                            // 优先尝试单课程格式
-                            if let Ok(single_course) =
-                                serde_json::from_str::<SingleCourseFile>(&content)
-                            {
-                                metadata.insert(
-                                    single_course.id.clone(),
-                                    (
-                                        single_course.title,
-                                        single_course.language.unwrap_or_else(|| "java".to_string()),
-                                        single_course.steps.len() as u32,
-                                    ),
-                                );
-                                continue;
-                            }
-                            // 尝试语言包格式
-                            if let Ok(lang_course) =
-                                serde_json::from_str::<CourseJson>(&content)
-                            {
-                                for inner_course in lang_course.courses {
-                                    metadata.insert(
-                                        inner_course.id.clone(),
-                                        (
-                                            inner_course.title,
-                                            inner_course.language,
-                                            inner_course.steps.len() as u32,
-                                        ),
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
+        let Ok(course_entries) = fs::read_dir(&lang_dir) else {
+            continue;
+        };
+        for course_entry in course_entries.flatten() {
+            let course_dir = course_entry.path();
+            if !course_dir.is_dir() {
+                continue;
+            }
+            let course_file = course_dir.join("course.json");
+            if !course_file.exists() {
+                continue;
+            }
+            let Ok(content) = fs::read_to_string(&course_file) else {
+                continue;
+            };
+            if let Ok(course) = serde_json::from_str::<SingleCourseFile>(&content) {
+                let language = course.language.unwrap_or_else(|| lang_fallback.clone());
+                metadata.insert(
+                    course.id.clone(),
+                    (course.title, language, course.steps.len() as u32, mode.to_string()),
+                );
             }
         }
     }
@@ -220,47 +135,45 @@ pub async fn get_user_learning_summary(
 ) -> Result<UserLearningSummary, String> {
     let db = state.db.lock().map_err(|e| e.to_string())?;
 
-    // 从文件系统读取课程元数据（跨 typing / coding 两种模式）
-    let mut course_metadata: HashMap<String, (String, String, u32)> = HashMap::new();
+    // 跨 typing / coding 两种模式收集课程元数据
+    let mut course_metadata: HashMap<String, (String, String, u32, String)> = HashMap::new();
     for mode in SUPPORTED_MODES {
         if let Some(dir) = get_courses_dir_for(mode) {
-            if dir.exists() {
-                for (k, v) in scan_course_metadata(&dir) {
-                    course_metadata.entry(k).or_insert(v);
-                }
+            for (k, v) in scan_course_metadata(&dir, mode) {
+                course_metadata.entry(k).or_insert(v);
             }
         }
     }
     eprintln!("[UserCenter] scanned {} courses total", course_metadata.len());
 
-    // 获取用户进度数据
     let mut stmt = db
         .prepare(
-            "SELECT course_id, current_step, completed_steps, time_spent, started_at
+            "SELECT course_id, current_step, completed_steps, time_spent, started_at, course_mode
              FROM course_progress
              ORDER BY started_at DESC",
         )
         .map_err(|e| e.to_string())?;
 
-    let progress_rows: Vec<(String, String, u32, Option<String>)> = stmt
+    let progress_rows: Vec<(String, String, u32, Option<String>, Option<String>)> = stmt
         .query_map([], |row| {
             let course_id: String = row.get(0)?;
             let _current_step: u32 = row.get(1)?;
             let completed_steps_json: String = row.get(2)?;
             let time_spent: u32 = row.get(3)?;
             let started_at: Option<String> = row.get(4)?;
-            Ok((course_id, completed_steps_json, time_spent, started_at))
+            let course_mode: Option<String> = row.get(5)?;
+            Ok((course_id, completed_steps_json, time_spent, started_at, course_mode))
         })
         .map_err(|e| e.to_string())?
         .filter_map(|r| r.ok())
         .collect();
-    
+
     eprintln!("[UserCenter] progress_rows count: {}", progress_rows.len());
 
     let mut course_progress_list: Vec<CourseProgressSummary> = Vec::new();
 
-    for (course_id, completed_steps_json, time_spent, started_at) in progress_rows {
-        if let Some((title, language, total_steps)) = course_metadata.get(&course_id) {
+    for (course_id, completed_steps_json, time_spent, started_at, _db_course_mode) in progress_rows {
+        if let Some((title, language, total_steps, mode)) = course_metadata.get(&course_id) {
             let completed_count = count_json_array_items(&completed_steps_json);
             let progress_percent = if *total_steps > 0 {
                 (completed_count as f64 / *total_steps as f64 * 100.0).min(100.0)
@@ -277,6 +190,7 @@ pub async fn get_user_learning_summary(
                 total_steps: *total_steps,
                 last_studied_at: started_at,
                 time_spent_minutes: time_spent / 60,
+                course_mode: mode.clone(),
             });
         }
     }
