@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useCourseStore } from '@/stores/courseStore';
+import { useComboStore } from '@/stores/comboStore';
 
 type ComboEvent = 'increment' | 'reset' | 'new-best';
 
 export function ComboDisplay() {
-  const { combo } = useCourseStore();
+  const { currentCombo, maxCombo } = useComboStore();
   const [animEvent, setAnimEvent] = useState<ComboEvent | null>(null);
   const [comboVisible, setComboVisible] = useState(false);
   const [comboFadingOut, setComboFadingOut] = useState(false);
@@ -13,8 +13,6 @@ export function ComboDisplay() {
   const prevComboRef = useRef(0);
   const prevMaxRef = useRef(0);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-
-  const { currentCombo, maxCombo } = combo;
 
   const addTimer = useCallback((fn: () => void, ms: number) => {
     const id = setTimeout(fn, ms);

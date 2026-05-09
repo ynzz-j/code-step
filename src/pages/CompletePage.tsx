@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCourseStore } from '@/stores/courseStore';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useTypingStatsStore } from '@/stores/typingStatsStore';
+import { useComboStore } from '@/stores/comboStore';
+import { normalizeCourseMode } from '@/services/courseService';
 
 export function CompletePage() {
-  const { combo, typingStats } = useCourseStore();
+  const [searchParams] = useSearchParams();
+  const modeParam = searchParams.get('mode');
+  const coursesQuery = modeParam ? `?mode=${normalizeCourseMode(modeParam)}` : '';
+  const typingStats = useTypingStatsStore((s) => s.typingStats);
+  const { maxCombo } = useComboStore();
   const [showCombo, setShowCombo] = useState(false);
 
   useEffect(() => {
     // 课程完成后显示最大连击
-    if (combo.maxCombo > 0) {
+    if (maxCombo > 0) {
       setShowCombo(true);
     }
-  }, [combo.maxCombo]);
+  }, [maxCombo]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full px-8 animate-fade-in">
@@ -27,9 +33,9 @@ export function CompletePage() {
         {/* 统计数据展示 */}
         <div className="grid grid-cols-3 gap-4 pt-4">
           {/* 最大连击 */}
-          {showCombo && combo.maxCombo > 0 && (
+          {showCombo && maxCombo > 0 && (
             <div className="flex flex-col items-center p-4 rounded-lg bg-primary-500/10 border border-primary-500/20">
-              <div className="text-2xl font-bold text-primary-400">x{combo.maxCombo}</div>
+              <div className="text-2xl font-bold text-primary-400">x{maxCombo}</div>
               <div className="text-xs text-gray-400 mt-1">最大连击</div>
             </div>
           )}
@@ -56,7 +62,7 @@ export function CompletePage() {
 
         <div className="flex items-center justify-center gap-4 pt-4">
           <Link
-            to="/courses"
+            to={`/courses${coursesQuery}`}
             className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
           >
             继续学习

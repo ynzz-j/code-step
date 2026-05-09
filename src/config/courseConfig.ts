@@ -27,7 +27,7 @@ export type CourseMode = keyof typeof COURSE_MODE_CONFIG;
  * 当前课程模式
  * 修改此值切换 Typing/Coding 模式
  */
-export const CURRENT_COURSE_MODE: CourseMode = 'typing';
+export const CURRENT_COURSE_MODE: CourseMode = 'coding';
 
 /**
  * 获取课程根目录

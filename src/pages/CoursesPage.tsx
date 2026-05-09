@@ -1,9 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCourseStore } from '@/stores/courseStore';
+import { useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
+import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { CategoryFilter } from '@/components/courses/CategoryFilter';
-import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, ALL_DIFFICULTIES, type CourseMetadata, type Difficulty } from '@/types';
-import { invoke } from '@tauri-apps/api/core';
+import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
+import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata } from '@/types';
+
+const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
+  coding: {
+    title: '编程模式',
+    subtitle: '写代码、跑代码，专注编程能力训练',
+  },
+  typing: {
+    title: '打字模式',
+    subtitle: '逐字跟敲，建立代码肌肉记忆',
+  },
+};
 
 // 难度颜色映射
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -23,8 +35,8 @@ const DIFFICULTY_ORDER: Record<string, number> = {
   hell: 5,
 };
 
-function CourseCard({ course }: { course: CourseMetadata }) {
-  const getCourseProgress = useCourseStore((s) => s.getCourseProgress);
+function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode }) {
+  const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
 
   const progress = getCourseProgress(course.id);
   const completedCount = progress?.completedSteps?.length || 0;
@@ -34,7 +46,7 @@ function CourseCard({ course }: { course: CourseMetadata }) {
 
   return (
     <Link
-      to={`/learn/${course.id}`}
+      to={`/learn/${course.id}?mode=${mode}`}
       className="block p-6 rounded-xl bg-gray-800/50 border border-gray-700/50 hover:border-primary-500/50 transition-all hover:shadow-lg hover:shadow-primary-500/5"
     >
       <div className="flex items-start justify-between mb-3">
@@ -95,26 +107,29 @@ function CourseCard({ course }: { course: CourseMetadata }) {
 }
 
 export function CoursesPage() {
-  const { filteredCourses, courses, loadCourses, selectedCategory, selectedLanguage, selectedDifficulty } =
-    useCourseStore();
+  const [searchParams] = useSearchParams();
+  const mode = normalizeCourseMode(searchParams.get('mode'));
+  const modeLabel = MODE_LABELS[mode];
 
-  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const {
+    courses,
+    loadCourses,
+    selectedCategory,
+    selectedLanguage,
+    selectedDifficulty,
+  } = useCourseCatalogStore();
 
   useEffect(() => {
-    loadCourses();
-  }, [loadCourses]);
+    loadCourses(mode);
+  }, [loadCourses, mode]);
 
-  // 加载调试信息
-  useEffect(() => {
-    (async () => {
-      try {
-        const info = await invoke('debug_courses');
-        setDebugInfo(info);
-      } catch (e) {
-        setDebugInfo({ error: String(e) });
-      }
-    })();
-  }, []);
+  // 筛选课程（由 courses + filters 计算，不再存状态）
+  const filteredCourses = courses.filter((c) => {
+    const matchCat = selectedCategory === 'all' || c.category === selectedCategory;
+    const matchLang = selectedLanguage === 'all' || c.language === selectedLanguage;
+    const matchDiff = selectedDifficulty === 'all' || c.difficulty === selectedDifficulty;
+    return matchCat && matchLang && matchDiff;
+  });
 
   const displayCourses =
     filteredCourses.length > 0 || (selectedCategory === 'all' && selectedLanguage === 'all' && selectedDifficulty === 'all')
@@ -131,8 +146,16 @@ export function CoursesPage() {
   return (
     <div className="h-full overflow-auto px-8 py-8 animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">选择课程</h1>
-        <p className="text-gray-400 mb-6">选择一门课程开始你的编程之旅</p>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold">{modeLabel.title}</h1>
+          <Link
+            to="/"
+            className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
+          >
+            &larr; 返回首页
+          </Link>
+        </div>
+        <p className="text-gray-400 mb-6">{modeLabel.subtitle}</p>
 
         <CategoryFilter className="mb-8" />
 
@@ -143,10 +166,17 @@ export function CoursesPage() {
               该筛选条件下暂无课程，敬请期待更多内容
             </p>
           </div>
+        ) : sortedCourses.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="text-4xl mb-4 opacity-30">📭</div>
+            <p className="text-gray-400">
+              {modeLabel.title}暂无课程，敬请期待更多内容
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sortedCourses.map((course) => (
-              <CourseCard key={course.id} course={course} />
+              <CourseCard key={course.id} course={course} mode={mode} />
             ))}
           </div>
         )}

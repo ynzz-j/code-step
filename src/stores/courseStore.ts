@@ -1,22 +1,23 @@
+/**
+ * courseStore — 兼容层
+ *
+ * @deprecated 此 store 已拆分为 4 个独立 store：
+ *   - useCourseCatalogStore  (课程加载/筛选)
+ *   - useCourseSessionStore  (学习会话/进度)
+ *   - useTypingStatsStore    (打字统计)
+ *   - useComboStore          (连击状态)
+ *
+ * 此兼容层将所有子 store 的状态合并为旧接口。
+ * 新代码请直接使用对应的新 store。
+ */
+
 import { create } from 'zustand';
 import type { Course, CourseMetadata, Step, TypingStats, CourseCategory, Difficulty } from '@/types';
-import { courseService } from '@/services/courseService';
-
-// 连击空闲超时（3s 无输入视为中断）
-const COMBO_IDLE_TIMEOUT_MS = 3000;
-let comboTimeoutId: ReturnType<typeof setTimeout> | null = null;
-
-function clearComboTimeout() {
-  if (comboTimeoutId !== null) {
-    clearTimeout(comboTimeoutId);
-    comboTimeoutId = null;
-  }
-}
-
-function startComboTimeout(onTimeout: () => void) {
-  clearComboTimeout();
-  comboTimeoutId = setTimeout(onTimeout, COMBO_IDLE_TIMEOUT_MS);
-}
+import { type CourseMode } from '@/services/courseService';
+import { useCourseCatalogStore } from './courseCatalogStore';
+import { useCourseSessionStore } from './courseSessionStore';
+import { useTypingStatsStore } from './typingStatsStore';
+import { useComboStore } from './comboStore';
 
 interface CourseProgressInfo {
   completedSteps: number[];
@@ -43,13 +44,11 @@ interface CourseStore {
   courseStartTime: number | null;
   isLoading: boolean;
   error: string | null;
-  // 课程进度映射
   courseProgress: Record<string, CourseProgressInfo>;
-  // 连击状态
   combo: ComboState;
 
-  loadCourses: () => Promise<void>;
-  startCourse: (courseId: string) => Promise<void>;
+  loadCourses: (mode?: CourseMode) => Promise<void>;
+  startCourse: (courseId: string, mode?: CourseMode) => Promise<void>;
   nextStep: () => void;
   prevStep: () => void;
   completeStep: (index: number) => void;
@@ -62,263 +61,108 @@ interface CourseStore {
   setLanguage: (lang: string | 'all') => void;
   setDifficulty: (difficulty: Difficulty | 'all') => void;
   getCourseProgress: (courseId: string) => CourseProgressInfo | null;
-  // 连击 actions
   incrementCombo: () => void;
   resetCombo: () => void;
   getMaxCombo: () => number;
   resetAllCombo: () => void;
 }
 
-export const useCourseStore = create<CourseStore>((set, get) => ({
-  courses: [],
-  filteredCourses: [],
-  selectedCategory: 'all',
-  selectedLanguage: 'all',
-  selectedDifficulty: 'all',
-  currentCourse: null,
-  currentStepIndex: 0,
-  currentStepCompleted: false,
-  completedSteps: new Set(),
-  typingStats: { wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 },
-  typingStartTime: null,
-  courseStartTime: null,
-  isLoading: false,
-  error: null,
-  courseProgress: {},
-  combo: { currentCombo: 0, maxCombo: 0 },
-
-  loadCourses: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const courses = await courseService.getCourses();
-      set({ courses, isLoading: false });
-      // 初始筛选
-      get().setCategory(get().selectedCategory);
-    } catch (error) {
-      console.error('Failed to load courses:', error);
-      set({ error: '加载课程列表失败', isLoading: false });
-    }
-  },
-
-  setCategory: (category) => {
-    const { courses, selectedLanguage, selectedDifficulty } = get();
-    const filtered = courses.filter((c) => {
-      const matchCategory = category === 'all' || c.category === category;
-      const matchLang = selectedLanguage === 'all' || c.language === selectedLanguage;
-      const matchDiff = selectedDifficulty === 'all' || c.difficulty === selectedDifficulty;
-      return matchCategory && matchLang && matchDiff;
+export const useCourseStore = create<CourseStore>((set, _get) => {
+  // Subscriptions: propagate changes from substores to this legacy store
+  useCourseCatalogStore.subscribe((c) => {
+    const { selectedCategory, selectedLanguage, selectedDifficulty, courses } = c;
+    const filtered = courses.filter((co) => {
+      const matchCat = selectedCategory === 'all' || co.category === selectedCategory;
+      const matchLang = selectedLanguage === 'all' || co.language === selectedLanguage;
+      const matchDiff = selectedDifficulty === 'all' || co.difficulty === selectedDifficulty;
+      return matchCat && matchLang && matchDiff;
     });
-    set({ selectedCategory: category, filteredCourses: filtered });
-  },
-
-  setLanguage: (lang) => {
-    const { courses, selectedCategory, selectedDifficulty } = get();
-    const filtered = courses.filter((c) => {
-      const matchCategory = selectedCategory === 'all' || c.category === selectedCategory;
-      const matchLang = lang === 'all' || c.language === lang;
-      const matchDiff = selectedDifficulty === 'all' || c.difficulty === selectedDifficulty;
-      return matchCategory && matchLang && matchDiff;
-    });
-    set({ selectedLanguage: lang, filteredCourses: filtered });
-  },
-
-  setDifficulty: (difficulty) => {
-    const { courses, selectedCategory, selectedLanguage } = get();
-    const filtered = courses.filter((c) => {
-      const matchCategory = selectedCategory === 'all' || c.category === selectedCategory;
-      const matchLang = selectedLanguage === 'all' || c.language === selectedLanguage;
-      const matchDiff = difficulty === 'all' || c.difficulty === difficulty;
-      return matchCategory && matchLang && matchDiff;
-    });
-    set({ selectedDifficulty: difficulty, filteredCourses: filtered });
-  },
-
-  startCourse: async (courseId: string) => {
-    console.log('startCourse called with:', courseId);
-    clearComboTimeout();
-    set({ isLoading: true, error: null });
-    try {
-      const course = await courseService.getCourse(courseId);
-      console.log('Course loaded:', course.title, 'steps:', course.steps.length);
-      // 先尝试从数据库获取已有进度
-      const dbProgress = await courseService.getProgress(courseId);
-      const existingProgress = dbProgress
-        ? { currentStep: dbProgress.currentStep, completedSteps: new Set(dbProgress.completedSteps) }
-        : { currentStep: 0, completedSteps: new Set<number>() };
-
-      set({
-        currentCourse: course,
-        currentStepIndex: existingProgress.currentStep,
-        currentStepCompleted: existingProgress.completedSteps.has(existingProgress.currentStep),
-        completedSteps: existingProgress.completedSteps,
-        typingStats: { wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 },
-        typingStartTime: Date.now(),
-        courseStartTime: Date.now(),
-        isLoading: false,
-        combo: { currentCombo: 0, maxCombo: 0 },
-      });
-    } catch (error) {
-      console.error('Failed to load course:', error);
-      set({ error: `加载课程失败: ${error}`, isLoading: false });
-    }
-  },
-
-  nextStep: () => {
-    const { currentCourse, currentStepIndex, currentStepCompleted, courseProgress, courseStartTime } = get();
-    if (!currentCourse) return;
-    if (!currentStepCompleted) return;
-    if (currentCourse && currentStepIndex < currentCourse.steps.length - 1) {
-      const newIndex = currentStepIndex + 1;
-      // 更新 courseProgress
-      const progressKey = currentCourse.id;
-      const newCourseProgress = {
-        ...courseProgress,
-        [progressKey]: {
-          ...courseProgress[progressKey],
-          currentStep: newIndex,
-        },
-      };
-      set({ currentStepIndex: newIndex, currentStepCompleted: false, courseProgress: newCourseProgress });
-
-      // 异步保存到数据库
-      const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
-      const completedSteps = Array.from(get().completedSteps);
-      courseService.saveProgress(currentCourse.id, currentStepIndex, completedSteps, timeSpent);
-    }
-  },
-
-  prevStep: () => {
-    const { currentStepIndex } = get();
-    if (currentStepIndex > 0) {
-      set({ currentStepIndex: currentStepIndex - 1 });
-    }
-  },
-
-  completeStep: (index: number) => {
-    const { completedSteps } = get();
-    const newCompleted = new Set(completedSteps);
-    newCompleted.add(index);
-    set({ completedSteps: newCompleted });
-  },
-
-  markStepCompleted: () => {
-    const { currentCourse, currentStepIndex, completedSteps, courseProgress, courseStartTime } = get();
-    if (!currentCourse) return;
-
-    // 更新 completedSteps Set
-    const newCompleted = new Set(completedSteps);
-    newCompleted.add(currentStepIndex);
-
-    // 更新 courseProgress
-    const progressKey = currentCourse.id;
-    const newCourseProgress = {
-      ...courseProgress,
-      [progressKey]: {
-        completedSteps: Array.from(newCompleted),
-        currentStep: currentStepIndex,
-      },
-    };
-
-    // 计算学习时间（秒）
-    const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
-
-    set({ currentStepCompleted: true, completedSteps: newCompleted, courseProgress: newCourseProgress });
-
-    // 异步保存到数据库
-    courseService.saveProgress(currentCourse.id, currentStepIndex, Array.from(newCompleted), timeSpent);
-  },
-
-  recordTypingKeystroke: (isCorrect: boolean) => {
-    const { typingStats, typingStartTime, combo } = get();
-    const now = Date.now();
-    const total = typingStats.totalKeystrokes + 1;
-    const correct = isCorrect ? typingStats.correctKeystrokes + 1 : typingStats.correctKeystrokes;
-    const errors = isCorrect ? typingStats.errors : typingStats.errors + 1;
-    const startTime = typingStartTime || now;
-    const elapsedMin = (now - startTime) / 60000;
-    const wpm = elapsedMin > 0 ? Math.round((correct / 5) / elapsedMin) : 0;
-    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 100;
-
-    // 更新连击状态
-    let newCombo: ComboState;
-    if (isCorrect) {
-      const nextCombo = combo.currentCombo + 1;
-      newCombo = {
-        currentCombo: nextCombo,
-        maxCombo: Math.max(combo.maxCombo, nextCombo),
-      };
-      // 正确输入：重置 3s 空闲定时器
-      startComboTimeout(() => {
-        const current = get().combo;
-        if (current.currentCombo > 0) {
-          set({ combo: { currentCombo: 0, maxCombo: current.maxCombo } });
-        }
-      });
-    } else {
-      newCombo = {
-        currentCombo: 0,
-        maxCombo: combo.maxCombo,
-      };
-      // 错误输入：清除空闲定时器
-      clearComboTimeout();
-    }
-
     set({
-      typingStats: { ...typingStats, totalKeystrokes: total, correctKeystrokes: correct, errors, wpm, accuracy },
-      typingStartTime: startTime,
-      combo: newCombo,
+      courses: c.courses,
+      selectedCategory: c.selectedCategory,
+      selectedLanguage: c.selectedLanguage,
+      selectedDifficulty: c.selectedDifficulty,
+      isLoading: c.isLoading,
+      error: c.error,
+      filteredCourses: filtered,
     });
-  },
+  });
 
-  resetTypingStats: () => set({
-    typingStats: { wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 },
-    typingStartTime: Date.now(),
-  }),
-
-  resetProgress: () => {
+  useCourseSessionStore.subscribe((s) => {
     set({
-      currentStepIndex: 0,
-      currentStepCompleted: false,
-      completedSteps: new Set(),
+      currentCourse: s.currentCourse,
+      currentStepIndex: s.currentStepIndex,
+      currentStepCompleted: s.completedSteps.has(s.currentStepIndex),
+      completedSteps: s.completedSteps,
+      courseProgress: s.courseProgress,
+      courseStartTime: s.courseStartTime,
     });
-  },
+  });
 
-  getCurrentStep: () => {
-    const { currentCourse, currentStepIndex } = get();
-    if (currentCourse && currentCourse.steps[currentStepIndex]) {
-      return currentCourse.steps[currentStepIndex];
-    }
-    return null;
-  },
-
-  getCourseProgress: (courseId: string) => {
-    const { courseProgress } = get();
-    return courseProgress[courseId] || null;
-  },
-
-  // 连击 actions
-  incrementCombo: () => {
-    const { combo } = get();
-    const nextCombo = combo.currentCombo + 1;
+  useTypingStatsStore.subscribe((t) => {
     set({
-      combo: {
-        currentCombo: nextCombo,
-        maxCombo: Math.max(combo.maxCombo, nextCombo),
-      },
+      typingStats: t.typingStats,
+      typingStartTime: t.typingStartTime,
     });
-  },
+  });
 
-  resetCombo: () => {
-    const { combo } = get();
-    set({ combo: { currentCombo: 0, maxCombo: combo.maxCombo } });
-  },
+  useComboStore.subscribe((cmb) => {
+    set({ combo: { currentCombo: cmb.currentCombo, maxCombo: cmb.maxCombo } });
+  });
 
-  getMaxCombo: () => {
-    return get().combo.maxCombo;
-  },
+  const catalogDefaults = useCourseCatalogStore.getState();
+  const sessionDefaults = useCourseSessionStore.getState();
+  const typingDefaults = useTypingStatsStore.getState();
+  const comboDefaults = useComboStore.getState();
 
-  resetAllCombo: () => {
-    clearComboTimeout();
-    set({ combo: { currentCombo: 0, maxCombo: 0 } });
-  },
-}));
+  return {
+    courses: catalogDefaults.courses,
+    filteredCourses: [],
+    selectedCategory: catalogDefaults.selectedCategory,
+    selectedLanguage: catalogDefaults.selectedLanguage,
+    selectedDifficulty: catalogDefaults.selectedDifficulty,
+    currentCourse: sessionDefaults.currentCourse,
+    currentStepIndex: sessionDefaults.currentStepIndex,
+    currentStepCompleted: sessionDefaults.completedSteps.has(sessionDefaults.currentStepIndex),
+    completedSteps: sessionDefaults.completedSteps,
+    typingStats: typingDefaults.typingStats,
+    typingStartTime: typingDefaults.typingStartTime,
+    courseStartTime: sessionDefaults.courseStartTime,
+    isLoading: catalogDefaults.isLoading,
+    error: catalogDefaults.error,
+    courseProgress: sessionDefaults.courseProgress,
+    combo: { currentCombo: comboDefaults.currentCombo, maxCombo: comboDefaults.maxCombo },
+
+    // Actions delegate to substores
+    loadCourses: (mode) => useCourseCatalogStore.getState().loadCourses(mode),
+    startCourse: (courseId, mode) => useCourseSessionStore.getState().startCourse(courseId, mode),
+    nextStep: () => useCourseSessionStore.getState().nextStep(),
+    prevStep: () => useCourseSessionStore.getState().prevStep(),
+    completeStep: (index) => {
+      const session = useCourseSessionStore.getState();
+      const newCompleted = new Set(session.completedSteps);
+      newCompleted.add(index);
+      useCourseSessionStore.setState({ completedSteps: newCompleted });
+    },
+    resetProgress: () => useCourseSessionStore.getState().resetProgress(),
+    getCurrentStep: () => useCourseSessionStore.getState().getCurrentStep(),
+    markStepCompleted: () => useCourseSessionStore.getState().markStepCompleted(),
+    recordTypingKeystroke: (isCorrect) => {
+      useTypingStatsStore.getState().recordTypingKeystroke(isCorrect);
+      if (isCorrect) {
+        useComboStore.getState().incrementCombo();
+      } else {
+        useComboStore.getState().resetCombo();
+      }
+    },
+    resetTypingStats: () => useTypingStatsStore.getState().resetTypingStats(),
+    setCategory: (category) => useCourseCatalogStore.getState().setCategory(category),
+    setLanguage: (lang) => useCourseCatalogStore.getState().setLanguage(lang),
+    setDifficulty: (difficulty) => useCourseCatalogStore.getState().setDifficulty(difficulty),
+    getCourseProgress: (courseId) => useCourseSessionStore.getState().getCourseProgress(courseId),
+    incrementCombo: () => useComboStore.getState().incrementCombo(),
+    resetCombo: () => useComboStore.getState().resetCombo(),
+    getMaxCombo: () => useComboStore.getState().maxCombo,
+    resetAllCombo: () => useComboStore.getState().resetAllCombo(),
+  };
+});

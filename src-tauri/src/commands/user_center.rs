@@ -5,16 +5,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 // ===================== 课程模式配置 =====================
-const COURSE_MODE_TYPING: &str = "typing";
-const COURSE_MODE_CODING: &str = "coding";
-const CURRENT_MODE: &str = COURSE_MODE_TYPING;
-
-fn get_mode_dir() -> &'static str {
-    match CURRENT_MODE {
-        COURSE_MODE_CODING => "coding",
-        _ => "typing",
-    }
-}
+const SUPPORTED_MODES: &[&str] = &["typing", "coding"];
 // =====================================================
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -99,54 +90,39 @@ struct SingleCourseJson {
     steps: Vec<String>,
 }
 
-fn get_courses_dir() -> PathBuf {
-    // 优先从 EXE 所在目录向上查找
+fn find_courses_root() -> Option<PathBuf> {
     if let Ok(exe_path) = std::env::current_exe() {
-        eprintln!("[DEBUG] EXE path for user_center: {:?}", exe_path);
-        
-        // 从 EXE 路径向上查找到项目根目录
-        // debug/release: src-tauri/target/{debug,release}/codestep.exe -> 项目根 (需要 4 层 parent)
-        let possible_roots = [
-            exe_path.parent().unwrap().parent().unwrap().parent().unwrap().parent().unwrap(),
-        ];
-        
-        for root in &possible_roots {
+        if let Some(root) = exe_path
+            .parent()
+            .and_then(|p| p.parent())
+            .and_then(|p| p.parent())
+            .and_then(|p| p.parent())
+        {
             let courses_path = root.join("courses");
-            eprintln!("[DEBUG] Checking root: {:?}, courses: {:?}", root, courses_path);
             if courses_path.exists() {
-                // 检查 typing/coding 目录
-                let mode_dir = courses_path.join(get_mode_dir());
-                if mode_dir.exists() {
-                    eprintln!("[DEBUG] Using mode_dir: {:?}", mode_dir);
-                    return mode_dir;
-                }
-                // 如果 mode_dir 不存在，使用 courses 根目录
-                eprintln!("[DEBUG] Using courses_path: {:?}", courses_path);
-                return courses_path;
+                return Some(courses_path);
             }
         }
     }
 
-    // 回退：尝试相对路径（开发模式）
-    let possible_paths = vec![
-        PathBuf::from("../../.."),
-        PathBuf::from("../.."),
-        PathBuf::from("."),
-    ];
-
-    for base in possible_paths {
-        let courses_path = base.join("courses");
+    for base in ["../../..", "../..", "."] {
+        let courses_path = PathBuf::from(base).join("courses");
         if courses_path.exists() {
-            let mode_dir = courses_path.join(get_mode_dir());
-            if mode_dir.exists() {
-                return mode_dir;
-            }
-            return courses_path;
+            return Some(courses_path);
         }
     }
 
-    eprintln!("[DEBUG] Falling back to 'courses'");
-    PathBuf::from("courses")
+    None
+}
+
+fn get_courses_dir_for(mode: &str) -> Option<PathBuf> {
+    let root = find_courses_root()?;
+    let mode_dir = root.join(mode);
+    if mode_dir.exists() {
+        Some(mode_dir)
+    } else {
+        Some(root)
+    }
 }
 
 // 扫描课程元数据（支持当前路径结构）
@@ -244,18 +220,18 @@ pub async fn get_user_learning_summary(
 ) -> Result<UserLearningSummary, String> {
     let db = state.db.lock().map_err(|e| e.to_string())?;
 
-    // 从文件系统读取课程元数据（支持新旧路径结构）
-    let courses_dir = get_courses_dir();
-    eprintln!("[UserCenter] courses_dir: {:?}", courses_dir);
-    eprintln!("[UserCenter] courses_dir exists: {}", courses_dir.exists());
-    
-    let course_metadata = if courses_dir.exists() {
-        let metadata = scan_course_metadata(&courses_dir);
-        eprintln!("[UserCenter] scanned {} courses: {:?}", metadata.len(), metadata.keys().collect::<Vec<_>>());
-        metadata
-    } else {
-        HashMap::new()
-    };
+    // 从文件系统读取课程元数据（跨 typing / coding 两种模式）
+    let mut course_metadata: HashMap<String, (String, String, u32)> = HashMap::new();
+    for mode in SUPPORTED_MODES {
+        if let Some(dir) = get_courses_dir_for(mode) {
+            if dir.exists() {
+                for (k, v) in scan_course_metadata(&dir) {
+                    course_metadata.entry(k).or_insert(v);
+                }
+            }
+        }
+    }
+    eprintln!("[UserCenter] scanned {} courses total", course_metadata.len());
 
     // 获取用户进度数据
     let mut stmt = db

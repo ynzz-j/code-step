@@ -1,15 +1,23 @@
-import { useEffect, useMemo, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useCourseStore } from '@/stores/courseStore';
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useCourseSessionStore } from '@/stores/courseSessionStore';
+import { useTypingStatsStore } from '@/stores/typingStatsStore';
+import { useComboStore } from '@/stores/comboStore';
+import { normalizeCourseMode } from '@/services/courseService';
 import { InstructionPanel } from '@/components/learn/InstructionPanel';
 import { ProgressDots } from '@/components/learn/ProgressDots';
 import { TypingEditor } from '@/components/editor/TypingEditor';
+import { CodeEditor } from '@/components/editor/CodeEditor';
 import { ComboDisplay } from '@/components/learn/ComboDisplay';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import type { TypingStep } from '@/types';
 
 export function LearnPage() {
   const { courseId } = useParams<{ courseId: string }>();
+  const [searchParams] = useSearchParams();
+  const modeParam = searchParams.get('mode');
+  const mode = modeParam ? normalizeCourseMode(modeParam) : undefined;
+  const coursesQuery = modeParam ? `?mode=${mode}` : '';
   const navigate = useNavigate();
   const [isShaking, setIsShaking] = useState(false);
   const prevComboRef = useRef(0);
@@ -18,22 +26,27 @@ export function LearnPage() {
   const {
     currentCourse,
     currentStepIndex,
-    currentStepCompleted,
-    combo,
+    completedSteps,
     startCourse,
     nextStep,
     prevStep,
     markStepCompleted,
-    recordTypingKeystroke,
-    resetTypingStats,
-  } = useCourseStore();
+  } = useCourseSessionStore();
+  const recordTypingKeystroke = useTypingStatsStore((s) => s.recordTypingKeystroke);
+  const resetTypingStats = useTypingStatsStore((s) => s.resetTypingStats);
+  const { currentCombo, incrementCombo, resetCombo } = useComboStore();
+
+  // currentStepCompleted 由 completedSteps 推导
+  const currentStepCompleted = completedSteps.has(currentStepIndex);
 
   // 进入课程时加载
   useEffect(() => {
     if (courseId) {
-      startCourse(courseId);
+      useComboStore.getState().resetAllCombo();
+      useTypingStatsStore.getState().resetTypingStats();
+      startCourse(courseId, mode);
     }
-  }, [courseId, startCourse]);
+  }, [courseId, mode, startCourse]);
 
   // 切换步骤时重置输入完成标记
   useEffect(() => {
@@ -42,32 +55,33 @@ export function LearnPage() {
 
   // 连击中断时触发屏幕震动
   useEffect(() => {
-    if (combo.currentCombo === 0 && prevComboRef.current > 0) {
+    if (currentCombo === 0 && prevComboRef.current > 0) {
       setIsShaking(true);
       const timer = setTimeout(() => setIsShaking(false), 350);
       return () => clearTimeout(timer);
     }
-    prevComboRef.current = combo.currentCombo;
-  }, [combo.currentCombo]);
+    prevComboRef.current = currentCombo;
+  }, [currentCombo]);
 
   const currentStep = currentCourse?.steps[currentStepIndex];
 
-  // 一期只做 typing 模式，所有步骤都转换为 typing
-  const typingStep: TypingStep | null = useMemo(() => {
-    if (!currentStep) return null;
-    // 已经是 TypingStep
-    if (currentStep.type === 'typing') return currentStep as TypingStep;
-    // CodingStep 也转为 TypingStep：用 starter 或 answer 作为 targetCode
-    const codingStep = currentStep as { starter?: string; answer?: string; type: string };
-    return {
-      ...codingStep,
-      type: 'typing' as const,
-      targetCode: codingStep.starter || codingStep.answer || '',
-    } as unknown as TypingStep;
-  }, [currentStep]);
+  // 打字按键回调：更新打字统计 + 连击
+  const handleKeystroke = (isCorrect: boolean) => {
+    recordTypingKeystroke(isCorrect);
+    if (isCorrect) {
+      incrementCombo();
+    } else {
+      resetCombo();
+    }
+  };
 
   // TypingEditor 打完字时的回调：只标记输入完成，不触发跳转
   const handleTypingComplete = () => {
+    setStepInputDone(true);
+  };
+
+  // CodeEditor 通过时的回调：只标记输入完成，不触发跳转
+  const handleCodingComplete = () => {
     setStepInputDone(true);
   };
 
@@ -81,11 +95,11 @@ export function LearnPage() {
     }
 
     // 判断是否是最后一步（从 store 实时读取，避免闭包问题）
-    const { currentCourse: course, currentStepIndex: idx } = useCourseStore.getState();
+    const { currentCourse: course, currentStepIndex: idx } = useCourseSessionStore.getState();
     const isLast = course && idx === course.steps.length - 1;
 
     if (isLast) {
-      navigate(`/complete/${courseId}`);
+      navigate(`/complete/${courseId}${coursesQuery}`);
     } else {
       nextStep();
     }
@@ -100,7 +114,7 @@ export function LearnPage() {
       j: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
       k: prevStep,
       tab: undefined,
-      escape: () => navigate('/courses'),
+      escape: () => navigate(`/courses${coursesQuery}`),
     },
     !!currentCourse,
   );
@@ -133,7 +147,7 @@ export function LearnPage() {
       {/* 顶部导航栏 */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800/30 border-b border-gray-700/50">
         <button
-          onClick={() => navigate('/courses')}
+          onClick={() => navigate(`/courses${coursesQuery}`)}
           className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
         >
           &larr; 退出
@@ -151,12 +165,19 @@ export function LearnPage() {
       <div className="flex-1 flex overflow-hidden">
         <InstructionPanel step={currentStep} />
         <div className="flex-1 flex flex-col relative">
-          {typingStep && (
+          {currentStep?.type === 'typing' && (
             <TypingEditor
-              step={typingStep}
+              step={currentStep as TypingStep}
               onComplete={handleTypingComplete}
-              onKeystroke={recordTypingKeystroke}
+              onKeystroke={handleKeystroke}
               onReset={resetTypingStats}
+            />
+          )}
+          {currentStep?.type === 'coding' && (
+            <CodeEditor
+              step={currentStep}
+              language={currentCourse.language}
+              onComplete={handleCodingComplete}
             />
           )}
 

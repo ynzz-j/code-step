@@ -57,68 +57,61 @@ fn default_category() -> String {
 
 // =====================================================
 // 课程模式配置
-// 一期: Typing 模式
-// 二期: Coding 模式 - 修改 CURRENT_MODE 切换
+// 现在由前端通过命令参数指定模式；后端保留支持的模式列表和默认回退。
 const COURSE_MODE_TYPING: &str = "typing";
 const COURSE_MODE_CODING: &str = "coding";
-const CURRENT_MODE: &str = COURSE_MODE_TYPING;
+const DEFAULT_MODE: &str = COURSE_MODE_TYPING;
+const SUPPORTED_MODES: &[&str] = &[COURSE_MODE_TYPING, COURSE_MODE_CODING];
 
-fn get_mode_dir() -> &'static str {
-    match CURRENT_MODE {
-        COURSE_MODE_CODING => "coding",
-        _ => "typing",
+fn normalize_mode(mode: Option<&str>) -> &str {
+    match mode {
+        Some(m) if SUPPORTED_MODES.contains(&m) => match m {
+            "coding" => COURSE_MODE_CODING,
+            _ => COURSE_MODE_TYPING,
+        },
+        _ => DEFAULT_MODE,
     }
 }
 
 // =====================================================
 
-fn get_courses_dir() -> PathBuf {
-    // 优先从 EXE 所在目录向上查找
+/// 查找 courses 根目录（不含 mode 子目录）
+fn find_courses_root() -> Option<PathBuf> {
     if let Ok(exe_path) = std::env::current_exe() {
-        eprintln!("[DEBUG] EXE path: {:?}", exe_path);
-        
-        // 从 EXE 路径向上查找到项目根目录
-        // debug/release: src-tauri/target/{debug,release}/codestep.exe -> 项目根 (需要 4 层 parent)
-        let possible_roots = [
-            exe_path.parent().unwrap().parent().unwrap().parent().unwrap().parent().unwrap(),
-        ];
-        
-        for root in &possible_roots {
+        if let Some(root) = exe_path
+            .parent()
+            .and_then(|p| p.parent())
+            .and_then(|p| p.parent())
+            .and_then(|p| p.parent())
+        {
             let courses_path = root.join("courses");
-            eprintln!("[DEBUG] Checking root: {:?}, courses: {:?}", root, courses_path);
             if courses_path.exists() {
-                // 检查 typing 目录
-                let mode_dir = courses_path.join(get_mode_dir());
-                if mode_dir.exists() {
-                    eprintln!("[DEBUG] Using mode_dir: {:?}", mode_dir);
-                    return mode_dir;
-                }
-                eprintln!("[DEBUG] Using courses_path: {:?}", courses_path);
-                return courses_path;
+                return Some(courses_path);
             }
         }
     }
 
-    // 回退：尝试相对路径（开发模式）
-    let possible_paths = vec![
-        PathBuf::from("../../.."),
-        PathBuf::from("../.."),
-        PathBuf::from("."),
-    ];
-
-    for base in possible_paths {
-        let courses_path = base.join("courses");
+    for base in ["../../..", "../..", "."] {
+        let courses_path = PathBuf::from(base).join("courses");
         if courses_path.exists() {
-            let mode_dir = courses_path.join(get_mode_dir());
-            if mode_dir.exists() {
-                return mode_dir;
-            }
-            return courses_path;
+            return Some(courses_path);
         }
     }
 
-    eprintln!("[DEBUG] Falling back to 'courses'");
-    PathBuf::from("courses")
+    None
+}
+
+/// 获取指定模式的课程目录。
+/// 如果该模式目录不存在则回退到 courses 根目录（兼容旧结构）。
+fn get_courses_dir_for(mode: &str) -> PathBuf {
+    let Some(root) = find_courses_root() else {
+        return PathBuf::from("courses");
+    };
+    let mode_dir = root.join(mode);
+    if mode_dir.exists() {
+        return mode_dir;
+    }
+    root
 }
 
 // 获取单个课程的根目录
@@ -180,13 +173,11 @@ fn parse_difficulty(diff_str: &str) -> Difficulty {
 }
 
 #[tauri::command]
-pub async fn get_courses() -> Result<Vec<CourseMetadata>, String> {
-    let courses_dir = get_courses_dir();
-
-    eprintln!("[DEBUG get_courses] courses_dir: {:?}, exists: {}", courses_dir, courses_dir.exists());
+pub async fn get_courses(mode: Option<String>) -> Result<Vec<CourseMetadata>, String> {
+    let mode = normalize_mode(mode.as_deref());
+    let courses_dir = get_courses_dir_for(mode);
 
     if !courses_dir.exists() {
-        eprintln!("[DEBUG get_courses] courses_dir does NOT exist, returning empty");
         return Ok(vec![]);
     }
 
@@ -238,16 +229,12 @@ pub async fn get_courses() -> Result<Vec<CourseMetadata>, String> {
     if let Ok(entries) = fs::read_dir(&courses_dir) {
         for entry in entries.flatten() {
             let path = entry.path();
-            eprintln!("[DEBUG get_courses] scanning dir: {:?}", path);
             if path.is_dir() && !path.join("courses").exists() {
                 let course_file = path.join("course.json");
-                eprintln!("[DEBUG get_courses] course_file: {:?}, exists: {}", course_file, course_file.exists());
                 if course_file.exists() {
                     if let Ok(content) = fs::read_to_string(&course_file) {
-                        eprintln!("[DEBUG get_courses] read course_file OK, len={}", content.len());
                         match serde_json::from_str::<LanguageCourseFile>(&content) {
                             Ok(lang_course) => {
-                                eprintln!("[DEBUG get_courses] parsed {} courses from language pack", lang_course.courses.len());
                                 for inner_course in lang_course.courses {
                                     let estimated_minutes = inner_course
                                         .estimated_minutes
@@ -266,36 +253,51 @@ pub async fn get_courses() -> Result<Vec<CourseMetadata>, String> {
                                     });
                                 }
                             }
-                            Err(e) => {
-                                eprintln!("[DEBUG get_courses] FAILED to parse language pack: {:?}", e);
-                            }
+                            Err(_) => {}
                         }
-                    } else {
-                        eprintln!("[DEBUG get_courses] FAILED to read course_file");
                     }
                 }
-            } else if path.is_dir() {
-                eprintln!("[DEBUG get_courses] skipped (has courses/ subdir): {:?}", path);
             }
         }
     }
 
-    eprintln!("[DEBUG get_courses] total courses found: {}", all_courses.len());
     Ok(all_courses)
 }
 
 #[tauri::command]
-pub async fn get_course(course_id: String) -> Result<Course, String> {
-    let courses_dir = get_courses_dir();
+pub async fn get_course(course_id: String, mode: Option<String>) -> Result<Course, String> {
+    let requested_mode = normalize_mode(mode.as_deref());
 
-    if !courses_dir.exists() {
-        return Err("Courses directory not found".to_string());
+    // 优先按请求的模式查找，缺省时按支持的模式依次回落
+    let search_modes: Vec<&str> = if mode.is_some() {
+        let mut modes = vec![requested_mode];
+        for m in SUPPORTED_MODES {
+            if *m != requested_mode {
+                modes.push(m);
+            }
+        }
+        modes
+    } else {
+        SUPPORTED_MODES.to_vec()
+    };
+
+    for m in search_modes {
+        let courses_dir = get_courses_dir_for(m);
+        if !courses_dir.exists() {
+            continue;
+        }
+        if let Ok(course) = try_load_course(&courses_dir, &course_id) {
+            return Ok(course);
+        }
     }
 
-    // 尝试获取课程根目录
-    let course_root = if let Some(root) = get_course_root_dir(&courses_dir, &course_id) {
+    Err(format!("Course not found: {}", course_id))
+}
+
+fn try_load_course(courses_dir: &Path, course_id: &str) -> Result<Course, String> {
+    let course_root = if let Some(root) = get_course_root_dir(courses_dir, course_id) {
         root
-    } else if let Some(root) = find_language_pack_root(&courses_dir, &course_id) {
+    } else if let Some(root) = find_language_pack_root(courses_dir, course_id) {
         root
     } else {
         return Err(format!("Course not found: {}", course_id));
@@ -309,7 +311,6 @@ pub async fn get_course(course_id: String) -> Result<Course, String> {
                 let mut steps: Vec<serde_json::Value> = Vec::new();
 
                 for step_path in &single_course.steps {
-                    // step_path 已经是相对于 course_root 的路径，如 "steps/step-01.json"
                     let full_step_path = course_root.join(step_path);
                     if let Ok(step_content) = fs::read_to_string(&full_step_path) {
                         if let Ok(step_json) =
@@ -343,16 +344,12 @@ pub async fn get_course(course_id: String) -> Result<Course, String> {
         }
 
         // 尝试语言包格式
-        if let Ok(lang_course) =
-            serde_json::from_str::<LanguageCourseFile>(&content)
-        {
-            if let Some(inner_course) =
-                lang_course.courses.into_iter().find(|c| c.id == course_id)
+        if let Ok(lang_course) = serde_json::from_str::<LanguageCourseFile>(&content) {
+            if let Some(inner_course) = lang_course.courses.into_iter().find(|c| c.id == course_id)
             {
                 let mut steps: Vec<serde_json::Value> = Vec::new();
 
                 for step_path in &inner_course.steps {
-                    // step_path 是相对于 course_root 的完整路径，如 "steps/java-syntax-basic/steps/step-01.json"
                     let full_step_path = course_root.join(step_path);
                     if let Ok(step_content) = fs::read_to_string(&full_step_path) {
                         if let Ok(step_json) =
@@ -360,8 +357,6 @@ pub async fn get_course(course_id: String) -> Result<Course, String> {
                         {
                             steps.push(step_json);
                         }
-                    } else {
-                        eprintln!("[DEBUG] Failed to read step file: {:?}", full_step_path);
                     }
                 }
 
@@ -388,16 +383,46 @@ pub async fn get_course(course_id: String) -> Result<Course, String> {
 }
 
 #[tauri::command]
-pub async fn get_step(course_id: String, step_index: u32) -> Result<serde_json::Value, String> {
-    let courses_dir = get_courses_dir();
+pub async fn get_step(
+    course_id: String,
+    step_index: u32,
+    mode: Option<String>,
+) -> Result<serde_json::Value, String> {
+    let requested_mode = normalize_mode(mode.as_deref());
 
-    if !courses_dir.exists() {
-        return Err("Courses directory not found".to_string());
+    let search_modes: Vec<&str> = if mode.is_some() {
+        let mut modes = vec![requested_mode];
+        for m in SUPPORTED_MODES {
+            if *m != requested_mode {
+                modes.push(m);
+            }
+        }
+        modes
+    } else {
+        SUPPORTED_MODES.to_vec()
+    };
+
+    for m in search_modes {
+        let courses_dir = get_courses_dir_for(m);
+        if !courses_dir.exists() {
+            continue;
+        }
+        if let Ok(step) = try_load_step(&courses_dir, &course_id, step_index) {
+            return Ok(step);
+        }
     }
 
-    let course_root = if let Some(root) = get_course_root_dir(&courses_dir, &course_id) {
+    Err(format!("Course not found: {}", course_id))
+}
+
+fn try_load_step(
+    courses_dir: &Path,
+    course_id: &str,
+    step_index: u32,
+) -> Result<serde_json::Value, String> {
+    let course_root = if let Some(root) = get_course_root_dir(courses_dir, course_id) {
         root
-    } else if let Some(root) = find_language_pack_root(&courses_dir, &course_id) {
+    } else if let Some(root) = find_language_pack_root(courses_dir, course_id) {
         root
     } else {
         return Err(format!("Course not found: {}", course_id));
@@ -405,7 +430,6 @@ pub async fn get_step(course_id: String, step_index: u32) -> Result<serde_json::
 
     let course_file = course_root.join("course.json");
     if let Ok(content) = fs::read_to_string(&course_file) {
-        // 优先尝试单课程格式
         if let Ok(single_course) = serde_json::from_str::<SingleCourseFile>(&content) {
             if single_course.id == course_id {
                 if step_index >= single_course.steps.len() as u32 {
@@ -416,7 +440,8 @@ pub async fn get_step(course_id: String, step_index: u32) -> Result<serde_json::
                 let full_step_path = course_root.join(&step_path);
 
                 if let Ok(step_content) = fs::read_to_string(&full_step_path) {
-                    if let Ok(step_json) = serde_json::from_str::<serde_json::Value>(&step_content) {
+                    if let Ok(step_json) = serde_json::from_str::<serde_json::Value>(&step_content)
+                    {
                         return Ok(step_json);
                     } else {
                         return Err("Failed to parse step JSON".to_string());
@@ -427,19 +452,14 @@ pub async fn get_step(course_id: String, step_index: u32) -> Result<serde_json::
             }
         }
 
-        // 尝试语言包格式
-        if let Ok(lang_course) =
-            serde_json::from_str::<LanguageCourseFile>(&content)
-        {
-            if let Some(inner_course) =
-                lang_course.courses.into_iter().find(|c| c.id == course_id)
+        if let Ok(lang_course) = serde_json::from_str::<LanguageCourseFile>(&content) {
+            if let Some(inner_course) = lang_course.courses.into_iter().find(|c| c.id == course_id)
             {
                 if step_index >= inner_course.steps.len() as u32 {
                     return Err(format!("Step index {} out of range", step_index));
                 }
 
                 let step_path = inner_course.steps[step_index as usize].clone();
-                // step_path 是相对于 course_root 的完整路径，如 "steps/java-syntax-basic/steps/step-01.json"
                 let full_step_path = course_root.join(&step_path);
 
                 if let Ok(step_content) = fs::read_to_string(&full_step_path) {
@@ -479,7 +499,7 @@ pub struct DebugInfo {
 }
 
 #[tauri::command]
-pub async fn debug_courses() -> Result<DebugInfo, String> {
+pub async fn debug_courses(mode: Option<String>) -> Result<DebugInfo, String> {
     let current_dir = std::env::current_dir()
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
@@ -488,7 +508,8 @@ pub async fn debug_courses() -> Result<DebugInfo, String> {
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
 
-    let courses_dir = get_courses_dir();
+    let mode = normalize_mode(mode.as_deref());
+    let courses_dir = get_courses_dir_for(mode);
     let courses_subdir = courses_dir.join("courses");
 
     let mut scan_log = Vec::new();

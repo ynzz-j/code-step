@@ -17,6 +17,7 @@ export interface ExecutionResult {
   output: string;
   error: string | null;
   execution_time_ms: number;
+  error_type: 'None' | 'CompileError' | 'RuntimeError' | 'Timeout' | 'Unsupported';
 }
 
 export interface BaseStep {

@@ -1,8 +1,8 @@
 pub mod sandbox;
 
-use crate::models::executor::ExecutionResult;
-use std::process::Command;
-use std::time::{Duration, Instant};
+use crate::models::executor::{ExecutionErrorType, ExecutionResult};
+use std::process::Stdio;
+use std::time::Instant;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -19,15 +19,14 @@ pub enum ExecutionError {
     UnsupportedLanguage(String),
 }
 
-pub struct Executor {
-    timeout: Duration,
-}
+const RUN_TIMEOUT_SECS: u64 = 5;
+const COMPILE_TIMEOUT_SECS: u64 = 10;
+
+pub struct Executor;
 
 impl Executor {
     pub fn new() -> Self {
-        Self {
-            timeout: Duration::from_secs(5),
-        }
+        Self
     }
 
     pub async fn execute(
@@ -35,110 +34,251 @@ impl Executor {
         language: &str,
         code: &str,
     ) -> Result<ExecutionResult, ExecutionError> {
-        match language {
-            "java" => self.execute_java(code).await,
-            "python" => self.execute_python(code).await,
-            "javascript" => self.execute_javascript(code).await,
-            _ => Err(ExecutionError::UnsupportedLanguage(language.to_string())),
-        }
-    }
-
-    async fn execute_java(&self, code: &str) -> Result<ExecutionResult, ExecutionError> {
-        let temp_dir = std::env::temp_dir().join("codestep_exec");
+        let id = uuid::Uuid::new_v4().to_string();
+        let temp_dir = std::env::temp_dir().join(format!("codestep_exec_{}", id));
         std::fs::create_dir_all(&temp_dir)?;
 
+        let result = match language {
+            "java" => self.execute_java_with_timeout(&temp_dir, code).await,
+            "python" => self.execute_python_with_timeout(&temp_dir, code).await,
+            "javascript" => self.execute_javascript_with_timeout(&temp_dir, code).await,
+            _ => Err(ExecutionError::UnsupportedLanguage(language.to_string())),
+        };
+
+        // 无论成功失败都清理临时目录
+        let _ = std::fs::remove_dir_all(&temp_dir);
+        result
+    }
+
+    // ============ Java ============
+
+    async fn execute_java_with_timeout(
+        &self,
+        temp_dir: &std::path::Path,
+        code: &str,
+    ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("Main.java");
         std::fs::write(&file_path, code)?;
 
-        // 编译
-        let compile_output = Command::new("javac")
-            .arg(&file_path)
-            .output()?;
+        let start = Instant::now();
+
+        // 编译（有独立超时）
+        let compile_result = tokio::time::timeout(
+            std::time::Duration::from_secs(COMPILE_TIMEOUT_SECS),
+            self.compile_java(&file_path),
+        )
+        .await;
+
+        let compile_output = match compile_result {
+            Ok(Ok(output)) => output,
+            Ok(Err(e)) => {
+                return Ok(ExecutionResult {
+                    success: false,
+                    output: String::new(),
+                    error: Some(e.to_string()),
+                    execution_time_ms: start.elapsed().as_millis() as u64,
+                    error_type: ExecutionErrorType::CompileError,
+                });
+            }
+            Err(_) => {
+                return Ok(ExecutionResult {
+                    success: false,
+                    output: String::new(),
+                    error: Some(format!("编译超时 ({}s)", COMPILE_TIMEOUT_SECS)),
+                    execution_time_ms: start.elapsed().as_millis() as u64,
+                    error_type: ExecutionErrorType::Timeout,
+                });
+            }
+        };
 
         if !compile_output.status.success() {
+            let stderr = String::from_utf8_lossy(&compile_output.stderr).to_string();
             return Ok(ExecutionResult {
                 success: false,
                 output: String::new(),
-                error: Some(String::from_utf8_lossy(&compile_output.stderr).to_string()),
-                execution_time_ms: 0,
+                error: Some(stderr),
+                execution_time_ms: start.elapsed().as_millis() as u64,
+                error_type: ExecutionErrorType::CompileError,
             });
         }
 
-        // 运行
-        let start = Instant::now();
-        let run_output = Command::new("java")
-            .current_dir(&temp_dir)
-            .arg("Main")
-            .output()?;
+        // 运行（有独立超时）
+        let run_start = Instant::now();
+        let run_result = tokio::time::timeout(
+            std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
+            self.run_java(temp_dir),
+        )
+        .await;
 
-        let elapsed = start.elapsed().as_millis() as u64;
+        let run_elapsed = run_start.elapsed().as_millis() as u64;
 
-        // 清理
-        let _ = std::fs::remove_dir_all(&temp_dir);
-
-        Ok(ExecutionResult {
-            success: run_output.status.success(),
-            output: String::from_utf8_lossy(&run_output.stdout).to_string(),
-            error: if run_output.status.success() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(&run_output.stderr).to_string())
-            },
-            execution_time_ms: elapsed,
-        })
+        match run_result {
+            Ok(Ok(output)) => Ok(ExecutionResult {
+                success: output.status.success(),
+                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                error: if output.status.success() {
+                    None
+                } else {
+                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                },
+                execution_time_ms: run_elapsed,
+                error_type: if output.status.success() {
+                    ExecutionErrorType::None
+                } else {
+                    ExecutionErrorType::RuntimeError
+                },
+            }),
+            Ok(Err(e)) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(e.to_string()),
+                execution_time_ms: run_elapsed,
+                error_type: ExecutionErrorType::RuntimeError,
+            }),
+            Err(_) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(format!("执行超时 ({}s)", RUN_TIMEOUT_SECS)),
+                execution_time_ms: run_elapsed,
+                error_type: ExecutionErrorType::Timeout,
+            }),
+        }
     }
 
-    async fn execute_python(&self, code: &str) -> Result<ExecutionResult, ExecutionError> {
-        let temp_dir = std::env::temp_dir().join("codestep_exec");
-        std::fs::create_dir_all(&temp_dir)?;
+    async fn compile_java(
+        &self,
+        file_path: &std::path::Path,
+    ) -> Result<std::process::Output, std::io::Error> {
+        tokio::process::Command::new("javac")
+            .arg(file_path)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+    }
 
+    async fn run_java(
+        &self,
+        temp_dir: &std::path::Path,
+    ) -> Result<std::process::Output, std::io::Error> {
+        tokio::process::Command::new("java")
+            .current_dir(temp_dir)
+            .arg("Main")
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+    }
+
+    // ============ Python ============
+
+    async fn execute_python_with_timeout(
+        &self,
+        temp_dir: &std::path::Path,
+        code: &str,
+    ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("main.py");
         std::fs::write(&file_path, code)?;
 
         let start = Instant::now();
-        let output = Command::new("python")
-            .arg(&file_path)
-            .output()?;
+        let run_result = tokio::time::timeout(
+            std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
+            tokio::process::Command::new("python")
+                .arg(&file_path)
+                .stdout(Stdio::piped())
+                .stderr(Stdio::piped())
+                .output(),
+        )
+        .await;
 
         let elapsed = start.elapsed().as_millis() as u64;
-        let _ = std::fs::remove_dir_all(&temp_dir);
 
-        Ok(ExecutionResult {
-            success: output.status.success(),
-            output: String::from_utf8_lossy(&output.stdout).to_string(),
-            error: if output.status.success() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(&output.stderr).to_string())
-            },
-            execution_time_ms: elapsed,
-        })
+        match run_result {
+            Ok(Ok(output)) => Ok(ExecutionResult {
+                success: output.status.success(),
+                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                error: if output.status.success() {
+                    None
+                } else {
+                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                },
+                execution_time_ms: elapsed,
+                error_type: if output.status.success() {
+                    ExecutionErrorType::None
+                } else {
+                    ExecutionErrorType::RuntimeError
+                },
+            }),
+            Ok(Err(e)) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(e.to_string()),
+                execution_time_ms: elapsed,
+                error_type: ExecutionErrorType::RuntimeError,
+            }),
+            Err(_) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(format!("执行超时 ({}s)", RUN_TIMEOUT_SECS)),
+                execution_time_ms: elapsed,
+                error_type: ExecutionErrorType::Timeout,
+            }),
+        }
     }
 
-    async fn execute_javascript(&self, code: &str) -> Result<ExecutionResult, ExecutionError> {
-        let temp_dir = std::env::temp_dir().join("codestep_exec");
-        std::fs::create_dir_all(&temp_dir)?;
+    // ============ JavaScript ============
 
+    async fn execute_javascript_with_timeout(
+        &self,
+        temp_dir: &std::path::Path,
+        code: &str,
+    ) -> Result<ExecutionResult, ExecutionError> {
         let file_path = temp_dir.join("main.js");
         std::fs::write(&file_path, code)?;
 
         let start = Instant::now();
-        let output = Command::new("node")
-            .arg(&file_path)
-            .output()?;
+        let run_result = tokio::time::timeout(
+            std::time::Duration::from_secs(RUN_TIMEOUT_SECS),
+            tokio::process::Command::new("node")
+                .arg(&file_path)
+                .stdout(Stdio::piped())
+                .stderr(Stdio::piped())
+                .output(),
+        )
+        .await;
 
         let elapsed = start.elapsed().as_millis() as u64;
-        let _ = std::fs::remove_dir_all(&temp_dir);
 
-        Ok(ExecutionResult {
-            success: output.status.success(),
-            output: String::from_utf8_lossy(&output.stdout).to_string(),
-            error: if output.status.success() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(&output.stderr).to_string())
-            },
-            execution_time_ms: elapsed,
-        })
+        match run_result {
+            Ok(Ok(output)) => Ok(ExecutionResult {
+                success: output.status.success(),
+                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                error: if output.status.success() {
+                    None
+                } else {
+                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                },
+                execution_time_ms: elapsed,
+                error_type: if output.status.success() {
+                    ExecutionErrorType::None
+                } else {
+                    ExecutionErrorType::RuntimeError
+                },
+            }),
+            Ok(Err(e)) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(e.to_string()),
+                execution_time_ms: elapsed,
+                error_type: ExecutionErrorType::RuntimeError,
+            }),
+            Err(_) => Ok(ExecutionResult {
+                success: false,
+                output: String::new(),
+                error: Some(format!("执行超时 ({}s)", RUN_TIMEOUT_SECS)),
+                execution_time_ms: elapsed,
+                error_type: ExecutionErrorType::Timeout,
+            }),
+        }
     }
 }

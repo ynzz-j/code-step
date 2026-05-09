@@ -14,12 +14,18 @@ export function WelcomePage() {
           通过「逐步显示、手敲代码、即时验证」的学习模式，
           帮助你建立真正的编程能力和肌肉记忆。
         </p>
-        <div className="flex items-center justify-center gap-4 pt-4">
+        <div className="flex items-center justify-center gap-4 pt-4 flex-wrap">
           <Link
-            to="/courses"
+            to="/courses?mode=coding"
             className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
           >
-            开始学习
+            编程模式
+          </Link>
+          <Link
+            to="/courses?mode=typing"
+            className="px-6 py-3 bg-success-500 hover:bg-success-600 text-white rounded-lg font-medium transition-colors"
+          >
+            打字模式
           </Link>
           <Link
             to="/about"

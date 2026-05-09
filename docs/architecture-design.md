@@ -1,5 +1,7 @@
 # CodeStep - 编程学习应用架构设计文档
 
+> ⚠️ **文档漂移提示（2026-05-09）**：本文档描述的目标架构与当前代码实现存在差异。未落地的模块包括：envStore/envService（环境检测）、CodeEditor（coding 模式编辑器）、userStore（成就系统）、settingsStore、validationService、statsService 等。当前一期实现以 courseStore（大 store）+ TypingEditor（仅 typing 模式）为主。本文档保留为架构目标参考，不建议作为当前代码的准确映射。
+
 > 版本：V1.3 | 日期：2026-05-08 | 状态：更新中
 >
 > **V1.3 变更摘要**：新增音游风格连击系统

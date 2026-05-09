@@ -3,3 +3,4 @@
 /.trae/
 /node_modules/
 /src-tauri/target/
+/.idea/

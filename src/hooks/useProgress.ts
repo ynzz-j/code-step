@@ -1,7 +1,7 @@
-import { useCourseStore } from '@/stores/courseStore';
+import { useCourseSessionStore } from '@/stores/courseSessionStore';
 
 export function useProgress() {
-  const { currentCourse, currentStepIndex, completedSteps } = useCourseStore();
+  const { currentCourse, currentStepIndex, completedSteps } = useCourseSessionStore();
 
   const totalSteps = currentCourse?.steps.length ?? 0;
   const completedCount = completedSteps.size;

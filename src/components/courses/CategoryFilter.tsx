@@ -1,11 +1,10 @@
-import { useCourseStore } from '@/stores/courseStore';
+import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import {
   ALL_CATEGORIES,
   COURSE_CATEGORY_LABELS,
   ALL_DIFFICULTIES,
   DIFFICULTY_LABELS,
 } from '@/types';
-import type { Difficulty } from '@/types';
 
 const LANGUAGES = [
   { value: 'all', label: '全部语言' },
@@ -45,7 +44,7 @@ interface CategoryFilterProps {
 
 export function CategoryFilter({ className = '' }: CategoryFilterProps) {
   const { selectedCategory, selectedLanguage, selectedDifficulty, setCategory, setLanguage, setDifficulty, courses } =
-    useCourseStore();
+    useCourseCatalogStore();
 
   // 统计各分类的课程数量
   const categoryCounts: Record<string, number> = { all: courses.length };

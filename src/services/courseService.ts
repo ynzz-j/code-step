@@ -1,6 +1,17 @@
 import { invoke } from '@tauri-apps/api/core';
 import type { Course, CourseMetadata, CourseCategory, Difficulty, Step } from '@/types';
 
+export type CourseMode = 'typing' | 'coding';
+export const DEFAULT_COURSE_MODE: CourseMode = 'typing';
+
+export function isCourseMode(value: unknown): value is CourseMode {
+  return value === 'typing' || value === 'coding';
+}
+
+export function normalizeCourseMode(value: unknown): CourseMode {
+  return isCourseMode(value) ? value : DEFAULT_COURSE_MODE;
+}
+
 interface CourseFromBackend {
   id: string;
   title: string;
@@ -72,13 +83,9 @@ function transformCourse(backend: CourseFromBackend): Course {
 
 class CourseService {
   // 直接调用 Tauri 后端，不再使用 mock 数据
-  async getCourses(): Promise<CourseMetadata[]> {
+  async getCourses(mode?: CourseMode): Promise<CourseMetadata[]> {
     try {
-      const debug = await invoke<any>('debug_courses');
-      console.log('[DEBUG] Course paths:', JSON.stringify(debug, null, 2));
-
-      const result = await invoke<CourseMetadataFromBackend[]>('get_courses');
-      console.log('[DEBUG] get_courses returned:', result.length, 'courses');
+      const result = await invoke<CourseMetadataFromBackend[]>('get_courses', { mode });
       return result.map(transformCourseMetadata);
     } catch (error) {
       console.error('Failed to get courses from Tauri:', error);
@@ -86,9 +93,9 @@ class CourseService {
     }
   }
 
-  async getCourse(courseId: string): Promise<Course> {
+  async getCourse(courseId: string, mode?: CourseMode): Promise<Course> {
     try {
-      const result = await invoke<CourseFromBackend>('get_course', { courseId });
+      const result = await invoke<CourseFromBackend>('get_course', { courseId, mode });
       return transformCourse(result);
     } catch (error) {
       console.error('Failed to get course from Tauri:', error);
@@ -96,9 +103,9 @@ class CourseService {
     }
   }
 
-  async getStep(courseId: string, stepIndex: number): Promise<Step> {
+  async getStep(courseId: string, stepIndex: number, mode?: CourseMode): Promise<Step> {
     try {
-      const result = await invoke<Step>('get_step', { courseId, stepIndex });
+      const result = await invoke<Step>('get_step', { courseId, stepIndex, mode });
       return {
         ...result,
         id: `${courseId}-${stepIndex + 1}`,
@@ -139,22 +146,6 @@ class CourseService {
     }
   }
 
-  async checkCourseUpdates(): Promise<CourseUpdate[]> {
-    try {
-      return await invoke<CourseUpdate[]>('check_course_updates');
-    } catch (error) {
-      console.error('Failed to check updates:', error);
-      return [];
-    }
-  }
-}
-
-export interface CourseUpdate {
-  course_id: string;
-  current_version: string;
-  latest_version: string;
-  changelog: string;
-  download_url?: string;
 }
 
 export const courseService = new CourseService();

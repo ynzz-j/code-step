@@ -63,11 +63,6 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
     return () => clearTimeout(timer);
   }, []);
 
-  // 点击编辑器区域时也确保音效就绪
-  const handleContainerClick = useCallback(() => {
-    initAudioContext();
-  }, []);
-
   // 使用现成的 useTypingStats hook
   const { wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, recordKeystroke, reset: resetStats } = useTypingStats();
 

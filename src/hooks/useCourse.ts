@@ -1,17 +1,23 @@
-import { useCourseStore } from '@/stores/courseStore';
+import { useCourseSessionStore } from '@/stores/courseSessionStore';
+import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 
 export function useCourse() {
-  const store = useCourseStore();
+  const courseCatalog = useCourseCatalogStore();
+  const session = useCourseSessionStore();
 
   return {
-    courses: store.courses,
-    currentCourse: store.currentCourse,
-    currentStep: store.currentCourse?.steps[store.currentStepIndex] ?? null,
-    currentStepIndex: store.currentStepIndex,
-    loadCourses: store.loadCourses,
-    startCourse: store.startCourse,
-    nextStep: store.nextStep,
-    prevStep: store.prevStep,
-    completeStep: store.completeStep,
+    courses: courseCatalog.courses,
+    currentCourse: session.currentCourse,
+    currentStep: session.currentCourse?.steps[session.currentStepIndex] ?? null,
+    currentStepIndex: session.currentStepIndex,
+    loadCourses: courseCatalog.loadCourses,
+    startCourse: session.startCourse,
+    nextStep: session.nextStep,
+    prevStep: session.prevStep,
+    completeStep: (index: number) => {
+      const newCompleted = new Set(session.completedSteps);
+      newCompleted.add(index);
+      useCourseSessionStore.setState({ completedSteps: newCompleted });
+    },
   };
 }
