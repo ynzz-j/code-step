@@ -52,6 +52,15 @@ fn normalize_mode(mode: Option<&str>) -> &'static str {
 
 /// 查找 courses 根目录（不含 mode 子目录）
 fn find_courses_root() -> Option<PathBuf> {
+    // 1. 首先检查 Tauri 资源目录（生产环境）
+    if let Ok(resource_dir) = tauri::api::path::resource_dir() {
+        let courses_path = resource_dir.join("courses");
+        if courses_path.exists() {
+            return Some(courses_path);
+        }
+    }
+
+    // 2. 检查可执行文件所在目录（开发环境）
     if let Ok(exe_path) = std::env::current_exe() {
         if let Some(root) = exe_path
             .parent()
@@ -66,6 +75,7 @@ fn find_courses_root() -> Option<PathBuf> {
         }
     }
 
+    // 3. 尝试相对路径（开发环境）
     for base in ["../../..", "../..", "."] {
         let courses_path = PathBuf::from(base).join("courses");
         if courses_path.exists() {
