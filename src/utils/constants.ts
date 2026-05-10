@@ -13,6 +13,6 @@ export const KEYBOARD_SHORTCUTS = {
   ANSWER: 'a',
   FOCUS_MODE: 'f',
   EXIT_FOCUS: 'Escape',
-  PREV_STEP: 'ArrowUp',
-  NEXT_STEP: 'ArrowDown',
+  PREV_STEP: 'ArrowLeft',
+  NEXT_STEP: 'ArrowRight',
 } as const;

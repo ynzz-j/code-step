@@ -1,5 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { isCourseMode } from '@/services/courseService';
+import { useState, useEffect } from 'react';
+import { getSoundStatus, setSoundEnabled } from '@/utils/soundEffects';
 
 const navLinks = [
   { path: '/', label: '首页' },
@@ -10,6 +12,17 @@ const navLinks = [
 
 export function Header() {
   const location = useLocation();
+  const [soundOn, setSoundOn] = useState(true);
+
+  useEffect(() => {
+    setSoundOn(getSoundStatus().enabled);
+  }, []);
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundEnabled(next);
+  };
 
   // 如果当前 URL 已经带 mode=X，点击"课程"时透传该参数
   const params = new URLSearchParams(location.search);
@@ -41,7 +54,15 @@ export function Header() {
           })}
         </nav>
       </div>
+
       <div className="flex items-center gap-3">
+        <button
+          onClick={toggleSound}
+          title={soundOn ? '关闭音效' : '开启音效'}
+          className="w-8 h-8 flex items-center justify-center rounded-lg text-lg hover:bg-gray-700/50 transition-colors"
+        >
+          {soundOn ? '🔊' : '🔇'}
+        </button>
         <span className="text-xs text-gray-500">v0.1.0</span>
       </div>
     </header>

@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { CategoryFilter } from '@/components/courses/CategoryFilter';
 import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
 import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata } from '@/types';
+import { playSound } from '@/utils/soundEffects';
 
 const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
   coding: {
@@ -47,7 +48,8 @@ function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode
   return (
     <Link
       to={`/learn/${course.id}?mode=${mode}`}
-      className="block p-6 rounded-xl bg-gray-800/50 border border-gray-700/50 hover:border-primary-500/50 transition-all hover:shadow-lg hover:shadow-primary-500/5"
+      onClick={() => playSound('click')}
+      className="group block p-6 rounded-xl bg-gray-800/60 border border-gray-700/50 hover:border-blue-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 min-w-0">
@@ -119,9 +121,26 @@ export function CoursesPage() {
     selectedDifficulty,
   } = useCourseCatalogStore();
 
+  // 背景粒子
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; duration: number; delay: number; size: number; color: string }>>([]);
+
   useEffect(() => {
     loadCourses(mode);
   }, [loadCourses, mode]);
+
+  useEffect(() => {
+    const colors = ['bg-blue-400/15', 'bg-cyan-400/15', 'bg-indigo-400/15', 'bg-sky-400/15'];
+    const newParticles = Array.from({ length: 24 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      duration: 4 + Math.random() * 6,
+      delay: Math.random() * 3,
+      size: 1 + Math.random() * 2,
+      color: colors[i % colors.length],
+    }));
+    setParticles(newParticles);
+  }, []);
 
   // 筛选课程（由 courses + filters 计算，不再存状态）
   const filteredCourses = courses.filter((c) => {
@@ -144,12 +163,32 @@ export function CoursesPage() {
   });
 
   return (
-    <div className="h-full overflow-auto px-8 py-8 animate-fade-in">
-      <div className="max-w-4xl mx-auto">
+    <div className="relative h-full overflow-auto px-8 py-8 animate-fade-in">
+      {/* 背景粒子 */}
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className={`absolute rounded-full animate-float pointer-events-none ${p.color}`}
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+
+      {/* 微弱渐变光晕 */}
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative z-10 max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-bold">{modeLabel.title}</h1>
           <Link
             to="/"
+            onClick={() => playSound('click')}
             className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
           >
             &larr; 返回首页

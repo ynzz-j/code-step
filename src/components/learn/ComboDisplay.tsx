@@ -10,6 +10,7 @@ export function ComboDisplay() {
   const [comboFadingOut, setComboFadingOut] = useState(false);
   const [newBestVisible, setNewBestVisible] = useState(false);
   const [newBestFadingOut, setNewBestFadingOut] = useState(false);
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const prevComboRef = useRef(0);
   const prevMaxRef = useRef(0);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -27,6 +28,19 @@ export function ComboDisplay() {
     };
   }, []);
 
+  // 生成粒子效果
+  const spawnParticles = useCallback((count: number) => {
+    const newParticles = Array.from({ length: count }, (_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+    }));
+    setParticles(prev => [...prev, ...newParticles]);
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+    }, 600);
+  }, []);
+
   useEffect(() => {
     // 首次有连击时显示
     if (currentCombo > 0 && !comboVisible) {
@@ -38,13 +52,12 @@ export function ComboDisplay() {
     if (currentCombo > prevComboRef.current) {
       // 连击增长
       setAnimEvent('increment');
+      spawnParticles(Math.min(currentCombo * 2, 20));
 
       // 检查是否打破最大记录
       if (currentCombo > prevMaxRef.current && prevMaxRef.current > 0) {
-        // 先确保淡出状态重置
         setNewBestFadingOut(false);
         setNewBestVisible(true);
-        // 1.8s 后开始淡出，0.5s 淡出动画后移除
         addTimer(() => {
           setNewBestFadingOut(true);
           addTimer(() => setNewBestVisible(false), 500);
@@ -53,11 +66,11 @@ export function ComboDisplay() {
     } else if (currentCombo === 0 && prevComboRef.current > 0) {
       // 连击中断
       setAnimEvent('reset');
+      spawnParticles(5);
 
       // 抖动动画结束后开始淡出 combo 数字
       addTimer(() => {
         setComboFadingOut(true);
-        // 淡出动画 400ms 后移除
         addTimer(() => {
           setComboVisible(false);
           setComboFadingOut(false);
@@ -68,7 +81,7 @@ export function ComboDisplay() {
 
     prevComboRef.current = currentCombo;
     prevMaxRef.current = maxCombo;
-  }, [currentCombo, maxCombo]);
+  }, [currentCombo, maxCombo, spawnParticles]);
 
   // 重置 animEvent（bounce 完成后）
   useEffect(() => {
@@ -83,21 +96,40 @@ export function ComboDisplay() {
     if (currentCombo >= 30) {
       return {
         scale: 'scale-150',
+        glow: 'combo-glow-ultra',
+        textClass: 'text-yellow-300',
+        particleCount: 20,
+      };
+    }
+    if (currentCombo >= 20) {
+      return {
+        scale: 'scale-125',
         glow: 'combo-glow-high',
-        textClass: 'text-primary-300',
+        textClass: 'text-yellow-400',
+        particleCount: 15,
       };
     }
     if (currentCombo >= 10) {
       return {
         scale: 'scale-110',
         glow: 'combo-glow-mid',
-        textClass: 'text-primary-400',
+        textClass: 'text-blue-400',
+        particleCount: 10,
+      };
+    }
+    if (currentCombo >= 5) {
+      return {
+        scale: 'scale-105',
+        glow: 'combo-glow-low',
+        textClass: 'text-blue-300',
+        particleCount: 5,
       };
     }
     return {
       scale: 'scale-100',
       glow: '',
       textClass: 'text-gray-200',
+      particleCount: 0,
     };
   };
 
@@ -106,12 +138,24 @@ export function ComboDisplay() {
   // 不显示连击数字的情况
   if (!comboVisible && currentCombo === 0) {
     return (
-      <div className="flex items-center justify-center h-16" />
+      <div className="flex items-center justify-center h-20" />
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-16 relative">
+    <div className="flex flex-col items-center justify-center h-20 relative">
+      {/* 粒子效果 */}
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-particle pointer-events-none"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+          }}
+        />
+      ))}
+
       {/* NEW BEST! 标签 */}
       {newBestVisible && (
         <div
@@ -121,8 +165,8 @@ export function ComboDisplay() {
               : 'animate-combo-newbest-in'
           }`}
         >
-          <span className="px-3 py-1 text-sm font-bold text-warning-400 bg-warning-500/20 rounded-full border border-warning-500/30">
-            NEW BEST!
+          <span className="px-3 py-1 text-sm font-bold text-yellow-400 bg-yellow-500/20 rounded-full border border-yellow-500/30 animate-pulse">
+            🎯 NEW BEST!
           </span>
         </div>
       )}
@@ -130,7 +174,7 @@ export function ComboDisplay() {
       {/* Combo 数字 */}
       <div
         className={`
-          flex items-baseline gap-1 font-mono font-bold select-none
+          flex items-baseline gap-2 font-mono font-bold select-none
           transition-all duration-300
           ${comboFadingOut ? 'opacity-0 scale-75' : 'opacity-100'}
           ${style.scale}
@@ -140,16 +184,20 @@ export function ComboDisplay() {
           ${animEvent === 'reset' ? 'animate-combo-shake' : ''}
         `}
       >
-        <span className="text-sm opacity-70 tracking-widest">COMBO</span>
-        <span className="text-3xl">
+        <span className="text-sm opacity-70 tracking-widest font-normal">COMBO</span>
+        <span className="text-4xl md:text-5xl">
           x{currentCombo}
         </span>
       </div>
 
-      {/* 底部状态栏：最大连击 */}
+      {/* 底部状态栏：最大连击 + 等级 */}
       {maxCombo > 0 && currentCombo > 0 && !comboFadingOut && (
-        <div className="text-xs text-gray-500 mt-1 transition-opacity duration-300">
-          Combo最大: {maxCombo}
+        <div className="text-xs text-gray-500 mt-1 transition-opacity duration-300 flex items-center gap-2">
+          <span>最佳: {maxCombo}</span>
+          {currentCombo >= 30 && <span className="text-yellow-400">👑 传奇</span>}
+          {currentCombo >= 20 && currentCombo < 30 && <span className="text-purple-400">🔥 大师</span>}
+          {currentCombo >= 10 && currentCombo < 20 && <span className="text-blue-400">⚡ 高手</span>}
+          {currentCombo >= 5 && currentCombo < 10 && <span className="text-green-400">✨ 进阶</span>}
         </div>
       )}
     </div>

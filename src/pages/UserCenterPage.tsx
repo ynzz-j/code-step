@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import type { UserLearningSummary, CourseProgressSummary } from '@/types/user';
+import { playSound } from '@/utils/soundEffects';
 
 type StatusFilter = 'all' | 'in_progress' | 'completed';
 
@@ -72,10 +73,11 @@ function CourseProgressCard({ progress }: { progress: CourseProgressSummary }) {
   return (
     <Link
       to={`/learn/${progress.courseId}?mode=${progress.courseMode}`}
-      className={`block p-5 rounded-xl border transition-all hover:shadow-lg ${
+      onClick={() => playSound('click')}
+      className={`block p-5 rounded-xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${
         isComplete
-          ? 'bg-success-500/5 border-success-500/20 hover:border-success-500/40'
-          : 'bg-gray-800/50 border-gray-700/50 hover:border-primary-500/40'
+          ? 'bg-gradient-to-br from-green-500/5 to-emerald-500/5 border-green-500/20 hover:border-green-500/40'
+          : 'bg-gray-800/60 border-gray-700/50 hover:border-blue-500/40'
       }`}
     >
       <div className="flex items-start justify-between mb-3">
@@ -201,7 +203,7 @@ export function UserCenterPage() {
               langCounts[lang.value] > 0 || lang.value === 'all' ? (
                 <button
                   key={lang.value}
-                  onClick={() => setSelectedLanguage(lang.value)}
+                  onClick={() => { setSelectedLanguage(lang.value); playSound('click'); }}
                   className={`px-2.5 py-1 rounded text-xs font-medium transition-colors border ${
                     selectedLanguage === lang.value
                       ? 'border-primary-500/50 bg-primary-500/10 text-primary-400'
@@ -222,7 +224,7 @@ export function UserCenterPage() {
             {STATUS_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => setSelectedStatus(opt.value)}
+                  onClick={() => { setSelectedStatus(opt.value); playSound('click'); }}
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   selectedStatus === opt.value
                     ? 'bg-primary-500 text-white'

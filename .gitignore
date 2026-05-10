@@ -30,6 +30,8 @@ build/
 /.idea/
 /task-artifacts/
 *.local
+/.workbuddy/
+/.claude/
 
 # environment
 .env

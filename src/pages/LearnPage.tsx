@@ -107,13 +107,8 @@ export function LearnPage() {
 
   useKeyboardShortcuts(
     {
-      arrowup: prevStep,
-      pagedown: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
-      arrowdown: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
-      pageup: prevStep,
-      j: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
-      k: prevStep,
-      tab: undefined,
+      arrowleft: prevStep,
+      arrowright: (stepInputDone || currentStepCompleted) ? handleGoNext : undefined,
       escape: () => navigate(`/courses${coursesQuery}`),
     },
     !!currentCourse,
@@ -188,13 +183,13 @@ export function LearnPage() {
                 <div className="text-4xl">&#10003;</div>
                 <h3 className="text-xl font-bold text-success-400">步骤完成！</h3>
                 <p className="text-sm text-gray-400">
-                  {isLastStep ? '恭喜完成全部课程！' : '按 ↓ 或 J 键继续'}
+                  {isLastStep ? '恭喜完成全部课程！' : '按 → 键继续'}
                 </p>
                 <button
                   onClick={handleGoNext}
                   className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
                 >
-                  {isLastStep ? '查看结果' : '下一步 ↓'}
+                  {isLastStep ? '查看结果' : '下一步 →'}
                 </button>
               </div>
             </div>
@@ -209,7 +204,7 @@ export function LearnPage() {
           disabled={currentStepIndex === 0}
           className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          &uarr; 上一步
+          &larr; 上一步
         </button>
         <span className="text-xs text-gray-500">
           {currentStepIndex + 1} / {currentCourse.steps.length}
@@ -219,7 +214,7 @@ export function LearnPage() {
           disabled={!canGoNext}
           className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          {isLastStep ? '完成' : '下一步 ↓'}
+          {isLastStep ? '完成' : '下一步 →'}
         </button>
       </div>
     </div>
