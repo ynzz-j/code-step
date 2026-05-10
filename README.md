@@ -1,9 +1,9 @@
 # CodeStep - 一步步学编程
 
-[![Release](https://img.shields.io/github/v/release/OWNER/REPO?style=flat-square)](https://github.com/OWNER/REPO/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/OWNER/REPO/ci.yml?branch=main&style=flat-square)](https://github.com/OWNER/REPO/actions)
-[![License](https://img.shields.io/github/license/OWNER/REPO?style=flat-square)](LICENSE)
-[![Downloads](https://img.shields.io/github/downloads/OWNER/REPO/total?style=flat-square)](https://github.com/OWNER/REPO/releases)
+[![Release](https://img.shields.io/github/v/release/ynzz-j/code-step?style=flat-square)](https://github.com/ynzz-j/code-step/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/ynzz-j/code-step/ci.yml?branch=main&style=flat-square)](https://github.com/ynzz-j/code-step/actions)
+[![License](https://img.shields.io/github/license/ynzz-j/code-step?style=flat-square)](LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/ynzz-j/code-step/total?style=flat-square)](https://github.com/ynzz-j/code-step/releases)
 
 一个帮助你学习编程的桌面应用程序。通过一步步的练习和即时反馈，让编程学习变得更加高效和有趣。
 
@@ -26,7 +26,7 @@ English | [中文](#中文)
 
 下载最新版本的 `.msi` 或 `.exe` 安装包：
 
-1. 前往 [Releases](https://github.com/OWNER/REPO/releases) 页面
+1. 前往 [Releases](https://github.com/ynzz-j/code-step/releases) 页面
 2. 下载最新的 `.msi` 或 `.exe` 文件
 3. 运行安装程序，按照向导完成安装
 
@@ -34,8 +34,8 @@ English | [中文](#中文)
 
 ```bash
 # 克隆仓库
-git clone https://github.com/OWNER/REPO.git
-cd REPO
+git clone https://github.com/ynzz-j/code-step.git
+cd code-step
 
 # 安装依赖
 npm install
@@ -118,8 +118,8 @@ cd src-tauri && cargo test
 
 ## 📧 Contact
 
-- 提交 Issue: [GitHub Issues](https://github.com/OWNER/REPO/issues)
-- 讨论区: [GitHub Discussions](https://github.com/OWNER/REPO/discussions)
+- 提交 Issue: [GitHub Issues](https://github.com/ynzz-j/code-step/issues)
+- 讨论区: [GitHub Discussions](https://github.com/ynzz-j/code-step/discussions)
 
 ---
 
@@ -140,7 +140,7 @@ CodeStep 是一个帮助你学习编程的桌面应用程序。通过分步练�
 
 ### 安装
 
-访问 [Releases](https://github.com/OWNER/REPO/releases) 页面下载最新版本。
+访问 [Releases](https://github.com/ynzz-j/code-step/releases) 页面下载最新版本。
 
 ### 开发
 

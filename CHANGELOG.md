@@ -54,5 +54,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Security fixes
 ```
 
-[Unreleased]: https://github.com/OWNER/REPO/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/OWNER/REPO/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ynzz-j/code-step/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ynzz-j/code-step/releases/tag/v0.1.0

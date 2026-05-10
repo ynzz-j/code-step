@@ -21,14 +21,14 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ### Reporting Bugs
 
-- Check if the bug has already been reported in [Issues](https://github.com/OWNER/REPO/issues)
+- Check if the bug has already been reported in [Issues](https://github.com/ynzz-j/code-step/issues)
 - Use the bug report template when creating a new issue
 - Include detailed steps to reproduce the bug
 - Include screenshots if applicable
 
 ### Suggesting Enhancements
 
-- Check if the enhancement has already been suggested in [Issues](https://github.com/OWNER/REPO/issues)
+- Check if the enhancement has already been suggested in [Issues](https://github.com/ynzz-j/code-step/issues)
 - Use the feature request template
 - Explain why this enhancement would be useful
 
