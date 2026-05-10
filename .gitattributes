@@ -1,0 +1,40 @@
+# Ensure consistent line endings across platforms
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.md text
+*.txt text
+*.json text
+*.ts text
+*.tsx text
+*.js text
+*.jsx text
+*.css text
+*.html text
+*.yml text
+*.yaml text
+*.toml text
+*.xml text
+*.svg text
+*.py text
+
+# Windows-specific files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.mp4 binary
+*.zip binary
+*.msi binary
+*.exe binary

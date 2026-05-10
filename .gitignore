@@ -1,6 +1,65 @@
-*.py
-/*.py
-/.trae/
-/node_modules/
+# dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# tauri
 /src-tauri/target/
+/src-tauri/target/**/**
+/gen/
+
+# Python scripts (if they generate temp files)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# project
+/dist/
+/.trae/
 /.idea/
+/task-artifacts/
+*.local
+
+# environment
+.env
+.env.*.local
+
+# vite
+*.timestamp-*.mjs
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Tauri bundle outputs
+*.msi
+*.nsis.exe
+*.app
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+*.snap
+
+# Generated icon files (if not committed)
+/src-tauri/icons/*.png
+!/src-tauri/icons/32x32.png
+!/src-tauri/icons/128x128.png
+!/src-tauri/icons/128x128@2x.png
+!/src-tauri/icons/icon.icns
+!/src-tauri/icons/icon.ico

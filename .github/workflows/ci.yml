@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: true  # 临时允许 lint 错误，后续可以改为 false
+
+      - name: Type check
+        run: npm run typecheck
+        continue-on-error: true  # 临时允许类型错误
+
+      - name: Build frontend
+        run: npm run build
+
+  build-windows:
+    name: Build Windows (PR Check)
+    runs-on: windows-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Tauri app (check only)
+        run: |
+          npm run tauri build -- --debug
+        env:
+          RUST_BACKTRACE: 1
+        continue-on-error: true  # 允许 PR 检查失败，不影响合并
