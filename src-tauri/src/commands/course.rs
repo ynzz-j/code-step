@@ -1,6 +1,7 @@
 use crate::models::course::{Course, CourseCategory, CourseMetadata, Difficulty};
 use std::fs;
 use std::path::{Path, PathBuf};
+use tauri::Manager;
 
 // ===================== 课程 JSON 格式 =====================
 // 唯一支持的格式：单课程目录
@@ -51,31 +52,35 @@ fn normalize_mode(mode: Option<&str>) -> &'static str {
 // =====================================================
 
 /// 查找 courses 根目录（不含 mode 子目录）
-fn find_courses_root() -> Option<PathBuf> {
-    // 1. 首先检查 Tauri 资源目录（生产环境）
-    if let Ok(resource_dir) = tauri::api::path::resource_dir() {
+fn find_courses_root(app_handle: &tauri::AppHandle) -> Option<PathBuf> {
+    if let Ok(resource_dir) = app_handle.path().resource_dir() {
+        // 1. 资源目录直接子路径
         let courses_path = resource_dir.join("courses");
         if courses_path.exists() {
             return Some(courses_path);
         }
+        // 2. MSI/NSIS 打包时将资源放在 _up_ 子目录下
+        let up_courses = resource_dir.join("_up_").join("courses");
+        if up_courses.exists() {
+            return Some(up_courses);
+        }
     }
 
-    // 2. 检查可执行文件所在目录（开发环境）
+    // 3. 开发环境：可执行文件向上查找项目根目录
     if let Ok(exe_path) = std::env::current_exe() {
-        if let Some(root) = exe_path
-            .parent()
-            .and_then(|p| p.parent())
-            .and_then(|p| p.parent())
-            .and_then(|p| p.parent())
-        {
-            let courses_path = root.join("courses");
-            if courses_path.exists() {
-                return Some(courses_path);
+        let mut current = exe_path.parent();
+        for _ in 0..5 {
+            if let Some(dir) = current {
+                let courses_path = dir.join("courses");
+                if courses_path.exists() {
+                    return Some(courses_path);
+                }
+                current = dir.parent();
             }
         }
     }
 
-    // 3. 尝试相对路径（开发环境）
+    // 4. 开发环境：相对路径回退
     for base in ["../../..", "../..", "."] {
         let courses_path = PathBuf::from(base).join("courses");
         if courses_path.exists() {
@@ -86,8 +91,8 @@ fn find_courses_root() -> Option<PathBuf> {
     None
 }
 
-fn get_courses_dir_for(mode: &str) -> Option<PathBuf> {
-    let root = find_courses_root()?;
+fn get_courses_dir_for(app_handle: &tauri::AppHandle, mode: &str) -> Option<PathBuf> {
+    let root = find_courses_root(app_handle)?;
     let mode_dir = root.join(mode);
     if mode_dir.exists() {
         Some(mode_dir)
@@ -158,9 +163,12 @@ fn scan_courses_in_mode(mode_dir: &Path) -> Vec<(PathBuf, SingleCourseFile)> {
 }
 
 #[tauri::command]
-pub async fn get_courses(mode: Option<String>) -> Result<Vec<CourseMetadata>, String> {
+pub async fn get_courses(
+    app_handle: tauri::AppHandle,
+    mode: Option<String>,
+) -> Result<Vec<CourseMetadata>, String> {
     let mode = normalize_mode(mode.as_deref());
-    let Some(mode_dir) = get_courses_dir_for(mode) else {
+    let Some(mode_dir) = get_courses_dir_for(&app_handle, mode) else {
         return Ok(vec![]);
     };
 
@@ -184,7 +192,11 @@ pub async fn get_courses(mode: Option<String>) -> Result<Vec<CourseMetadata>, St
 }
 
 #[tauri::command]
-pub async fn get_course(course_id: String, mode: Option<String>) -> Result<Course, String> {
+pub async fn get_course(
+    app_handle: tauri::AppHandle,
+    course_id: String,
+    mode: Option<String>,
+) -> Result<Course, String> {
     let requested_mode = normalize_mode(mode.as_deref());
 
     // 优先按请求的模式查找；缺省/未命中时再扫其他模式
@@ -201,7 +213,7 @@ pub async fn get_course(course_id: String, mode: Option<String>) -> Result<Cours
     };
 
     for m in search_modes {
-        let Some(mode_dir) = get_courses_dir_for(m) else {
+        let Some(mode_dir) = get_courses_dir_for(&app_handle, m) else {
             continue;
         };
         let Some(course_dir) = find_course_dir(&mode_dir, &course_id) else {
@@ -249,6 +261,7 @@ pub async fn get_course(course_id: String, mode: Option<String>) -> Result<Cours
 
 #[tauri::command]
 pub async fn get_step(
+    app_handle: tauri::AppHandle,
     course_id: String,
     step_index: u32,
     mode: Option<String>,
@@ -268,7 +281,7 @@ pub async fn get_step(
     };
 
     for m in search_modes {
-        let Some(mode_dir) = get_courses_dir_for(m) else {
+        let Some(mode_dir) = get_courses_dir_for(&app_handle, m) else {
             continue;
         };
         let Some(course_dir) = find_course_dir(&mode_dir, &course_id) else {
@@ -313,7 +326,10 @@ pub struct DebugInfo {
 }
 
 #[tauri::command]
-pub async fn debug_courses(mode: Option<String>) -> Result<DebugInfo, String> {
+pub async fn debug_courses(
+    app_handle: tauri::AppHandle,
+    mode: Option<String>,
+) -> Result<DebugInfo, String> {
     let current_dir = std::env::current_dir()
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
@@ -323,7 +339,7 @@ pub async fn debug_courses(mode: Option<String>) -> Result<DebugInfo, String> {
         .unwrap_or_default();
 
     let mode = normalize_mode(mode.as_deref());
-    let mode_dir_opt = get_courses_dir_for(mode);
+    let mode_dir_opt = get_courses_dir_for(&app_handle, mode);
     let courses_dir_str = mode_dir_opt
         .as_ref()
         .map(|p| p.to_string_lossy().to_string())
