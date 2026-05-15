@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "eslint src --ext .ts,.tsx",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "audit:courses": "node scripts/audit-courses.js"
   },
   "dependencies": {
     "react": "^18.3.1",

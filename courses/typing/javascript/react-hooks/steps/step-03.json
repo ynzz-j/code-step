@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useEffect cleanup",
+  "concept": "useEffect cleanup",
+  "difficulty": "intermediate",
+  "instruction": "Type the cleanup function pattern.",
+  "hint": "Return a function from the effect.",
+  "targetCode": "useEffect(() => {\n  const id = setInterval(tick, 1000);\n  return () => clearInterval(id);\n}, []);",
+  "encouragement": "Cleanup pattern remembered."
+}

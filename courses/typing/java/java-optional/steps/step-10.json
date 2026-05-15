@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Apply optional limit",
+  "concept": "ifPresent",
+  "difficulty": "basic",
+  "instruction": "Type the Optional command callback.",
+  "hint": "Pass the method reference to ifPresent.",
+  "targetCode": "Optional.ofNullable(request.getLimit()).ifPresent(query::limit);",
+  "encouragement": "Small and practical."
+}

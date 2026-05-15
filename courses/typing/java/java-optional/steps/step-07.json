@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Trim and reject blank",
+  "concept": "map + filter",
+  "difficulty": "intermediate",
+  "instruction": "Type the normalized Optional return.",
+  "hint": "Trim first, then filter empty strings.",
+  "targetCode": "return Optional.ofNullable(token).map(String::trim).filter(s -> !s.isEmpty());",
+  "encouragement": "A useful input cleanup pattern."
+}

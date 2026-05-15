@@ -1,0 +1,23 @@
+{
+  "id": "react-hooks",
+  "title": "React Hooks 高频训练",
+  "description": "练习 React Hooks 常用输入模板，建立前端开发肌肉记忆。",
+  "language": "javascript",
+  "category": "frontend",
+  "difficulty": "intermediate",
+  "concepts": [
+    "useState",
+    "useEffect",
+    "useMemo",
+    "useCallback",
+    "list render"
+  ],
+  "estimatedMinutes": 10,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json"
+  ]
+}

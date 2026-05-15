@@ -50,16 +50,16 @@ export function WelcomePage() {
             CodeStep
           </h1>
           <p className="text-xl text-gray-300 font-light">
-            一步步学编程，在 AI 时代打牢编程基础
+            用高频代码片段建立编程肌肉记忆
           </p>
         </div>
 
         {/* 特性介绍 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
           {[
-            { icon: '🎯', title: '逐步引导', desc: '每个步骤都有清晰的目标和提示' },
-            { icon: '⌨️', title: '实战练习', desc: '手敲代码，建立真正的编程能力' },
-            { icon: '✅', title: '即时反馈', desc: '运行代码后立即看到结果和错误' },
+            { icon: '🎯', title: '短片段循环', desc: '用 30 秒节奏反复练习常用写法' },
+            { icon: '⌨️', title: '逐字跟敲', desc: '把语法和符号变成自然动作' },
+            { icon: '✅', title: '即时反馈', desc: '错误、准确率和连击实时反馈' },
           ].map((feature, i) => (
             <div
               key={i}
@@ -76,17 +76,6 @@ export function WelcomePage() {
         {/* 模式选择按钮 */}
         <div className="flex items-center justify-center gap-4 pt-4 flex-wrap">
           <Link
-            to="/courses?mode=coding"
-            onClick={() => handleButtonClick('coding')}
-            className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95 flex items-center gap-2"
-          >
-            <svg className="w-5 h-5 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-            </svg>
-            编程模式
-          </Link>
-
-          <Link
             to="/courses?mode=typing"
             onClick={() => handleButtonClick('typing')}
             className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:scale-105 active:scale-95 flex items-center gap-2"
@@ -94,8 +83,19 @@ export function WelcomePage() {
             <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 11-1.676-1.676L14.25 9l1.035-.259a3.375 3.375 0 111.676-1.676L17.25 6l-.259 1.035a3.375 3.375 0 001.676 1.68z" />
             </svg>
-            打字模式
+            开始打字训练
           </Link>
+
+          <div
+            className="px-8 py-4 border border-gray-700/70 bg-gray-800/40 text-gray-400 rounded-xl font-medium flex items-center gap-2 cursor-not-allowed"
+            aria-disabled="true"
+            title="编程实战模式后续开放，当前先专注肌肉记忆训练。"
+          >
+            <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            编程实战 Coming Soon
+          </div>
 
           <Link
             to="/about"
@@ -115,13 +115,13 @@ export function WelcomePage() {
             <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>80+ 课程</span>
+            <span>Typing 优先</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            <span>即时验证</span>
+            <span>即时反馈</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

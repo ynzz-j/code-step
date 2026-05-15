@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { isCourseMode } from '@/services/courseService';
 import { useState, useEffect } from 'react';
 import { getSoundStatus, setSoundEnabled } from '@/utils/soundEffects';
 
@@ -24,10 +23,8 @@ export function Header() {
     setSoundEnabled(next);
   };
 
-  // 如果当前 URL 已经带 mode=X，点击"课程"时透传该参数
-  const params = new URLSearchParams(location.search);
-  const modeParam = params.get('mode');
-  const coursesTo = isCourseMode(modeParam) ? `/courses?mode=${modeParam}` : '/courses';
+  // 课程入口默认进入 typing；coding 仍保留为后续开放的直达空状态。
+  const coursesTo = '/courses?mode=typing';
 
   return (
     <header className="flex items-center justify-between px-6 py-3 bg-gray-800/50 border-b border-gray-700/50 backdrop-blur-sm">

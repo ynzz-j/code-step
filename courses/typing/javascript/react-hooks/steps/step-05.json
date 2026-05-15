@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useCallback handler",
+  "concept": "useCallback",
+  "difficulty": "intermediate",
+  "instruction": "Type the stable callback pattern.",
+  "hint": "Keep dependencies explicit.",
+  "targetCode": "const handleSave = useCallback(() => {\n  saveDraft(form);\n}, [form, saveDraft]);",
+  "encouragement": "Stable callback ready."
+}

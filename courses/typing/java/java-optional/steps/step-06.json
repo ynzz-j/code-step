@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Map to size",
+  "concept": "map + orElse",
+  "difficulty": "intermediate",
+  "instruction": "Type the Optional size extraction pattern.",
+  "hint": "Map to items, then map to size.",
+  "targetCode": "int total = Optional.ofNullable(cart).map(Cart::items).map(List::size).orElse(0);",
+  "encouragement": "Compact and readable."
+}

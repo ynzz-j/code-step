@@ -86,11 +86,11 @@ export function AboutPage() {
         {/* CTA */}
         <div className="text-center pt-4 animate-slide-up-fade" style={{ animationDelay: `${values.length * 150 + 200}ms` }}>
           <Link
-            to="/courses"
+            to="/courses?mode=typing"
             onClick={() => playSound('click')}
             className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-medium text-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95"
           >
-            开始学习 →
+            开始打字训练 →
           </Link>
         </div>
       </div>

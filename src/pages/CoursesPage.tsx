@@ -9,12 +9,12 @@ import { playSound } from '@/utils/soundEffects';
 
 const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
   coding: {
-    title: '编程模式',
-    subtitle: '写代码、跑代码，专注编程能力训练',
+    title: '编程实战模式',
+    subtitle: '后续开放，当前先专注代码肌肉记忆训练。',
   },
   typing: {
-    title: '打字模式',
-    subtitle: '逐字跟敲，建立代码肌肉记忆',
+    title: '打字训练',
+    subtitle: '逐字跟敲高频代码片段，建立代码肌肉记忆。',
   },
 };
 
@@ -108,10 +108,35 @@ function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode
   );
 }
 
+function CodingComingSoon() {
+  return (
+    <div className="text-center py-20">
+      <div className="mx-auto mb-5 w-16 h-16 rounded-2xl bg-gray-800/70 border border-gray-700/70 flex items-center justify-center">
+        <svg className="w-8 h-8 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+      </div>
+      <h2 className="text-2xl font-bold text-gray-100 mb-3">编程实战模式后续开放</h2>
+      <p className="max-w-md mx-auto text-gray-400 leading-relaxed mb-8">
+        当前先专注肌肉记忆训练，把常用语法、符号和代码节奏练顺。
+      </p>
+      <Link
+        to="/courses?mode=typing"
+        onClick={() => playSound('click')}
+        className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
+      >
+        开始打字训练
+        <span aria-hidden="true">→</span>
+      </Link>
+    </div>
+  );
+}
+
 export function CoursesPage() {
   const [searchParams] = useSearchParams();
   const mode = normalizeCourseMode(searchParams.get('mode'));
   const modeLabel = MODE_LABELS[mode];
+  const isCodingMode = mode === 'coding';
 
   const {
     courses,
@@ -125,8 +150,9 @@ export function CoursesPage() {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; duration: number; delay: number; size: number; color: string }>>([]);
 
   useEffect(() => {
+    if (isCodingMode) return;
     loadCourses(mode);
-  }, [loadCourses, mode]);
+  }, [isCodingMode, loadCourses, mode]);
 
   useEffect(() => {
     const colors = ['bg-blue-400/15', 'bg-cyan-400/15', 'bg-indigo-400/15', 'bg-sky-400/15'];
@@ -196,28 +222,34 @@ export function CoursesPage() {
         </div>
         <p className="text-gray-400 mb-6">{modeLabel.subtitle}</p>
 
-        <CategoryFilter className="mb-8" />
+        {isCodingMode ? (
+          <CodingComingSoon />
+        ) : (
+          <>
+            <CategoryFilter className="mb-8" />
 
-        {filteredCourses.length === 0 && (selectedCategory !== 'all' || selectedDifficulty !== 'all') ? (
+            {filteredCourses.length === 0 && (selectedCategory !== 'all' || selectedDifficulty !== 'all') ? (
           <div className="text-center py-16">
             <div className="text-4xl mb-4 opacity-30">📭</div>
             <p className="text-gray-400">
               该筛选条件下暂无课程，敬请期待更多内容
             </p>
           </div>
-        ) : sortedCourses.length === 0 ? (
+            ) : sortedCourses.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-4xl mb-4 opacity-30">📭</div>
             <p className="text-gray-400">
               {modeLabel.title}暂无课程，敬请期待更多内容
             </p>
           </div>
-        ) : (
+            ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sortedCourses.map((course) => (
               <CourseCard key={course.id} course={course} mode={mode} />
             ))}
           </div>
+            )}
+          </>
         )}
       </div>
     </div>

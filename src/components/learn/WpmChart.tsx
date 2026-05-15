@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, type CSSProperties } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { useChartStore } from '@/stores/chartStore';
 
 interface WpmChartProps {

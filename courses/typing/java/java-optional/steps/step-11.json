@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Require present value",
+  "concept": "Optional.of",
+  "difficulty": "basic",
+  "instruction": "Type the required product SKU extraction.",
+  "hint": "Use Optional.of when null should fail fast.",
+  "targetCode": "String sku = Optional.of(product).map(Product::sku).orElseThrow();",
+  "encouragement": "Clear required value."
+}

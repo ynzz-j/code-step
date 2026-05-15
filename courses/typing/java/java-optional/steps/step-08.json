@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Filter by enum",
+  "concept": "filter",
+  "difficulty": "basic",
+  "instruction": "Type the Optional enum filter.",
+  "hint": "Compare the status inside filter.",
+  "targetCode": "Optional<Order> paid = order.filter(o -> o.status() == Status.PAID);",
+  "encouragement": "Crisp predicate."
+}

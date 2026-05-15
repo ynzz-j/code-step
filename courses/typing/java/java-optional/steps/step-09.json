@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Boolean default",
+  "concept": "map + orElse",
+  "difficulty": "basic",
+  "instruction": "Type the Optional boolean fallback.",
+  "hint": "Map to the boolean getter and default to false.",
+  "targetCode": "boolean active = Optional.ofNullable(user).map(User::isActive).orElse(false);",
+  "encouragement": "Good boolean fallback."
+}

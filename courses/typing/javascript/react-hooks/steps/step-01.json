@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useState setter",
+  "concept": "useState",
+  "difficulty": "intermediate",
+  "instruction": "Type the state tuple and setter pattern.",
+  "hint": "Keep the setter name paired with the state name.",
+  "targetCode": "const [count, setCount] = useState(0);\nsetCount((value) => value + 1);",
+  "encouragement": "Clean state update."
+}

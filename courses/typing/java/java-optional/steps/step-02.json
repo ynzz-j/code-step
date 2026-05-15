@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Fallback value",
+  "concept": "orElse",
+  "difficulty": "basic",
+  "instruction": "Type the Optional fallback pattern.",
+  "hint": "Use orElse for the default string.",
+  "targetCode": "String label = Optional.ofNullable(order.getLabel()).orElse(\"draft\");",
+  "encouragement": "Clean fallback."
+}

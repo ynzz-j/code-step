@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Throw when missing",
+  "concept": "orElseThrow",
+  "difficulty": "intermediate",
+  "instruction": "Type the repository lookup with an exception fallback.",
+  "hint": "Use orElseThrow with a lambda.",
+  "targetCode": "User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(\"user\"));",
+  "encouragement": "That lookup pattern lands well."
+}

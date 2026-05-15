@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Wrap nullable value",
+  "concept": "ofNullable",
+  "difficulty": "basic",
+  "instruction": "Type the Optional wrapper for a nullable getter.",
+  "hint": "Use Optional.ofNullable around the value.",
+  "targetCode": "Optional<String> name = Optional.ofNullable(user.getName());",
+  "encouragement": "Good nullable wrapper."
+}

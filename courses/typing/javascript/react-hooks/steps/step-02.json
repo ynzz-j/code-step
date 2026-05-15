@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useEffect dependency",
+  "concept": "useEffect",
+  "difficulty": "intermediate",
+  "instruction": "Type the effect pattern with an explicit dependency array.",
+  "hint": "The dependency array keeps the effect predictable.",
+  "targetCode": "useEffect(() => {\n  fetchUser(userId);\n}, [userId]);",
+  "encouragement": "Effect dependency locked in."
+}

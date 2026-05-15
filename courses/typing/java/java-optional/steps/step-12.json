@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Flat map repository",
+  "concept": "flatMap",
+  "difficulty": "intermediate",
+  "instruction": "Type the Optional flatMap repository lookup.",
+  "hint": "Use flatMap when the repository already returns Optional.",
+  "targetCode": "Optional<Customer> customer = Optional.ofNullable(dto.customerId()).flatMap(customerRepo::findById);",
+  "encouragement": "That avoids nested Optional values."
+}

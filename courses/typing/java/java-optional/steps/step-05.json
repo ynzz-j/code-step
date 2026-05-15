@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Map nested property",
+  "concept": "map chain",
+  "difficulty": "intermediate",
+  "instruction": "Type the null-safe nested property lookup.",
+  "hint": "Chain map calls before orElse.",
+  "targetCode": "String city = Optional.ofNullable(user).map(User::getAddress).map(Address::getCity).orElse(\"Unknown\");",
+  "encouragement": "Nested access without a null check."
+}

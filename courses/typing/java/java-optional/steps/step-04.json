@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Filter then act",
+  "concept": "filter + ifPresent",
+  "difficulty": "intermediate",
+  "instruction": "Type the Optional filter and callback pattern.",
+  "hint": "Filter first, then call ifPresent.",
+  "targetCode": "Optional.ofNullable(email).filter(e -> e.contains(\"@\")).ifPresent(this::sendWelcome);",
+  "encouragement": "Nice guard and action."
+}

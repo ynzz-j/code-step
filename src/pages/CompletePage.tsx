@@ -79,7 +79,7 @@ export function CompletePage() {
         {/* 奖杯图标 */}
         <div className="text-7xl">🏆</div>
 
-        <div space-y-2>
+        <div className="space-y-2">
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
             课程完成！
           </h1>
