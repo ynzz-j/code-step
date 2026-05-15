@@ -18,6 +18,14 @@ const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
   },
 };
 
+const DEFAULT_RECOMMENDED_COURSE_IDS = [
+  'js-array',
+  'js-async',
+  'python-list',
+  'python-dict',
+  'python-function',
+];
+
 // 难度颜色映射
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'text-success-400 bg-success-500/10',
@@ -36,7 +44,7 @@ const DIFFICULTY_ORDER: Record<string, number> = {
   hell: 5,
 };
 
-function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode }) {
+function CourseCard({ course, mode, recommended }: { course: CourseMetadata; mode: CourseMode; recommended?: boolean }) {
   const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
 
   const progress = getCourseProgress(course.id);
@@ -57,6 +65,11 @@ function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode
             <span className="px-2 py-0.5 rounded text-xs font-medium bg-gray-700/50 text-gray-400">
               {COURSE_CATEGORY_LABELS[course.category]}
             </span>
+            {recommended && (
+              <span className="px-2 py-0.5 rounded text-xs font-medium bg-success-500/10 text-success-300">
+                推荐
+              </span>
+            )}
             <h3 className="text-lg font-semibold text-gray-100 truncate">{course.title}</h3>
           </div>
         </div>
@@ -181,8 +194,18 @@ export function CoursesPage() {
       ? filteredCourses
       : courses;
 
-  // 按难度排序（入门→基础→中等→困难→地狱）
+  // 默认先露出高频短循环推荐，再按难度排序（入门→基础→中等→困难→地狱）
   const sortedCourses = [...displayCourses].sort((a, b) => {
+    const recommendedA = DEFAULT_RECOMMENDED_COURSE_IDS.indexOf(a.id);
+    const recommendedB = DEFAULT_RECOMMENDED_COURSE_IDS.indexOf(b.id);
+    const isRecommendedA = recommendedA >= 0;
+    const isRecommendedB = recommendedB >= 0;
+
+    if (isRecommendedA || isRecommendedB) {
+      if (isRecommendedA && isRecommendedB) return recommendedA - recommendedB;
+      return isRecommendedA ? -1 : 1;
+    }
+
     const orderA = DIFFICULTY_ORDER[a.difficulty] || 0;
     const orderB = DIFFICULTY_ORDER[b.difficulty] || 0;
     return orderA - orderB;
@@ -245,7 +268,12 @@ export function CoursesPage() {
             ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sortedCourses.map((course) => (
-              <CourseCard key={course.id} course={course} mode={mode} />
+              <CourseCard
+                key={course.id}
+                course={course}
+                mode={mode}
+                recommended={DEFAULT_RECOMMENDED_COURSE_IDS.includes(course.id)}
+              />
             ))}
           </div>
             )}

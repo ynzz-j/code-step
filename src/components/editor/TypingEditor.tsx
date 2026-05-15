@@ -2,47 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTypingStats } from '@/hooks/useTypingStats';
 import { StatsPanel } from '@/components/learn/StatsPanel';
 import { useChartStore } from '@/stores/chartStore';
+import { initSound, playSound } from '@/utils/soundEffects';
 import type { TypingStep } from '@/types';
-
-let audioCtx: AudioContext | null = null;
-
-function initAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new AudioContext();
-  }
-  // 确保 AudioContext 处于运行状态（浏览器 autoplay policy 要求用户交互后启动）
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-  return audioCtx;
-}
-
-// 在模块加载时就尝试初始化（如果已经在用户交互上下文中）
-if (typeof window !== 'undefined') {
-  document.addEventListener('click', () => {
-    initAudioContext();
-  }, { once: true });
-}
-
-function getAudioContext(): AudioContext {
-  return initAudioContext();
-}
-
-function playTypeSound(correct: boolean) {
-  try {
-    const ctx = getAudioContext();
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    oscillator.type = correct ? 'sine' : 'square';
-    oscillator.frequency.value = correct ? 880 : 220;
-    gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + 0.08);
-  } catch {}
-}
 
 interface TypingEditorProps {
   step: TypingStep;
@@ -63,7 +24,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
 
   // 组件挂载时预初始化音效（需用户已交互）
   useEffect(() => {
-    const timer = setTimeout(() => initAudioContext(), 0);
+    const timer = setTimeout(() => initSound(), 0);
     return () => clearTimeout(timer);
   }, []);
 
@@ -114,7 +75,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
       if (cursorPosition + spaces.length <= targetCode.length) {
         const expected = targetCode.slice(cursorPosition, cursorPosition + spaces.length);
         if (expected === spaces) {
-          playTypeSound(true);
+          playSound('typing');
           onKeystroke(true);
           setTyped((prev) => prev + spaces);
           setCursorPosition((prev) => prev + spaces.length);
@@ -129,7 +90,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
       if (cursorPosition < targetCode.length) {
         const expected = targetCode[cursorPosition];
         if (expected === '\n') {
-          playTypeSound(true);
+          playSound('typing');
           onKeystroke(true);
           setTyped((prev) => prev + newline);
           setCursorPosition((prev) => prev + 1);
@@ -152,7 +113,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
     const inputChar = e.key;
     const isCorrect = inputChar === expectedChar;
 
-    playTypeSound(isCorrect);
+    playSound(isCorrect ? 'typing' : 'error');
     recordKeystroke(isCorrect);
     onKeystroke(isCorrect);
 
@@ -182,6 +143,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
       if (backspaceCount.current === 0) {
         onPerfectStrike?.();
       }
+      playSound(backspaceCount.current === 0 ? 'perfect' : 'success');
       onComplete();
     }
   }, [typed, step.targetCode, onComplete, onPerfectStrike]);
@@ -240,7 +202,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
         tabIndex={0}
         className="flex-1 overflow-auto p-6 bg-gray-900/30 focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-text"
         onClick={() => {
-          initAudioContext();
+          initSound();
           containerRef.current?.focus();
         }}
       >

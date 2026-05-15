@@ -1,239 +1,441 @@
+import blueKey01Url from '@/assets/sounds/keyboard/blue-01.wav?url';
+import blueKey02Url from '@/assets/sounds/keyboard/blue-02.wav?url';
+import blueKey03Url from '@/assets/sounds/keyboard/blue-03.wav?url';
+import blueKey04Url from '@/assets/sounds/keyboard/blue-04.wav?url';
+
 /**
- * CodeStep 音效系统
- * 使用 Web Audio API 生成音效，无需外部音频文件
+ * CodeStep audio system.
+ *
+ * The product sound direction is a sustainable training groove:
+ * mechanical key samples carry the rhythm, while synthetic sounds are reserved
+ * for sparse UI, negative, and reward feedback.
  */
 
-// 音效类型
 export type SoundType =
-  | 'click' // 按钮点击
-  | 'combo-increment' // 连击增加
-  | 'combo-reset' // 连击中断
-  | 'combo-milestone' // 连击里程碑（5/10/20/30）
-  | 'new-best' // 新纪录
-  | 'success' // 步骤通过
-  | 'error' // 错误
-  | 'run-code' // 运行代码
-  | 'typing' // 打字声音
-  | 'complete'; // 课程完成
+  | 'click'
+  | 'combo-increment'
+  | 'combo-reset'
+  | 'combo-milestone'
+  | 'new-best'
+  | 'perfect'
+  | 'success'
+  | 'error'
+  | 'run-code'
+  | 'typing'
+  | 'complete';
 
-// 音效配置
-interface SoundConfig {
-  frequency: number; // 频率 (Hz)
-  duration: number; // 时长 (秒)
-  type: OscillatorType; // 波形类型
-  gain: number; // 音量 (0-1)
-  fadeIn?: number; // 淡入时长
-  fadeOut?: number; // 淡出时长
+type SoundCategory = 'input' | 'negative' | 'reward' | 'ui';
+
+interface SynthSoundConfig {
+  category: SoundCategory;
+  priority: number;
+  notes: number[];
+  duration: number;
+  type: OscillatorType;
+  gain: number;
+  fadeIn?: number;
+  fadeOut?: number;
+  noteGap?: number;
+  filter?: {
+    type: BiquadFilterType;
+    frequency: number;
+    q?: number;
+  };
 }
 
-// 音效配置映射
-const SOUND_PRESETS: Record<SoundType, SoundConfig> = {
+interface PendingReward {
+  soundType: SoundType;
+  config: SynthSoundConfig;
+}
+
+const KEYBOARD_SAMPLE_URLS = [
+  blueKey01Url,
+  blueKey02Url,
+  blueKey03Url,
+  blueKey04Url,
+];
+
+const CATEGORY_GAIN: Record<SoundCategory, number> = {
+  input: 0.45,
+  ui: 0.35,
+  negative: 0.5,
+  reward: 0.65,
+};
+
+const REWARD_COOLDOWN_MS = 120;
+
+const SYNTH_SOUNDS: Record<Exclude<SoundType, 'typing'>, SynthSoundConfig> = {
   click: {
-    frequency: 800,
-    duration: 0.1,
-    type: 'sine',
-    gain: 0.3,
-    fadeIn: 0.01,
-    fadeOut: 0.05,
+    category: 'ui',
+    priority: 1,
+    notes: [720],
+    duration: 0.07,
+    type: 'triangle',
+    gain: 0.28,
+    fadeIn: 0.004,
+    fadeOut: 0.045,
   },
   'combo-increment': {
-    frequency: 600,
-    duration: 0.15,
+    category: 'reward',
+    priority: 1,
+    notes: [620],
+    duration: 0.08,
     type: 'sine',
-    gain: 0.4,
-    fadeIn: 0.01,
-    fadeOut: 0.1,
+    gain: 0.18,
+    fadeIn: 0.004,
+    fadeOut: 0.05,
   },
   'combo-reset': {
-    frequency: 300,
-    duration: 0.3,
-    type: 'sawtooth',
-    gain: 0.3,
-    fadeIn: 0.01,
-    fadeOut: 0.2,
+    category: 'negative',
+    priority: 1,
+    notes: [155],
+    duration: 0.085,
+    type: 'triangle',
+    gain: 0.42,
+    fadeIn: 0.003,
+    fadeOut: 0.065,
+    filter: { type: 'lowpass', frequency: 700, q: 0.4 },
   },
   'combo-milestone': {
-    frequency: 1200,
-    duration: 0.4,
+    category: 'reward',
+    priority: 3,
+    notes: [740, 980],
+    duration: 0.22,
+    noteGap: 0.055,
     type: 'sine',
-    gain: 0.5,
-    fadeIn: 0.05,
-    fadeOut: 0.2,
+    gain: 0.38,
+    fadeIn: 0.006,
+    fadeOut: 0.08,
   },
   'new-best': {
-    frequency: 1500,
-    duration: 0.5,
-    type: 'sine',
-    gain: 0.6,
-    fadeIn: 0.1,
-    fadeOut: 0.3,
+    category: 'reward',
+    priority: 5,
+    notes: [880, 1175, 1568],
+    duration: 0.36,
+    noteGap: 0.06,
+    type: 'triangle',
+    gain: 0.44,
+    fadeIn: 0.006,
+    fadeOut: 0.12,
+  },
+  perfect: {
+    category: 'reward',
+    priority: 4,
+    notes: [1047, 1319, 1760],
+    duration: 0.4,
+    noteGap: 0.07,
+    type: 'triangle',
+    gain: 0.4,
+    fadeIn: 0.006,
+    fadeOut: 0.13,
   },
   success: {
-    frequency: 1000,
-    duration: 0.3,
+    category: 'reward',
+    priority: 2,
+    notes: [830, 1109],
+    duration: 0.24,
+    noteGap: 0.06,
     type: 'sine',
-    gain: 0.5,
-    fadeIn: 0.05,
-    fadeOut: 0.15,
+    gain: 0.3,
+    fadeIn: 0.006,
+    fadeOut: 0.08,
   },
   error: {
-    frequency: 200,
-    duration: 0.4,
-    type: 'sawtooth',
-    gain: 0.4,
-    fadeIn: 0.01,
-    fadeOut: 0.3,
+    category: 'negative',
+    priority: 2,
+    notes: [125],
+    duration: 0.115,
+    type: 'triangle',
+    gain: 0.45,
+    fadeIn: 0.003,
+    fadeOut: 0.09,
+    filter: { type: 'lowpass', frequency: 540, q: 0.5 },
   },
   'run-code': {
-    frequency: 500,
-    duration: 0.2,
+    category: 'ui',
+    priority: 1,
+    notes: [460],
+    duration: 0.12,
     type: 'triangle',
-    gain: 0.3,
-    fadeIn: 0.02,
-    fadeOut: 0.1,
-  },
-  typing: {
-    frequency: 1000 + Math.random() * 500, // 随机频率模拟打字机
-    duration: 0.05,
-    type: 'sine',
-    gain: 0.15,
+    gain: 0.26,
     fadeIn: 0.01,
-    fadeOut: 0.02,
+    fadeOut: 0.07,
   },
   complete: {
-    frequency: 800,
-    duration: 0.8,
-    type: 'sine',
-    gain: 0.6,
-    fadeIn: 0.1,
-    fadeOut: 0.4,
+    category: 'reward',
+    priority: 6,
+    notes: [659, 880, 1175, 1568],
+    duration: 0.45,
+    noteGap: 0.07,
+    type: 'triangle',
+    gain: 0.42,
+    fadeIn: 0.01,
+    fadeOut: 0.14,
   },
 };
 
-// 音效管理器类
 class SoundManager {
   private audioContext: AudioContext | null = null;
-  private enabled: boolean = true;
-  private volume: number = 0.5;
-  private initialized: boolean = false;
+  private enabled = true;
+  private volume = 0.5;
+  private initialized = false;
+  private samplesReady = false;
+  private samplesFailed = false;
+  private keyboardBuffers: AudioBuffer[] = [];
+  private keyboardSamplesPromise: Promise<void> | null = null;
+  private pendingReward: PendingReward | null = null;
+  private rewardTimer: ReturnType<typeof setTimeout> | null = null;
   private storageKey = 'codestep-sound-enabled';
 
-  // 从 localStorage 读取用户音效偏好
   private loadPreference(): boolean {
     try {
       const saved = localStorage.getItem(this.storageKey);
-      if (saved === null) return true; // 默认开启
+      if (saved === null) return true;
       return saved === 'true';
     } catch {
       return true;
     }
   }
 
-  // 保存用户音效偏好到 localStorage
   private savePreference(enabled: boolean): void {
     try {
       localStorage.setItem(this.storageKey, String(enabled));
-    } catch { /* ignore */ }
-  }
-
-  // 初始化 AudioContext（需要用户交互后调用）
-  init(): void {
-    if (this.initialized) return;
-
-    try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      this.enabled = this.loadPreference();
-      this.initialized = true;
-      console.log('[SoundManager] Initialized, enabled:', this.enabled);
-    } catch (err) {
-      console.warn('[SoundManager] Failed to initialize:', err);
-      this.enabled = false;
+    } catch {
+      // ignore storage failures
     }
   }
 
-  // 播放音效
+  init(): void {
+    if (!this.initialized) {
+      try {
+        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        this.enabled = this.loadPreference();
+        this.initialized = true;
+        this.loadKeyboardSamples();
+      } catch (err) {
+        console.warn('[SoundManager] Failed to initialize:', err);
+        this.enabled = false;
+      }
+    }
+
+    this.ensureContextRunning();
+  }
+
   play(soundType: SoundType): void {
     if (!this.enabled || !this.initialized || !this.audioContext) return;
 
+    this.ensureContextRunning();
+
     try {
-      const config = SOUND_PRESETS[soundType];
-      if (!config) {
-        console.warn(`[SoundManager] Unknown sound type: ${soundType}`);
+      if (soundType === 'typing') {
+        this.playKeyboardTyping();
         return;
       }
 
-      // 创建振荡器
-      const oscillator = this.audioContext.createOscillator();
-      const gainNode = this.audioContext.createGain();
+      const config = SYNTH_SOUNDS[soundType];
+      if (!config) return;
 
-      // 配置振荡器
-      oscillator.type = config.type;
+      if (config.category === 'reward') {
+        this.queueReward(soundType, config);
+        return;
+      }
 
-      // typing 音效每次播放时随机频率，模拟打字机质感
-      const frequency = soundType === 'typing'
-        ? 800 + Math.random() * 800
-        : config.frequency;
-      oscillator.frequency.setValueAtTime(
-        frequency,
-        this.audioContext.currentTime
-      );
-
-      // 配置音量
-      gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-      gainNode.gain.linearRampToValueAtTime(
-        config.gain * this.volume,
-        this.audioContext.currentTime + (config.fadeIn || 0.01)
-      );
-      gainNode.gain.linearRampToValueAtTime(
-        0,
-        this.audioContext.currentTime + config.duration
-      );
-
-      // 连接节点
-      oscillator.connect(gainNode);
-      gainNode.connect(this.audioContext.destination);
-
-      // 播放
-      oscillator.start(this.audioContext.currentTime);
-      oscillator.stop(this.audioContext.currentTime + config.duration);
-
-      // 清理
-      oscillator.onended = () => {
-        oscillator.disconnect();
-        gainNode.disconnect();
-      };
+      this.playSynth(config);
     } catch (err) {
       console.warn(`[SoundManager] Failed to play sound ${soundType}:`, err);
     }
   }
 
-  // 启用/禁用音效
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
     this.savePreference(enabled);
-    console.log(`[SoundManager] ${enabled ? 'Enabled' : 'Disabled'}`);
+    if (!enabled) {
+      this.clearPendingReward();
+    }
   }
 
-  // 设置音量
   setVolume(volume: number): void {
     this.volume = Math.max(0, Math.min(1, volume));
-    console.log(`[SoundManager] Volume set to: ${this.volume}`);
   }
 
-  // 获取状态
   getStatus() {
     return {
       enabled: this.enabled,
       volume: this.volume,
       initialized: this.initialized,
+      samplesReady: this.samplesReady,
+      samplesFailed: this.samplesFailed,
     };
+  }
+
+  private ensureContextRunning(): void {
+    if (this.audioContext?.state === 'suspended') {
+      this.audioContext.resume().catch(() => {
+        // The next user gesture will try again.
+      });
+    }
+  }
+
+  private loadKeyboardSamples(): void {
+    if (!this.audioContext || this.keyboardSamplesPromise) return;
+
+    this.keyboardSamplesPromise = Promise.all(
+      KEYBOARD_SAMPLE_URLS.map(async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to load keyboard sample: ${url}`);
+        }
+        const data = await response.arrayBuffer();
+        return this.audioContext!.decodeAudioData(data);
+      }),
+    )
+      .then((buffers) => {
+        this.keyboardBuffers = buffers;
+        this.samplesReady = buffers.length > 0;
+        this.samplesFailed = false;
+      })
+      .catch((err) => {
+        console.warn('[SoundManager] Keyboard samples unavailable; using fallback click.', err);
+        this.keyboardBuffers = [];
+        this.samplesReady = false;
+        this.samplesFailed = true;
+      });
+  }
+
+  private playKeyboardTyping(): void {
+    if (!this.audioContext) return;
+
+    if (!this.samplesReady || this.keyboardBuffers.length === 0) {
+      this.playFallbackKeyboardClick();
+      return;
+    }
+
+    const buffer = this.keyboardBuffers[Math.floor(Math.random() * this.keyboardBuffers.length)];
+    const source = this.audioContext.createBufferSource();
+    const gain = this.audioContext.createGain();
+    const filter = this.audioContext.createBiquadFilter();
+    const now = this.audioContext.currentTime;
+
+    source.buffer = buffer;
+    source.playbackRate.setValueAtTime(0.96 + Math.random() * 0.08, now);
+
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(85, now);
+
+    gain.gain.setValueAtTime(
+      CATEGORY_GAIN.input * this.volume * (0.9 + Math.random() * 0.18),
+      now,
+    );
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.audioContext.destination);
+
+    source.start(now);
+    source.onended = () => {
+      source.disconnect();
+      filter.disconnect();
+      gain.disconnect();
+    };
+  }
+
+  private playFallbackKeyboardClick(): void {
+    this.playSynth({
+      category: 'input',
+      priority: 0,
+      notes: [2600],
+      duration: 0.045,
+      type: 'triangle',
+      gain: 0.22,
+      fadeIn: 0.002,
+      fadeOut: 0.035,
+      filter: { type: 'highpass', frequency: 900, q: 0.7 },
+    });
+  }
+
+  private queueReward(soundType: SoundType, config: SynthSoundConfig): void {
+    if (!this.pendingReward || config.priority >= this.pendingReward.config.priority) {
+      this.pendingReward = { soundType, config };
+    }
+
+    if (this.rewardTimer) return;
+
+    this.rewardTimer = setTimeout(() => {
+      const reward = this.pendingReward;
+      this.clearPendingReward();
+      if (reward && this.enabled) {
+        this.playSynth(reward.config);
+      }
+    }, REWARD_COOLDOWN_MS);
+  }
+
+  private clearPendingReward(): void {
+    if (this.rewardTimer) {
+      clearTimeout(this.rewardTimer);
+      this.rewardTimer = null;
+    }
+    this.pendingReward = null;
+  }
+
+  private playSynth(config: SynthSoundConfig): void {
+    if (!this.audioContext) return;
+
+    const now = this.audioContext.currentTime;
+    const noteGap = config.noteGap ?? 0;
+    const noteDuration = Math.max(
+      0.035,
+      (config.duration - noteGap * Math.max(0, config.notes.length - 1)) / config.notes.length,
+    );
+
+    config.notes.forEach((frequency, index) => {
+      const startAt = now + index * noteGap;
+      const stopAt = startAt + noteDuration;
+      const oscillator = this.audioContext!.createOscillator();
+      const gain = this.audioContext!.createGain();
+      const outputNode = this.createFilter(config);
+
+      oscillator.type = config.type;
+      oscillator.frequency.setValueAtTime(frequency, startAt);
+
+      gain.gain.setValueAtTime(0, startAt);
+      gain.gain.linearRampToValueAtTime(
+        config.gain * CATEGORY_GAIN[config.category] * this.volume,
+        startAt + (config.fadeIn ?? 0.005),
+      );
+      gain.gain.exponentialRampToValueAtTime(0.001, stopAt + (config.fadeOut ?? 0.06));
+
+      oscillator.connect(gain);
+      gain.connect(outputNode);
+      outputNode.connect(this.audioContext!.destination);
+
+      oscillator.start(startAt);
+      oscillator.stop(stopAt + (config.fadeOut ?? 0.06));
+
+      oscillator.onended = () => {
+        oscillator.disconnect();
+        gain.disconnect();
+        outputNode.disconnect();
+      };
+    });
+  }
+
+  private createFilter(config: SynthSoundConfig): AudioNode {
+    if (!this.audioContext || !config.filter) {
+      return this.audioContext!.createGain();
+    }
+
+    const filter = this.audioContext.createBiquadFilter();
+    filter.type = config.filter.type;
+    filter.frequency.setValueAtTime(config.filter.frequency, this.audioContext.currentTime);
+    if (config.filter.q !== undefined) {
+      filter.Q.setValueAtTime(config.filter.q, this.audioContext.currentTime);
+    }
+    return filter;
   }
 }
 
-// 导出单例
 export const soundManager = new SoundManager();
 
-// 便捷函数
 export function playSound(soundType: SoundType): void {
   soundManager.play(soundType);
 }

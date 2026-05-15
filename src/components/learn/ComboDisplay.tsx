@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useComboStore } from '@/stores/comboStore';
+import { playSound } from '@/utils/soundEffects';
 
 type ComboEvent = 'increment' | 'reset' | 'new-best';
 
@@ -56,17 +57,21 @@ export function ComboDisplay() {
 
       // 检查是否打破最大记录
       if (currentCombo > prevMaxRef.current && prevMaxRef.current > 0) {
+        playSound('new-best');
         setNewBestFadingOut(false);
         setNewBestVisible(true);
         addTimer(() => {
           setNewBestFadingOut(true);
           addTimer(() => setNewBestVisible(false), 500);
         }, 1800);
+      } else if ([5, 10, 20, 30].includes(currentCombo)) {
+        playSound('combo-milestone');
       }
     } else if (currentCombo === 0 && prevComboRef.current > 0) {
       // 连击中断
       setAnimEvent('reset');
       spawnParticles(5);
+      playSound('combo-reset');
 
       // 抖动动画结束后开始淡出 combo 数字
       addTimer(() => {
