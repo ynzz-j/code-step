@@ -8,7 +8,7 @@ import type { TypingStep } from '@/types';
 interface TypingEditorProps {
   step: TypingStep;
   onComplete: () => void;
-  onKeystroke: (isCorrect: boolean) => void;
+  onKeystroke: (isCorrect: boolean, info?: { expected: string; input: string; position: number }) => void;
   onReset?: () => void;
   /** 无退格完成当前步骤时触发 */
   onPerfectStrike?: () => void;
@@ -76,7 +76,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
         const expected = targetCode.slice(cursorPosition, cursorPosition + spaces.length);
         if (expected === spaces) {
           playSound('typing');
-          onKeystroke(true);
+          onKeystroke(true, { expected: spaces, input: spaces, position: cursorPosition });
           setTyped((prev) => prev + spaces);
           setCursorPosition((prev) => prev + spaces.length);
         }
@@ -91,7 +91,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
         const expected = targetCode[cursorPosition];
         if (expected === '\n') {
           playSound('typing');
-          onKeystroke(true);
+          onKeystroke(true, { expected: newline, input: newline, position: cursorPosition });
           setTyped((prev) => prev + newline);
           setCursorPosition((prev) => prev + 1);
         }
@@ -115,7 +115,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
 
     playSound(isCorrect ? 'typing' : 'error');
     recordKeystroke(isCorrect);
-    onKeystroke(isCorrect);
+    onKeystroke(isCorrect, { expected: expectedChar, input: inputChar, position: cursorPosition });
 
     setTyped((prev) => prev + inputChar);
     setCursorPosition((prev) => prev + 1);

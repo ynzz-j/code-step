@@ -29,11 +29,14 @@ export const useUserStore = create<UserStore>()(
       updateStats: (stats) =>
         set((state) => ({
           stepStats: [...state.stepStats, stats as StepStats],
+          totalLearningTime: state.totalLearningTime + (stats.timeSpent ?? 0),
         })),
 
       addCompletedCourse: (courseId) =>
         set((state) => ({
-          completedCourses: [...state.completedCourses, courseId],
+          completedCourses: state.completedCourses.includes(courseId)
+            ? state.completedCourses
+            : [...state.completedCourses, courseId],
         })),
 
       unlockAchievement: (achievement) =>

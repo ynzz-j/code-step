@@ -51,23 +51,53 @@ export function StatsPanel({ stats }: StatsPanelProps) {
     }
   }, [bestStats, flowScore, totalKeystrokes, wpm]);
 
-  const items = [
-    { label: 'WPM', value: wpm, tone: 'text-primary-300', sub: bestStats.wpm > 0 ? `最佳 ${bestStats.wpm}` : '开始后记录' },
-    { label: '准确率', value: `${accuracy}%`, tone: accuracy < 95 ? 'text-warning-400' : 'text-success-400', sub: `${totalKeystrokes} 键` },
-    { label: '错误', value: errors, tone: errors > 0 ? 'text-error-400' : 'text-success-400', sub: '越少越稳' },
-    { label: '最大连击', value: `x${maxCombo}`, tone: maxCombo >= 20 ? 'text-yellow-300' : 'text-blue-300', sub: '当前课程' },
-    { label: 'Flow', value: flowScore, tone: flowScore >= bestStats.flowScore && flowScore > 0 ? 'text-yellow-300' : 'text-cyan-300', sub: bestStats.flowScore > 0 ? `最佳 ${bestStats.flowScore}` : '节奏分' },
-  ];
-
   return (
-    <div className="grid grid-cols-5 gap-2 px-6 py-3 bg-gray-800/30 border-b border-gray-700/50">
-      {items.map((item) => (
-        <div key={item.label} className="min-w-0 rounded-lg bg-gray-900/30 border border-gray-700/40 px-3 py-2 text-center">
-          <div className={`text-xl font-bold leading-none ${item.tone}`}>{item.value}</div>
-          <div className="mt-1 text-xs text-gray-500">{item.label}</div>
-          <div className="mt-0.5 text-[10px] text-gray-600 truncate">{item.sub}</div>
+    <div className="flex items-center gap-4 px-4 py-2 bg-bg-panel/30 border-t border-bg-surface/30">
+      {/* 核心三项 - 主要显示 */}
+      <div className="flex items-center gap-4">
+        <div className="text-center">
+          <div className="text-lg font-bold text-accent-primary font-mono">{wpm}</div>
+          <div className="text-[10px] text-text-muted uppercase tracking-wide">WPM</div>
         </div>
-      ))}
+        <div className="w-px h-8 bg-bg-surface/50" />
+        <div className="text-center">
+          <div className={`text-lg font-bold font-mono ${accuracy < 95 ? 'text-warning-400' : 'text-success-400'}`}>{accuracy}%</div>
+          <div className="text-[10px] text-text-muted uppercase tracking-wide">准确率</div>
+        </div>
+        <div className="w-px h-8 bg-bg-surface/50" />
+        <div className="text-center">
+          <div className={`text-lg font-bold font-mono ${errors > 0 ? 'text-error-400' : 'text-success-400'}`}>{errors}</div>
+          <div className="text-[10px] text-text-muted uppercase tracking-wide">错误</div>
+        </div>
+      </div>
+
+      {/* 分隔线 */}
+      <div className="w-px h-8 bg-bg-surface/50" />
+
+      {/* 次级指标 - 更小更轻 */}
+      <div className="flex items-center gap-3 text-[10px]">
+        <div className="text-center">
+          <div className="text-sm font-mono text-accent-primary">x{maxCombo}</div>
+          <div className="text-[9px] text-text-disabled">Combo</div>
+        </div>
+        <div className="text-center">
+          <div className="text-sm font-mono text-accent-success">{flowScore}</div>
+          <div className="text-[9px] text-text-disabled">Flow</div>
+        </div>
+        {bestStats.wpm > 0 && (
+          <>
+            <div className="text-center">
+              <div className="text-sm font-mono text-accent-record">{bestStats.wpm}</div>
+              <div className="text-[9px] text-text-disabled">最佳</div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* 键数 */}
+      <div className="ml-auto text-[10px] text-text-disabled">
+        {totalKeystrokes} 键
+      </div>
     </div>
   );
 }

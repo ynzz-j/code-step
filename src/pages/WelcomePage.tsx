@@ -1,19 +1,73 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { playSound } from '@/utils/soundEffects';
+import { FEATURED_TRAINING_PACKS } from '@/data/trainingPacks';
+import { DIFFICULTY_LABELS } from '@/types';
+
+interface RecentStats {
+  lastWpm: number;
+  lastAccuracy: number;
+  bestCombo: number;
+  todayDelta: number;
+  totalTimeMin: number;
+  completedCourses: number;
+  hasActivity: boolean;
+}
+
+function readRecentStats(): RecentStats {
+  try {
+    const user = JSON.parse(localStorage.getItem('codestep-user') || '{}');
+    const packStats = JSON.parse(localStorage.getItem('codestep-training-pack-stats') || '{}');
+
+    const stepStats = user?.state?.stepStats || [];
+    const totalTimeMin = Math.round((user?.state?.totalLearningTime || 0) / 60);
+    const completedCourses = user?.state?.completedCourses || [];
+
+    // 从最近的 stepStats 取平均值
+    const recent = stepStats.slice(-10);
+    const lastWpm = recent.length > 0
+      ? Math.round(recent.reduce((s: number, x: { wpm?: number }) => s + (x.wpm || 0), 0) / recent.length)
+      : 0;
+    const lastAccuracy = recent.length > 0
+      ? Math.round(recent.reduce((s: number, x: { accuracy: number }) => s + x.accuracy, 0) / recent.length)
+      : 0;
+
+    // 取所有训练包中的最佳 Combo
+    let bestCombo = 0;
+    let todayDelta = 0;
+    for (const key of Object.keys(packStats)) {
+      const s = packStats[key];
+      if (s?.bestCombo > bestCombo) bestCombo = s.bestCombo;
+      if (s?.todayDelta > todayDelta) todayDelta = s.todayDelta;
+    }
+
+    return {
+      lastWpm,
+      lastAccuracy,
+      bestCombo,
+      todayDelta,
+      totalTimeMin,
+      completedCourses: completedCourses.length,
+      hasActivity: stepStats.length > 0,
+    };
+  } catch {
+    return { lastWpm: 0, lastAccuracy: 0, bestCombo: 0, todayDelta: 0, totalTimeMin: 0, completedCourses: 0, hasActivity: false };
+  }
+}
+
+const DIFFICULTY_COLORS: Record<string, string> = {
+  beginner: 'text-success-400 bg-success-500/15',
+  basic: 'text-cyan-400 bg-cyan-500/15',
+  intermediate: 'text-blue-400 bg-blue-500/15',
+  advanced: 'text-orange-400 bg-orange-500/15',
+  hell: 'text-error-400 bg-error-500/15',
+};
 
 export function WelcomePage() {
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; duration: number }>>([]);
+  const [stats, setStats] = useState<RecentStats>(readRecentStats);
 
-  // 生成背景粒子
   useEffect(() => {
-    const newParticles = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: 3 + Math.random() * 5,
-    }));
-    setParticles(newParticles);
+    setStats(readRecentStats());
   }, []);
 
   const handleButtonClick = (mode: string) => {
@@ -22,114 +76,189 @@ export function WelcomePage() {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-full px-8 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* 背景粒子 */}
-      {particles.map(particle => (
-        <div
-          key={particle.id}
-          className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-float pointer-events-none"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            animationDuration: `${particle.duration}s`,
-            animationDelay: `${Math.random() * 2}s`,
-          }}
-        />
-      ))}
+    <div className="flex flex-col items-center h-full overflow-y-auto px-6 py-8 bg-bg-app">
+      <div className="max-w-4xl w-full space-y-10 animate-fade-in">
 
-      {/* 主内容 */}
-      <div className="relative z-10 max-w-4xl text-center space-y-8 animate-fade-in">
-        {/* Logo + 标题 */}
-        <div className="space-y-4">
+        {/* === Hero 品牌区 === */}
+        <div className="text-center space-y-4 pt-4">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-3xl font-bold text-white shadow-lg shadow-blue-500/25 animate-pulse-slow">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-blue-500/20">
               CS
             </div>
           </div>
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-x">
+          <h1 className="text-3xl md:text-4xl font-bold text-text-primary">
             CodeStep
           </h1>
-          <p className="text-xl text-gray-300 font-light">
+          <p className="text-base text-text-secondary">
             用高频代码片段建立编程肌肉记忆
           </p>
         </div>
 
-        {/* 特性介绍 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-          {[
-            { icon: '🎯', title: '短片段循环', desc: '用 30 秒节奏反复练习常用写法' },
-            { icon: '⌨️', title: '逐字跟敲', desc: '把语法和符号变成自然动作' },
-            { icon: '✅', title: '即时反馈', desc: '错误、准确率和连击实时反馈' },
-          ].map((feature, i) => (
-            <div
-              key={i}
-              className="p-4 rounded-xl bg-gray-800/30 border border-gray-700/30 hover:border-blue-500/30 hover:bg-gray-800/50 transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${i * 100}ms` }}
-            >
-              <div className="text-3xl mb-2">{feature.icon}</div>
-              <h3 className="text-sm font-semibold text-gray-200 mb-1">{feature.title}</h3>
-              <p className="text-xs text-gray-400">{feature.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* 模式选择按钮 */}
-        <div className="flex items-center justify-center gap-4 pt-4 flex-wrap">
+        {/* === 主 CTA === */}
+        <div className="flex items-center justify-center gap-3">
           <Link
-            to="/courses?mode=typing"
+            to={stats.hasActivity ? '/courses?mode=typing' : '/courses?mode=typing'}
             onClick={() => handleButtonClick('typing')}
-            className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:scale-105 active:scale-95 flex items-center gap-2"
+            className="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-tool font-medium transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/20 active:scale-95 flex items-center gap-2"
           >
-            <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 11-1.676-1.676L14.25 9l1.035-.259a3.375 3.375 0 111.676-1.676L17.25 6l-.259 1.035a3.375 3.375 0 001.676 1.68z" />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7z" />
             </svg>
-            开始打字训练
+            {stats.hasActivity ? '继续训练' : '开始 30 秒训练'}
           </Link>
-
-          <div
-            className="px-8 py-4 border border-gray-700/70 bg-gray-800/40 text-gray-400 rounded-xl font-medium flex items-center gap-2 cursor-not-allowed"
-            aria-disabled="true"
-            title="编程实战模式后续开放，当前先专注肌肉记忆训练。"
-          >
-            <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-            </svg>
-            编程实战 Coming Soon
-          </div>
-
           <Link
             to="/about"
             onClick={() => handleButtonClick('about')}
-            className="px-8 py-4 border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white rounded-xl font-medium transition-all duration-300 hover:bg-gray-800/50 hover:scale-105 active:scale-95 flex items-center gap-2"
+            className="px-6 py-2.5 border border-gray-600 hover:border-gray-500 text-text-secondary hover:text-text-primary rounded-tool font-medium transition-all duration-200 hover:bg-bg-panel active:scale-95"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
             了解更多
           </Link>
         </div>
 
-        {/* 统计信息 */}
-        <div className="flex items-center justify-center gap-8 pt-8 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        {/* === 最近表现（有活动记录时显示）=== */}
+        {stats.hasActivity && (
+          <div className="rounded-tool border border-gray-700/40 bg-bg-panel px-6 py-4">
+            <h2 className="text-xs font-medium text-text-muted uppercase tracking-wide mb-3">最近表现</h2>
+            <div className="flex items-center justify-center gap-8 flex-wrap">
+              <div className="text-center">
+                <div className="text-xl font-bold text-primary-300 font-mono">{stats.lastWpm || '--'}</div>
+                <div className="text-[10px] text-text-muted mt-0.5">平均 WPM</div>
+              </div>
+              <div className="w-px h-8 bg-gray-700/50" />
+              <div className="text-center">
+                <div className={`text-xl font-bold font-mono ${stats.lastAccuracy >= 95 ? 'text-success-400' : 'text-warning-400'}`}>
+                  {stats.lastAccuracy || '--'}%
+                </div>
+                <div className="text-[10px] text-text-muted mt-0.5">准确率</div>
+              </div>
+              <div className="w-px h-8 bg-gray-700/50" />
+              <div className="text-center">
+                <div className="text-xl font-bold text-yellow-300 font-mono">x{stats.bestCombo}</div>
+                <div className="text-[10px] text-text-muted mt-0.5">最佳 Combo</div>
+              </div>
+              <div className="w-px h-8 bg-gray-700/50" />
+              <div className="text-center">
+                <div className="text-xl font-bold text-text-primary font-mono">{stats.totalTimeMin}</div>
+                <div className="text-[10px] text-text-muted mt-0.5">训练分钟</div>
+              </div>
+              <div className="w-px h-8 bg-gray-700/50" />
+              <div className="text-center">
+                <div className="text-xl font-bold text-text-primary font-mono">{stats.completedCourses}</div>
+                <div className="text-[10px] text-text-muted mt-0.5">完成课程</div>
+              </div>
+              {stats.todayDelta > 0 && (
+                <>
+                  <div className="w-px h-8 bg-gray-700/50" />
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-success-400 font-mono">+{stats.todayDelta}%</div>
+                    <div className="text-[10px] text-text-muted mt-0.5">今日提升</div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* === 推荐训练包 === */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-sm font-semibold text-text-primary">推荐训练包</h2>
+              <p className="text-xs text-text-muted mt-0.5">高频代码模式，30 秒起刷</p>
+            </div>
+            <Link
+              to="/courses?mode=typing"
+              className="text-xs text-primary-400 hover:text-primary-300 transition-colors"
+            >
+              查看全部 →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {FEATURED_TRAINING_PACKS.map((pack) => (
+              <Link
+                key={pack.id}
+                to={`/learn/${pack.id}?mode=typing`}
+                onClick={() => playSound('click')}
+                className="group block rounded-tool border border-gray-700/40 bg-bg-panel p-4 transition-all duration-200 hover:border-primary-500/40 hover:bg-bg-surface hover:-translate-y-0.5"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-text-primary group-hover:text-primary-300 transition-colors truncate">
+                    {pack.title}
+                  </h3>
+                  <span className={`flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium ${DIFFICULTY_COLORS[pack.difficulty] || ''}`}>
+                    {DIFFICULTY_LABELS[pack.difficulty]?.label}
+                  </span>
+                </div>
+                <p className="text-xs text-text-muted line-clamp-2 mb-3">
+                  {pack.patterns.map((p) => p.label).join(' · ')}
+                </p>
+                <div className="flex items-center gap-3 text-[10px] text-text-muted">
+                  <span>{pack.language.toUpperCase()}</span>
+                  <span>{pack.patterns.length} 模式</span>
+                  <span>{pack.durationModes[0]}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* === 更多训练包（Coming Soon）=== */}
+        <div>
+          <h2 className="text-sm font-semibold text-text-primary mb-3">即将推出</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              { title: 'React Hooks 高频', desc: 'useState / useEffect / useMemo / useCallback', lang: 'React' },
+              { title: 'SQL 极速输入', desc: 'SELECT JOIN GROUP BY 极速敲击', lang: 'SQL' },
+              { title: 'Vim Motion', desc: 'hjkl / wbe / ciw / f/t 组合动作', lang: 'Vim' },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-tool border border-dashed border-gray-700/30 bg-bg-panel/50 p-4 opacity-70"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-sm font-medium text-text-muted">{item.title}</h3>
+                  <span className="flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] bg-gray-700/30 text-gray-500">
+                    {item.lang}
+                  </span>
+                </div>
+                <p className="text-xs text-text-disabled line-clamp-2">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* === 特性介绍（弱化）=== */}
+        <div className="flex items-center justify-center gap-6 text-xs text-text-muted pt-4">
+          <div className="flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Typing 优先</span>
+            <span>短片段循环</span>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <div className="flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>逐字跟敲</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7z" />
             </svg>
             <span>即时反馈</span>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7z" />
-            </svg>
-            <span>多语言支持</span>
-          </div>
         </div>
+
+        {/* === 底部：Coding Coming Soon（不与主 CTA 同级竞争）=== */}
+        <div className="text-center pt-2 pb-4">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-tool border border-gray-700/30 bg-bg-panel/50 text-xs text-text-disabled cursor-default">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            编程实战模式后续开放
+          </span>
+        </div>
+
       </div>
     </div>
   );

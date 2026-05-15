@@ -53,11 +53,17 @@ export interface UserProgress {
 
 export interface StepStats {
   stepId: string;
+  courseId?: string;
+  courseTitle?: string;
+  concept?: string;
   attempts: number;
   timeSpent: number;
   errorsCount: number;
   accuracy: number;
   wpm?: number;
+  maxCombo?: number;
+  weakTokens?: string[];
+  createdAt?: string;
 }
 
 export interface Achievement {
