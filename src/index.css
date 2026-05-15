@@ -328,7 +328,59 @@
   @apply hover:bg-primary-500/10 hover:border-primary-500/30;
 }
 
-/* ========== 响应式优化 ========== */
+/* ========== 完美一击：强震屏 ========== */
+@keyframes screen-shake-hard {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10%  { transform: translate(-5px, -3px) rotate(-0.5deg); }
+  20%  { transform: translate(5px, 3px)  rotate(0.5deg); }
+  30%  { transform: translate(-4px, 5px) rotate(-0.3deg); }
+  40%  { transform: translate(4px, -5px) rotate(0.3deg); }
+  50%  { transform: translate(-5px, 2px) rotate(-0.5deg); }
+  60%  { transform: translate(5px, -3px) rotate(0.5deg); }
+  70%  { transform: translate(-2px, 4px) rotate(-0.2deg); }
+  80%  { transform: translate(2px, -4px) rotate(0.2deg); }
+  90%  { transform: translate(-3px, 1px) rotate(-0.3deg); }
+}
+
+.animate-screen-shake-hard {
+  animation: screen-shake-hard 0.8s ease-out;
+}
+
+/* ========== 完美一击：边缘粒子爆炸 ========== */
+@keyframes particle-burst-hard {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2); }
+}
+
+.perfect-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particle-burst-hard 1.2s ease-out forwards;
+  pointer-events: none;
+  z-index: 35;
+}
+
+/* ========== 完美一击：徽章弹簧入 ========== */
+@keyframes badge-spring-in {
+  0%   { opacity: 0; transform: translateY(-40px) scale(0.6); }
+  50%  { opacity: 1; transform: translateY(6px) scale(1.08); }
+  70%  { transform: translateY(-3px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.perfect-badge-in {
+  animation: badge-spring-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ========== 图表滑入 ========== */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out forwards;
+}
 
 /* 大屏幕优化 */
 @media (min-width: 1024px) {

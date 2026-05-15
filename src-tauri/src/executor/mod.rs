@@ -5,6 +5,17 @@ use std::process::Stdio;
 use std::time::Instant;
 use thiserror::Error;
 
+/// 智能解码：优先 UTF-8，失败则尝试 GBK（Windows 中文系统）
+fn smart_decode(bytes: &[u8]) -> String {
+    // 先尝试 UTF-8
+    if let Ok(s) = std::str::from_utf8(bytes) {
+        return s.to_string();
+    }
+    // 回退到 GBK
+    let (decoded, _, _) = encoding_rs::GBK.decode(bytes);
+    decoded.into_owned()
+}
+
 #[derive(Error, Debug)]
 pub enum ExecutionError {
     #[error("Compilation error: {0}")]
@@ -94,7 +105,7 @@ impl Executor {
         };
 
         if !compile_output.status.success() {
-            let stderr = String::from_utf8_lossy(&compile_output.stderr).to_string();
+            let stderr = smart_decode(&compile_output.stderr);
             return Ok(ExecutionResult {
                 success: false,
                 output: String::new(),
@@ -117,11 +128,11 @@ impl Executor {
         match run_result {
             Ok(Ok(output)) => Ok(ExecutionResult {
                 success: output.status.success(),
-                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                output: smart_decode(&output.stdout),
                 error: if output.status.success() {
                     None
                 } else {
-                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                    Some(smart_decode(&output.stderr))
                 },
                 execution_time_ms: run_elapsed,
                 error_type: if output.status.success() {
@@ -198,11 +209,11 @@ impl Executor {
         match run_result {
             Ok(Ok(output)) => Ok(ExecutionResult {
                 success: output.status.success(),
-                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                output: smart_decode(&output.stdout),
                 error: if output.status.success() {
                     None
                 } else {
-                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                    Some(smart_decode(&output.stderr))
                 },
                 execution_time_ms: elapsed,
                 error_type: if output.status.success() {
@@ -251,11 +262,11 @@ impl Executor {
         match run_result {
             Ok(Ok(output)) => Ok(ExecutionResult {
                 success: output.status.success(),
-                output: String::from_utf8_lossy(&output.stdout).to_string(),
+                output: smart_decode(&output.stdout),
                 error: if output.status.success() {
                     None
                 } else {
-                    Some(String::from_utf8_lossy(&output.stderr).to_string())
+                    Some(smart_decode(&output.stderr))
                 },
                 execution_time_ms: elapsed,
                 error_type: if output.status.success() {

@@ -30,3 +30,4 @@ winapi = { version = "0.3", features = ["winuser", "processthreadsapi"] }
 libc = "0.2"
 dirs = "5"
 which = "4"
+encoding_rs = "0.8"

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTypingStats } from '@/hooks/useTypingStats';
 import { StatsPanel } from '@/components/learn/StatsPanel';
+import { useChartStore } from '@/stores/chartStore';
 import type { TypingStep } from '@/types';
 
 let audioCtx: AudioContext | null = null;
@@ -48,14 +49,17 @@ interface TypingEditorProps {
   onComplete: () => void;
   onKeystroke: (isCorrect: boolean) => void;
   onReset?: () => void;
+  /** 无退格完成当前步骤时触发 */
+  onPerfectStrike?: () => void;
 }
 
-export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingEditorProps) {
+export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfectStrike }: TypingEditorProps) {
   const typedRef = useRef('');
   const [typed, setTyped] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const completedRef = useRef(false);
+  const backspaceCount = useRef(0);
 
   // 组件挂载时预初始化音效（需用户已交互）
   useEffect(() => {
@@ -71,6 +75,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
     setCursorPosition(0);
     resetStats();
     completedRef.current = false;
+    backspaceCount.current = 0;
     onReset?.();
     containerRef.current?.focus();
   }, [step, onReset, resetStats]);
@@ -94,6 +99,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
     }
 
     if (e.key === 'Backspace') {
+      backspaceCount.current += 1;
       if (cursorPosition > 0) {
         setTyped((prev) => prev.slice(0, -1));
         setCursorPosition((prev) => prev - 1);
@@ -163,14 +169,22 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset }: TypingE
 
   useEffect(() => {
     typedRef.current = typed;
-  }, [typed]);
+    // 每 3 个字符推送一次图表数据
+    if (typed.length > 0 && typed.length % 3 === 0) {
+      useChartStore.getState().pushWpm(wpm);
+      useChartStore.getState().pushAccuracy(accuracy);
+    }
+  }, [typed, wpm, accuracy]);
 
   useEffect(() => {
     if (typed === step.targetCode && typed.length > 0 && !completedRef.current) {
       completedRef.current = true;
+      if (backspaceCount.current === 0) {
+        onPerfectStrike?.();
+      }
       onComplete();
     }
-  }, [typed, step.targetCode, onComplete]);
+  }, [typed, step.targetCode, onComplete, onPerfectStrike]);
 
   const renderCode = () => {
     const chars: JSX.Element[] = [];

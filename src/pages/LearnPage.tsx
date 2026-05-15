@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { useTypingStatsStore } from '@/stores/typingStatsStore';
@@ -10,6 +10,9 @@ import { TypingEditor } from '@/components/editor/TypingEditor';
 import { CodeEditor } from '@/components/editor/CodeEditor';
 import { ComboDisplay } from '@/components/learn/ComboDisplay';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { PerfectStrike } from '@/components/learn/PerfectStrike';
+import { WpmChart } from '@/components/learn/WpmChart';
+import { useChartStore } from '@/stores/chartStore';
 import type { TypingStep } from '@/types';
 
 export function LearnPage() {
@@ -23,6 +26,10 @@ export function LearnPage() {
   const prevComboRef = useRef(0);
   // 步骤输入完成标记（独立于 store 的 currentStepCompleted）
   const [stepInputDone, setStepInputDone] = useState(false);
+  // 完美一击
+  const [perfectStrikeVisible, setPerfectStrikeVisible] = useState(false);
+  const wpm = useTypingStatsStore((s) => s.typingStats.wpm);
+  const accuracy = useTypingStatsStore((s) => s.typingStats.accuracy);
   const {
     currentCourse,
     currentStepIndex,
@@ -63,6 +70,11 @@ export function LearnPage() {
     prevComboRef.current = currentCombo;
   }, [currentCombo]);
 
+  // 切换步骤时重置图表
+  useEffect(() => {
+    useChartStore.getState().resetChart();
+  }, [currentStepIndex]);
+
   const currentStep = currentCourse?.steps[currentStepIndex];
 
   // 打字按键回调：更新打字统计 + 连击
@@ -84,6 +96,15 @@ export function LearnPage() {
   const handleCodingComplete = () => {
     setStepInputDone(true);
   };
+
+  // 完美一击回调
+  const handlePerfectStrike = useCallback(() => {
+    setPerfectStrikeVisible(true);
+  }, []);
+
+  const handlePerfectStrikeComplete = useCallback(() => {
+    setPerfectStrikeVisible(false);
+  }, []);
 
   // 用户主动确认进入下一步
   const handleGoNext = () => {
@@ -166,6 +187,7 @@ export function LearnPage() {
               onComplete={handleTypingComplete}
               onKeystroke={handleKeystroke}
               onReset={resetTypingStats}
+              onPerfectStrike={handlePerfectStrike}
             />
           )}
           {currentStep?.type === 'coding' && (
@@ -192,6 +214,19 @@ export function LearnPage() {
                   {isLastStep ? '查看结果' : '下一步 →'}
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* 完美一击特效 */}
+          <PerfectStrike
+            visible={perfectStrikeVisible}
+            onComplete={handlePerfectStrikeComplete}
+          />
+
+          {/* 实时表现图表（右上角）- 仅在打字模式下显示 */}
+          {currentStep?.type === 'typing' && (
+            <div className="absolute top-3 right-3 z-20">
+              <WpmChart wpm={wpm} accuracy={accuracy} />
             </div>
           )}
         </div>
