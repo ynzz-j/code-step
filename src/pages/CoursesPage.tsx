@@ -3,8 +3,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { CategoryFilter } from '@/components/courses/CategoryFilter';
+import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
 import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
-import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata } from '@/types';
+import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata, type TrainingPack } from '@/types';
 import { playSound } from '@/utils/soundEffects';
 
 const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
@@ -19,6 +20,7 @@ const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
 };
 
 const DEFAULT_RECOMMENDED_COURSE_IDS = [
+  ...DEFAULT_TRAINING_PACK_IDS,
   'js-array',
   'js-async',
   'python-list',
@@ -34,6 +36,108 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   advanced: 'text-orange-400 bg-orange-500/10',
   hell: 'text-error-400 bg-error-500/10',
 };
+
+interface TrainingPackStats {
+  todayDelta: number;
+  masteryPercent: number;
+  bestWpm: number;
+  bestCombo: number;
+}
+
+const TRAINING_PACK_STATS_KEY = 'codestep-training-pack-stats';
+
+function readTrainingPackStats(packId: string): TrainingPackStats {
+  if (typeof window === 'undefined') {
+    return { todayDelta: 0, masteryPercent: 0, bestWpm: 0, bestCombo: 0 };
+  }
+
+  try {
+    const saved = localStorage.getItem(TRAINING_PACK_STATS_KEY);
+    const stats = saved ? JSON.parse(saved) as Record<string, Partial<TrainingPackStats>> : {};
+    return {
+      todayDelta: stats[packId]?.todayDelta ?? 0,
+      masteryPercent: stats[packId]?.masteryPercent ?? 0,
+      bestWpm: stats[packId]?.bestWpm ?? 0,
+      bestCombo: stats[packId]?.bestCombo ?? 0,
+    };
+  } catch {
+    return { todayDelta: 0, masteryPercent: 0, bestWpm: 0, bestCombo: 0 };
+  }
+}
+
+function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: CourseMetadata }) {
+  const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
+  const [stats, setStats] = useState<TrainingPackStats>(() => readTrainingPackStats(pack.id));
+
+  useEffect(() => {
+    setStats(readTrainingPackStats(pack.id));
+  }, [pack.id]);
+
+  const progress = getCourseProgress(pack.id);
+  const completedCount = progress?.completedSteps?.length || 0;
+  const stepCount = course?.stepsCount ?? 0;
+  const masteryPercent = Math.max(
+    stats.masteryPercent,
+    stepCount > 0 ? Math.round((completedCount / stepCount) * 100) : 0,
+  );
+  const patternLabels = pack.patterns.map((pattern) => pattern.label).join(' · ');
+
+  return (
+    <Link
+      to={`/learn/${pack.id}?mode=typing`}
+      onClick={() => playSound('click')}
+      className="group block rounded-xl border border-cyan-500/30 bg-gray-900/70 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-400/70 hover:shadow-lg hover:shadow-cyan-500/10"
+    >
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <span className="rounded bg-cyan-500/10 px-2 py-0.5 text-xs font-medium text-cyan-300">
+              Training Pack
+            </span>
+            <span className="rounded bg-gray-700/50 px-2 py-0.5 text-xs font-medium text-gray-400">
+              {pack.track}
+            </span>
+          </div>
+          <h3 className="truncate text-lg font-semibold text-gray-100">{pack.title}</h3>
+          <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-gray-400">
+            {patternLabels}
+          </p>
+        </div>
+        <span className={`flex-shrink-0 rounded px-2 py-0.5 text-xs font-medium ${DIFFICULTY_COLORS[pack.difficulty]}`}>
+          {DIFFICULTY_LABELS[pack.difficulty].label}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-4 gap-2 text-center">
+        <div className="rounded-lg border border-gray-700/50 bg-gray-800/50 px-2 py-2">
+          <div className="text-sm font-semibold text-success-300">
+            {stats.todayDelta > 0 ? `+${stats.todayDelta}%` : '0%'}
+          </div>
+          <div className="mt-0.5 text-[10px] text-gray-500">今日提升</div>
+        </div>
+        <div className="rounded-lg border border-gray-700/50 bg-gray-800/50 px-2 py-2">
+          <div className="text-sm font-semibold text-cyan-300">{masteryPercent}%</div>
+          <div className="mt-0.5 text-[10px] text-gray-500">熟练度</div>
+        </div>
+        <div className="rounded-lg border border-gray-700/50 bg-gray-800/50 px-2 py-2">
+          <div className="text-sm font-semibold text-primary-300">{stats.bestWpm || '--'}</div>
+          <div className="mt-0.5 text-[10px] text-gray-500">最佳 WPM</div>
+        </div>
+        <div className="rounded-lg border border-gray-700/50 bg-gray-800/50 px-2 py-2">
+          <div className="text-sm font-semibold text-yellow-300">x{stats.bestCombo}</div>
+          <div className="mt-0.5 text-[10px] text-gray-500">最佳 Combo</div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+        <span>{pack.language.toUpperCase()}</span>
+        <span>{pack.patterns.length} 个模式</span>
+        <span>{pack.durationModes.join(' / ')}</span>
+        {course && <span>{course.stepsCount} 段</span>}
+      </div>
+    </Link>
+  );
+}
 
 // 难度排序（从低到高）
 const DIFFICULTY_ORDER: Record<string, number> = {
@@ -194,8 +298,11 @@ export function CoursesPage() {
       ? filteredCourses
       : courses;
 
+  const trainingPackIdSet = new Set(DEFAULT_TRAINING_PACK_IDS);
+  const displayCourseList = displayCourses.filter((course) => !trainingPackIdSet.has(course.id));
+
   // 默认先露出高频短循环推荐，再按难度排序（入门→基础→中等→困难→地狱）
-  const sortedCourses = [...displayCourses].sort((a, b) => {
+  const sortedCourses = [...displayCourseList].sort((a, b) => {
     const recommendedA = DEFAULT_RECOMMENDED_COURSE_IDS.indexOf(a.id);
     const recommendedB = DEFAULT_RECOMMENDED_COURSE_IDS.indexOf(b.id);
     const isRecommendedA = recommendedA >= 0;
@@ -209,6 +316,14 @@ export function CoursesPage() {
     const orderA = DIFFICULTY_ORDER[a.difficulty] || 0;
     const orderB = DIFFICULTY_ORDER[b.difficulty] || 0;
     return orderA - orderB;
+  });
+
+  const courseById = new Map(courses.map((course) => [course.id, course]));
+  const visibleTrainingPacks = FEATURED_TRAINING_PACKS.filter((pack) => {
+    const matchLang = selectedLanguage === 'all' || pack.language === selectedLanguage;
+    const matchDiff = selectedDifficulty === 'all' || pack.difficulty === selectedDifficulty;
+    const matchCat = selectedCategory === 'all' || courseById.get(pack.id)?.category === selectedCategory;
+    return matchLang && matchDiff && matchCat;
   });
 
   return (
@@ -251,31 +366,55 @@ export function CoursesPage() {
           <>
             <CategoryFilter className="mb-8" />
 
-            {filteredCourses.length === 0 && (selectedCategory !== 'all' || selectedDifficulty !== 'all') ? (
-          <div className="text-center py-16">
-            <div className="text-4xl mb-4 opacity-30">📭</div>
-            <p className="text-gray-400">
-              该筛选条件下暂无课程，敬请期待更多内容
-            </p>
-          </div>
-            ) : sortedCourses.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-4xl mb-4 opacity-30">📭</div>
-            <p className="text-gray-400">
-              {modeLabel.title}暂无课程，敬请期待更多内容
-            </p>
-          </div>
+            {visibleTrainingPacks.length > 0 && (
+              <section className="mb-8">
+                <div className="mb-3 flex items-end justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-100">训练包</h2>
+                    <p className="mt-1 text-sm text-gray-500">按真实高频代码模式重组，适合 30 秒到 3 分钟反复刷。</p>
+                  </div>
+                  <span className="text-xs text-gray-500">第 4-6 周重组层</span>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  {visibleTrainingPacks.map((pack) => (
+                    <TrainingPackCard
+                      key={pack.id}
+                      pack={pack}
+                      course={courseById.get(pack.id)}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {sortedCourses.length === 0 ? (
+              visibleTrainingPacks.length === 0 ? (
+                <div className="text-center py-16">
+                  <div className="text-4xl mb-4 opacity-30">📭</div>
+                  <p className="text-gray-400">
+                    {selectedCategory !== 'all' || selectedDifficulty !== 'all'
+                      ? '该筛选条件下暂无训练内容，敬请期待更多内容'
+                      : `${modeLabel.title}暂无课程，敬请期待更多内容`}
+                  </p>
+                </div>
+              ) : null
             ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {sortedCourses.map((course) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-                mode={mode}
-                recommended={DEFAULT_RECOMMENDED_COURSE_IDS.includes(course.id)}
-              />
-            ))}
-          </div>
+          <section>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-100">课程库</h2>
+              <span className="text-xs text-gray-500">保留原课程，训练包作为推荐入口</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {sortedCourses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  mode={mode}
+                  recommended={DEFAULT_RECOMMENDED_COURSE_IDS.includes(course.id)}
+                />
+              ))}
+            </div>
+          </section>
             )}
           </>
         )}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Service 字段",
+  "concept": "dependency injection",
+  "difficulty": "intermediate",
+  "instruction": "输入构造器注入常用字段，练习 final 字段声明。",
+  "hint": "字段名用小驼峰。",
+  "targetCode": "private final UserService userService;",
+  "encouragement": "依赖字段很干净。"
+}

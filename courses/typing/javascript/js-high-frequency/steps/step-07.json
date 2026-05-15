@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "try catch 请求",
+  "concept": "try/catch",
+  "difficulty": "intermediate",
+  "instruction": "输入异步调用的错误保护模板，练习代码块切换。",
+  "hint": "catch 参数保持简短。",
+  "targetCode": "try {\n  const profile = await loadUser(userId);\n} catch (error) {\n  console.error(error);\n}",
+  "encouragement": "错误保护不再卡手。"
+}

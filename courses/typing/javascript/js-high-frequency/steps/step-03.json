@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "reduce 累加",
+  "concept": "reduce",
+  "difficulty": "intermediate",
+  "instruction": "输入购物车总价累加模板，重点练 sum 和初始值。",
+  "hint": "reduce 第二个参数是初始值。",
+  "targetCode": "const total = cart.reduce((sum, item) => sum + item.price, 0);",
+  "encouragement": "累加模板稳住了。"
+}

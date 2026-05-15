@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "导出计算函数",
+  "concept": "export function",
+  "difficulty": "intermediate",
+  "instruction": "输入导出的订单总额函数，练习业务工具函数骨架。",
+  "hint": "qty 和 price 相乘后再累加。",
+  "targetCode": "export const getOrderTotal = (items) => items.reduce((sum, item) => sum + item.qty * item.price, 0);",
+  "encouragement": "工具函数输入稳定。"
+}

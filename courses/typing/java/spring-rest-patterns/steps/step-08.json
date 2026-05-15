@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Stream 筛选",
+  "concept": "Stream",
+  "difficulty": "intermediate",
+  "instruction": "输入 active 用户 Stream 筛选，练习链式换行。",
+  "hint": "filter 里使用方法引用。",
+  "targetCode": "return users.stream()\n    .filter(User::isActive)\n    .toList();",
+  "encouragement": "Stream 链路很顺。"
+}

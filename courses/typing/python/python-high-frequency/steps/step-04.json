@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字典索引",
+  "concept": "dict comprehension",
+  "difficulty": "basic",
+  "instruction": "输入按 id 建立字典索引的模板，练习冒号位置。",
+  "hint": "冒号左边是 key，右边是 value。",
+  "targetCode": "user_by_id = {user[\"id\"]: user for user in users}",
+  "encouragement": "字典构造很干净。"
+}

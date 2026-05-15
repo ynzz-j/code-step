@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "列表筛选",
+  "concept": "list comprehension",
+  "difficulty": "basic",
+  "instruction": "输入列表推导式筛选 active 用户，练习 if 的位置。",
+  "hint": "先写表达式，再写 for，最后写 if。",
+  "targetCode": "active_users = [user for user in users if user[\"active\"]]",
+  "encouragement": "列表推导式很顺。"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-high-frequency",
+  "title": "Python 高频基础 loop",
+  "description": "用 list、dict、函数、guard 和字符串处理组成短循环，适合脚本和数据处理的日常手感训练。",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "basic",
+  "concepts": [
+    "list",
+    "dict",
+    "function",
+    "guard",
+    "string"
+  ],
+  "estimatedMinutes": 10,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json"
+  ]
+}

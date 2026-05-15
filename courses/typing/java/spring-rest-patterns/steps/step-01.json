@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Controller 注解",
+  "concept": "RestController",
+  "difficulty": "intermediate",
+  "instruction": "输入 REST Controller 的顶部注解，练习注解和路径节奏。",
+  "hint": "RequestMapping 放在类级路径。",
+  "targetCode": "@RestController\n@RequestMapping(\"/api/users\")",
+  "encouragement": "Controller 入口很稳。"
+}

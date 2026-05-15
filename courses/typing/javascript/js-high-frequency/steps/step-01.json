@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "filter 条件筛选",
+  "concept": "filter",
+  "difficulty": "intermediate",
+  "instruction": "输入最常见的 active 用户筛选写法，重点练箭头函数和属性访问。",
+  "hint": "条件表达式保持短而直接。",
+  "targetCode": "const activeUsers = users.filter((user) => user.isActive);",
+  "encouragement": "筛选节奏已经起来了。"
+}

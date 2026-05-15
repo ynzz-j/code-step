@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "规范化函数",
+  "concept": "function",
+  "difficulty": "basic",
+  "instruction": "输入一个短函数，练习 def、缩进和方法链。",
+  "hint": "Python 函数体缩进 4 个空格。",
+  "targetCode": "def normalize_email(email):\n    return email.strip().lower()",
+  "encouragement": "函数骨架已经顺手。"
+}

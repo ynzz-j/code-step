@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "next 查找",
+  "concept": "next",
+  "difficulty": "basic",
+  "instruction": "输入根据 id 查找用户的短函数，练习 next 默认值。",
+  "hint": "next 的第二个参数是找不到时的返回值。",
+  "targetCode": "def find_user(users, user_id):\n    return next((user for user in users if user[\"id\"] == user_id), None)",
+  "encouragement": "查找函数手感很好。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "对象返回",
+  "concept": "object literal",
+  "difficulty": "intermediate",
+  "instruction": "输入箭头函数直接返回对象，重点练括号包对象。",
+  "hint": "对象字面量外面需要小括号。",
+  "targetCode": "const createUser = ({ name, email }) => ({ id: crypto.randomUUID(), name, email });",
+  "encouragement": "对象返回节奏漂亮。"
+}

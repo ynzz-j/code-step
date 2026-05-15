@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "find 精确查找",
+  "concept": "find",
+  "difficulty": "intermediate",
+  "instruction": "输入按 id 查找对象的短句，练习比较表达式。",
+  "hint": "find 返回第一个匹配项。",
+  "targetCode": "const userById = users.find((user) => user.id === userId);",
+  "encouragement": "查找动作很干净。"
+}

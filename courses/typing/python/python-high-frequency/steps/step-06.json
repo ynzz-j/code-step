@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "入口 guard",
+  "concept": "guard clause",
+  "difficulty": "basic",
+  "instruction": "输入缺少 user_id 时的 guard，练习 not 和 raise。",
+  "hint": "错误信息保持英文短句。",
+  "targetCode": "if not user_id:\n    raise ValueError(\"user_id is required\")",
+  "encouragement": "保护分支很稳。"
+}

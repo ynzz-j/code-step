@@ -24,6 +24,10 @@ const DIFFICULTY_COLORS: Record<string, { active: string; inactive: string }> = 
     active: 'bg-green-500/80 text-white',
     inactive: 'bg-green-900/30 text-green-400/70 hover:bg-green-900/50',
   },
+  basic: {
+    active: 'bg-cyan-500/80 text-white',
+    inactive: 'bg-cyan-900/30 text-cyan-400/70 hover:bg-cyan-900/50',
+  },
   intermediate: {
     active: 'bg-blue-500/80 text-white',
     inactive: 'bg-blue-900/30 text-blue-400/70 hover:bg-blue-900/50',

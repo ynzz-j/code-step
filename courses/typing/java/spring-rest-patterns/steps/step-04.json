@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "GET by id",
+  "concept": "GetMapping",
+  "difficulty": "intermediate",
+  "instruction": "输入按 id 查询接口模板，练习路径变量位置。",
+  "hint": "PathVariable 和参数类型挨在一起。",
+  "targetCode": "@GetMapping(\"/{id}\")\npublic UserDto getUser(@PathVariable Long id) {\n    return userService.findById(id);\n}",
+  "encouragement": "查询接口骨架稳住。"
+}

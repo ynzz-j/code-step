@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "构造器注入",
+  "concept": "constructor injection",
+  "difficulty": "intermediate",
+  "instruction": "输入构造器注入模板，练习 this 赋值。",
+  "hint": "参数名和字段名保持一致。",
+  "targetCode": "public UserController(UserService userService) {\n    this.userService = userService;\n}",
+  "encouragement": "构造器节奏顺了。"
+}

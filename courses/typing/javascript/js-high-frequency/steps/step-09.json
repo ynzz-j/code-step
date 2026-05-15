@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "布尔判断",
+  "concept": "boolean guard",
+  "difficulty": "intermediate",
+  "instruction": "输入权限判断短句，练习 Boolean 和 includes。",
+  "hint": "把存在性和权限检查合在一行。",
+  "targetCode": "const isReady = Boolean(user && permissions.includes(\"write\"));",
+  "encouragement": "判断语句很利落。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "POST 创建",
+  "concept": "PostMapping",
+  "difficulty": "intermediate",
+  "instruction": "输入创建接口模板，练习 RequestBody 和 service 调用。",
+  "hint": "request 传给 service.create。",
+  "targetCode": "@PostMapping\npublic UserDto createUser(@RequestBody CreateUserRequest request) {\n    return userService.create(request);\n}",
+  "encouragement": "创建接口很顺。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "嵌套 get",
+  "concept": "dict get",
+  "difficulty": "basic",
+  "instruction": "输入嵌套字典默认值读取，练习连续 get。",
+  "hint": "中间默认值用空字典。",
+  "targetCode": "result = user.get(\"profile\", {}).get(\"display_name\", \"Guest\")",
+  "encouragement": "默认值读取稳了。"
+}

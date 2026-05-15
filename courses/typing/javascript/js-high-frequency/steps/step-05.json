@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "解构后 map",
+  "concept": "destructuring",
+  "difficulty": "intermediate",
+  "instruction": "输入解构参数后的 email 处理，练括号和花括号节奏。",
+  "hint": "参数里的花括号表示对象解构。",
+  "targetCode": "const emails = users.map(({ email }) => email.toLowerCase());",
+  "encouragement": "解构输入开始顺手了。"
+}

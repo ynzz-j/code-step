@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "三元表达式",
+  "concept": "conditional expression",
+  "difficulty": "basic",
+  "instruction": "输入状态选择短句，练 Python 的条件表达式顺序。",
+  "hint": "真值在 if 前，条件在中间。",
+  "targetCode": "status = \"active\" if user[\"enabled\"] else \"blocked\"",
+  "encouragement": "条件表达式很利落。"
+}

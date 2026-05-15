@@ -1,0 +1,28 @@
+{
+  "id": "spring-rest-patterns",
+  "title": "Spring REST 短模板训练",
+  "description": "把 Spring Controller、Service、Bean 和异常处理拆成 80-180 字符内的高频输入模板。",
+  "language": "java",
+  "category": "backend",
+  "difficulty": "intermediate",
+  "concepts": [
+    "Controller",
+    "REST",
+    "Service",
+    "IoC",
+    "Bean"
+  ],
+  "estimatedMinutes": 12,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json"
+  ]
+}

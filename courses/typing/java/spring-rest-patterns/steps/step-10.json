@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "DTO record",
+  "concept": "record",
+  "difficulty": "intermediate",
+  "instruction": "输入接口常用 DTO record，练习参数列表。",
+  "hint": "record 结尾用花括号。",
+  "targetCode": "record UserDto(Long id, String name, String email) {}",
+  "encouragement": "DTO 短模板很利落。"
+}

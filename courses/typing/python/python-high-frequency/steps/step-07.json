@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "循环收集",
+  "concept": "for loop",
+  "difficulty": "basic",
+  "instruction": "输入 for 循环收集金额，练习缩进和 append。",
+  "hint": "append 在循环体里。",
+  "targetCode": "for order in orders:\n    totals.append(order[\"amount\"])",
+  "encouragement": "循环输入保持住了。"
+}

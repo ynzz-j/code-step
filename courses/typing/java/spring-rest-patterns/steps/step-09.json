@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "异常处理",
+  "concept": "ExceptionHandler",
+  "difficulty": "intermediate",
+  "instruction": "输入 404 异常处理注解组合，练习长注解名。",
+  "hint": "HttpStatus.NOT_FOUND 使用下划线。",
+  "targetCode": "@ExceptionHandler(UserNotFoundException.class)\n@ResponseStatus(HttpStatus.NOT_FOUND)",
+  "encouragement": "异常反馈模板稳了。"
+}

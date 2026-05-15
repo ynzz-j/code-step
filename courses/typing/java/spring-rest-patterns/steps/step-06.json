@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Service 声明",
+  "concept": "Service",
+  "difficulty": "intermediate",
+  "instruction": "输入 Service 类骨架，练习注解和类名。",
+  "hint": "Service 注解直接放在类上方。",
+  "targetCode": "@Service\npublic class UserService {\n}",
+  "encouragement": "服务层入口很稳。"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "js-high-frequency",
+  "title": "JavaScript 高频肌肉记忆",
+  "description": "把数组处理、异步请求、函数对象这些日常高频写法拆成短 loop，练出连续输入手感。",
+  "language": "javascript",
+  "category": "frontend",
+  "difficulty": "intermediate",
+  "concepts": [
+    "map",
+    "filter",
+    "reduce",
+    "async/await",
+    "object"
+  ],
+  "estimatedMinutes": 10,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json"
+  ]
+}

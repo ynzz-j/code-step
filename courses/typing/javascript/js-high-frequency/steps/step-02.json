@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "map 提取字段",
+  "concept": "map",
+  "difficulty": "intermediate",
+  "instruction": "输入从对象数组提取 name 的模板，练习点号访问。",
+  "hint": "map 的返回值就是新数组。",
+  "targetCode": "const names = users.map((user) => user.name);",
+  "encouragement": "字段提取很顺。"
+}

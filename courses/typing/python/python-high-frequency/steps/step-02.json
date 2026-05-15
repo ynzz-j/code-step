@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "字段清洗",
+  "concept": "list comprehension",
+  "difficulty": "basic",
+  "instruction": "输入 email 统一小写的列表推导式，练习索引和方法链。",
+  "hint": "lower 后面别忘了括号。",
+  "targetCode": "emails = [user[\"email\"].lower() for user in users]",
+  "encouragement": "字段清洗节奏稳定。"
+}

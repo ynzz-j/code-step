@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "sum 生成器",
+  "concept": "generator expression",
+  "difficulty": "basic",
+  "instruction": "输入购物车金额求和，练习生成器表达式。",
+  "hint": "sum 里不用额外方括号。",
+  "targetCode": "total = sum(item[\"price\"] * item[\"qty\"] for item in cart)",
+  "encouragement": "求和模板很稳。"
+}

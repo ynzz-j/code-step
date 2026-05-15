@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "async 函数",
+  "concept": "async/await",
+  "difficulty": "intermediate",
+  "instruction": "输入一个短 async 请求函数，练 await 的固定位置。",
+  "hint": "await 放在 Promise 调用前。",
+  "targetCode": "async function loadUser(userId) {\n  return await api.get(`/users/${userId}`);\n}",
+  "encouragement": "异步函数骨架很稳。"
+}

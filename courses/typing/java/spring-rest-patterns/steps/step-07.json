@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "Bean 方法",
+  "concept": "Bean",
+  "difficulty": "intermediate",
+  "instruction": "输入一个短 Bean 模板，练习方法声明和返回值。",
+  "hint": "Clock.systemUTC 后面有括号。",
+  "targetCode": "@Bean\npublic Clock clock() {\n    return Clock.systemUTC();\n}",
+  "encouragement": "Bean 模板输入稳定。"
+}
