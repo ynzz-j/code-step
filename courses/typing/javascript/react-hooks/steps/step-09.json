@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "JSX 条件渲染",
+  "concept": "JSX render",
+  "difficulty": "intermediate",
+  "instruction": "输入 loading 与内容切换的三元表达式。",
+  "hint": "问号和冒号的位置要稳定。",
+  "targetCode": "{isLoading ? <Spinner /> : <UserList users={users} />}",
+  "encouragement": "条件渲染很稳。"
+}

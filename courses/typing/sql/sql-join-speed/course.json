@@ -1,17 +1,17 @@
 {
-  "id": "react-hooks",
-  "title": "React Hooks 高频爆点训练",
-  "description": "把 useState、useEffect、useMemo、useCallback 和 JSX 条件渲染拆成短片段，训练前端开发最常敲的手感。",
-  "language": "javascript",
-  "category": "frontend",
+  "id": "sql-join-speed",
+  "title": "SQL Join 极速输入训练",
+  "description": "把 select、where、join、group by、order by 和 window function 拆成短片段，训练数据查询最常用的输入节奏。",
+  "language": "sql",
+  "category": "database",
   "difficulty": "intermediate",
   "concepts": [
-    "useState",
-    "useEffect",
-    "useMemo",
-    "useCallback",
-    "JSX render",
-    "async/await"
+    "select",
+    "where",
+    "join",
+    "group by",
+    "order by",
+    "window function"
   ],
   "estimatedMinutes": 10,
   "steps": [

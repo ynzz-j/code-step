@@ -202,27 +202,29 @@ export function WelcomePage() {
           </div>
         </div>
 
-        {/* === 更多训练包（Coming Soon）=== */}
+        {/* === 传播型爆点内容 === */}
         <div>
-          <h2 className="text-sm font-semibold text-text-primary mb-3">即将推出</h2>
+          <h2 className="text-sm font-semibold text-text-primary mb-3">本月爆点内容</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {[
-              { title: 'React Hooks 高频', desc: 'useState / useEffect / useMemo / useCallback', lang: 'React' },
-              { title: 'SQL 极速输入', desc: 'SELECT JOIN GROUP BY 极速敲击', lang: 'SQL' },
-              { title: 'Vim Motion', desc: 'hjkl / wbe / ciw / f/t 组合动作', lang: 'Vim' },
+              { id: 'react-hooks', title: 'React Hooks 30s', desc: 'useState / useEffect / JSX 渲染高频手感', lang: 'React' },
+              { id: 'sql-join-speed', title: 'SQL Join 30s', desc: 'SELECT / JOIN / GROUP BY 查询节奏', lang: 'SQL' },
+              { id: 'vim-motion-core', title: 'Vim Motion', desc: 'hjkl / ciw / f/t 组合动作训练', lang: 'Vim' },
             ].map((item) => (
-              <div
+              <Link
                 key={item.title}
-                className="rounded-tool border border-dashed border-gray-700/30 bg-bg-panel/50 p-4 opacity-70"
+                to={`/learn/${item.id}?mode=typing`}
+                onClick={() => playSound('click')}
+                className="group rounded-tool border border-primary-500/20 bg-bg-panel/70 p-4 transition-all duration-200 hover:border-primary-400/50 hover:bg-bg-surface hover:-translate-y-0.5"
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-sm font-medium text-text-muted">{item.title}</h3>
-                  <span className="flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] bg-gray-700/30 text-gray-500">
+                  <h3 className="text-sm font-medium text-text-secondary group-hover:text-primary-300 transition-colors">{item.title}</h3>
+                  <span className="flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] bg-primary-500/10 text-primary-300">
                     {item.lang}
                   </span>
                 </div>
-                <p className="text-xs text-text-disabled line-clamp-2">{item.desc}</p>
-              </div>
+                <p className="text-xs text-text-muted line-clamp-2">{item.desc}</p>
+              </Link>
             ))}
           </div>
         </div>

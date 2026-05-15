@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "inner join",
+  "concept": "join",
+  "difficulty": "intermediate",
+  "instruction": "输入用户与订单的 join 骨架。",
+  "hint": "on 后面连接两张表的 id。",
+  "targetCode": "select u.email, o.total\nfrom users u\njoin orders o on o.user_id = u.id;",
+  "encouragement": "join 骨架已经顺手。"
+}

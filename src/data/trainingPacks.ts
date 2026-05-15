@@ -1,12 +1,111 @@
 import type { TrainingPack } from '@/types';
 
 export const DEFAULT_TRAINING_PACK_IDS = [
+  'react-hooks',
+  'sql-join-speed',
+  'vim-motion-core',
   'js-high-frequency',
   'python-high-frequency',
   'spring-rest-patterns',
 ];
 
 export const FEATURED_TRAINING_PACKS: TrainingPack[] = [
+  {
+    id: 'react-hooks',
+    title: 'React Hooks 高频爆点训练',
+    track: '前端高频代码手感',
+    language: 'javascript',
+    difficulty: 'intermediate',
+    durationModes: ['30s', '3min', 'Loop'],
+    sourceCourseIds: ['react-hooks'],
+    patterns: [
+      {
+        id: 'state-effect',
+        label: 'useState / useEffect',
+        snippets: ['setCount((value) => value + 1)', 'useEffect(..., [userId])'],
+        targetSkill: 'Hook 状态与副作用节奏',
+        recommendedDuration: 30,
+      },
+      {
+        id: 'memo-callback',
+        label: 'useMemo / useCallback',
+        snippets: ['users.filter((user) => user.isActive)', 'useCallback(() => submitForm(values), [...])'],
+        targetSkill: '性能 Hook 模板',
+        recommendedDuration: 45,
+      },
+      {
+        id: 'jsx-render',
+        label: 'JSX 条件与列表',
+        snippets: ['items.map((item) => <ItemRow />)', 'isLoading ? <Spinner /> : <UserList />'],
+        targetSkill: '前端 UI 渲染肌肉记忆',
+        recommendedDuration: 60,
+      },
+    ],
+  },
+  {
+    id: 'sql-join-speed',
+    title: 'SQL Join 极速输入训练',
+    track: '数据查询高频模板',
+    language: 'sql',
+    difficulty: 'intermediate',
+    durationModes: ['30s', '3min', 'Challenge'],
+    sourceCourseIds: ['sql-join-speed'],
+    patterns: [
+      {
+        id: 'select-where',
+        label: 'select / where',
+        snippets: ['select id, email from users', 'where status = active'],
+        targetSkill: '查询入口与过滤条件',
+        recommendedDuration: 30,
+      },
+      {
+        id: 'join-group',
+        label: 'join / group by',
+        snippets: ['join orders o on o.user_id = u.id', 'group by status'],
+        targetSkill: '多表查询与聚合节奏',
+        recommendedDuration: 45,
+      },
+      {
+        id: 'window-cte',
+        label: 'window / CTE',
+        snippets: ['row_number() over (...)', 'with recent_orders as (...)'],
+        targetSkill: '进阶查询骨架',
+        recommendedDuration: 60,
+      },
+    ],
+  },
+  {
+    id: 'vim-motion-core',
+    title: 'Vim Motion 肌肉记忆训练',
+    track: '编辑器动作爆点',
+    language: 'vim',
+    difficulty: 'basic',
+    durationModes: ['30s', '3min', 'Loop'],
+    sourceCourseIds: ['vim-motion-core'],
+    patterns: [
+      {
+        id: 'basic-motion',
+        label: 'hjkl / wbe',
+        snippets: ['h j k l', 'w b e'],
+        targetSkill: '基础移动反射',
+        recommendedDuration: 30,
+      },
+      {
+        id: 'text-object',
+        label: 'ciw / diw',
+        snippets: ['ciw', 'diw', 'ci('],
+        targetSkill: '文本对象编辑',
+        recommendedDuration: 30,
+      },
+      {
+        id: 'find-motion',
+        label: 'f/t 组合',
+        snippets: ['f)', 't,', 'df)', 'ct,'],
+        targetSkill: '字符定位与组合动作',
+        recommendedDuration: 45,
+      },
+    ],
+  },
   {
     id: 'js-high-frequency',
     title: 'JavaScript 高频肌肉记忆',
@@ -84,7 +183,7 @@ export const FEATURED_TRAINING_PACKS: TrainingPack[] = [
         id: 'controller-mapping',
         label: 'Controller 注解',
         snippets: ['@RestController', '@GetMapping("/{id}")'],
-        targetSkill: 'REST 入口骨架',
+        targetSkill: 'REST 接口骨架',
         recommendedDuration: 30,
       },
       {

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "括号内文本对象",
+  "concept": "text object",
+  "difficulty": "basic",
+  "instruction": "输入修改括号内部内容的命令。",
+  "hint": "ci( 常用于函数参数。",
+  "targetCode": "ci(",
+  "encouragement": "文本对象定位更精准。"
+}

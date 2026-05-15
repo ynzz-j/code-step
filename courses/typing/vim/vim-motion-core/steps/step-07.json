@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "查找字符",
+  "concept": "find motion",
+  "difficulty": "basic",
+  "instruction": "练习向右查找字符的 motion。",
+  "hint": "f 后面跟目标字符。",
+  "targetCode": "f)",
+  "encouragement": "字符定位很快。"
+}

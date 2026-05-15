@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "useMemo derived value",
-  "concept": "useMemo",
+  "title": "useEffect 清理函数",
+  "concept": "useEffect",
   "difficulty": "intermediate",
-  "instruction": "Type the derived value memo pattern.",
-  "hint": "Memoize work from stable dependencies.",
-  "targetCode": "const visibleItems = useMemo(() => {\n  return items.filter((item) => item.active);\n}, [items]);",
-  "encouragement": "Derived value cached."
+  "instruction": "练习订阅与清理函数的常用结构。",
+  "hint": "return 后面跟 cleanup 回调。",
+  "targetCode": "useEffect(() => {\n  window.addEventListener('resize', syncSize);\n  return () => window.removeEventListener('resize', syncSize);\n}, []);",
+  "encouragement": "副作用收尾很干净。"
 }

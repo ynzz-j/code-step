@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "order by limit",
+  "concept": "order by",
+  "difficulty": "intermediate",
+  "instruction": "练习按时间倒序取最新记录。",
+  "hint": "desc 和 limit 经常一起出现。",
+  "targetCode": "select * from orders order by created_at desc limit 20;",
+  "encouragement": "排序节奏很干净。"
+}

@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "useCallback handler",
-  "concept": "useCallback",
+  "title": "useMemo 派生数据",
+  "concept": "useMemo",
   "difficulty": "intermediate",
-  "instruction": "Type the stable callback pattern.",
-  "hint": "Keep dependencies explicit.",
-  "targetCode": "const handleSave = useCallback(() => {\n  saveDraft(form);\n}, [form, saveDraft]);",
-  "encouragement": "Stable callback ready."
+  "instruction": "输入列表过滤的 useMemo 模板，练习链式调用和依赖。",
+  "hint": "filter 条件和依赖数组要成对出现。",
+  "targetCode": "const activeUsers = useMemo(() => users.filter((user) => user.isActive), [users]);",
+  "encouragement": "派生数据写法很利落。"
 }

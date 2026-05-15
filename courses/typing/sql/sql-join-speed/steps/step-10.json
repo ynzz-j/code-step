@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "case when",
+  "concept": "case",
+  "difficulty": "intermediate",
+  "instruction": "练习 SQL 中常见的状态映射。",
+  "hint": "case、when、then、else、end 是固定节奏。",
+  "targetCode": "case when total >= 100 then 'vip' else 'standard' end as user_tier",
+  "encouragement": "case 表达式手感不错。"
+}

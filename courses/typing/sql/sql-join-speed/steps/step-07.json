@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "insert row",
+  "concept": "insert",
+  "difficulty": "intermediate",
+  "instruction": "输入常用 insert 字段与 values 模板。",
+  "hint": "字段顺序和 values 顺序要一致。",
+  "targetCode": "insert into users (email, status) values ('ada@example.com', 'active');",
+  "encouragement": "写入模板很顺。"
+}

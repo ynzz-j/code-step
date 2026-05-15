@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "引号内文本对象",
+  "concept": "text object",
+  "difficulty": "basic",
+  "instruction": "练习修改引号内部字符串。",
+  "hint": "ci\" 常用于快速替换字符串。",
+  "targetCode": "ci\"",
+  "encouragement": "字符串编辑手感很好。"
+}

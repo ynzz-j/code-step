@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "cte with",
+  "concept": "with",
+  "difficulty": "intermediate",
+  "instruction": "练习 CTE 的查询骨架。",
+  "hint": "with 名称后接 as 和括号。",
+  "targetCode": "with recent_orders as (\n  select * from orders where created_at >= current_date - interval '7 days'\n)\nselect * from recent_orders;",
+  "encouragement": "CTE 骨架很清楚。"
+}

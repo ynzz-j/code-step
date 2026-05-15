@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useCallback 事件处理",
+  "concept": "useCallback",
+  "difficulty": "intermediate",
+  "instruction": "输入按钮提交的 useCallback 模板。",
+  "hint": "依赖数组里保留 submitForm。",
+  "targetCode": "const handleSubmit = useCallback(() => {\n  submitForm(values);\n}, [submitForm, values]);",
+  "encouragement": "回调结构清楚。"
+}

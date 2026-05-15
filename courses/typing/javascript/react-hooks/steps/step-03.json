@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "useEffect cleanup",
-  "concept": "useEffect cleanup",
+  "title": "useEffect 依赖数组",
+  "concept": "useEffect",
   "difficulty": "intermediate",
-  "instruction": "Type the cleanup function pattern.",
-  "hint": "Return a function from the effect.",
-  "targetCode": "useEffect(() => {\n  const id = setInterval(tick, 1000);\n  return () => clearInterval(id);\n}, []);",
-  "encouragement": "Cleanup pattern remembered."
+  "instruction": "输入带依赖数组的 effect 模板，训练括号、箭头和数组位置。",
+  "hint": "依赖项保持显式，不要省略数组。",
+  "targetCode": "useEffect(() => {\n  fetchUser(userId);\n}, [userId]);",
+  "encouragement": "effect 模板已经成形。"
 }

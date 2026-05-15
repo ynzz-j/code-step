@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "自定义 Hook 返回值",
+  "concept": "custom hook",
+  "difficulty": "intermediate",
+  "instruction": "输入自定义 Hook 的常见返回对象。",
+  "hint": "对象里返回 data、error、isLoading。",
+  "targetCode": "return { data, error, isLoading, refetch };",
+  "encouragement": "Hook 出口很清爽。"
+}

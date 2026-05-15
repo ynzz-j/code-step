@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "受控输入 JSX",
+  "concept": "JSX input",
+  "difficulty": "intermediate",
+  "instruction": "练习受控输入的 value 与 onChange 固定节奏。",
+  "hint": "value 和 onChange 通常成对出现。",
+  "targetCode": "<input value={email} onChange={(e) => setEmail(e.target.value)} />",
+  "encouragement": "受控组件手感很扎实。"
+}

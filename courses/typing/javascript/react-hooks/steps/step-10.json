@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "async effect 内部函数",
+  "concept": "async/await",
+  "difficulty": "intermediate",
+  "instruction": "练习 effect 内部声明 async 函数的常用写法。",
+  "hint": "effect 回调本身不直接写 async。",
+  "targetCode": "useEffect(() => {\n  const loadUser = async () => setUser(await fetchUser(userId));\n  loadUser();\n}, [userId]);",
+  "encouragement": "异步 effect 写法更稳了。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "改当前词",
+  "concept": "text object",
+  "difficulty": "basic",
+  "instruction": "输入修改当前词的高频命令。",
+  "hint": "ciw 是 change inner word。",
+  "targetCode": "ciw",
+  "encouragement": "改词动作很利落。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "select where",
+  "concept": "select",
+  "difficulty": "intermediate",
+  "instruction": "输入最基础的查询过滤模板。",
+  "hint": "字段、表名和 where 条件保持清晰。",
+  "targetCode": "select id, email from users where status = 'active';",
+  "encouragement": "查询入口很稳。"
+}

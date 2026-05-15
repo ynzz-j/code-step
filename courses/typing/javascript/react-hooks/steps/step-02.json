@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "useEffect dependency",
-  "concept": "useEffect",
+  "title": "useState 表单字段",
+  "concept": "useState",
   "difficulty": "intermediate",
-  "instruction": "Type the effect pattern with an explicit dependency array.",
-  "hint": "The dependency array keeps the effect predictable.",
-  "targetCode": "useEffect(() => {\n  fetchUser(userId);\n}, [userId]);",
-  "encouragement": "Effect dependency locked in."
+  "instruction": "练习表单输入的高频命名和事件读取。",
+  "hint": "注意 e.target.value 的点位。",
+  "targetCode": "const [email, setEmail] = useState('');\nsetEmail(e.target.value);",
+  "encouragement": "表单手感开始顺了。"
 }

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "hjkl 基础移动",
+  "concept": "hjkl",
+  "difficulty": "basic",
+  "instruction": "输入 Vim 最基础的四向移动序列。",
+  "hint": "h 左、j 下、k 上、l 右。",
+  "targetCode": "h j k l",
+  "encouragement": "方向键替代开始成形。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "update where",
+  "concept": "update",
+  "difficulty": "intermediate",
+  "instruction": "练习带 where 的更新语句。",
+  "hint": "update 一定带明确过滤条件。",
+  "targetCode": "update users set status = 'inactive' where last_login_at < '2026-01-01';",
+  "encouragement": "更新条件很清楚。"
+}

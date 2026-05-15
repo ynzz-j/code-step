@@ -1,0 +1,30 @@
+{
+  "id": "vim-motion-core",
+  "title": "Vim Motion 肌肉记忆训练",
+  "description": "把 hjkl、w/b/e、gg/G、ciw/diw、f/t 和组合 motion 拆成短命令，训练编辑器里最有传播感的移动手感。",
+  "language": "vim",
+  "category": "devtools",
+  "difficulty": "basic",
+  "concepts": [
+    "hjkl",
+    "word motion",
+    "line motion",
+    "text object",
+    "find motion"
+  ],
+  "estimatedMinutes": 8,
+  "steps": [
+    "steps/step-01.json",
+    "steps/step-02.json",
+    "steps/step-03.json",
+    "steps/step-04.json",
+    "steps/step-05.json",
+    "steps/step-06.json",
+    "steps/step-07.json",
+    "steps/step-08.json",
+    "steps/step-09.json",
+    "steps/step-10.json",
+    "steps/step-11.json",
+    "steps/step-12.json"
+  ]
+}

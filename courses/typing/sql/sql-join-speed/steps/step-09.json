@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "between range",
+  "concept": "where",
+  "difficulty": "intermediate",
+  "instruction": "训练日期范围过滤。",
+  "hint": "between 的两个端点都要写完整。",
+  "targetCode": "select * from events where created_at between '2026-05-01' and '2026-05-31';",
+  "encouragement": "范围查询很稳定。"
+}

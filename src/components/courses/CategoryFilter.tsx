@@ -12,6 +12,8 @@ const LANGUAGES = [
   { value: 'java', label: 'Java' },
   { value: 'python', label: 'Python' },
   { value: 'javascript', label: 'JS' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'vim', label: 'Vim' },
   { value: 'cpp', label: 'C++' },
 ];
 

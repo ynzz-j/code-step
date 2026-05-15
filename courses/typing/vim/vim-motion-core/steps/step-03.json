@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "文件首尾",
+  "concept": "line motion",
+  "difficulty": "basic",
+  "instruction": "输入文件首尾跳转命令。",
+  "hint": "gg 到文件开头，G 到文件末尾。",
+  "targetCode": "gg G",
+  "encouragement": "大范围跳转记住了。"
+}

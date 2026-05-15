@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "删当前词",
+  "concept": "text object",
+  "difficulty": "basic",
+  "instruction": "输入删除当前词的高频命令。",
+  "hint": "diw 是 delete inner word。",
+  "targetCode": "diw",
+  "encouragement": "删词动作很稳。"
+}

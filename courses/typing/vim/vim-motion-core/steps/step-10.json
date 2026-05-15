@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "修改到字符前",
+  "concept": "combined motion",
+  "difficulty": "basic",
+  "instruction": "练习修改到逗号前的组合命令。",
+  "hint": "c 加 t, 经常用于参数内编辑。",
+  "targetCode": "ct,",
+  "encouragement": "编辑动作很像肌肉记忆了。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "词级移动",
+  "concept": "word motion",
+  "difficulty": "basic",
+  "instruction": "练习按词跳转的核心 motion。",
+  "hint": "w 到下个词，b 回前个词，e 到词尾。",
+  "targetCode": "w b e",
+  "encouragement": "词级移动更顺了。"
+}

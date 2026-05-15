@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "useMemo reduce 汇总",
+  "concept": "useMemo",
+  "difficulty": "intermediate",
+  "instruction": "训练订单金额汇总的高频 reduce 模板。",
+  "hint": "acc + item.total 是业务汇总常见动作。",
+  "targetCode": "const total = useMemo(() => orders.reduce((sum, order) => sum + order.total, 0), [orders]);",
+  "encouragement": "reduce 节奏很顺。"
+}

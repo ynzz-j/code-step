@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "行首行尾",
+  "concept": "line motion",
+  "difficulty": "basic",
+  "instruction": "练习一行内的首尾移动。",
+  "hint": "0 到行首，$ 到行尾。",
+  "targetCode": "0 $",
+  "encouragement": "行内移动很清楚。"
+}

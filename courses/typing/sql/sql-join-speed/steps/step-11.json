@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "row_number",
+  "concept": "window function",
+  "difficulty": "intermediate",
+  "instruction": "输入窗口函数里的分区与排序。",
+  "hint": "partition by 和 order by 在 over 内部。",
+  "targetCode": "row_number() over (partition by user_id order by created_at desc) as rn",
+  "encouragement": "窗口函数节奏起来了。"
+}

@@ -1,10 +1,10 @@
 {
   "type": "typing",
-  "title": "useState setter",
+  "title": "useState 函数式更新",
   "concept": "useState",
   "difficulty": "intermediate",
-  "instruction": "Type the state tuple and setter pattern.",
-  "hint": "Keep the setter name paired with the state name.",
+  "instruction": "输入最常见的状态递增模板，重点练 setter 与回调括号。",
+  "hint": "函数式更新能避免闭包里的旧值。",
   "targetCode": "const [count, setCount] = useState(0);\nsetCount((value) => value + 1);",
-  "encouragement": "Clean state update."
+  "encouragement": "状态更新节奏很稳。"
 }

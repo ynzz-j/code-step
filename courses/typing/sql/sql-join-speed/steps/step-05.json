@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "group by count",
+  "concept": "group by",
+  "difficulty": "intermediate",
+  "instruction": "输入按状态分组计数的模板。",
+  "hint": "select 字段要和 group by 对齐。",
+  "targetCode": "select status, count(*) as total\nfrom orders\ngroup by status;",
+  "encouragement": "分组统计很稳。"
+}

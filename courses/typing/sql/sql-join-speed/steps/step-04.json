@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "left join",
+  "concept": "join",
+  "difficulty": "intermediate",
+  "instruction": "练习保留左表数据的 left join。",
+  "hint": "left join 适合补齐可选关系。",
+  "targetCode": "select u.id, p.city\nfrom users u\nleft join profiles p on p.user_id = u.id;",
+  "encouragement": "left join 节奏很好。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "map 列表渲染",
+  "concept": "JSX render",
+  "difficulty": "intermediate",
+  "instruction": "训练 React 最常见的列表渲染片段。",
+  "hint": "key 和 item.id 是固定节奏。",
+  "targetCode": "{items.map((item) => (\n  <ItemRow key={item.id} item={item} />\n))}",
+  "encouragement": "列表渲染手感到位。"
+}

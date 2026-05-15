@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "删除到字符",
+  "concept": "combined motion",
+  "difficulty": "basic",
+  "instruction": "输入删除到右括号的组合命令。",
+  "hint": "d 加 motion 形成操作。",
+  "targetCode": "df)",
+  "encouragement": "组合 motion 开始顺了。"
+}

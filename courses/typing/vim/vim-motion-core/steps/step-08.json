@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "跳到字符前",
+  "concept": "find motion",
+  "difficulty": "basic",
+  "instruction": "练习跳到目标字符前的 motion。",
+  "hint": "t 会停在目标字符前一位。",
+  "targetCode": "t,",
+  "encouragement": "精细移动更准了。"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "typing",
+  "title": "having",
+  "concept": "group by",
+  "difficulty": "intermediate",
+  "instruction": "练习分组后的过滤条件。",
+  "hint": "where 过滤行，having 过滤聚合结果。",
+  "targetCode": "select user_id, count(*) as order_count\nfrom orders\ngroup by user_id\nhaving count(*) > 3;",
+  "encouragement": "having 位置记住了。"
+}
