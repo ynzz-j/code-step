@@ -1,59 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { playSound } from '@/utils/soundEffects';
 import { FEATURED_TRAINING_PACKS } from '@/data/trainingPacks';
 import { DIFFICULTY_LABELS } from '@/types';
-
-interface RecentStats {
-  lastWpm: number;
-  lastAccuracy: number;
-  bestCombo: number;
-  todayDelta: number;
-  totalTimeMin: number;
-  completedCourses: number;
-  hasActivity: boolean;
-}
-
-function readRecentStats(): RecentStats {
-  try {
-    const user = JSON.parse(localStorage.getItem('codestep-user') || '{}');
-    const packStats = JSON.parse(localStorage.getItem('codestep-training-pack-stats') || '{}');
-
-    const stepStats = user?.state?.stepStats || [];
-    const totalTimeMin = Math.round((user?.state?.totalLearningTime || 0) / 60);
-    const completedCourses = user?.state?.completedCourses || [];
-
-    // 从最近的 stepStats 取平均值
-    const recent = stepStats.slice(-10);
-    const lastWpm = recent.length > 0
-      ? Math.round(recent.reduce((s: number, x: { wpm?: number }) => s + (x.wpm || 0), 0) / recent.length)
-      : 0;
-    const lastAccuracy = recent.length > 0
-      ? Math.round(recent.reduce((s: number, x: { accuracy: number }) => s + x.accuracy, 0) / recent.length)
-      : 0;
-
-    // 取所有训练包中的最佳 Combo
-    let bestCombo = 0;
-    let todayDelta = 0;
-    for (const key of Object.keys(packStats)) {
-      const s = packStats[key];
-      if (s?.bestCombo > bestCombo) bestCombo = s.bestCombo;
-      if (s?.todayDelta > todayDelta) todayDelta = s.todayDelta;
-    }
-
-    return {
-      lastWpm,
-      lastAccuracy,
-      bestCombo,
-      todayDelta,
-      totalTimeMin,
-      completedCourses: completedCourses.length,
-      hasActivity: stepStats.length > 0,
-    };
-  } catch {
-    return { lastWpm: 0, lastAccuracy: 0, bestCombo: 0, todayDelta: 0, totalTimeMin: 0, completedCourses: 0, hasActivity: false };
-  }
-}
+import { useGrowthStore } from '@/stores/growthStore';
+import { growthService } from '@/services/growthService';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'text-success-400 bg-success-500/15',
@@ -64,11 +15,28 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 };
 
 export function WelcomePage() {
-  const [stats, setStats] = useState<RecentStats>(readRecentStats);
+  const growthSummary = useGrowthStore((s) => s.summary);
+  const refreshSummary = useGrowthStore((s) => s.refreshSummary);
 
   useEffect(() => {
-    setStats(readRecentStats());
-  }, []);
+    const migrated = localStorage.getItem('codestep-growth-migrated');
+    if (!migrated) {
+      growthService.importLegacyGrowthData().then(() => {
+        localStorage.setItem('codestep-growth-migrated', '1');
+        refreshSummary();
+      });
+    } else {
+      refreshSummary();
+    }
+  }, [refreshSummary]);
+
+  const hasActivity = growthSummary?.hasActivity ?? false;
+  const lastWpm = Math.round(growthSummary?.recentWpm ?? 0);
+  const lastAccuracy = Math.round(growthSummary?.recentAccuracy ?? 0);
+  const bestCombo = growthSummary?.bestCombo ?? 0;
+  const todayDelta = growthSummary?.todayDelta ?? 0;
+  const totalTimeMin = growthSummary?.totalTimeMin ?? 0;
+  const completedCourses = growthSummary?.completedCourses ?? 0;
 
   const handleButtonClick = (mode: string) => {
     playSound('click');
@@ -97,14 +65,14 @@ export function WelcomePage() {
         {/* === 主 CTA === */}
         <div className="flex items-center justify-center gap-3">
           <Link
-            to={stats.hasActivity ? '/courses?mode=typing' : '/courses?mode=typing'}
+            to={hasActivity ? '/courses?mode=typing' : '/courses?mode=typing'}
             onClick={() => handleButtonClick('typing')}
             className="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-tool font-medium transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/20 active:scale-95 flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.1-2.846a4.5 4.5 0 00-1.7-1.7L5.25 15l2.846-.1a4.5 4.5 0 001.7-1.7L9.75 11l2.846.1a4.5 4.5 0 001.7 1.7L15 14.25l-2.846.1a4.5 4.5 0 00-1.7 1.7z" />
             </svg>
-            {stats.hasActivity ? '继续训练' : '开始 30 秒训练'}
+            {hasActivity ? '继续训练' : '开始 30 秒训练'}
           </Link>
           <Link
             to="/about"
@@ -116,41 +84,41 @@ export function WelcomePage() {
         </div>
 
         {/* === 最近表现（有活动记录时显示）=== */}
-        {stats.hasActivity && (
+        {hasActivity && (
           <div className="rounded-tool border border-gray-700/40 bg-bg-panel px-6 py-4">
             <h2 className="text-xs font-medium text-text-muted uppercase tracking-wide mb-3">最近表现</h2>
             <div className="flex items-center justify-center gap-8 flex-wrap">
               <div className="text-center">
-                <div className="text-xl font-bold text-primary-300 font-mono">{stats.lastWpm || '--'}</div>
+                <div className="text-xl font-bold text-primary-300 font-mono">{lastWpm || '--'}</div>
                 <div className="text-[10px] text-text-muted mt-0.5">平均 WPM</div>
               </div>
               <div className="w-px h-8 bg-gray-700/50" />
               <div className="text-center">
-                <div className={`text-xl font-bold font-mono ${stats.lastAccuracy >= 95 ? 'text-success-400' : 'text-warning-400'}`}>
-                  {stats.lastAccuracy || '--'}%
+                <div className={`text-xl font-bold font-mono ${lastAccuracy >= 95 ? 'text-success-400' : 'text-warning-400'}`}>
+                  {lastAccuracy || '--'}%
                 </div>
                 <div className="text-[10px] text-text-muted mt-0.5">准确率</div>
               </div>
               <div className="w-px h-8 bg-gray-700/50" />
               <div className="text-center">
-                <div className="text-xl font-bold text-yellow-300 font-mono">x{stats.bestCombo}</div>
+                <div className="text-xl font-bold text-yellow-300 font-mono">x{bestCombo}</div>
                 <div className="text-[10px] text-text-muted mt-0.5">最佳 Combo</div>
               </div>
               <div className="w-px h-8 bg-gray-700/50" />
               <div className="text-center">
-                <div className="text-xl font-bold text-text-primary font-mono">{stats.totalTimeMin}</div>
+                <div className="text-xl font-bold text-text-primary font-mono">{totalTimeMin}</div>
                 <div className="text-[10px] text-text-muted mt-0.5">训练分钟</div>
               </div>
               <div className="w-px h-8 bg-gray-700/50" />
               <div className="text-center">
-                <div className="text-xl font-bold text-text-primary font-mono">{stats.completedCourses}</div>
+                <div className="text-xl font-bold text-text-primary font-mono">{completedCourses}</div>
                 <div className="text-[10px] text-text-muted mt-0.5">完成课程</div>
               </div>
-              {stats.todayDelta > 0 && (
+              {todayDelta > 0 && (
                 <>
                   <div className="w-px h-8 bg-gray-700/50" />
                   <div className="text-center">
-                    <div className="text-xl font-bold text-success-400 font-mono">+{stats.todayDelta}%</div>
+                    <div className="text-xl font-bold text-success-400 font-mono">+{todayDelta}%</div>
                     <div className="text-[10px] text-text-muted mt-0.5">今日提升</div>
                   </div>
                 </>
@@ -213,14 +181,14 @@ export function WelcomePage() {
             ].map((item) => (
               <Link
                 key={item.title}
-                to={`/learn/${item.id}?mode=typing`}
+                to={`/learn/${item.id}?mode=typing&challenge=speed-30s`}
                 onClick={() => playSound('click')}
                 className="group rounded-tool border border-primary-500/20 bg-bg-panel/70 p-4 transition-all duration-200 hover:border-primary-400/50 hover:bg-bg-surface hover:-translate-y-0.5"
               >
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-sm font-medium text-text-secondary group-hover:text-primary-300 transition-colors">{item.title}</h3>
-                  <span className="flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] bg-primary-500/10 text-primary-300">
-                    {item.lang}
+                  <span className="flex-shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] bg-accent-record/15 text-accent-record border border-accent-record/20">
+                    30s挑战
                   </span>
                 </div>
                 <p className="text-xs text-text-muted line-clamp-2">{item.desc}</p>

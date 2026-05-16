@@ -43,6 +43,7 @@ export interface CodingStep extends BaseStep {
 export interface TypingStep extends BaseStep {
   type: 'typing';
   targetCode: string;
+  patternId?: string;
 }
 
 export interface TypingStats {
@@ -51,6 +52,7 @@ export interface TypingStats {
   errors: number;
   totalKeystrokes: number;
   correctKeystrokes: number;
+  backspaces: number;
 }
 
 export type Step = CodingStep | TypingStep;

@@ -1,7 +1,10 @@
+pub mod challenge;
 pub mod course;
 pub mod env_checker;
 pub mod executor;
+pub mod growth;
 pub mod ime;
 pub mod progress;
 pub mod settings;
+pub mod share;
 pub mod user_center;

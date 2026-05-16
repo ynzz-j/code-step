@@ -2,8 +2,11 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import type { UserLearningSummary, CourseProgressSummary } from '@/types/user';
+import type { WeakTokenStat, ChallengeRunResult } from '@/types';
 import { useUserStore } from '@/stores/userStore';
-import { FEATURED_TRAINING_PACKS } from '@/data/trainingPacks';
+import { useGrowthStore } from '@/stores/growthStore';
+import { challengeService } from '@/services/challengeService';
+import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
 import { DIFFICULTY_LABELS } from '@/types';
 import { playSound } from '@/utils/soundEffects';
 
@@ -23,7 +26,7 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: 'completed', label: '已完成' },
 ];
 
-// ==================== 辅助函数 ====================
+// ==================== 辅助类型 ====================
 
 interface PerformanceOverview {
   totalTimeMin: number;
@@ -34,73 +37,6 @@ interface PerformanceOverview {
   completedCourses: number;
   totalCourses: number;
   todayImproved: boolean;
-}
-
-interface WeakTokenSummary {
-  token: string;
-  count: number;
-}
-
-function derivePerformance(
-  summary: UserLearningSummary | null,
-): PerformanceOverview {
-  const user = JSON.parse(localStorage.getItem('codestep-user') || '{}');
-  const packStats = JSON.parse(localStorage.getItem('codestep-training-pack-stats') || '{}');
-
-  const stepStats = user?.state?.stepStats || [];
-  const totalTimeMin = Math.round((user?.state?.totalLearningTime || 0) / 60);
-  const completedCourseIds: string[] = user?.state?.completedCourses || [];
-
-  const recent = stepStats.slice(-10);
-  const avgWpm = recent.length > 0
-    ? Math.round(recent.reduce((s: number, x: { wpm?: number }) => s + (x.wpm || 0), 0) / recent.length)
-    : 0;
-  const avgAccuracy = recent.length > 0
-    ? Math.round(recent.reduce((s: number, x: { accuracy: number }) => s + (x.accuracy || 0), 0) / recent.length)
-    : 0;
-
-  let bestCombo = 0;
-  let todayImproved = false;
-  for (const key of Object.keys(packStats)) {
-    const s = packStats[key];
-    if (s?.bestCombo > bestCombo) bestCombo = s.bestCombo;
-    if (s?.todayDelta > 0) todayImproved = true;
-  }
-
-  const courseProgress = summary?.courseProgress ?? [];
-  const totalSegments = courseProgress.reduce((s, c) => s + c.completedSteps, 0);
-
-  return {
-    totalTimeMin,
-    completedSegments: totalSegments,
-    avgWpm,
-    avgAccuracy,
-    bestCombo,
-    completedCourses: completedCourseIds.length,
-    totalCourses: courseProgress.length,
-    todayImproved,
-  };
-}
-
-function deriveWeakTokens(): WeakTokenSummary[] {
-  try {
-    const user = JSON.parse(localStorage.getItem('codestep-user') || '{}');
-    const stepStats = user?.state?.stepStats || [];
-    const counts: Record<string, number> = {};
-
-    for (const stat of stepStats) {
-      for (const token of stat.weakTokens || []) {
-        counts[token] = (counts[token] ?? 0) + 1;
-      }
-    }
-
-    return Object.entries(counts)
-      .sort(([, countA], [, countB]) => countB - countA)
-      .slice(0, 6)
-      .map(([token, count]) => ({ token, count }));
-  } catch {
-    return [];
-  }
 }
 
 // ==================== 迷你趋势条 ====================
@@ -276,28 +212,49 @@ function EmptyState() {
 export function UserCenterPage() {
   const [summary, setSummary] = useState<UserLearningSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [weakTokenStats, setWeakTokenStats] = useState<WeakTokenStat[]>([]);
+  const [recentChallenges, setRecentChallenges] = useState<ChallengeRunResult[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
   const displayName = useUserStore((s) => s.displayName);
+  const growthSummary = useGrowthStore((s) => s.summary);
+  const packGrowthMap = useGrowthStore((s) => s.packGrowth);
+  const refreshSummary = useGrowthStore((s) => s.refreshSummary);
 
   useEffect(() => {
     loadSummary();
-  }, []);
+    refreshSummary();
+    useGrowthStore.getState().refreshMultiplePackGrowth(DEFAULT_TRAINING_PACK_IDS);
+  }, [refreshSummary]);
 
   const loadSummary = async () => {
     try {
       setLoading(true);
       const data = await invoke<UserLearningSummary>('get_user_learning_summary');
       setSummary(data);
+      const tokens = await invoke<WeakTokenStat[]>('get_weak_token_stats');
+      setWeakTokenStats(tokens);
+      const challenges = await challengeService.getRecentRuns(10);
+      setRecentChallenges(challenges);
     } catch (err) {
-      console.error('[UserCenter] Failed to load learning summary:', err);
+      console.error('[UserCenter] Failed to load data:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const perf = useMemo(() => derivePerformance(summary), [summary]);
   const courseProgress = summary?.courseProgress ?? [];
+
+  const perf: PerformanceOverview = {
+    totalTimeMin: growthSummary?.totalTimeMin ?? 0,
+    completedSegments: growthSummary?.totalAttempts ?? 0,
+    avgWpm: Math.round(growthSummary?.recentWpm ?? 0),
+    avgAccuracy: Math.round(growthSummary?.recentAccuracy ?? 0),
+    bestCombo: growthSummary?.bestCombo ?? 0,
+    completedCourses: growthSummary?.completedCourses ?? 0,
+    totalCourses: courseProgress.length,
+    todayImproved: growthSummary?.todayImproved ?? false,
+  };
 
   // 筛选
   const filteredProgress = courseProgress.filter((p) => {
@@ -317,18 +274,18 @@ export function UserCenterPage() {
 
   // 推荐复刷的训练包（低熟练度）
   const suggestedPacks = useMemo(() => {
-    try {
-      const packStats = JSON.parse(localStorage.getItem('codestep-training-pack-stats') || '{}');
-      return FEATURED_TRAINING_PACKS.filter((pack) => {
-        const stats = packStats[pack.id];
-        return !stats || (stats.masteryPercent || 0) < 50;
-      }).slice(0, 2);
-    } catch {
-      return FEATURED_TRAINING_PACKS.slice(0, 2);
-    }
-  }, []);
+    return FEATURED_TRAINING_PACKS.filter((pack) => {
+      const growth = packGrowthMap[pack.id];
+      return !growth || (growth.masteryPercent ?? 0) < 50;
+    }).slice(0, 2);
+  }, [packGrowthMap]);
 
-  const weakTokens = useMemo(() => deriveWeakTokens(), [summary]);
+  const weakTokens = useMemo(() => {
+    return weakTokenStats.slice(0, 6).map((item) => ({
+      token: item.token,
+      count: item.count,
+    }));
+  }, [weakTokenStats]);
 
   if (loading) {
     return (
@@ -341,7 +298,7 @@ export function UserCenterPage() {
     );
   }
 
-  const hasActivity = courseProgress.length > 0;
+  const hasActivity = courseProgress.length > 0 || (growthSummary?.hasActivity ?? false);
 
   return (
     <div className="h-full overflow-y-auto px-6 py-6">
@@ -401,10 +358,12 @@ export function UserCenterPage() {
             )}
 
             {/* 7 天趋势 */}
-            <div>
-              <div className="text-[10px] text-text-muted mb-2 uppercase tracking-wide">近 7 天活动</div>
-              <MiniTrend courseProgress={courseProgress} />
-            </div>
+            {courseProgress.length > 0 && (
+              <div>
+                <div className="text-[10px] text-text-muted mb-2 uppercase tracking-wide">近 7 天活动</div>
+                <MiniTrend courseProgress={courseProgress} />
+              </div>
+            )}
           </div>
         )}
 
@@ -467,8 +426,41 @@ export function UserCenterPage() {
           </div>
         )}
 
-        {/* === 课程进度列表（降级）=== */}
-        {hasActivity && (
+        {/* === 本地挑战纪录 === */}
+        {recentChallenges.length > 0 && (
+          <div className="rounded-tool border border-accent-record/20 bg-bg-panel/70 p-4">
+            <h2 className="text-xs font-medium text-text-muted uppercase tracking-wide mb-3">最近挑战</h2>
+            <div className="space-y-2">
+              {recentChallenges.slice(0, 6).map((r) => (
+                <Link
+                  key={r.id}
+                  to={`/complete/${r.packId}?mode=typing&challenge=${r.challengeMode}&runId=${r.id}`}
+                  onClick={() => playSound('click')}
+                  className="flex items-center justify-between px-3 py-2 rounded bg-bg-app/50 border border-gray-700/30 hover:border-accent-record/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-accent-record/10 text-accent-record border border-accent-record/20 flex-shrink-0">
+                      {({ 'speed-30s': '30s', 'focus-3min': '3min', 'perfect-run': 'Perfect', 'combo-rush': 'Combo' } as Record<string, string>)[r.challengeMode]}
+                    </span>
+                    <span className="text-xs text-text-primary truncate">
+                      {FEATURED_TRAINING_PACKS.find((p) => p.id === r.packId)?.title ?? r.packId}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0 ml-2">
+                    <span className="text-xs font-mono font-bold text-accent-record">{r.flowScore} Flow</span>
+                    <span className="text-[10px] text-text-muted">{r.wpm} WPM</span>
+                    {r.isNewBest && (
+                      <span className="text-[10px] text-yellow-400">新纪录</span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* === 课程进度列表 === */}
+        {courseProgress.length > 0 && (
           <div>
             {/* 筛选栏 */}
             <div className="flex items-center justify-between mb-4">

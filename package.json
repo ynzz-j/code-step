@@ -1,6 +1,6 @@
 {
   "name": "codestep",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "CodeStep - 编程学习桌面应用",
   "private": true,
   "type": "module",

@@ -8,6 +8,7 @@ export function useTypingStats() {
     errors: 0,
     totalKeystrokes: 0,
     correctKeystrokes: 0,
+    backspaces: 0,
   });
 
   const startTimeRef = useRef<number | null>(null);
@@ -42,6 +43,7 @@ export function useTypingStats() {
       errors: errorsRef.current,
       totalKeystrokes: totalKeystrokesRef.current,
       correctKeystrokes: correctKeystrokesRef.current,
+      backspaces: 0,
     });
   }, []);
 
@@ -50,7 +52,7 @@ export function useTypingStats() {
     totalKeystrokesRef.current = 0;
     correctKeystrokesRef.current = 0;
     errorsRef.current = 0;
-    setStats({ wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0 });
+    setStats({ wpm: 0, accuracy: 100, errors: 0, totalKeystrokes: 0, correctKeystrokes: 0, backspaces: 0 });
   }, []);
 
   return {

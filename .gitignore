@@ -29,6 +29,7 @@ build/
 /.trae/
 /.idea/
 /task-artifacts/
+/obs-live-stats/
 *.local
 /.workbuddy/
 /.claude/

@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicegui/nicegui/main/tauri-conf-schema.json",
   "productName": "CodeStep",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "identifier": "com.codestep.app",
   "build": {
     "frontendDist": "../dist",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
@@ -7,7 +7,7 @@ import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/train
 import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
 import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata, type TrainingPack } from '@/types';
 import { playSound } from '@/utils/soundEffects';
-import { readTrainingPackStats, type TrainingPackStats } from '@/utils/trainingPackStats';
+import { useGrowthStore } from '@/stores/growthStore';
 
 const MODE_LABELS: Record<CourseMode, { title: string; subtitle: string }> = {
   coding: {
@@ -37,87 +37,112 @@ const DIFFICULTY_ORDER: Record<string, number> = {
 
 function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: CourseMetadata }) {
   const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
-  const [stats, setStats] = useState<TrainingPackStats>(() => readTrainingPackStats(pack.id));
+  const packGrowth = useGrowthStore((s) => s.packGrowth[pack.id]);
+  const refreshPackGrowth = useGrowthStore((s) => s.refreshPackGrowth);
 
   useEffect(() => {
-    setStats(readTrainingPackStats(pack.id));
-  }, [pack.id]);
+    refreshPackGrowth(pack.id);
+  }, [pack.id, refreshPackGrowth]);
 
   const progress = getCourseProgress(pack.id);
   const completedCount = progress?.completedSteps?.length || 0;
   const stepCount = course?.stepsCount ?? 0;
   const masteryPercent = Math.max(
-    stats.masteryPercent,
+    packGrowth?.masteryPercent ?? 0,
     stepCount > 0 ? Math.round((completedCount / stepCount) * 100) : 0,
   );
-  const hasPracticeStats = Boolean(stats.lastPracticedAt || stats.bestWpm > 0 || stats.bestCombo > 0 || completedCount > 0);
-  const todayDeltaLabel = stats.todayDelta > 0
-    ? `+${stats.todayDelta}%`
+  const hasPracticeStats = Boolean(packGrowth?.lastPracticedAt || (packGrowth?.bestWpm ?? 0) > 0 || (packGrowth?.bestCombo ?? 0) > 0 || completedCount > 0);
+  const todayDelta = packGrowth?.todayDelta ?? 0;
+  const todayDeltaLabel = todayDelta > 0
+    ? `+${todayDelta}%`
     : hasPracticeStats
     ? '已训练'
     : '待训练';
 
+  const challengeModes = [
+    { mode: 'speed-30s' as const, label: '30s' },
+    { mode: 'focus-3min' as const, label: '3min' },
+    { mode: 'perfect-run' as const, label: 'Perfect' },
+    { mode: 'combo-rush' as const, label: 'Combo' },
+  ];
+
   return (
-    <Link
-      to={`/learn/${pack.id}?mode=typing`}
-      onClick={() => playSound('click')}
-      className="group block rounded-tool border border-cyan-500/30 bg-bg-panel p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/8"
-    >
-      {/* 头部 */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-500/15 text-cyan-300 border border-cyan-500/20">
-            训练包
+    <div className="rounded-tool border border-cyan-500/30 bg-bg-panel transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/8">
+      <Link
+        to={`/learn/${pack.id}?mode=typing`}
+        onClick={() => playSound('click')}
+        className="block p-5 pb-3"
+      >
+        {/* 头部 */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-500/15 text-cyan-300 border border-cyan-500/20">
+              训练包
+            </span>
+            <span className="text-[10px] text-text-muted">{pack.track}</span>
+          </div>
+          <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium border ${DIFFICULTY_COLORS[pack.difficulty]}`}>
+            {DIFFICULTY_LABELS[pack.difficulty].label}
           </span>
-          <span className="text-[10px] text-text-muted">{pack.track}</span>
         </div>
-        <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium border ${DIFFICULTY_COLORS[pack.difficulty]}`}>
-          {DIFFICULTY_LABELS[pack.difficulty].label}
-        </span>
-      </div>
 
-      {/* 标题 + 一行目标 */}
-      <h3 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-cyan-300 transition-colors">
-        {pack.title}
-      </h3>
-      <p className="text-xs text-text-muted line-clamp-1 mb-4">
-        {pack.patterns.map((p) => p.targetSkill).join(' · ')}
-      </p>
+        <h3 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-cyan-300 transition-colors">
+          {pack.title}
+        </h3>
+        <p className="text-xs text-text-muted line-clamp-1 mb-4">
+          {pack.patterns.map((p) => p.targetSkill).join(' · ')}
+        </p>
 
-      {/* 四项关键指标 */}
-      <div className="grid grid-cols-4 gap-2 mb-3">
-        <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
-          <div className={`text-sm font-bold font-mono ${hasPracticeStats || stats.todayDelta > 0 ? 'text-success-400' : 'text-text-muted'}`}>
-            {todayDeltaLabel}
+        {/* 四项关键指标 */}
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
+            <div className={`text-sm font-bold font-mono ${hasPracticeStats || todayDelta > 0 ? 'text-success-400' : 'text-text-muted'}`}>
+              {todayDeltaLabel}
+            </div>
+            <div className="mt-0.5 text-[9px] text-text-muted">今日提升</div>
           </div>
-          <div className="mt-0.5 text-[9px] text-text-muted">今日提升</div>
-        </div>
-        <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
-          <div className="text-sm font-bold font-mono text-cyan-300">{masteryPercent}%</div>
-          <div className="mt-0.5 text-[9px] text-text-muted">熟练度</div>
-        </div>
-        <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
-          <div className={`text-sm font-bold font-mono ${stats.bestWpm > 0 ? 'text-primary-300' : 'text-text-muted'}`}>
-            {stats.bestWpm > 0 ? stats.bestWpm : '--'}
+          <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
+            <div className="text-sm font-bold font-mono text-cyan-300">{masteryPercent}%</div>
+            <div className="mt-0.5 text-[9px] text-text-muted">熟练度</div>
           </div>
-          <div className="mt-0.5 text-[9px] text-text-muted">最佳 WPM</div>
-        </div>
-        <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
-          <div className={`text-sm font-bold font-mono ${stats.bestCombo > 0 ? 'text-yellow-300' : 'text-text-muted'}`}>
-            {stats.bestCombo > 0 ? `x${stats.bestCombo}` : '--'}
+          <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
+            <div className={`text-sm font-bold font-mono ${(packGrowth?.bestWpm ?? 0) > 0 ? 'text-primary-300' : 'text-text-muted'}`}>
+              {(packGrowth?.bestWpm ?? 0) > 0 ? packGrowth?.bestWpm : '--'}
+            </div>
+            <div className="mt-0.5 text-[9px] text-text-muted">最佳 WPM</div>
           </div>
-          <div className="mt-0.5 text-[9px] text-text-muted">最佳 Combo</div>
+          <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
+            <div className={`text-sm font-bold font-mono ${(packGrowth?.bestCombo ?? 0) > 0 ? 'text-yellow-300' : 'text-text-muted'}`}>
+              {(packGrowth?.bestCombo ?? 0) > 0 ? `x${packGrowth.bestCombo}` : '--'}
+            </div>
+            <div className="mt-0.5 text-[9px] text-text-muted">最佳 Combo</div>
+          </div>
         </div>
-      </div>
 
-      {/* 底部元信息 */}
-      <div className="flex items-center gap-3 text-[10px] text-text-disabled">
-        <span className="uppercase">{pack.language}</span>
-        <span>{pack.patterns.length} 个模式</span>
-        <span>{pack.durationModes.join(' / ')}</span>
-        {course && <span>{course.stepsCount} 段</span>}
+        {/* 底部元信息 */}
+        <div className="flex items-center gap-3 text-[10px] text-text-disabled">
+          <span className="uppercase">{pack.language}</span>
+          <span>{pack.patterns.length} 个模式</span>
+          <span>{pack.durationModes.join(' / ')}</span>
+          {course && <span>{course.stepsCount} 段</span>}
+        </div>
+      </Link>
+
+      {/* 挑战入口按钮 */}
+      <div className="px-5 pb-4 pt-0 flex items-center gap-1.5">
+        <span className="text-[9px] text-text-disabled mr-1">挑战:</span>
+        {challengeModes.map(({ mode, label }) => (
+          <Link
+            key={mode}
+            to={`/learn/${pack.id}?mode=typing&challenge=${mode}`}
+            onClick={(e) => { e.stopPropagation(); playSound('click'); }}
+            className="px-2 py-1 rounded text-[10px] font-medium border border-gray-600/40 text-text-muted hover:text-text-primary hover:border-gray-500/60 hover:bg-bg-surface/50 transition-colors"
+          >
+            {label}
+          </Link>
+        ))}
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -218,6 +243,12 @@ export function CoursesPage() {
     if (isCodingMode) return;
     loadCourses(mode);
   }, [isCodingMode, loadCourses, mode]);
+
+  useEffect(() => {
+    if (!isCodingMode) {
+      useGrowthStore.getState().refreshMultiplePackGrowth(DEFAULT_TRAINING_PACK_IDS);
+    }
+  }, [isCodingMode]);
 
   const filteredCourses = courses.filter((c) => {
     const matchCat = selectedCategory === 'all' || c.category === selectedCategory;

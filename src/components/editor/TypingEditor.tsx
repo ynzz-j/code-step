@@ -5,22 +5,30 @@ import { useChartStore } from '@/stores/chartStore';
 import { initSound, playSound } from '@/utils/soundEffects';
 import type { TypingStep } from '@/types';
 
+export interface TypingCompleteData {
+  backspaces: number;
+  perfect: boolean;
+  durationMs: number;
+}
+
 interface TypingEditorProps {
   step: TypingStep;
-  onComplete: () => void;
+  onComplete: (data: TypingCompleteData) => void;
   onKeystroke: (isCorrect: boolean, info?: { expected: string; input: string; position: number }) => void;
+  onBackspace?: (info: { position: number }) => void;
   onReset?: () => void;
   /** 无退格完成当前步骤时触发 */
   onPerfectStrike?: () => void;
 }
 
-export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfectStrike }: TypingEditorProps) {
+export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onReset, onPerfectStrike }: TypingEditorProps) {
   const typedRef = useRef('');
   const [typed, setTyped] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const completedRef = useRef(false);
   const backspaceCount = useRef(0);
+  const startedAtRef = useRef(Date.now());
 
   // 组件挂载时预初始化音效（需用户已交互）
   useEffect(() => {
@@ -37,6 +45,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
     resetStats();
     completedRef.current = false;
     backspaceCount.current = 0;
+    startedAtRef.current = Date.now();
     onReset?.();
     containerRef.current?.focus();
   }, [step, onReset, resetStats]);
@@ -61,6 +70,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
 
     if (e.key === 'Backspace') {
       backspaceCount.current += 1;
+      onBackspace?.({ position: cursorPosition });
       if (cursorPosition > 0) {
         setTyped((prev) => prev.slice(0, -1));
         setCursorPosition((prev) => prev - 1);
@@ -119,7 +129,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
 
     setTyped((prev) => prev + inputChar);
     setCursorPosition((prev) => prev + 1);
-  }, [cursorPosition, step.targetCode, onKeystroke]);
+  }, [cursorPosition, step.targetCode, onKeystroke, onBackspace]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -140,11 +150,14 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
   useEffect(() => {
     if (typed === step.targetCode && typed.length > 0 && !completedRef.current) {
       completedRef.current = true;
-      if (backspaceCount.current === 0) {
+      const backspaces = backspaceCount.current;
+      const perfect = backspaces === 0;
+      const durationMs = Date.now() - startedAtRef.current;
+      if (perfect) {
         onPerfectStrike?.();
       }
-      playSound(backspaceCount.current === 0 ? 'perfect' : 'success');
-      onComplete();
+      playSound(perfect ? 'perfect' : 'success');
+      onComplete({ backspaces, perfect, durationMs });
     }
   }, [typed, step.targetCode, onComplete, onPerfectStrike]);
 
@@ -215,7 +228,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onReset, onPerfect
         </pre>
       </div>
 
-      <StatsPanel stats={{ wpm, accuracy, errors, totalKeystrokes, correctKeystrokes }} />
+      <StatsPanel stats={{ wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, backspaces: 0 }} />
       <div className="px-6 py-2 bg-gray-800/50 border-t border-gray-700/50">
         <div className="flex items-center gap-4 text-xs text-gray-400">
           <span>进度: {cursorPosition} / {step.targetCode.length}</span>

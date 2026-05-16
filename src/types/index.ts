@@ -7,7 +7,7 @@ export type {
 export { COURSE_CATEGORY_LABELS, ALL_CATEGORIES, DIFFICULTY_LABELS, ALL_DIFFICULTIES } from './course';
 export type { Step, CodingStep, TypingStep, StepType, ValidationRule, ValidationType, ExecutionResult } from './step';
 export type { TypingStats } from './step';
-export type { TrainingPack, TrainingPattern, TypingSessionStats, PatternMastery } from './training';
+export type { TrainingPack, TrainingPattern, TypingSessionStats, PatternMastery, TypingAttemptPayload, GrowthSummary, TrainingPackGrowth, WeakTokenStat, ChallengeMode, ChallengeRunPayload, ChallengeRunResult } from './training';
 export type {
   User,
   CourseProgress,

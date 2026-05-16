@@ -22,6 +22,8 @@ pub enum Step {
         instruction: String,
         hint: Option<String>,
         target_code: String,
+        #[serde(default)]
+        pattern_id: Option<String>,
         encouragement: Option<String>,
     },
 }
