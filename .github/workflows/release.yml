@@ -78,25 +78,33 @@ jobs:
           }
         shell: pwsh
 
-      - name: Generate changelog
+      - name: Extract changelog for this release
         id: changelog
         run: |
-          $PREV_TAG = git describe --tags --abbrev=0 HEAD^ 2>$null
-          if (-not $PREV_TAG) {
-            $PREV_TAG = "v0.1.0"
-          }
-          echo "Previous tag: $PREV_TAG"
+          $VERSION = "${{ github.ref_name }}".Substring(1)   # 去掉前缀 "v"
+          $content = Get-Content "CHANGELOG.md" -Raw -Encoding UTF8
           
-          $CHANGELOG = git log "$PREV_TAG"..HEAD --pretty=format:"- %s" --no-merges
-          if (-not $CHANGELOG) {
-            $CHANGELOG = "Initial release"
+          # 匹配当前版本区块：从 "## [X.Y.Z]" 到下一个 "## [" 之间的内容
+          $pattern = "(?s)## \[$VERSION\][^\n]*\n(.*?)(?=\n## \[|\Z)"
+          $match = [regex]::Match($content, $pattern)
+          
+          if ($match.Success) {
+            $CHANGELOG = $match.Groups[1].Value.Trim()
+          } else {
+            $CHANGELOG = "请查看 [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) 获取更新详情。"
           }
           
-          # 保存到环境变量
-          $CHANGELOG = $CHANGELOG -join "`n"
+          # 写入 GITHUB_OUTPUT（多行内容用 EOF 分隔）
           echo "CHANGELOG<<EOF" >> $env:GITHUB_OUTPUT
           echo $CHANGELOG >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
+          
+          # 计算对比链接用的上一个 tag
+          $PREV_TAG = git describe --tags --abbrev=0 HEAD^ 2>$null
+          if (-not $PREV_TAG) { $PREV_TAG = "v0.1.0" }
+          echo "PREV_TAG=$PREV_TAG" >> $env:GITHUB_OUTPUT
+          
+          Write-Host "Version: $VERSION | Prev tag: $PREV_TAG"
         shell: pwsh
 
       - name: Create Release
@@ -106,22 +114,19 @@ jobs:
           name: CodeStep ${{ github.ref_name }}
           body: |
             ## 🎉 CodeStep ${{ github.ref_name }}
-            
-            ### 📦 下载
-            - **Windows**: 
-              - `.msi` - Windows Installer 安装包（推荐）
-              - `.exe` - NSIS 安装包
-            
-            ### 🚀 安装说明
-            1. 下载适合你系统的安装包
-            2. Windows: 运行 `.msi` 或 `.exe` 安装程序
-            3. 按照安装向导完成安装
-            
+
             ### 📝 更新日志
             ${{ steps.changelog.outputs.CHANGELOG }}
-            
+
             ---
-            
+
+            ### 📦 下载说明
+            - **Windows**:
+              - `.msi` - Windows Installer 安装包（推荐）
+              - `.exe` - NSIS 安装包
+            1. 下载适合你系统的安装包
+            2. 运行安装程序，按向导完成安装
+
             **完整 Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.changelog.outputs.PREV_TAG }}...${{ github.ref_name }}
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
