@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import type { TypingAttemptPayload, GrowthSummary, TrainingPackGrowth, WeakTokenStat } from '@/types';
+import type { TypingAttemptPayload, GrowthSummary, TrainingPackGrowth, PatternMastery, WeakTokenStat } from '@/types';
 
 class GrowthService {
   async recordTypingAttempt(payload: TypingAttemptPayload): Promise<void> {
@@ -25,6 +25,15 @@ class GrowthService {
     } catch (error) {
       console.error('[GrowthService] Failed to get training pack growth:', error);
       return null;
+    }
+  }
+
+  async getTrainingPackPatternMastery(packId: string): Promise<PatternMastery[]> {
+    try {
+      return await invoke<PatternMastery[]>('get_training_pack_pattern_mastery', { packId });
+    } catch (error) {
+      console.error('[GrowthService] Failed to get training pack pattern mastery:', error);
+      return [];
     }
   }
 

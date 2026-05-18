@@ -60,7 +60,7 @@ export function Header() {
         >
           {soundOn ? '🔊' : '🔇'}
         </button>
-        <span className="text-xs text-gray-500">v0.1.0</span>
+        <span className="text-xs text-gray-500">v{__APP_VERSION__}</span>
       </div>
     </header>
   );

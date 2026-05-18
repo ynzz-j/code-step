@@ -79,6 +79,23 @@ pub struct TrainingPackGrowth {
 }
 
 #[derive(Debug, Serialize)]
+pub struct PatternMastery {
+    #[serde(rename = "patternId")]
+    pub pattern_id: String,
+    pub attempts: u32,
+    #[serde(rename = "masteryPercent")]
+    pub mastery_percent: f64,
+    #[serde(rename = "bestWpm")]
+    pub best_wpm: f64,
+    #[serde(rename = "bestFlowScore")]
+    pub best_flow_score: f64,
+    #[serde(rename = "recentTrend")]
+    pub recent_trend: f64,
+    #[serde(rename = "weakTokens")]
+    pub weak_tokens: Vec<String>,
+}
+
+#[derive(Debug, Serialize)]
 pub struct WeakTokenStat {
     pub token: String,
     pub count: u32,
@@ -403,6 +420,44 @@ pub async fn get_training_pack_growth(
         .ok();
 
     Ok(result)
+}
+
+#[tauri::command]
+pub async fn get_training_pack_pattern_mastery(
+    state: tauri::State<'_, AppState>,
+    pack_id: String,
+) -> Result<Vec<PatternMastery>, String> {
+    let db = state.db.lock().map_err(|e| e.to_string())?;
+
+    let mut stmt = db
+        .prepare(
+            "SELECT pattern_id, attempts, mastery_percent, best_wpm, best_flow_score, recent_trend, weak_tokens
+             FROM pattern_mastery
+             WHERE user_id = ?1 AND pack_id = ?2",
+        )
+        .map_err(|e| e.to_string())?;
+
+    let results = stmt
+        .query_map(rusqlite::params![DEFAULT_USER_ID, pack_id], |row| {
+            let weak_tokens_json: String = row.get(6)?;
+            let weak_tokens =
+                serde_json::from_str::<Vec<String>>(&weak_tokens_json).unwrap_or_default();
+
+            Ok(PatternMastery {
+                pattern_id: row.get(0)?,
+                attempts: row.get(1)?,
+                mastery_percent: row.get(2)?,
+                best_wpm: row.get(3)?,
+                best_flow_score: row.get(4)?,
+                recent_trend: row.get(5)?,
+                weak_tokens,
+            })
+        })
+        .map_err(|e| e.to_string())?
+        .filter_map(|r| r.ok())
+        .collect();
+
+    Ok(results)
 }
 
 #[tauri::command]

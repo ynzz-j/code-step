@@ -19,7 +19,7 @@ import { useGrowthStore } from '@/stores/growthStore';
 import { challengeService } from '@/services/challengeService';
 import { useChallengeStore } from '@/stores/challengeStore';
 import { publishObsStats } from '@/services/obsStatsPublisher';
-import type { TypingStep, TypingAttemptPayload, ChallengeMode, ChallengeRunPayload } from '@/types';
+import type { Step, TypingStep, TypingAttemptPayload, ChallengeMode, ChallengeRunPayload, PatternMastery } from '@/types';
 import type { TypingCompleteData } from '@/components/editor/TypingEditor';
 
 const AUTO_NEXT_DELAY_MS = 1200;
@@ -34,6 +34,36 @@ interface StepSummary {
   durationMs: number;
   backspaces: number;
   perfect: boolean;
+}
+
+function getTypingStepPatternId(step: TypingStep) {
+  return step.patternId || step.concept.toLowerCase().replace(/\s+/g, '-');
+}
+
+function buildWeakFirstStepOrder(steps: Step[], patternMastery: PatternMastery[]) {
+  const fallbackOrder = steps.map((_, index) => index);
+  if (patternMastery.length === 0) return fallbackOrder;
+
+  const masteryByPattern = new Map(patternMastery.map((item) => [item.patternId, item]));
+
+  return fallbackOrder
+    .map((index) => {
+      const step = steps[index];
+      if (step.type !== 'typing') {
+        return { index, bucket: 3, weakness: 100, originalIndex: index };
+      }
+
+      const mastery = masteryByPattern.get(getTypingStepPatternId(step));
+      if (!mastery) {
+        return { index, bucket: 1, weakness: 50, originalIndex: index };
+      }
+
+      const masteryPercent = Number.isFinite(mastery.masteryPercent) ? mastery.masteryPercent : 0;
+      const bucket = masteryPercent < 70 ? 0 : 2;
+      return { index, bucket, weakness: masteryPercent, originalIndex: index };
+    })
+    .sort((a, b) => a.bucket - b.bucket || a.weakness - b.weakness || a.originalIndex - b.originalIndex)
+    .map((item) => item.index);
 }
 
 export function LearnPage() {
@@ -66,6 +96,8 @@ export function LearnPage() {
       ? challengeParam
       : null;
   const challengeRunIdRef = useRef<number | null>(null);
+  const challengeStepOrderRef = useRef<number[]>([]);
+  const challengeOrderPositionRef = useRef(0);
   const challengeStatsRef = useRef({
     charsTyped: 0,
     correctChars: 0,
@@ -77,6 +109,7 @@ export function LearnPage() {
     totalBackspaces: 0,
   });
   const challengeSettledRef = useRef(false);
+  const segmentWeakTokenCountsRef = useRef<Record<string, number>>({});
 
   // 倒计时 (秒)
   const getInitialCountdown = () => {
@@ -89,6 +122,13 @@ export function LearnPage() {
 
   // Combo rush idle 计时
   const comboIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearChallengeTimer = useCallback(() => {
+    if (challengeTimerRef.current) {
+      clearInterval(challengeTimerRef.current);
+      challengeTimerRef.current = null;
+    }
+  }, []);
 
   const isTimedChallenge = challengeMode === 'speed-30s' || challengeMode === 'focus-3min';
   const wpm = useTypingStatsStore((s) => s.typingStats.wpm);
@@ -118,8 +158,11 @@ export function LearnPage() {
 
   useEffect(() => {
     challengeRunIdRef.current = null;
+    challengeStepOrderRef.current = [];
+    challengeOrderPositionRef.current = 0;
     challengeSettledRef.current = false;
     challengeStartedAtRef.current = Date.now();
+    segmentWeakTokenCountsRef.current = {};
     challengeStatsRef.current = {
       charsTyped: 0,
       correctChars: 0,
@@ -132,10 +175,10 @@ export function LearnPage() {
     };
     setPerfectRunFailed(false);
     setChallengeCountdown(getInitialCountdown());
-    if (challengeTimerRef.current) clearInterval(challengeTimerRef.current);
+    clearChallengeTimer();
     if (comboIdleTimerRef.current) clearTimeout(comboIdleTimerRef.current);
     useChallengeStore.getState().setMode(challengeMode);
-  }, [challengeMode, courseId]);
+  }, [challengeMode, clearChallengeTimer, courseId]);
 
   // 进入课程时加载
   useEffect(() => {
@@ -165,6 +208,7 @@ export function LearnPage() {
     setAutoAdvancePaused(false);
     clearAutoAdvanceTimers();
     stepStartedAtRef.current = Date.now();
+    segmentWeakTokenCountsRef.current = {};
     if (!challengeMode) {
       weakTokenCountsRef.current = {};
     }
@@ -182,23 +226,24 @@ export function LearnPage() {
 
   // ===== 挑战模式：倒计时 =====
   useEffect(() => {
-    if (!isTimedChallenge || !currentCourse) return;
+    if (!isTimedChallenge || !currentCourse || stepInputDone || challengeSettledRef.current) {
+      clearChallengeTimer();
+      return;
+    }
 
     challengeTimerRef.current = setInterval(() => {
       setChallengeCountdown((prev) => {
         if (prev <= 1) {
           // 时间到，结算挑战
-          if (challengeTimerRef.current) clearInterval(challengeTimerRef.current);
+          clearChallengeTimer();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => {
-      if (challengeTimerRef.current) clearInterval(challengeTimerRef.current);
-    };
-  }, [isTimedChallenge, currentCourse]);
+    return clearChallengeTimer;
+  }, [clearChallengeTimer, currentCourse, isTimedChallenge, stepInputDone]);
 
   // 倒计时到 0 自动结算
   useEffect(() => {
@@ -208,6 +253,50 @@ export function LearnPage() {
   }, [challengeCountdown]);
 
   const currentStep = currentCourse?.steps[currentStepIndex];
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!challengeMode || !currentCourse || !courseId) {
+      challengeStepOrderRef.current = [];
+      challengeOrderPositionRef.current = 0;
+      return;
+    }
+
+    const fallbackOrder = currentCourse.steps.map((_, index) => index);
+    challengeStepOrderRef.current = fallbackOrder;
+    challengeOrderPositionRef.current = 0;
+
+    const applyOrder = (order: number[]) => {
+      if (cancelled || order.length === 0) return;
+
+      challengeStepOrderRef.current = order;
+      const liveIndex = useCourseSessionStore.getState().currentStepIndex;
+      const livePosition = order.indexOf(liveIndex);
+
+      if (
+        challengeStatsRef.current.charsTyped === 0 &&
+        !stepInputDone &&
+        !challengeSettledRef.current
+      ) {
+        challengeOrderPositionRef.current = 0;
+        useCourseSessionStore.setState({ currentStepIndex: order[0] });
+        return;
+      }
+
+      challengeOrderPositionRef.current = livePosition >= 0 ? livePosition : 0;
+    };
+
+    applyOrder(fallbackOrder);
+
+    growthService.getTrainingPackPatternMastery(courseId).then((patternMastery) => {
+      applyOrder(buildWeakFirstStepOrder(currentCourse.steps, patternMastery));
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [challengeMode, courseId, currentCourse, stepInputDone]);
 
   useEffect(() => {
     if (!currentCourse || !currentStep) return;
@@ -268,6 +357,7 @@ export function LearnPage() {
       if (info?.expected) {
         const token = normalizeWeakToken(info.expected);
         weakTokenCountsRef.current[token] = (weakTokenCountsRef.current[token] ?? 0) + 1;
+        segmentWeakTokenCountsRef.current[token] = (segmentWeakTokenCountsRef.current[token] ?? 0) + 1;
       }
     }
   };
@@ -304,16 +394,19 @@ export function LearnPage() {
     };
   };
 
-  const recordTypingAttemptToDb = async (summary: StepSummary) => {
+  const recordTypingAttemptToDb = async (
+    summary: StepSummary,
+    weakTokenCounts: Record<string, number> = weakTokenCountsRef.current,
+  ) => {
     if (!courseId || !currentCourse || !currentStep) return;
 
-    const weakTokens = Object.entries(weakTokenCountsRef.current)
+    const weakTokens = Object.entries(weakTokenCounts)
       .sort(([, countA], [, countB]) => countB - countA)
       .slice(0, 10)
       .map(([token]) => token);
 
     const stepTypingStep = currentStep as TypingStep;
-    const patternId = stepTypingStep.patternId || stepTypingStep.concept.toLowerCase().replace(/\s+/g, '-');
+    const patternId = getTypingStepPatternId(stepTypingStep);
     const localDay = new Date().toISOString().slice(0, 10);
 
     const payload: TypingAttemptPayload = {
@@ -348,6 +441,7 @@ export function LearnPage() {
 
     // 挑战模式：累加片段统计
     if (challengeMode) {
+      recordTypingAttemptToDb(summary, segmentWeakTokenCountsRef.current);
       challengeStatsRef.current.completedSegments++;
       challengeStatsRef.current.maxCombo = Math.max(challengeStatsRef.current.maxCombo, summary.maxCombo);
       if (summary.perfect) challengeStatsRef.current.perfectSegments++;
@@ -364,7 +458,7 @@ export function LearnPage() {
     if (!courseId || challengeSettledRef.current) return;
     challengeSettledRef.current = true;
 
-    if (challengeTimerRef.current) clearInterval(challengeTimerRef.current);
+    clearChallengeTimer();
 
     const stats = challengeStatsRef.current;
     const totalDurationMs = isTimedChallenge
@@ -479,6 +573,7 @@ export function LearnPage() {
     setAutoAdvancePercent(0);
     setAutoAdvancePaused(false);
     stepStartedAtRef.current = Date.now();
+    segmentWeakTokenCountsRef.current = {};
     if (!options?.preserveWeakTokens) {
       weakTokenCountsRef.current = {};
     }
@@ -493,7 +588,16 @@ export function LearnPage() {
   const advanceChallengeSegment = () => {
     const { currentCourse: course, currentStepIndex: index } = useCourseSessionStore.getState();
     if (!course) return;
-    const nextIndex = index >= course.steps.length - 1 ? 0 : index + 1;
+    const order = challengeStepOrderRef.current.length > 0
+      ? challengeStepOrderRef.current
+      : course.steps.map((_, stepIndex) => stepIndex);
+    if (order.length === 0) return;
+    const currentPosition = order.indexOf(index);
+    const nextPosition = currentPosition >= 0
+      ? (currentPosition + 1) % order.length
+      : (challengeOrderPositionRef.current + 1) % order.length;
+    challengeOrderPositionRef.current = nextPosition;
+    const nextIndex = order[nextPosition];
     useCourseSessionStore.setState({ currentStepIndex: nextIndex });
     resetSegmentInput({ preserveWeakTokens: true, preserveCombo: true });
   };
@@ -540,7 +644,7 @@ export function LearnPage() {
   const handleStopTraining = () => {
     clearAutoAdvanceTimers();
     setAutoAdvancePaused(false);
-    if (challengeTimerRef.current) clearInterval(challengeTimerRef.current);
+    clearChallengeTimer();
     if (comboIdleTimerRef.current) clearTimeout(comboIdleTimerRef.current);
     useChallengeStore.getState().clearChallenge();
     navigate(`/courses${coursesQuery}`);

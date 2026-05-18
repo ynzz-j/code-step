@@ -33,6 +33,7 @@ export interface TypingSessionStats {
 
 export interface PatternMastery {
   patternId: string;
+  attempts: number;
   masteryPercent: number;
   bestWpm: number;
   bestFlowScore: number;

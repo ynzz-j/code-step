@@ -47,10 +47,10 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
   const progress = getCourseProgress(pack.id);
   const completedCount = progress?.completedSteps?.length || 0;
   const stepCount = course?.stepsCount ?? 0;
-  const masteryPercent = Math.max(
+  const masteryPercent = Math.round(Math.max(
     packGrowth?.masteryPercent ?? 0,
     stepCount > 0 ? Math.round((completedCount / stepCount) * 100) : 0,
-  );
+  ));
   const hasPracticeStats = Boolean(packGrowth?.lastPracticedAt || (packGrowth?.bestWpm ?? 0) > 0 || (packGrowth?.bestCombo ?? 0) > 0 || completedCount > 0);
   const todayDelta = packGrowth?.todayDelta ?? 0;
   const todayDeltaLabel = todayDelta > 0

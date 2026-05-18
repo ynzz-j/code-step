@@ -32,6 +32,7 @@ pub fn run() {
             growth::record_typing_attempt,
             growth::get_growth_summary,
             growth::get_training_pack_growth,
+            growth::get_training_pack_pattern_mastery,
             growth::get_weak_token_stats,
             growth::import_legacy_growth_data,
             challenge::record_challenge_run,
