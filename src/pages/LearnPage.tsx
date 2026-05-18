@@ -8,7 +8,7 @@ import { InstructionPanel } from '@/components/learn/InstructionPanel';
 import { ProgressDots } from '@/components/learn/ProgressDots';
 import { TypingEditor } from '@/components/editor/TypingEditor';
 import { CodeEditor } from '@/components/editor/CodeEditor';
-import { ComboDisplay } from '@/components/learn/ComboDisplay';
+import { ComboDisplay, ComboFlashOverlay } from '@/components/learn/ComboDisplay';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { PerfectStrike } from '@/components/learn/PerfectStrike';
 import { WpmChart } from '@/components/learn/WpmChart';
@@ -802,7 +802,9 @@ export function LearnPage() {
       {/* 主内容区：代码输入区占主要空间 */}
       <div className="flex-1 flex overflow-hidden">
         <InstructionPanel step={currentStep} />
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="relative flex-1 flex flex-col min-w-0">
+          <ComboFlashOverlay />
+
           {/* 实时图表区域 - 固定区域，不再覆盖编辑器 */}
           {currentStep?.type === 'typing' && (
             <div className="flex-shrink-0 px-4 py-2 border-b border-bg-surface/30">

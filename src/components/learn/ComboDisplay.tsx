@@ -8,6 +8,13 @@ interface ComboDisplayProps {
   compact?: boolean;
 }
 
+interface ComboFlashState {
+  combo: number;
+  maxCombo: number;
+  isNewBest: boolean;
+  fadingOut: boolean;
+}
+
 export function ComboDisplay({ compact = false }: ComboDisplayProps) {
   const { currentCombo, maxCombo } = useComboStore();
   const [animEvent, setAnimEvent] = useState<ComboEvent | null>(null);
@@ -143,6 +150,99 @@ export function ComboDisplay({ compact = false }: ComboDisplayProps) {
           最佳: {maxCombo}
         </div>
       )}
+    </div>
+  );
+}
+
+export function ComboFlashOverlay() {
+  const { currentCombo, maxCombo } = useComboStore();
+  const [flash, setFlash] = useState<ComboFlashState | null>(null);
+  const prevComboRef = useRef(0);
+  const prevMaxRef = useRef(0);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  }, []);
+
+  useEffect(() => clearTimers, [clearTimers]);
+
+  useEffect(() => {
+    if (currentCombo === 0) {
+      clearTimers();
+      setFlash(null);
+      prevComboRef.current = 0;
+      prevMaxRef.current = maxCombo;
+      return;
+    }
+
+    if (currentCombo > prevComboRef.current) {
+      clearTimers();
+      const isNewBest = currentCombo > prevMaxRef.current && prevMaxRef.current > 0;
+      setFlash({
+        combo: currentCombo,
+        maxCombo,
+        isNewBest,
+        fadingOut: false,
+      });
+
+      timersRef.current.push(
+        setTimeout(() => {
+          setFlash((current) => current ? { ...current, fadingOut: true } : current);
+        }, 650),
+      );
+      timersRef.current.push(
+        setTimeout(() => setFlash(null), 950),
+      );
+    }
+
+    prevComboRef.current = currentCombo;
+    prevMaxRef.current = maxCombo;
+  }, [clearTimers, currentCombo, maxCombo]);
+
+  if (!flash) return null;
+
+  const isRecordTone = flash.combo >= 20 || flash.isNewBest;
+  const isMilestone = flash.combo >= 10;
+
+  return (
+    <div
+      className={`
+        pointer-events-none absolute inset-x-0 top-14 z-20 flex justify-center
+        transition-all duration-300
+        ${flash.fadingOut ? 'opacity-0 -translate-y-2 scale-95' : 'opacity-100 translate-y-0 scale-100'}
+      `}
+      aria-hidden="true"
+    >
+      <div
+        className={`
+          flex items-center gap-3 rounded-brand border px-4 py-2 font-mono font-bold shadow-2xl backdrop-blur-md
+          animate-combo-bounce
+          ${isRecordTone
+            ? 'border-accent-record/50 bg-accent-record/15 text-accent-record shadow-accent-record/20'
+            : isMilestone
+              ? 'border-accent-primary/50 bg-accent-primary/15 text-accent-primary shadow-accent-primary/20'
+              : 'border-bg-surface/70 bg-bg-panel/90 text-text-primary shadow-black/30'}
+        `}
+      >
+        <span className="text-xs tracking-wider opacity-70">COMBO</span>
+        <span className={`${isMilestone ? 'text-4xl' : 'text-2xl'} leading-none`}>
+          x{flash.combo}
+        </span>
+        {(flash.isNewBest || isMilestone) && (
+          <span
+            className={`
+              rounded-tool border px-2 py-0.5 text-[10px] leading-none
+              ${isRecordTone
+                ? 'border-accent-record/40 bg-accent-record/15 text-accent-record'
+                : 'border-accent-primary/40 bg-accent-primary/15 text-accent-primary'}
+            `}
+          >
+            {flash.isNewBest ? 'NEW BEST' : `BEST x${flash.maxCombo}`}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
