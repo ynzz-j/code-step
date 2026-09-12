@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    --color-bg-app: #0f172a;
-    --color-bg-panel: #1e293b;
-    --color-bg-surface: #334155;
-    --color-bg-elevated: #475569;
-    --color-text-primary: #f8fafc;
-    --color-text-secondary: #94a3b8;
+    --color-bg-app: #0a1120;
+    --color-bg-panel: #111b2e;
+    --color-bg-surface: #1a2740;
+    --color-bg-elevated: #243352;
+    --color-text-primary: #f5f8ff;
+    --color-text-secondary: #9aa8bd;
     --color-text-muted: #64748b;
-    --color-text-disabled: #475569;
-    --color-accent: #0ea5e9;
+    --color-text-disabled: #3d4c63;
+    --color-accent: #f59e0b;
   }
 
   body {
@@ -26,6 +26,153 @@
   }
 }
 
+/* ============================================================
+   CodeStep 虚拟键盘皮肤（react-simple-keyboard，参考 键位视觉参考.png）
+   ============================================================ */
+.cs-keyboard {
+  background: transparent !important;
+  padding: 4px 0;
+}
+
+.cs-keyboard .hg-button {
+  background: linear-gradient(180deg, #1e2c47 0%, #16223a 55%, #121c30 100%);
+  border: 1px solid rgba(96, 126, 176, 0.28);
+  border-bottom: 3px solid rgba(8, 14, 28, 0.95);
+  border-radius: 8px;
+  color: #c9d4e8;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  height: 38px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 60ms ease, box-shadow 60ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.cs-keyboard .hg-button:hover {
+  background: linear-gradient(180deg, #24345a 0%, #1a2740 55%, #14203a 100%);
+  color: #e6edf9;
+}
+
+/* 物理键盘按下 → 虚拟键下沉 */
+.cs-keyboard .hg-button:active,
+.cs-keyboard .hg-button.hg-active {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+  background: linear-gradient(180deg, #16223a 0%, #121c30 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* 当前应按键：金橙 glow + 上浮 */
+.cs-keyboard .hg-button.cs-next {
+  border-color: #f5b23c;
+  color: #ffd27a;
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(245, 158, 11, 0.55),
+    0 0 14px rgba(245, 158, 11, 0.45),
+    0 4px 8px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* 命令键：更沉的色调；Enter 蓝色填充（参考图 Command 键样式） */
+.cs-keyboard .hg-button.cs-command {
+  color: #9fb2d0;
+  background: linear-gradient(180deg, #1a2740 0%, #131e34 60%, #101a2c 100%);
+}
+
+.cs-keyboard .hg-button.cs-enter {
+  background: linear-gradient(180deg, #2f6fce 0%, #23538f 100%);
+  border-color: rgba(120, 170, 240, 0.4);
+  color: #eaf2ff;
+}
+
+/* 正确输入：绿色短闪 */
+.cs-keyboard .hg-button.cs-ok {
+  animation: cs-key-ok 260ms ease-out;
+  border-color: rgba(34, 197, 94, 0.85);
+  color: #86efac;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+}
+
+/* 错误输入：红光 + 抖动 */
+.cs-keyboard .hg-button.cs-err {
+  animation: cs-key-err 200ms ease-out;
+  border-color: rgba(239, 68, 68, 0.9);
+  color: #fca5a5;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
+}
+
+@keyframes cs-key-ok {
+  0% { transform: translateY(3px); border-bottom-width: 1px; }
+  100% { transform: translateY(0); }
+}
+
+@keyframes cs-key-err {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+}
+
+/* 指引栏里的当前按键预览键帽 */
+.cs-keycap-preview {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  color: #c9d4e8;
+  background: linear-gradient(180deg, #1e2c47 0%, #121c30 100%);
+  border: 1px solid rgba(96, 126, 176, 0.28);
+  border-bottom: 3px solid rgba(8, 14, 28, 0.95);
+}
+
+.cs-keycap-preview.cs-next {
+  border-color: #f5b23c;
+  color: #ffd27a;
+  box-shadow:
+    0 0 0 1px rgba(245, 158, 11, 0.55),
+    0 0 12px rgba(245, 158, 11, 0.45);
+}
+
+/* ============================================================
+   打字界面：语法高亮 + 光标（参考 打字界面UI.png）
+   ============================================================ */
+.syn-str { color: #fbbf24; }
+.syn-kw { color: #c084fc; }
+.syn-num { color: #22d3ee; }
+.syn-com { color: #6b7a90; }
+.syn-type { color: #60a5fa; }
+
+.ch-pending { opacity: 0.35; }
+
+.ch-err {
+  color: #f87171 !important;
+  opacity: 1 !important;
+  background: rgba(239, 68, 68, 0.18);
+  border-radius: 3px;
+  text-decoration: underline wavy #ef4444 1px;
+}
+
+.cs-caret {
+  display: inline-block;
+  width: 2.5px;
+  height: 1.15em;
+  margin: 0 1.5px;
+  vertical-align: text-bottom;
+  background: #f5b23c;
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+  animation: caret-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes caret-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 @layer components {
   .cm-correct-char {
     @apply text-success-400 bg-success-500/10;
@@ -37,6 +184,38 @@
 
   .cm-cursor-char {
     @apply bg-primary-500/30 border-l-2 border-primary-400;
+  }
+
+  /* TypingEditor 键帽式字符（mockup 游戏反馈 03） */
+  .ty-char {
+    display: inline-block;
+    min-width: 1.5ch;
+    text-align: center;
+    padding: 1px 3px;
+    margin: 1.5px 1px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+
+  .ty-pending {
+    @apply text-text-secondary bg-bg-surface/50 border-bg-elevated/60;
+  }
+
+  .ty-correct {
+    @apply text-success-400 bg-success-500/10 border-success-500/25;
+  }
+
+  .ty-error {
+    @apply text-error-400 bg-error-500/20 border-error-500/40 underline decoration-wavy decoration-error-500;
+  }
+
+  .ty-cursor {
+    @apply text-text-primary bg-primary-500/20 border-primary-400/60;
+  }
+
+  .ty-break {
+    @apply text-text-disabled;
   }
 }
 

@@ -9,10 +9,15 @@ import { ProgressDots } from '@/components/learn/ProgressDots';
 import { TypingEditor } from '@/components/editor/TypingEditor';
 import { CodeEditor } from '@/components/editor/CodeEditor';
 import { ComboDisplay, ComboFlashOverlay } from '@/components/learn/ComboDisplay';
+import { SideStatsPanel } from '@/components/learn/SideStatsPanel';
+import { CoreStatsBar } from '@/components/learn/CoreStatsBar';
+import { VirtualKeyboard, type KeyStrokeInfo } from '@/components/editor/VirtualKeyboard';
+import keyboardIcon from '@/assets/icons/keyboard.png';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { PerfectStrike } from '@/components/learn/PerfectStrike';
-import { WpmChart } from '@/components/learn/WpmChart';
 import { useChartStore } from '@/stores/chartStore';
+import boltIcon from '@/assets/icons/bolt.png';
+import targetIcon from '@/assets/icons/target.png';
 import { useUserStore } from '@/stores/userStore';
 import { growthService } from '@/services/growthService';
 import { useGrowthStore } from '@/stores/growthStore';
@@ -34,6 +39,30 @@ interface StepSummary {
   durationMs: number;
   backspaces: number;
   perfect: boolean;
+}
+
+/** 柱状迷你图（打字界面UI：WPM/ACC 卡右侧） */
+function BarSparkline({ data, slots = 9, tone }: { data: number[]; slots?: number; tone: 'amber' | 'green' }) {
+  const slice = data.slice(-slots);
+  const max = Math.max(...slice, tone === 'amber' ? 60 : 100, 1);
+  const padCount = Math.max(0, slots - slice.length);
+  const full = [...Array(padCount).fill(0), ...slice];
+  return (
+    <div className="flex items-end gap-1 h-10 flex-shrink-0">
+      {Array.from({ length: slots }).map((_, i) => {
+        const v = full[i] ?? 0;
+        const h = v > 0 ? Math.max((Math.min(v, max) / max) * 38, 6) : 4;
+        const active = v > 0;
+        return (
+          <div
+            key={i}
+            className={`w-1.5 rounded-sm ${active ? (tone === 'amber' ? 'bg-primary-400' : 'bg-success-500') : 'bg-bg-elevated'}`}
+            style={{ height: `${h}px` }}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 function getTypingStepPatternId(step: TypingStep) {
@@ -88,6 +117,10 @@ export function LearnPage() {
   // 完美一击
   const [perfectStrikeVisible, setPerfectStrikeVisible] = useState(false);
   const [perfectRunFailed, setPerfectRunFailed] = useState(false);
+  // 底部全宽虚拟键盘状态（光标位置 + 最近击键）
+  const [kbPosition, setKbPosition] = useState(0);
+  const [kbLastKey, setKbLastKey] = useState<KeyStrokeInfo | null>(null);
+  const kbSeqRef = useRef(0);
 
   // ===== 挑战模式状态 =====
   const challengeParam = searchParams.get('challenge') as ChallengeMode | null;
@@ -133,6 +166,10 @@ export function LearnPage() {
   const isTimedChallenge = challengeMode === 'speed-30s' || challengeMode === 'focus-3min';
   const wpm = useTypingStatsStore((s) => s.typingStats.wpm);
   const accuracy = useTypingStatsStore((s) => s.typingStats.accuracy);
+  const errors = useTypingStatsStore((s) => s.typingStats.errors);
+  const totalKeystrokes = useTypingStatsStore((s) => s.typingStats.totalKeystrokes);
+  const wpmHistory = useChartStore((s) => s.wpmHistory);
+  const accuracyHistory = useChartStore((s) => s.accuracyHistory);
   const {
     currentCourse,
     currentStepIndex,
@@ -326,9 +363,11 @@ export function LearnPage() {
     return token;
   };
 
-  // 打字按键回调：更新打字统计 + 连击
+  // 打字按键回调：更新打字统计 + 连击 + 底部键盘反馈
   const handleKeystroke = (isCorrect: boolean, info?: { expected: string; input: string; position: number }) => {
     recordTypingKeystroke(isCorrect);
+    kbSeqRef.current += 1;
+    setKbLastKey({ char: info?.input ?? '', correct: isCorrect, seq: kbSeqRef.current });
     if (challengeMode) {
       challengeStatsRef.current.charsTyped++;
       if (isCorrect) challengeStatsRef.current.correctChars++;
@@ -363,6 +402,8 @@ export function LearnPage() {
   };
 
   const handleBackspace = () => {
+    kbSeqRef.current += 1;
+    setKbLastKey({ char: '\b', correct: true, seq: kbSeqRef.current });
     if (!challengeMode) return;
     challengeStatsRef.current.totalBackspaces++;
     if (challengeMode === 'perfect-run') {
@@ -733,6 +774,13 @@ export function LearnPage() {
     'combo-rush': 'Combo Rush',
   };
 
+  const liveFlowScore = Math.max(0, Math.round((wpm * accuracy) / 100 + maxCombo * 0.4 - errors * 1.5));
+  const typingStepTarget = currentStep?.type === 'typing' ? (currentStep as TypingStep).targetCode : '';
+  const codeLength = typingStepTarget.length;
+  const kbPercent = codeLength > 0 ? Math.min(Math.round((kbPosition / codeLength) * 100), 100) : 0;
+  const isTyping = totalKeystrokes > 0 && !stepInputDone;
+  const kbNextChar = typingStepTarget[kbPosition] ?? '';
+
   return (
     <div className="flex flex-col h-full">
       {/* 顶部状态栏：紧凑布局 */}
@@ -801,19 +849,61 @@ export function LearnPage() {
 
       {/* 主内容区：代码输入区占主要空间 */}
       <div className="flex-1 flex overflow-hidden">
-        <InstructionPanel step={currentStep} />
+        <InstructionPanel
+          step={currentStep}
+          courseTitle={currentCourse.title}
+          language={currentCourse.language}
+          difficulty={currentCourse.difficulty}
+          stepIndex={currentStepIndex}
+          totalSteps={currentCourse.steps.length}
+        />
         <div className="relative flex-1 flex flex-col min-w-0">
           <ComboFlashOverlay />
-
-          {/* 实时图表区域 - 固定区域，不再覆盖编辑器 */}
+          {/* 实时表现卡组（打字界面UI）：WPM / ACC 双卡 + 柱状迷你图 */}
           {currentStep?.type === 'typing' && (
-            <div className="flex-shrink-0 px-4 py-2 border-b border-bg-surface/30">
-              <WpmChart wpm={wpm} accuracy={accuracy} />
+            <div className="flex-shrink-0 mx-4 mt-3 rounded-tool border border-gray-700/40 bg-bg-panel/50 px-4 py-2.5">
+              <div className="flex items-center justify-between mb-2.5">
+                <div className="flex items-center gap-2">
+                  <svg className="w-3.5 h-3.5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V9m5 10V5m5 14v-8" />
+                  </svg>
+                  <span className="text-xs font-bold text-text-primary">实时表现</span>
+                  <span className="text-[9px] text-text-disabled uppercase tracking-wider hidden md:inline">/ Real-time Performance</span>
+                </div>
+                <span className={`flex items-center gap-1.5 text-[10px] ${isTyping ? 'text-success-400' : 'text-text-muted'}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isTyping ? 'bg-success-400 animate-pulse' : 'bg-bg-elevated'}`} />
+                  {isTyping ? '正在输入...' : '等待输入'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex items-center gap-3 rounded-tool border border-primary-500/30 bg-bg-app/50 px-3.5 py-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-primary-500/15 border border-primary-500/30 flex items-center justify-center flex-shrink-0">
+                    <img src={boltIcon} alt="" className="h-5 w-5 object-contain" draggable={false} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] text-text-muted leading-none">WPM</div>
+                    <div className="text-2xl font-bold font-mono text-text-primary leading-none mt-1">{wpm}</div>
+                    <div className="text-[9px] text-text-disabled mt-1">输入速度（词/分钟）</div>
+                  </div>
+                  <div className="ml-auto"><BarSparkline data={wpmHistory} tone="amber" /></div>
+                </div>
+                <div className="flex items-center gap-3 rounded-tool border border-success-500/30 bg-bg-app/50 px-3.5 py-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-success-500/15 border border-success-500/30 flex items-center justify-center flex-shrink-0">
+                    <img src={targetIcon} alt="" className="h-5 w-5 object-contain" draggable={false} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] text-text-muted leading-none">ACC</div>
+                    <div className="text-2xl font-bold font-mono text-success-400 leading-none mt-1">{accuracy}%</div>
+                    <div className="text-[9px] text-text-disabled mt-1">准确率</div>
+                  </div>
+                  <div className="ml-auto"><BarSparkline data={accuracyHistory} tone="green" /></div>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* 代码编辑器区域 - 占据剩余所有空间 */}
-          <div className="flex-1 min-h-0 overflow-auto">
+          {/* 代码训练主卡（打字界面UI） */}
+          <div className="flex-1 min-h-0 mx-4 mt-3 rounded-tool border border-gray-700/40 bg-bg-panel/30 flex flex-col overflow-hidden">
             {currentStep?.type === 'typing' && (
               <TypingEditor
                 key={`${currentStepIndex}-${replayKey}`}
@@ -823,6 +913,9 @@ export function LearnPage() {
                 onBackspace={handleBackspace}
                 onReset={resetTypingStats}
                 onPerfectStrike={handlePerfectStrike}
+                language={currentCourse.language}
+                onReplay={handleReplayStep}
+                onCursorChange={setKbPosition}
               />
             )}
             {currentStep?.type === 'coding' && (
@@ -834,6 +927,28 @@ export function LearnPage() {
               />
             )}
           </div>
+
+          {/* 核心统计条（线框 4.5-C） */}
+          {currentStep?.type === 'typing' && (
+            <CoreStatsBar wpm={wpm} accuracy={accuracy} errors={errors} maxCombo={maxCombo} flowScore={liveFlowScore} />
+          )}
+
+          {/* 练习进度条（打字界面UI） */}
+          {currentStep?.type === 'typing' && (
+            <div className="flex-shrink-0 mx-4 mt-2 mb-3 rounded-tool border border-gray-700/40 bg-bg-panel/50 px-4 py-2 flex items-center gap-3">
+              <span className="text-[11px] text-text-secondary flex-shrink-0">
+                练习进度 <span className="font-mono text-text-primary">{currentStepIndex + 1}/{currentCourse.steps.length}</span>
+              </span>
+              <div className="flex-1 h-1.5 bg-bg-app rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-primary-500 to-orange-400 rounded-full transition-all duration-300"
+                  style={{ width: `${kbPercent}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-text-muted flex-shrink-0">代码长度 <span className="font-mono">{codeLength}</span></span>
+              <span className="text-[10px] text-text-muted flex-shrink-0">已完成 <span className="font-mono text-primary-300">{kbPercent}%</span></span>
+            </div>
+          )}
 
           {/* 完美一击特效 */}
           <PerfectStrike
@@ -936,7 +1051,45 @@ export function LearnPage() {
             </div>
           )}
         </div>
+
+        {/* 右侧鼓励卡（打字界面UI）：奖杯 + 山顶旗帜 */}
+        {currentStep?.type === 'typing' && <SideStatsPanel accuracy={accuracy} />}
       </div>
+
+      {/* 底部全宽键盘区（打字界面UI） */}
+      {currentStep?.type === 'typing' && (
+        <div className="flex-shrink-0 grid grid-cols-[200px_1fr_180px] items-stretch border-t border-bg-surface/40 bg-bg-panel/40">
+          <div className="hidden md:flex flex-col justify-center gap-1.5 px-4 py-3 border-r border-bg-surface/40">
+            <div className="flex items-center gap-2">
+              <img src={keyboardIcon} alt="" className="h-5 w-5 object-contain" draggable={false} />
+              <span className="text-xs font-bold text-text-primary">键盘指引</span>
+            </div>
+            <p className="text-[10px] text-text-muted">实时显示你的按键位置</p>
+            <div className="space-y-1 mt-1">
+              <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+                <span className="w-2 h-2 rounded-full bg-primary-400" /> 当前按键
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+                <span className="w-2 h-2 rounded-full bg-warning-400/70" /> 建议手指
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+                <span className="w-2 h-2 rounded-full bg-bg-elevated" /> 已输入
+              </div>
+            </div>
+          </div>
+          <VirtualKeyboard wide nextChar={kbNextChar} lastInput={kbLastKey} />
+          <div className="hidden lg:flex flex-col items-center justify-center text-center gap-2 px-4 py-3 border-l border-bg-surface/40">
+            <svg className="w-7 h-7 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+            </svg>
+            <p className="text-[11px] text-text-secondary leading-relaxed">
+              建议使用正确的指法
+              <br />
+              提升输入效率
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
-import { CategoryFilter } from '@/components/courses/CategoryFilter';
 import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
 import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
-import { COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata, type TrainingPack } from '@/types';
+import { ALL_CATEGORIES, COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata, type TrainingPack } from '@/types';
 import { playSound } from '@/utils/soundEffects';
 import { useGrowthStore } from '@/stores/growthStore';
 
@@ -25,12 +24,35 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'text-success-400 bg-success-500/10 border-success-500/20',
   basic: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
   intermediate: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-  advanced: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
+  advanced: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
   hell: 'text-error-400 bg-error-500/10 border-error-500/20',
 };
 
 const DIFFICULTY_ORDER: Record<string, number> = {
   beginner: 1, basic: 2, intermediate: 3, advanced: 4, hell: 5,
+};
+
+// 语言图标徽章（mockup 02：JS/Py/TS 圆角方块）
+const LANGUAGE_BADGES: Record<string, { label: string; tile: string }> = {
+  javascript: { label: 'JS', tile: 'bg-yellow-400/15 text-yellow-300 border-yellow-400/30' },
+  typescript: { label: 'TS', tile: 'bg-blue-400/15 text-blue-300 border-blue-400/30' },
+  python: { label: 'Py', tile: 'bg-sky-400/15 text-sky-300 border-sky-400/30' },
+  java: { label: 'Ja', tile: 'bg-orange-400/15 text-orange-300 border-orange-400/30' },
+  cpp: { label: 'C++', tile: 'bg-pink-400/15 text-pink-300 border-pink-400/30' },
+  sql: { label: 'SQL', tile: 'bg-emerald-400/15 text-emerald-300 border-emerald-400/30' },
+  vim: { label: 'Vi', tile: 'bg-violet-400/15 text-violet-300 border-violet-400/30' },
+};
+
+// 侧栏筛选顺序（mockup 02 左栏）
+const LANG_ORDER = ['javascript', 'typescript', 'python', 'java', 'sql', 'vim', 'cpp'];
+const LANG_LABELS: Record<string, string> = {
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  python: 'Python',
+  java: 'Java',
+  sql: 'SQL',
+  vim: 'Vim',
+  cpp: 'C++',
 };
 
 // ==================== TrainingPackCard ====================
@@ -67,7 +89,7 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
   ];
 
   return (
-    <div className="rounded-tool border border-cyan-500/30 bg-bg-panel transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/8">
+    <div className="rounded-tool border border-primary-500/30 bg-bg-panel transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-400/50 hover:shadow-lg hover:shadow-primary-500/10">
       <Link
         to={`/learn/${pack.id}?mode=typing`}
         onClick={() => playSound('click')}
@@ -76,7 +98,7 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
         {/* 头部 */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-500/15 text-cyan-300 border border-cyan-500/20">
+            <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-primary-500/15 text-primary-300 border border-primary-500/20">
               训练包
             </span>
             <span className="text-[10px] text-text-muted">{pack.track}</span>
@@ -86,7 +108,7 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
           </span>
         </div>
 
-        <h3 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-cyan-300 transition-colors">
+        <h3 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-primary-300 transition-colors">
           {pack.title}
         </h3>
         <p className="text-xs text-text-muted line-clamp-1 mb-4">
@@ -102,7 +124,7 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
             <div className="mt-0.5 text-[9px] text-text-muted">今日提升</div>
           </div>
           <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
-            <div className="text-sm font-bold font-mono text-cyan-300">{masteryPercent}%</div>
+            <div className="text-sm font-bold font-mono text-primary-300">{masteryPercent}%</div>
             <div className="mt-0.5 text-[9px] text-text-muted">熟练度</div>
           </div>
           <div className="text-center px-1.5 py-2 rounded bg-bg-app/50 border border-gray-700/30">
@@ -154,46 +176,59 @@ function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode
   const completedCount = progress?.completedSteps?.length || 0;
   const progressPercent = course.stepsCount > 0 ? Math.round((completedCount / course.stepsCount) * 100) : 0;
   const hasProgress = completedCount > 0;
+  const isComplete = progressPercent >= 100;
+  const badge = LANGUAGE_BADGES[course.language] ?? {
+    label: course.language.slice(0, 2).toUpperCase(),
+    tile: 'bg-bg-surface text-text-secondary border-gray-600/40',
+  };
 
   return (
     <Link
       to={`/learn/${course.id}?mode=${mode}`}
       onClick={() => playSound('click')}
-      className="group block p-4 rounded-tool border border-gray-700/40 bg-bg-panel transition-all duration-200 hover:border-gray-600/60 hover:bg-bg-surface hover:-translate-y-0.5"
+      className="group flex items-center gap-4 p-4 rounded-tool border border-gray-700/40 bg-bg-panel transition-all duration-200 hover:border-primary-500/40 hover:bg-bg-surface/50 hover:-translate-y-0.5"
     >
-      <div className="flex items-start justify-between gap-3 mb-2">
-        <div className="min-w-0 flex-1">
+      {/* 语言图标（mockup 02） */}
+      <div className={`w-12 h-12 rounded-xl border flex items-center justify-center text-sm font-extrabold flex-shrink-0 ${badge.tile}`}>
+        {badge.label}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold text-text-primary truncate group-hover:text-primary-300 transition-colors">
             {course.title}
           </h3>
-          <p className="text-xs text-text-muted line-clamp-1 mt-0.5">{course.description}</p>
+          <span className={`flex-shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium border ${DIFFICULTY_COLORS[course.difficulty]}`}>
+            {DIFFICULTY_LABELS[course.difficulty].label}
+          </span>
+          <span className={`flex-shrink-0 ml-auto px-1.5 py-0.5 rounded text-[10px] font-medium border ${STATUS_TAG[statusOf(progressPercent)].classes}`}>
+            {STATUS_TAG[statusOf(progressPercent)].label}
+          </span>
         </div>
-        <span className={`flex-shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium border ${DIFFICULTY_COLORS[course.difficulty]}`}>
-          {DIFFICULTY_LABELS[course.difficulty].label}
-        </span>
-      </div>
-
-      {/* 进度条 */}
-      {hasProgress && (
-        <div className="mb-2">
-          <div className="h-1 bg-gray-700/50 rounded-full overflow-hidden">
+        <p className="text-xs text-text-muted truncate mt-0.5">{course.description}</p>
+        <div className="flex items-center gap-2 mt-2">
+          <div className="flex-1 h-1.5 bg-bg-app/70 rounded-full overflow-hidden">
             <div
-              className="h-full bg-primary-500 rounded-full transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
+              className={`h-full rounded-full transition-all duration-300 ${isComplete ? 'bg-success-500' : 'bg-primary-500'}`}
+              style={{ width: `${Math.min(progressPercent, 100)}%` }}
             />
           </div>
+          <span className="text-[10px] text-text-muted flex-shrink-0 font-mono">
+            {completedCount}/{course.stepsCount} 段
+          </span>
         </div>
-      )}
-
-      {/* 三项信息 */}
-      <div className="flex items-center gap-3 text-[10px] text-text-disabled">
-        <span className="uppercase">{course.language}</span>
-        <span>{course.stepsCount} 段</span>
-        <span>~{course.estimatedMinutes} 分钟</span>
-        {hasProgress && (
-          <span className="text-primary-400 ml-auto">{progressPercent}%</span>
-        )}
       </div>
+
+      {/* 动作按钮（mockup 02：继续练习） */}
+      <span
+        className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+          hasProgress
+            ? 'bg-primary-500 text-white group-hover:bg-primary-400 shadow-sm shadow-primary-500/25'
+            : 'border border-gray-600/50 text-text-secondary group-hover:border-primary-500/50 group-hover:text-primary-300'
+        }`}
+      >
+        {isComplete ? '重新练习' : hasProgress ? '继续练习' : '开始练习'}
+      </span>
     </Link>
   );
 }
@@ -204,7 +239,7 @@ function CodingComingSoon() {
   return (
     <div className="text-center py-20">
       <div className="mx-auto mb-5 w-16 h-16 rounded-2xl bg-bg-panel border border-gray-700/50 flex items-center justify-center">
-        <svg className="w-8 h-8 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <svg className="w-8 h-8 text-primary-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
       </div>
@@ -223,6 +258,38 @@ function CodingComingSoon() {
   );
 }
 
+// 侧栏筛选按钮样式
+function sidebarBtn(active: boolean) {
+  return `w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs transition-colors border ${
+    active
+      ? 'bg-primary-500/15 text-primary-300 border-primary-500/25'
+      : 'text-text-secondary border-transparent hover:bg-bg-surface/60 hover:text-text-primary'
+  }`;
+}
+
+function chipBtn(active: boolean) {
+  return `px-2 py-0.5 rounded text-[10px] font-medium transition-colors border ${
+    active
+      ? 'bg-primary-500/15 text-primary-300 border-primary-500/25'
+      : 'text-text-muted border-transparent hover:border-gray-600/50 hover:text-text-secondary'
+  }`;
+}
+
+type StatusFilter = 'all' | 'not_started' | 'in_progress' | 'completed';
+
+// 状态筛选 Tag（线框 3.3-B）
+const STATUS_TAG: Record<string, { label: string; classes: string }> = {
+  not_started: { label: '未开始', classes: 'bg-bg-surface/60 text-text-muted border-bg-elevated/60' },
+  in_progress: { label: '学习中', classes: 'bg-primary-500/15 text-primary-300 border-primary-500/25' },
+  completed: { label: '已完成', classes: 'bg-success-500/15 text-success-400 border-success-500/25' },
+};
+
+function statusOf(progressPercent: number): Exclude<StatusFilter, 'all'> {
+  if (progressPercent >= 100) return 'completed';
+  if (progressPercent > 0) return 'in_progress';
+  return 'not_started';
+}
+
 // ==================== CoursesPage ====================
 
 export function CoursesPage() {
@@ -237,6 +304,9 @@ export function CoursesPage() {
     selectedCategory,
     selectedLanguage,
     selectedDifficulty,
+    setCategory,
+    setLanguage,
+    setDifficulty,
   } = useCourseCatalogStore();
 
   useEffect(() => {
@@ -279,41 +349,181 @@ export function CoursesPage() {
     return matchLang && matchDiff && matchCat;
   });
 
-  const totalResults = visibleTrainingPacks.length + sortedCourses.length;
+  // 侧栏语言计数（基于完整课程目录，mockup 02 左栏）
+  const langCounts: Record<string, number> = {};
+  for (const c of courses) {
+    langCounts[c.language] = (langCounts[c.language] ?? 0) + 1;
+  }
+
+  // 状态筛选 + 搜索（线框 3.3-A）
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [query, setQuery] = useState('');
+  const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
+
+  const packStatus = new Map(visibleTrainingPacks.map((pack) => {
+    const p = getCourseProgress(pack.id);
+    const pct = p ? Math.round((p.completedSteps?.length || 0) / Math.max(courseById.get(pack.id)?.stepsCount ?? 1, 1) * 100) : 0;
+    return [pack.id, statusOf(pct)] as const;
+  }));
+  const courseStatus = new Map(sortedCourses.map((course) => {
+    const p = getCourseProgress(course.id);
+    const pct = course.stepsCount > 0 ? Math.round(((p?.completedSteps?.length || 0) / course.stepsCount) * 100) : 0;
+    return [course.id, statusOf(pct)] as const;
+  }));
+
+  const matchStatus = (id: string, map: Map<string, Exclude<StatusFilter, 'all'>>) =>
+    statusFilter === 'all' || map.get(id) === statusFilter;
+  const matchQuery = (...fields: (string | undefined)[]) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return fields.some((f) => (f ?? '').toLowerCase().includes(q));
+  };
+
+  const filteredPacks = visibleTrainingPacks.filter(
+    (pack) => matchStatus(pack.id, packStatus) && matchQuery(pack.title, courseById.get(pack.id)?.description),
+  );
+  const statusFilteredCourses = sortedCourses.filter(
+    (course) => matchStatus(course.id, courseStatus) && matchQuery(course.title, course.description),
+  );
+
+  // 进行中课程默认排前（线框 3.4）
+  const STATUS_ORDER: Record<string, number> = { in_progress: 0, not_started: 1, completed: 2 };
+  const sortedFilteredCourses = [...statusFilteredCourses].sort((a, b) => {
+    const statusDiff = (STATUS_ORDER[courseStatus.get(a.id) ?? 'not_started'] ?? 1) - (STATUS_ORDER[courseStatus.get(b.id) ?? 'not_started'] ?? 1);
+    return statusDiff;
+  });
+
+  const visibleResultCount = filteredPacks.length + sortedFilteredCourses.length;
 
   return (
     <div className="h-full overflow-y-auto px-6 py-6 animate-fade-in">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
 
         {/* 页头 */}
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between gap-4 mb-1">
           <h1 className="text-2xl font-bold text-text-primary">{modeLabel.title}</h1>
-          <Link
-            to="/"
-            onClick={() => playSound('click')}
-            className="text-xs text-text-muted hover:text-text-secondary transition-colors"
-          >
-            &larr; 返回首页
-          </Link>
+          <div className="flex items-center gap-3">
+            {/* 搜索课程（线框 3.4） */}
+            <div className="relative">
+              <svg className="w-3.5 h-3.5 text-text-muted absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="搜索课程..."
+                className="w-44 pl-8 pr-3 py-1.5 text-xs bg-bg-panel border border-gray-700/50 rounded-tool text-text-primary placeholder:text-text-disabled focus:border-primary-500/50 focus:outline-none transition-colors"
+              />
+            </div>
+            <Link
+              to="/"
+              onClick={() => playSound('click')}
+              className="text-xs text-text-muted hover:text-text-secondary transition-colors flex-shrink-0"
+            >
+              &larr; 返回首页
+            </Link>
+          </div>
         </div>
-        <p className="text-sm text-text-muted mb-6">{modeLabel.subtitle}</p>
+        <p className="text-sm text-text-muted mb-6">
+          {modeLabel.subtitle} · 共 {visibleResultCount} 个内容
+        </p>
 
         {isCodingMode ? (
           <CodingComingSoon />
         ) : (
-          <>
-            {/* 筛选器 + 结果计数 */}
-            <CategoryFilter className="mb-6" resultCount={totalResults} />
+          <div className="flex flex-col lg:flex-row gap-6 items-start">
+            {/* 左侧筛选栏（线框 3.3-A，240px） */}
+            <aside className="w-full lg:w-60 flex-shrink-0 space-y-5 lg:sticky lg:top-0">
+              <div>
+                <h3 className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-2">模式</h3>
+                <div className="flex flex-col gap-1">
+                  <Link to="/courses?mode=typing" className={sidebarBtn(true)}>
+                    <span>跟敲模式</span>
+                    <span className="text-[9px] text-primary-400/80">当前</span>
+                  </Link>
+                  <span className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs text-text-disabled border border-transparent cursor-not-allowed" title="后续开放">
+                    <span>编程实战</span>
+                    <span className="text-[9px] text-text-disabled">后续开放</span>
+                  </span>
+                </div>
+              </div>
 
+              <div>
+                <h3 className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-2">语言</h3>
+                <div className="flex lg:flex-col flex-wrap gap-1">
+                  <button
+                    onClick={() => { setLanguage('all'); playSound('click'); }}
+                    className={sidebarBtn(selectedLanguage === 'all')}
+                  >
+                    <span>全部</span>
+                    <span className="text-[10px] text-text-muted">{courses.length}</span>
+                  </button>
+                  {LANG_ORDER.filter((lang) => (langCounts[lang] ?? 0) > 0).map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => { setLanguage(lang); playSound('click'); }}
+                      className={sidebarBtn(selectedLanguage === lang)}
+                    >
+                      <span>{LANG_LABELS[lang]}</span>
+                      <span className="text-[10px] text-text-muted">{langCounts[lang]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-2">难度</h3>
+                <div className="flex flex-wrap gap-1">
+                  <button onClick={() => { setDifficulty('all'); playSound('click'); }} className={chipBtn(selectedDifficulty === 'all')}>
+                    全部
+                  </button>
+                  {(Object.keys(DIFFICULTY_ORDER) as (keyof typeof DIFFICULTY_LABELS)[]).map((diff) => (
+                    <button key={diff} onClick={() => { setDifficulty(diff); playSound('click'); }} className={chipBtn(selectedDifficulty === diff)}>
+                      {DIFFICULTY_LABELS[diff].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-2">状态</h3>
+                <div className="flex flex-wrap gap-1">
+                  {([['all', '全部'], ['not_started', '未开始'], ['in_progress', '学习中'], ['completed', '已完成']] as [StatusFilter, string][]).map(
+                    ([value, label]) => (
+                      <button key={value} onClick={() => { setStatusFilter(value); playSound('click'); }} className={chipBtn(statusFilter === value)}>
+                        {label}
+                      </button>
+                    ),
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-2">分类</h3>
+                <div className="flex flex-wrap gap-1">
+                  <button onClick={() => { setCategory('all'); playSound('click'); }} className={chipBtn(selectedCategory === 'all')}>
+                    全部
+                  </button>
+                  {ALL_CATEGORIES.map((cat) => (
+                    <button key={cat} onClick={() => { setCategory(cat); playSound('click'); }} className={chipBtn(selectedCategory === cat)}>
+                      {COURSE_CATEGORY_LABELS[cat]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </aside>
+
+            {/* 主内容列 */}
+            <div className="flex-1 min-w-0 space-y-8">
             {/* === 训练包（置顶，双列网格）=== */}
-            {visibleTrainingPacks.length > 0 && (
+            {filteredPacks.length > 0 && (
               <section className="mb-8">
                 <div className="mb-3">
                   <h2 className="text-lg font-semibold text-text-primary">推荐训练包</h2>
                   <p className="text-xs text-text-muted mt-0.5">按真实高频代码模式重组，30 秒到 3 分钟反复刷</p>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {visibleTrainingPacks.map((pack) => (
+                  {filteredPacks.map((pack) => (
                     <TrainingPackCard
                       key={pack.id}
                       pack={pack}
@@ -325,18 +535,18 @@ export function CoursesPage() {
             )}
 
             {/* === 全部课程（降级）=== */}
-            {sortedCourses.length > 0 && (
+            {sortedFilteredCourses.length > 0 && (
               <section>
                 <div className="mb-3">
                   <h2 className="text-lg font-semibold text-text-primary">全部内容</h2>
                   <p className="text-xs text-text-muted mt-0.5">
-                    {sortedCourses.length} 门课程
+                    {sortedFilteredCourses.length} 门课程
                     {selectedCategory !== 'all' && <> · {COURSE_CATEGORY_LABELS[selectedCategory]}</>}
                     {selectedDifficulty !== 'all' && <> · {DIFFICULTY_LABELS[selectedDifficulty].label}</>}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {sortedCourses.map((course) => (
+                  {sortedFilteredCourses.map((course) => (
                     <CourseCard key={course.id} course={course} mode={mode} />
                   ))}
                 </div>
@@ -344,7 +554,7 @@ export function CoursesPage() {
             )}
 
             {/* 空状态 */}
-            {visibleTrainingPacks.length === 0 && sortedCourses.length === 0 && (
+            {filteredPacks.length === 0 && sortedFilteredCourses.length === 0 && (
               <div className="text-center py-16">
                 <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-bg-panel border border-gray-700/50 flex items-center justify-center">
                   <svg className="w-6 h-6 text-text-disabled" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -352,13 +562,14 @@ export function CoursesPage() {
                   </svg>
                 </div>
                 <p className="text-text-muted">
-                  {selectedCategory !== 'all' || selectedDifficulty !== 'all' || selectedLanguage !== 'all'
-                    ? '该筛选条件下暂无训练内容'
+                  {query.trim() || selectedCategory !== 'all' || selectedDifficulty !== 'all' || selectedLanguage !== 'all' || statusFilter !== 'all'
+                    ? '没有匹配的训练内容，试试调整筛选或搜索词'
                     : '暂无训练内容，敬请期待更多内容'}
                 </p>
               </div>
             )}
-          </>
+            </div>
+          </div>
         )}
       </div>
     </div>

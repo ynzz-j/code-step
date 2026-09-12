@@ -21,7 +21,7 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'text-success-400 border-success-500/30 bg-success-500/10',
   basic: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
   intermediate: 'text-blue-400 border-blue-500/30 bg-blue-500/10',
-  advanced: 'text-orange-400 border-orange-500/30 bg-orange-500/10',
+  advanced: 'text-violet-400 border-violet-500/30 bg-violet-500/10',
   hell: 'text-error-400 border-error-500/30 bg-error-500/10',
 };
 

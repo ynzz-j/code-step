@@ -9,6 +9,8 @@ import { challengeService } from '@/services/challengeService';
 import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
 import { DIFFICULTY_LABELS } from '@/types';
 import { playSound } from '@/utils/soundEffects';
+import pathSummit from '@/assets/backgrounds/path-summit.png';
+import calendarIcon from '@/assets/icons/calendar.png';
 
 type StatusFilter = 'all' | 'in_progress' | 'completed';
 
@@ -75,7 +77,7 @@ function MiniTrend({ courseProgress }: { courseProgress: CourseProgressSummary[]
             className="w-full rounded-sm transition-all duration-500"
             style={{
               height: `${Math.max((val / maxVal) * 32, val > 0 ? 3 : 1)}px`,
-              backgroundColor: val > 0 ? '#0ea5e9' : '#334155',
+              backgroundColor: val > 0 ? '#f59e0b' : '#1a2740',
               opacity: val > 0 ? 0.7 + (val / maxVal) * 0.3 : 0.4,
             }}
           />
@@ -181,6 +183,72 @@ function CourseProgressCard({ progress }: { progress: CourseProgressSummary }) {
         <span>{formatLastStudied(progress.lastStudiedAt)}</span>
       </div>
     </Link>
+  );
+}
+
+// ==================== 语言分布环图（线框 6.2-C） ====================
+
+const LANG_DONUT_COLORS: Record<string, string> = {
+  javascript: '#facc15',
+  typescript: '#60a5fa',
+  python: '#38bdf8',
+  java: '#fb923c',
+  cpp: '#f472b6',
+  sql: '#34d399',
+  vim: '#a78bfa',
+};
+
+function LanguageDonut({ courseProgress }: { courseProgress: CourseProgressSummary[] }) {
+  const data = useMemo(() => {
+    const byLang: Record<string, number> = {};
+    for (const p of courseProgress) {
+      byLang[p.language] = (byLang[p.language] ?? 0) + Math.max(p.timeSpentMinutes, 0);
+    }
+    const total = Object.values(byLang).reduce((a, b) => a + b, 0);
+    if (total === 0) return null;
+    let acc = 0;
+    const segs = Object.entries(byLang)
+      .sort((a, b) => b[1] - a[1])
+      .map(([lang, minutes]) => {
+        const frac = minutes / total;
+        const seg = { lang, frac, offset: acc, color: LANG_DONUT_COLORS[lang] ?? '#94a3b8' };
+        acc += frac;
+        return seg;
+      });
+    return segs;
+  }, [courseProgress]);
+
+  if (!data) return <p className="text-xs text-text-muted">暂无训练分布，开始练习后生成</p>;
+  const R = 15.9155; // 周长=100，方便按百分比绘制
+
+  return (
+    <div className="flex items-center gap-4">
+      <svg viewBox="0 0 42 42" className="w-24 h-24 -rotate-90 flex-shrink-0">
+        <circle cx="21" cy="21" r={R} fill="none" stroke="#1a2740" strokeWidth="6" />
+        {data.map((s) => (
+          <circle
+            key={s.lang}
+            cx="21"
+            cy="21"
+            r={R}
+            fill="none"
+            stroke={s.color}
+            strokeWidth="6"
+            strokeDasharray={`${s.frac * 100} ${100 - s.frac * 100}`}
+            strokeDashoffset={-s.offset * 100}
+          />
+        ))}
+      </svg>
+      <div className="space-y-1 min-w-0 flex-1">
+        {data.map((s) => (
+          <div key={s.lang} className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+            <span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: s.color }} />
+            <span className="uppercase truncate">{s.lang}</span>
+            <span className="text-text-muted ml-auto">{Math.round(s.frac * 100)}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -300,6 +368,31 @@ export function UserCenterPage() {
 
   const hasActivity = courseProgress.length > 0 || (growthSummary?.hasActivity ?? false);
 
+  // 等级体系：每 20 个片段升一级（真实数据游戏化呈现）
+  const totalAttempts = growthSummary?.totalAttempts ?? 0;
+  const level = Math.floor(totalAttempts / 20) + 1;
+  const levelRemainder = totalAttempts % 20;
+  const levelProgress = (levelRemainder / 20) * 100;
+
+  // 连续训练天数（从最近学习记录推算，今天未练则从昨天回溯；纯计算不用 hook，
+  // 因为它位于 loading 早退之后，hook 顺序会不稳定导致 React 崩溃白屏）
+  const trainedDays = new Set(
+    courseProgress
+      .filter((p) => p.lastStudiedAt)
+      .map((p) => new Date(p.lastStudiedAt as string).toISOString().slice(0, 10)),
+  );
+  const streakCursor = new Date();
+  if (!trainedDays.has(streakCursor.toISOString().slice(0, 10))) {
+    streakCursor.setDate(streakCursor.getDate() - 1);
+  }
+  let streakDays = 0;
+  for (;;) {
+    if (trainedDays.has(streakCursor.toISOString().slice(0, 10))) {
+      streakDays += 1;
+      streakCursor.setDate(streakCursor.getDate() - 1);
+    } else break;
+  }
+
   return (
     <div className="h-full overflow-y-auto px-6 py-6">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -312,9 +405,42 @@ export function UserCenterPage() {
           </p>
         </div>
 
+        {/* === 玩家档案卡 === */}
+        {hasActivity && (
+          <div className="flex items-center gap-4 rounded-tool border border-gray-700/40 bg-bg-panel p-4">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-orange-500 flex items-center justify-center text-lg font-bold text-bg-app flex-shrink-0 shadow-md shadow-primary-500/25">
+              {(displayName || 'C').slice(0, 1).toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-text-primary">{displayName}</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-500/15 text-primary-300 border border-primary-500/25">
+                  Lv.{level}
+                </span>
+              </div>
+              <div className="mt-1.5 h-1.5 bg-bg-app/70 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-primary-500 to-orange-400 rounded-full transition-all duration-500"
+                  style={{ width: `${levelProgress}%` }}
+                />
+              </div>
+              <div className="mt-1 text-[10px] text-text-muted">
+                本级进度 {levelRemainder}/20 段，再练 {20 - levelRemainder} 段升级
+              </div>
+            </div>
+            <div className="hidden sm:flex flex-col items-center flex-shrink-0 pl-4 border-l border-gray-700/40">
+              <img src={calendarIcon} alt="" className="h-8 w-8 object-contain" draggable={false} />
+              <span className="mt-1 text-[10px] text-text-secondary">
+                连续 <span className="font-bold text-accent-record">{streakDays}</span> 天
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* === 表现总览 === */}
         {hasActivity && (
-          <div className="rounded-tool border border-gray-700/40 bg-bg-panel p-5">
+          <div className="rounded-tool border border-gray-700/40 bg-bg-panel p-5 md:flex md:gap-5">
+            <div className="flex-1 min-w-0">
             <h2 className="text-xs font-medium text-text-muted uppercase tracking-wide mb-4">表现总览</h2>
 
             {/* 统计卡片 */}
@@ -357,13 +483,31 @@ export function UserCenterPage() {
               </div>
             )}
 
-            {/* 7 天趋势 */}
-            {courseProgress.length > 0 && (
-              <div>
-                <div className="text-[10px] text-text-muted mb-2 uppercase tracking-wide">近 7 天活动</div>
-                <MiniTrend courseProgress={courseProgress} />
-              </div>
-            )}
+            {/* 图表区：近 7 天趋势 + 语言分布环图（线框 6.2-C） */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {courseProgress.length > 0 && (
+                <div>
+                  <div className="text-[10px] text-text-muted mb-2 uppercase tracking-wide">近 7 天活动</div>
+                  <MiniTrend courseProgress={courseProgress} />
+                </div>
+              )}
+              {courseProgress.length > 0 && (
+                <div>
+                  <div className="text-[10px] text-text-muted mb-2 uppercase tracking-wide">语言分布（按训练时长）</div>
+                  <LanguageDonut courseProgress={courseProgress} />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 成长之路插画（mockup 05 右侧栏） */}
+            <div className="hidden md:block relative w-44 rounded-tool overflow-hidden border border-gray-700/40 flex-shrink-0">
+              <img src={pathSummit} alt="" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg-app/85 via-bg-app/20 to-transparent" />
+              <span className="absolute bottom-2.5 left-0 right-0 text-center font-hand text-base text-primary-100/85 rotate-[-2deg] select-none">
+                Keep Practicing, Keep Growing.
+              </span>
+            </div>
           </div>
         )}
 

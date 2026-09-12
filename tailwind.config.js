@@ -5,19 +5,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary brand
+        // Primary brand（暖橙/琥珀 —— 黄昏暖光）
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+          950: '#451a03',
         },
         // Semantic status colors
         success: {
@@ -35,16 +35,16 @@ export default {
           500: '#f59e0b',
           600: '#d97706',
         },
-        // UI token colors (semantic)
-        'bg-app': '#0f172a',
-        'bg-panel': '#1e293b',
-        'bg-surface': '#334155',
-        'bg-elevated': '#475569',
-        'text-primary': '#f8fafc',
-        'text-secondary': '#94a3b8',
+        // UI token colors (semantic)（深夜蓝底，配黄昏插画氛围）
+        'bg-app': '#0a1120',
+        'bg-panel': '#111b2e',
+        'bg-surface': '#1a2740',
+        'bg-elevated': '#243352',
+        'text-primary': '#f5f8ff',
+        'text-secondary': '#9aa8bd',
         'text-muted': '#64748b',
-        'text-disabled': '#475569',
-        'accent-primary': '#0ea5e9',
+        'text-disabled': '#3d4c63',
+        'accent-primary': '#f59e0b',
         'accent-success': '#22c55e',
         'accent-warning': '#f59e0b',
         'accent-error': '#ef4444',
@@ -56,6 +56,14 @@ export default {
           'Fira Code',
           'Consolas',
           'monospace',
+        ],
+        // 手写批注体（mockup 中的 "Keep Practicing" 注释风格）
+        hand: [
+          'Caveat',
+          'Segoe Script',
+          'Bradley Hand',
+          'Comic Sans MS',
+          'cursive',
         ],
       },
       borderRadius: {

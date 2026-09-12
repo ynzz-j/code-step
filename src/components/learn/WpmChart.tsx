@@ -4,14 +4,16 @@ import { useChartStore } from '@/stores/chartStore';
 interface WpmChartProps {
   wpm: number;
   accuracy: number;
+  /** 迷你模式：只渲染折线（嵌入表现卡组 WPM 卡） */
+  mini?: boolean;
 }
 
 const W = 200;
 const H = 60;
 const PAD = 6;
 const CHART_COLORS = {
-  grid: '#334155',
-  wpm: '#0ea5e9',
+  grid: '#243352',
+  wpm: '#f59e0b',
   accuracy: '#22c55e',
 };
 
@@ -26,7 +28,7 @@ function toSvgPoints(data: number[], max: number): string {
     .join(' ');
 }
 
-export function WpmChart({ wpm, accuracy }: WpmChartProps) {
+export function WpmChart({ wpm, accuracy, mini = false }: WpmChartProps) {
   const wpmHistory = useChartStore((s) => s.wpmHistory);
   const accuracyHistory = useChartStore((s) => s.accuracyHistory);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -51,6 +53,21 @@ export function WpmChart({ wpm, accuracy }: WpmChartProps) {
 
   const curWpm = wpmHistory.length > 0 ? wpmHistory[wpmHistory.length - 1] : wpm;
   const curAcc = accuracyHistory.length > 0 ? accuracyHistory[accuracyHistory.length - 1] : accuracy;
+
+  if (mini) {
+    return (
+      <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="w-full h-10" preserveAspectRatio="none">
+        <line x1={PAD} y1={H * 0.33} x2={W - PAD} y2={H * 0.33} stroke={CHART_COLORS.grid} strokeWidth="0.3" />
+        <line x1={PAD} y1={H * 0.66} x2={W - PAD} y2={H * 0.66} stroke={CHART_COLORS.grid} strokeWidth="0.3" />
+        {wpmPts && (
+          <polyline points={wpmPts} fill="none" stroke={CHART_COLORS.wpm} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="chart-line-animated" />
+        )}
+        {accPts && (
+          <polyline points={accPts} fill="none" stroke={CHART_COLORS.accuracy} strokeWidth="1.5" strokeDasharray="3,2" strokeLinecap="round" className="chart-line-animated" />
+        )}
+      </svg>
+    );
+  }
 
   return (
     <div className="w-full max-w-md bg-bg-panel/40 border border-bg-surface/30 rounded-tool">

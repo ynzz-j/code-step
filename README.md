@@ -13,12 +13,15 @@ Inspired by Duolingo — spend a few minutes a day turning everyday patterns lik
 
 ## ✨ Highlights
 
-- **Training Pack Driven** — Snippets grouped by real-world patterns (map/filter, async/await, Controller annotations). 30s to 3min per session, continuous Loop mode.
-- **Keystroke-Level Validation** — Real-time per-character checking: correct / error / backspace, with typing and coding practice modes.
-- **Data-Rich Feedback** — Live WPM, Accuracy, Error count, Combo streak, Flow Score — all compared against your personal best.
-- **Combo & Milestones** — Tiered feedback at 10/20/30 combo; dedicated visuals + sound for New Best and Perfect Strike.
-- **Dark, Tool-Focused UI** — Code input area dominates the viewport. Semantic color tokens, unified component specs, restrained motion.
-- **Lightweight Desktop App** — Built on Tauri v2 + React + TypeScript. Fast startup, works at 1024px window width.
+- **Amber Arcade UI** — deep-navy night theme with warm dusk illustrations; code is always the main character. New amber `< >` app icon.
+- **Syntax-Highlighted Typing** — per-character keywords/strings/numbers coloring, line numbers, and a breathing amber caret. Errors flash red with a wavy underline.
+- **Smart Indentation** — IDE-style auto alignment: never type filler spaces. Press the next real character and the indent is filled for you.
+- **Virtual Keyboard** — powered by `react-simple-keyboard`: next-key amber glow, physical key sync, finger-zone guidance, green flash on correct / red shake on wrong.
+- **Game Feedback** — combo flame tiers (10 / 20 / 30), milestone toasts, session result cards with personal-best deltas, highlights & weak-point analysis.
+- **Challenge Modes** — `speed-30s` / `focus-3min` / `perfect-run` / `combo-rush`, local leaderboards and shareable result cards.
+- **Growth Tracking** — pattern mastery, weak-token stats, best records, daily streaks and a language-distribution donut in your profile center.
+- **Frameless Window** — custom title bar (minimize / maximize / close) drawn into the amber header, drag anywhere on it.
+- **Lightweight Desktop** — Tauri v2 + React + TypeScript, fast startup, works at 1024px window width.
 
 ## 🛠 Tech Stack
 
@@ -26,27 +29,46 @@ Inspired by Duolingo — spend a few minutes a day turning everyday patterns lik
 |---|---|
 | Desktop Framework | Tauri v2 (Rust) |
 | Frontend | React 18 + TypeScript |
-| State | Zustand (persisted) |
-| Editor | CodeMirror 6 |
-| Styling | Tailwind CSS + Semantic Design Tokens |
+| State | Zustand |
+| Virtual Keyboard | react-simple-keyboard (MIT) |
+| Editor / Typing Surface | Custom char renderer + CodeMirror 6 (coding mode) |
+| Styling | Tailwind CSS + semantic design tokens |
 | Bundler | Vite 5 |
+| Storage | SQLite (progress / settings / growth) |
 | Audio | Web Audio API |
+
+## 🎮 Challenge Modes
+
+| Mode | Goal |
+|---|---|
+| `speed-30s` | Most correct characters in 30 seconds |
+| `focus-3min` | Steady, accurate input for 3 minutes |
+| `perfect-run` | Finish segments with zero errors / backspaces |
+| `combo-rush` | Push your max combo (idle breaks it) |
+
+Every run is scored with a **Flow Score** and ranked on the local leaderboard; results can be exported as a share card.
 
 ## 📖 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── editor/          # CodeMirror wrappers (TypingEditor / CodeEditor)
-│   ├── learn/           # In-session: StatsPanel / ComboDisplay / WpmChart / InstructionPanel
+│   ├── editor/          # TypingEditor (syntax highlight + caret) / VirtualKeyboard / CodeEditor
+│   ├── learn/           # SideStatsPanel / CoreStatsBar / ComboDisplay / PerfectStrike / ShareCard ...
 │   ├── courses/         # Course filters & cards
-│   └── layout/          # AppShell / Header
-├── pages/               # Welcome / Courses / Learn / Complete / UserCenter
-├── stores/              # Zustand stores (catalog / session / typing / combo / chart / user / settings)
+│   └── layout/          # AppShell / Header (frameless window controls)
+├── pages/               # Welcome / Courses / Learn / Complete / UserCenter / About
+├── stores/              # Zustand stores (session / typing / combo / growth / challenge ...)
 ├── services/            # Tauri backend bridge
+├── assets/              # backgrounds/ (dusk illustrations) + icons/ (rewards & ui icons)
 ├── data/                # Training pack definitions
 ├── types/               # TypeScript types
-└── utils/               # Sound manager / training stats
+└── utils/               # Sound manager / validation / stats
+src-tauri/
+├── commands/            # course / progress / growth / challenge / settings / thinking ...
+├── capabilities/        # Tauri v2 permissions (frameless window controls)
+└── executor/            # sandboxed code runner (coding mode)
+courses/                 # typing & coding course assets (47 typing courses / 399 snippets)
 ```
 
 ## 📦 Installation
@@ -64,6 +86,8 @@ npm install
 npm run tauri dev      # dev mode
 npm run tauri build    # production build
 ```
+
+> Regenerating the app icon: `python generate_icon_v4.py master && npx tauri icon app-icon.png && python generate_icon_v4.py all`
 
 ## 🤝 Contributing
 
@@ -90,19 +114,22 @@ MIT License — see [LICENSE](LICENSE).
 
 ### 卖点
 
-- **训练包驱动** — 按真实高频模式（map/filter、async/await、Controller 注解）聚合片段，30 秒起刷，支持连续 Loop
-- **逐字跟敲** — 逐字符实时校验，正确/错误/退格即时区分，打字模式和编程实战模式双轨
-- **数据化反馈** — WPM、准确率、错误数、Combo 连击、Flow Score 实时统计，当前成绩与历史最佳对比
-- **连击 & 里程碑** — 10/20/30 连击分档反馈，New Best 和 Perfect Strike 独立视觉+音效
-- **暗色工具感 UI** — 代码输入区占据主视觉，反馈克制分层，统一语义色和组件规范
-- **轻量桌面应用** — Tauri v2 + React + TypeScript，启动快，窗口可控制在 1024px 以下
+- **琥珀街机 UI** —— 深夜蓝底 + 黄昏插画的设计语言，代码永远占主视觉；全新琥珀 `< >` 应用图标
+- **语法高亮跟敲** —— 逐字符关键字/字符串/数字着色、行号、琥珀呼吸光标，敲错红底波浪线提示
+- **缩进自动对齐** —— IDE 式智能空格：缩进和对齐空格自动补齐，只敲有效字符
+- **虚拟键盘** —— 基于 react-simple-keyboard：下一键金橙高亮、物理按键同步下沉、指法分区建议、敲对绿闪 / 敲错红抖
+- **游戏化反馈** —— 连击火焰三档（10/20/30）、里程碑 Toast、结算卡带历史最佳差值、亮点与弱点分析
+- **挑战模式** —— 30 秒极速 / 3 分钟专注 / Perfect Run / Combo Rush，本地排行榜 + 可分享成绩卡
+- **成长追踪** —— 模式熟练度、薄弱 token、最佳纪录、连续训练天数、语言分布环图
+- **无边框窗口** —— 自定义标题栏（最小化/最大化/退出）融入琥珀 Header，整条可拖拽
+- **轻量桌面应用** —— Tauri v2 + React + TypeScript，启动快，1024px 宽度可用
 
 ### 快速开始
 
-1. 启动应用 → 首屏直接点击训练包或「开始 30 秒训练」
-2. 进入训练 → 跟敲代码，逐字符实时校验
+1. 启动应用 → 首屏直接点击训练包或「开始练习」
+2. 进入训练 → 跟敲代码，逐字符实时校验，缩进自动对齐
 3. 完成片段 → 底部轻量结算，可自动下一段或手动跳过
-4. 课程结算 → 查看本轮 WPM / 准确率 / Max Combo / Flow Score
+4. 课程结算 → 本轮 WPM / 准确率 / Max Combo / Flow Score，亮点与弱点一目了然
 
 ### 安装
 

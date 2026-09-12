@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTypingStats } from '@/hooks/useTypingStats';
-import { StatsPanel } from '@/components/learn/StatsPanel';
 import { useChartStore } from '@/stores/chartStore';
 import { initSound, playSound } from '@/utils/soundEffects';
 import type { TypingStep } from '@/types';
@@ -19,10 +18,96 @@ interface TypingEditorProps {
   onReset?: () => void;
   /** 无退格完成当前步骤时触发 */
   onPerfectStrike?: () => void;
+  /** 代码卡头语言标签（线框 4.5-B） */
+  language?: string;
+  /** 重置本题 */
+  onReplay?: () => void;
+  /** 光标位置变化（供外部全宽键盘/进度条使用） */
+  onCursorChange?: (position: number) => void;
 }
 
-export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onReset, onPerfectStrike }: TypingEditorProps) {
-  const typedRef = useRef('');
+const JS_KEYWORDS = new Set([
+  'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'do',
+  'import', 'from', 'export', 'default', 'class', 'extends', 'new', 'delete',
+  'async', 'await', 'typeof', 'instanceof', 'in', 'of', 'try', 'catch', 'finally',
+  'throw', 'switch', 'case', 'break', 'continue', 'yield', 'void', 'super', 'this',
+]);
+const PY_KEYWORDS = new Set([
+  'def', 'return', 'if', 'elif', 'else', 'for', 'while', 'import', 'from', 'as',
+  'class', 'print', 'lambda', 'with', 'try', 'except', 'finally', 'raise',
+  'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'global', 'del',
+]);
+
+/** 逐字符语法着色（轻量 tokenizer：字符串/注释/关键字/类名/数字） */
+function computeSyntax(target: string, language?: string): string[] {
+  const keywords = language === 'python' ? PY_KEYWORDS : JS_KEYWORDS;
+  const colors: string[] = new Array(target.length).fill('');
+  let i = 0;
+  while (i < target.length) {
+    const ch = target[i];
+
+    // 字符串
+    if (ch === '"' || ch === "'" || ch === '`') {
+      let j = i + 1;
+      while (j < target.length && target[j] !== ch) {
+        if (target[j] === '\\') j += 1;
+        j += 1;
+      }
+      const end = Math.min(j, target.length - 1);
+      for (let k = i; k <= end; k++) colors[k] = 'syn-str';
+      i = j + 1;
+      continue;
+    }
+    // 注释 // 或 #
+    if ((ch === '/' && target[i + 1] === '/') || (ch === '#' && language === 'python')) {
+      let j = i;
+      while (j < target.length && target[j] !== '\n') {
+        colors[j] = 'syn-com';
+        j += 1;
+      }
+      i = j;
+      continue;
+    }
+    // 标识符 / 关键字
+    if (/[A-Za-z_$]/.test(ch)) {
+      let j = i;
+      while (j < target.length && /[A-Za-z0-9_$]/.test(target[j])) j += 1;
+      const word = target.slice(i, j);
+      const cls = keywords.has(word)
+        ? 'syn-kw'
+        : /^[A-Z]/.test(word)
+          ? 'syn-type'
+          : '';
+      for (let k = i; k < j; k++) colors[k] = cls;
+      i = j;
+      continue;
+    }
+    // 数字
+    if (/[0-9]/.test(ch)) {
+      let j = i;
+      while (j < target.length && /[0-9.]/.test(target[j])) {
+        colors[j] = 'syn-num';
+        j += 1;
+      }
+      i = j;
+      continue;
+    }
+    i += 1;
+  }
+  return colors;
+}
+
+export function TypingEditor({
+  step,
+  onComplete,
+  onKeystroke,
+  onBackspace,
+  onReset,
+  onPerfectStrike,
+  language,
+  onReplay,
+  onCursorChange,
+}: TypingEditorProps) {
   const [typed, setTyped] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,7 +122,7 @@ export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onRes
   }, []);
 
   // 使用现成的 useTypingStats hook
-  const { wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, recordKeystroke, reset: resetStats } = useTypingStats();
+  const { wpm, accuracy, recordKeystroke, reset: resetStats } = useTypingStats();
 
   useEffect(() => {
     setTyped('');
@@ -49,6 +134,11 @@ export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onRes
     onReset?.();
     containerRef.current?.focus();
   }, [step, onReset, resetStats]);
+
+  // 上报光标位置（外部键盘/进度条）
+  useEffect(() => {
+    onCursorChange?.(cursorPosition);
+  }, [cursorPosition, onCursorChange, step]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const targetCode = step?.targetCode || "";
@@ -113,22 +203,45 @@ export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onRes
 
     // 只处理单字符的可打印键
     if (e.key.length !== 1) return;
-    
+
     // 过滤非ASCII字符
     if (/[^\x00-\x7F]/.test(e.key)) return;
 
     if (cursorPosition >= targetCode.length) return;
 
-    const expectedChar = targetCode[cursorPosition];
     const inputChar = e.key;
+
+    // IDE 式自动对齐：目标位置是空格段时，不需要逐个敲空格——
+    // 按空格一次吞掉整段；按非空格字符则自动补齐空格后直接校验该字符
+    let pos = cursorPosition;
+    if (targetCode[pos] === ' ') {
+      while (pos < targetCode.length && targetCode[pos] === ' ') {
+        playSound('typing');
+        recordKeystroke(true);
+        onKeystroke(true, { expected: ' ', input: ' ', position: pos });
+        pos += 1;
+      }
+      if (inputChar === ' ') {
+        setTyped((prev) => prev + targetCode.slice(cursorPosition, pos));
+        setCursorPosition(pos);
+        return;
+      }
+      if (pos >= targetCode.length) {
+        setTyped((prev) => prev + targetCode.slice(cursorPosition, pos));
+        setCursorPosition(pos);
+        return;
+      }
+    }
+
+    const expectedChar = targetCode[pos];
     const isCorrect = inputChar === expectedChar;
 
     playSound(isCorrect ? 'typing' : 'error');
     recordKeystroke(isCorrect);
-    onKeystroke(isCorrect, { expected: expectedChar, input: inputChar, position: cursorPosition });
+    onKeystroke(isCorrect, { expected: expectedChar, input: inputChar, position: pos });
 
-    setTyped((prev) => prev + inputChar);
-    setCursorPosition((prev) => prev + 1);
+    setTyped((prev) => prev + targetCode.slice(cursorPosition, pos) + inputChar);
+    setCursorPosition(pos + 1);
   }, [cursorPosition, step.targetCode, onKeystroke, onBackspace]);
 
   useEffect(() => {
@@ -139,7 +252,6 @@ export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onRes
   }, [handleKeyDown]);
 
   useEffect(() => {
-    typedRef.current = typed;
     // 每 3 个字符推送一次图表数据
     if (typed.length > 0 && typed.length % 3 === 0) {
       useChartStore.getState().pushWpm(wpm);
@@ -161,86 +273,127 @@ export function TypingEditor({ step, onComplete, onKeystroke, onBackspace, onRes
     }
   }, [typed, step.targetCode, onComplete, onPerfectStrike]);
 
-  const renderCode = () => {
-    const chars: JSX.Element[] = [];
-    const targetCode = step?.targetCode || "";
+  // 按行拆分目标代码（行号区），保留全局字符索引
+  const lines = useMemo(() => {
+    const target = step?.targetCode || '';
+    const rows: { start: number; text: string }[] = [];
+    let start = 0;
+    for (let i = 0; i < target.length; i++) {
+      if (target[i] === '\n') {
+        rows.push({ start, text: target.slice(start, i + 1) });
+        start = i + 1;
+      }
+    }
+    if (start < target.length) rows.push({ start, text: target.slice(start) });
+    if (rows.length === 0) rows.push({ start: 0, text: '' });
+    return rows;
+  }, [step.targetCode]);
 
-    // 防御性检查
-    if (!targetCode) {
-      return <span className="text-gray-500">暂无内容</span>;
+  const syntaxClasses = useMemo(
+    () => computeSyntax(step?.targetCode || '', language),
+    [step.targetCode, language],
+  );
+
+  const renderChar = (char: string, index: number) => {
+    const isTyped = index < typed.length;
+    const isCurrent = index === cursorPosition;
+    const isWrong = isTyped && typed[index] !== char;
+    const syn = syntaxClasses[index] || '';
+
+    const nodes: JSX.Element[] = [];
+    // 琥珀色光标（参考打字界面UI：竖条光标）
+    if (isCurrent) {
+      nodes.push(<span key={`${index}-caret`} className="cs-caret" />);
     }
 
-    for (let i = 0; i < targetCode.length; i++) {
-      const char = targetCode[i];
-      const isTyped = i < typed.length;
-      const isCurrent = i === cursorPosition;
-      const isCorrect = isTyped && typed[i] === char;
-      const isWrong = isTyped && typed[i] !== char;
+    let displayChar = char;
+    if (char === '\n') displayChar = '↵';
+    else if (char === ' ') displayChar = ' ';
+    else if (char === '\t') displayChar = '→';
 
-      let className = 'text-gray-500';
-      if (isCorrect) {
-        className = 'text-success-400';
-      } else if (isWrong) {
-        className = 'text-error-400 bg-error-500/20';
-      } else if (isCurrent) {
-        className = 'text-gray-200 bg-primary-500/30';
-      }
+    let cls = syn;
+    if (isWrong) cls = `${cls ? cls + ' ' : ''}ch-err`;
+    else if (isTyped) cls = `${cls ? cls + ' ' : ''}ch-ok`;
+    else cls = `${cls ? cls + ' ' : ''}ch-pending`;
 
-      let displayChar = char;
-      if (char === '\n') {
-        displayChar = '↵\n';
-      } else if (char === ' ') {
-        displayChar = '·';
-      } else if (char === '\t') {
-        displayChar = '→';
-      }
-
-      chars.push(
-        <span
-          key={i}
-          className={`${className} relative ${isCurrent ? 'after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-primary-400 after:animate-pulse' : ''}`}
-        >
-          {displayChar}
-        </span>
-      );
-    }
-
-    return chars;
+    nodes.push(
+      <span key={index} className={cls}>
+        {displayChar}
+      </span>,
+    );
+    return nodes;
   };
+
+  const currentLineIndex = lines.findIndex(
+    (line) => cursorPosition >= line.start && cursorPosition < line.start + line.text.length,
+  );
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
+      {/* 代码训练主卡头（线框 4.5-B） */}
+      <div className="flex items-center justify-between px-4 py-2 bg-bg-panel/50 border-b border-bg-surface/40">
+        <div className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l-3 3 3 3m8-6l3 3-3 3m-5 5l2-16" />
+          </svg>
+          <span className="text-xs text-text-secondary">在下方输入以下代码（实时校验 · <span className="text-primary-300">缩进自动对齐</span>，空格无需逐个敲）</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {language && (
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-medium bg-bg-surface/70 text-text-secondary border border-bg-elevated/50">
+              <span className="px-1 py-px rounded-sm bg-yellow-400/20 text-yellow-300 font-bold text-[9px]">
+                {language === 'javascript' ? 'JS' : language === 'python' ? 'Py' : language.slice(0, 2).toUpperCase()}
+              </span>
+              {language.charAt(0).toUpperCase() + language.slice(1)}
+            </span>
+          )}
+          <span className="w-px h-3.5 bg-gray-700/60" />
+          {onReplay && (
+            <button
+              onClick={() => {
+                playSound('click');
+                onReplay();
+              }}
+              className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] text-text-secondary hover:text-primary-300 hover:bg-bg-surface/60 border border-transparent hover:border-primary-500/30 transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              重置本题
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 代码区：行号 + 语法高亮字符 + 琥珀光标 */}
       <div
         ref={containerRef}
         tabIndex={0}
-        className="flex-1 overflow-auto p-6 bg-gray-900/30 focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-text"
+        className="flex-1 overflow-auto p-4 bg-gray-900/30 focus:outline-none focus:ring-2 focus:ring-primary-500/40 cursor-text"
         onClick={() => {
           initSound();
           containerRef.current?.focus();
         }}
       >
-        <div className="text-xs text-gray-500 mb-4 flex items-center gap-2">
+        <div className="text-xs text-gray-500 mb-3 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
           点击此处开始打字练习
         </div>
-        <pre className="font-mono text-lg leading-relaxed whitespace-pre-wrap">
-          {renderCode()}
-        </pre>
-      </div>
-
-      <StatsPanel stats={{ wpm, accuracy, errors, totalKeystrokes, correctKeystrokes, backspaces: 0 }} />
-      <div className="px-6 py-2 bg-gray-800/50 border-t border-gray-700/50">
-        <div className="flex items-center gap-4 text-xs text-gray-400">
-          <span>进度: {cursorPosition} / {step.targetCode.length}</span>
-          <span>{Math.round((cursorPosition / step.targetCode.length) * 100)}%</span>
-        </div>
-        <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-primary-500 transition-all duration-300"
-            style={{
-              width: `${(cursorPosition / step.targetCode.length) * 100}%`,
-            }}
-          />
+        <div className="font-mono text-base leading-relaxed">
+          {lines.map((line, rowIdx) => (
+            <div key={rowIdx} className="flex">
+              <span
+                className={`w-8 flex-shrink-0 pr-2 text-right text-[10px] leading-relaxed select-none ${
+                  rowIdx === currentLineIndex ? 'text-primary-300 font-bold' : 'text-gray-600'
+                }`}
+              >
+                {rowIdx + 1}
+              </span>
+              <span className="whitespace-pre-wrap break-all flex-1 min-w-0">
+                {line.text.split('').map((char, offset) => renderChar(char, line.start + offset))}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
