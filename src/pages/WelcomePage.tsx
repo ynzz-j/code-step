@@ -5,8 +5,10 @@ import { FEATURED_TRAINING_PACKS } from '@/data/trainingPacks';
 import { DIFFICULTY_LABELS } from '@/types';
 import { useGrowthStore } from '@/stores/growthStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
+import { useDbCourseProgress } from '@/hooks/useDbCourseProgress';
 import { growthService } from '@/services/growthService';
-import heroBg from '@/assets/backgrounds/dusk-cliff.png';
+import heroBg from '@/assets/backgrounds/dusk-cliff.webp';
+import { AmbientLayer } from '@/components/AmbientLayer';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'text-success-400 bg-success-500/15',
@@ -20,6 +22,7 @@ export function WelcomePage() {
   const growthSummary = useGrowthStore((s) => s.summary);
   const refreshSummary = useGrowthStore((s) => s.refreshSummary);
   const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
+  const dbProgress = useDbCourseProgress();
 
   useEffect(() => {
     const migrated = localStorage.getItem('codestep-growth-migrated');
@@ -59,6 +62,8 @@ export function WelcomePage() {
             draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-bg-app/95 via-bg-app/60 to-transparent" />
+          <AmbientLayer variant="fireflies" count={7} />
+          <div className="absolute inset-0 hero-breathe bg-gradient-to-t from-orange-500/10 via-transparent to-orange-200/5" />
           <span className="absolute right-6 top-4 font-hand text-xl text-primary-100/80 rotate-[-3deg] drop-shadow-md select-none">
             Good Developers Keep Practicing.
           </span>
@@ -181,8 +186,9 @@ export function WelcomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
             {FEATURED_TRAINING_PACKS.slice(0, 4).map((pack) => {
-              const progress = getCourseProgress(pack.id);
-              const completedCount = progress?.completedSteps?.length || 0;
+              const sessionDone = getCourseProgress(pack.id)?.completedSteps?.length || 0;
+              const dbDone = dbProgress[pack.id]?.completedSteps ?? 0;
+              const completedCount = Math.max(sessionDone, dbDone);
               return (
                 <Link
                   key={pack.id}

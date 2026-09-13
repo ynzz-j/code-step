@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 import { useTypingStatsStore } from '@/stores/typingStatsStore';
@@ -10,12 +10,13 @@ import { useGrowthStore } from '@/stores/growthStore';
 import { useChallengeStore } from '@/stores/challengeStore';
 import { challengeService } from '@/services/challengeService';
 import { ShareCard } from '@/components/learn/ShareCard';
-import campRiver from '@/assets/backgrounds/camp-river.png';
-import trophyIcon from '@/assets/icons/trophy.png';
-import boltIcon from '@/assets/icons/bolt.png';
-import targetIcon from '@/assets/icons/target.png';
-import flameIcon from '@/assets/icons/flame.png';
-import flowIcon from '@/assets/icons/flow.png';
+import campRiver from '@/assets/backgrounds/camp-river.webp';
+import { AmbientLayer } from '@/components/AmbientLayer';
+import trophyIcon from '@/assets/icons/trophy.webp';
+import boltIcon from '@/assets/icons/bolt.svg';
+import targetIcon from '@/assets/icons/target.svg';
+import flameIcon from '@/assets/icons/flame.svg';
+import flowIcon from '@/assets/icons/flow.svg';
 import type { ChallengeMode, ChallengeRunResult, WeakTokenStat } from '@/types';
 
 function buildQuery(modeParam: string | null, restart = false, challenge?: string | null) {
@@ -176,6 +177,24 @@ export function CompletePage() {
     if (highlights.length === 0) highlights.push('完成了一轮完整训练，节奏感在积累');
   }
 
+  // 新纪录礼花（结算主卡内的 CSS 礼花，只在破纪录时生成）
+  const confettiPieces = useMemo(() => {
+    if (!hasRecord) return [];
+    const colors = ['#fbbf24', '#34d399', '#f59e0b', '#e2e8f0', '#fb923c'];
+    return Array.from({ length: 26 }, (_, i) => ({
+      id: i,
+      left: Math.round(Math.random() * 96),
+      dx: Math.round(Math.random() * 120 - 60),
+      dy: Math.round(260 + Math.random() * 140),
+      rot: Math.round(360 + Math.random() * 540),
+      dur: (1.1 + Math.random() * 0.9).toFixed(2),
+      delay: (Math.random() * 0.6).toFixed(2),
+      color: colors[i % colors.length],
+      w: Math.round(4 + Math.random() * 4),
+      h: Math.round(7 + Math.random() * 6),
+    }));
+  }, [hasRecord]);
+
   return (
     <div className="min-h-full overflow-y-auto bg-bg-app px-4 py-6 sm:px-6 sm:py-8">
       <div
@@ -184,11 +203,13 @@ export function CompletePage() {
         }`}
       >
         {/* 结算主卡（线框 5.2）：左主视觉 + 右结果卡 */}
-        <div className="rounded-brand border border-gray-700/40 bg-bg-panel/70 overflow-hidden md:flex">
+        <div className="relative rounded-brand border border-gray-700/40 bg-bg-panel/70 overflow-hidden md:flex">
           {/* 左：主视觉 */}
           <div className="relative md:w-[38%] flex flex-col items-center justify-center p-6 text-center">
             <img src={campRiver} alt="" className="absolute inset-0 h-full w-full object-cover opacity-20" draggable={false} />
             <div className="absolute inset-0 bg-gradient-to-t from-bg-app/85 via-bg-app/40 to-transparent" />
+            <span className="result-sweep" />
+            <AmbientLayer variant="fireflies" count={4} />
             <span className="absolute right-4 top-3 z-10 select-none font-hand text-base text-primary-100/70 rotate-[-2deg]">
               Keep Practicing, Keep Growing.
             </span>
@@ -196,7 +217,7 @@ export function CompletePage() {
               <img
                 src={trophyIcon}
                 alt=""
-                className={`h-20 w-20 object-contain mb-3 ${hasRecord ? 'drop-shadow-[0_0_20px_rgba(245,158,11,0.55)]' : 'opacity-90'}`}
+                className={`h-20 w-20 object-contain mb-3 result-trophy-in ${hasRecord ? 'drop-shadow-[0_0_20px_rgba(245,158,11,0.55)]' : 'opacity-90'}`}
                 draggable={false}
               />
               <h1 className="text-3xl font-bold text-text-primary">
@@ -297,6 +318,27 @@ export function CompletePage() {
               “持续的练习，让平凡的敲击，变成了不起的能力。”
             </p>
           </div>
+
+          {hasRecord &&
+            confettiPieces.map((p) => (
+              <span
+                key={p.id}
+                className="result-confetti-piece"
+                style={
+                  {
+                    left: `${p.left}%`,
+                    background: p.color,
+                    width: p.w,
+                    height: p.h,
+                    '--dx': `${p.dx}px`,
+                    '--dy': `${p.dy}px`,
+                    '--rot': `${p.rot}deg`,
+                    '--dur': `${p.dur}s`,
+                    '--delay': `${p.delay}s`,
+                  } as CSSProperties
+                }
+              />
+            ))}
         </div>
 
         {/* 本轮亮点 / 弱点（线框 5.3-C） */}

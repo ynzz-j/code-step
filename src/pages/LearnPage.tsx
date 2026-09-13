@@ -4,6 +4,7 @@ import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { useTypingStatsStore } from '@/stores/typingStatsStore';
 import { useComboStore } from '@/stores/comboStore';
 import { normalizeCourseMode } from '@/services/courseService';
+import { playSound } from '@/utils/soundEffects';
 import { InstructionPanel } from '@/components/learn/InstructionPanel';
 import { ProgressDots } from '@/components/learn/ProgressDots';
 import { TypingEditor } from '@/components/editor/TypingEditor';
@@ -12,19 +13,19 @@ import { ComboDisplay, ComboFlashOverlay } from '@/components/learn/ComboDisplay
 import { SideStatsPanel } from '@/components/learn/SideStatsPanel';
 import { CoreStatsBar } from '@/components/learn/CoreStatsBar';
 import { VirtualKeyboard, type KeyStrokeInfo } from '@/components/editor/VirtualKeyboard';
-import keyboardIcon from '@/assets/icons/keyboard.png';
+import keyboardIcon from '@/assets/icons/keyboard.svg';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { PerfectStrike } from '@/components/learn/PerfectStrike';
 import { useChartStore } from '@/stores/chartStore';
-import boltIcon from '@/assets/icons/bolt.png';
-import targetIcon from '@/assets/icons/target.png';
 import { useUserStore } from '@/stores/userStore';
 import { growthService } from '@/services/growthService';
 import { useGrowthStore } from '@/stores/growthStore';
 import { challengeService } from '@/services/challengeService';
 import { useChallengeStore } from '@/stores/challengeStore';
 import { publishObsStats } from '@/services/obsStatsPublisher';
-import type { Step, TypingStep, TypingAttemptPayload, ChallengeMode, ChallengeRunPayload, PatternMastery } from '@/types';
+import { buildWeakFirstStepOrder, getTypingStepPatternId } from '@/utils/stepOrder';
+import { segmentFlowScore, challengeFlowScore } from '@/utils/flowScore';
+import type { TypingStep, TypingAttemptPayload, ChallengeMode, ChallengeRunPayload } from '@/types';
 import type { TypingCompleteData } from '@/components/editor/TypingEditor';
 
 const AUTO_NEXT_DELAY_MS = 1200;
@@ -41,17 +42,17 @@ interface StepSummary {
   perfect: boolean;
 }
 
-/** 柱状迷你图（打字界面UI：WPM/ACC 卡右侧） */
+/** 最近输入趋势，不重复显示指标数值 */
 function BarSparkline({ data, slots = 9, tone }: { data: number[]; slots?: number; tone: 'amber' | 'green' }) {
   const slice = data.slice(-slots);
   const max = Math.max(...slice, tone === 'amber' ? 60 : 100, 1);
   const padCount = Math.max(0, slots - slice.length);
   const full = [...Array(padCount).fill(0), ...slice];
   return (
-    <div className="flex items-end gap-1 h-10 flex-shrink-0">
+    <div className="flex items-end gap-1 h-6 flex-shrink-0">
       {Array.from({ length: slots }).map((_, i) => {
         const v = full[i] ?? 0;
-        const h = v > 0 ? Math.max((Math.min(v, max) / max) * 38, 6) : 4;
+        const h = v > 0 ? Math.max((Math.min(v, max) / max) * 22, 4) : 4;
         const active = v > 0;
         return (
           <div
@@ -65,35 +66,7 @@ function BarSparkline({ data, slots = 9, tone }: { data: number[]; slots?: numbe
   );
 }
 
-function getTypingStepPatternId(step: TypingStep) {
-  return step.patternId || step.concept.toLowerCase().replace(/\s+/g, '-');
-}
-
-function buildWeakFirstStepOrder(steps: Step[], patternMastery: PatternMastery[]) {
-  const fallbackOrder = steps.map((_, index) => index);
-  if (patternMastery.length === 0) return fallbackOrder;
-
-  const masteryByPattern = new Map(patternMastery.map((item) => [item.patternId, item]));
-
-  return fallbackOrder
-    .map((index) => {
-      const step = steps[index];
-      if (step.type !== 'typing') {
-        return { index, bucket: 3, weakness: 100, originalIndex: index };
-      }
-
-      const mastery = masteryByPattern.get(getTypingStepPatternId(step));
-      if (!mastery) {
-        return { index, bucket: 1, weakness: 50, originalIndex: index };
-      }
-
-      const masteryPercent = Number.isFinite(mastery.masteryPercent) ? mastery.masteryPercent : 0;
-      const bucket = masteryPercent < 70 ? 0 : 2;
-      return { index, bucket, weakness: masteryPercent, originalIndex: index };
-    })
-    .sort((a, b) => a.bucket - b.bucket || a.weakness - b.weakness || a.originalIndex - b.originalIndex)
-    .map((item) => item.index);
-}
+// 弱项优先排序与 Flow Score 计算已抽取到 src/utils/stepOrder.ts / flowScore.ts（含单测）
 
 export function LearnPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -178,7 +151,6 @@ export function LearnPage() {
     nextStep,
     prevStep,
     markStepCompleted,
-    resetProgress,
   } = useCourseSessionStore();
   const recordTypingKeystroke = useTypingStatsStore((s) => s.recordTypingKeystroke);
   const resetTypingStats = useTypingStatsStore((s) => s.resetTypingStats);
@@ -217,25 +189,25 @@ export function LearnPage() {
     useChallengeStore.getState().setMode(challengeMode);
   }, [challengeMode, clearChallengeTimer, courseId]);
 
-  // 进入课程时加载
+  // 进入课程时加载；带 restart=1 时在加载完成后清空（内存 + DB）进度，从头开始
   useEffect(() => {
-    if (courseId) {
-      useComboStore.getState().resetAllCombo();
-      useTypingStatsStore.getState().resetTypingStats();
-      startCourse(courseId, mode);
-    }
-  }, [courseId, mode, startCourse]);
-
-  useEffect(() => {
-    if (restartParam === '1' && currentCourse?.id === courseId) {
-      resetProgress();
-      useComboStore.getState().resetAllCombo();
-      useTypingStatsStore.getState().resetTypingStats();
-      useChartStore.getState().resetChart();
-      stepStartedAtRef.current = Date.now();
-      weakTokenCountsRef.current = {};
-    }
-  }, [courseId, currentCourse?.id, resetProgress, restartParam]);
+    if (!courseId) return;
+    let cancelled = false;
+    useComboStore.getState().resetAllCombo();
+    useTypingStatsStore.getState().resetTypingStats();
+    startCourse(courseId, mode).then(() => {
+      if (cancelled) return;
+      if (restartParam === '1') {
+        useCourseSessionStore.getState().restartCourse();
+        useChartStore.getState().resetChart();
+        stepStartedAtRef.current = Date.now();
+        weakTokenCountsRef.current = {};
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [courseId, mode, restartParam, startCourse]);
 
   // 切换步骤时重置输入完成标记
   useEffect(() => {
@@ -416,11 +388,13 @@ export function LearnPage() {
   const buildStepSummary = (data: TypingCompleteData) => {
     const { typingStats } = useTypingStatsStore.getState();
     const { maxCombo: latestMaxCombo } = useComboStore.getState();
-    const perfectBonus = (data.backspaces === 0 && typingStats.errors === 0) ? 8 : 0;
-    const flowScore = Math.max(
-      0,
-      Math.round((typingStats.wpm * typingStats.accuracy) / 100 + latestMaxCombo * 0.4 - typingStats.errors * 1.5 + perfectBonus),
-    );
+    const flowScore = segmentFlowScore({
+      wpm: typingStats.wpm,
+      accuracy: typingStats.accuracy,
+      maxCombo: latestMaxCombo,
+      errors: typingStats.errors,
+      backspaces: data.backspaces,
+    });
 
     return {
       wpm: typingStats.wpm,
@@ -513,26 +487,18 @@ export function LearnPage() {
       : 100;
 
     // 计算 Flow Score（含模式加成）
-    const base = (runWpm * runAccuracy) / 100;
-    const comboBonus = Math.min(stats.maxCombo * 0.45, 35);
-    const perfectBonus = stats.perfectSegments * 5;
-    const stabilityPenalty = stats.totalErrors * 1.8 + stats.totalBackspaces * 0.8;
-    let modeBonus = 0;
-    switch (challengeMode) {
-      case 'speed-30s':
-        modeBonus = stats.completedSegments * 2;
-        break;
-      case 'focus-3min':
-        modeBonus = Math.min(totalDurationMs / 60000, 3) * 3;
-        break;
-      case 'perfect-run':
-        modeBonus = stats.perfectFailed ? -20 : 25;
-        break;
-      case 'combo-rush':
-        modeBonus = Math.min(stats.maxCombo / 10, 8);
-        break;
-    }
-    const flowScore = Math.max(0, Math.round(base + comboBonus + perfectBonus + modeBonus - stabilityPenalty));
+    const flowScore = challengeFlowScore({
+      challengeMode: challengeMode!,
+      runWpm,
+      runAccuracy,
+      maxCombo: stats.maxCombo,
+      totalErrors: stats.totalErrors,
+      totalBackspaces: stats.totalBackspaces,
+      perfectSegments: stats.perfectSegments,
+      perfectFailed: stats.perfectFailed,
+      completedSegments: stats.completedSegments,
+      durationMs: totalDurationMs,
+    });
 
     const weakTokens = Object.entries(weakTokenCountsRef.current)
       .sort(([, a], [, b]) => b - a)
@@ -682,6 +648,13 @@ export function LearnPage() {
     });
   };
 
+  // 章节列表跳转（普通模式）：只切换片段，进度记录仍由各步骤完成逻辑负责
+  const handleJumpToStep = useCallback((index: number) => {
+    if (challengeMode || !currentCourse) return;
+    if (index === currentStepIndex) return;
+    useCourseSessionStore.setState({ currentStepIndex: index });
+  }, [challengeMode, currentCourse, currentStepIndex]);
+
   const handleStopTraining = () => {
     clearAutoAdvanceTimers();
     setAutoAdvancePaused(false);
@@ -745,6 +718,16 @@ export function LearnPage() {
     !!currentCourse,
   );
 
+  const handleRestartCourse = useCallback(() => {
+    playSound('click');
+    useCourseSessionStore.getState().restartCourse();
+    useComboStore.getState().resetAllCombo();
+    resetTypingStats();
+    useChartStore.getState().resetChart();
+    stepStartedAtRef.current = Date.now();
+    weakTokenCountsRef.current = {};
+  }, [resetTypingStats]);
+
   if (!currentCourse || !currentStep) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center px-8">
@@ -766,6 +749,12 @@ export function LearnPage() {
   }
 
   const isLastStep = currentCourse && currentStepIndex === currentCourse.steps.length - 1;
+
+  // 课程全部章节已完成 → 提供持久化的"重新开始"入口
+  // 注意：useCallback 必须位于下方"加载中"提前 return 之前（hooks 顺序不能随渲染分支变化）
+  const isCourseFullyCompleted = Boolean(
+    currentCourse && !challengeMode && currentCourse.steps.length > 0 && completedSteps.size >= currentCourse.steps.length,
+  );
 
   const challengeLabel: Record<string, string> = {
     'speed-30s': '30秒极速',
@@ -809,6 +798,19 @@ export function LearnPage() {
               {currentStepIndex + 1} / {currentCourse.steps.length}
             </span>
           </>
+        )}
+        {/* 课程已完成：持久化重置入口 */}
+        {isCourseFullyCompleted && (
+          <button
+            onClick={handleRestartCourse}
+            title="清空本课程进度，从头开始"
+            className="ml-1 flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-primary-500/15 text-primary-300 border border-primary-500/30 hover:bg-primary-500/25 transition-colors"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            重新开始
+          </button>
         )}
         {/* 挑战模式：倒计时 + segment 计数 */}
         {challengeMode && (
@@ -856,52 +858,30 @@ export function LearnPage() {
           difficulty={currentCourse.difficulty}
           stepIndex={currentStepIndex}
           totalSteps={currentCourse.steps.length}
+          steps={!challengeMode ? currentCourse.steps.map((s, i) => ({ title: s.title, done: completedSteps.has(i) })) : undefined}
+          onSelectStep={handleJumpToStep}
         />
         <div className="relative flex-1 flex flex-col min-w-0">
           <ComboFlashOverlay />
-          {/* 实时表现卡组（打字界面UI）：WPM / ACC 双卡 + 柱状迷你图 */}
+          {/* 状态与趋势在上，总指标统一放在编辑器下方。 */}
           {currentStep?.type === 'typing' && (
-            <div className="flex-shrink-0 mx-4 mt-3 rounded-tool border border-gray-700/40 bg-bg-panel/50 px-4 py-2.5">
-              <div className="flex items-center justify-between mb-2.5">
+            <div className="flex-shrink-0 mx-4 mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-tool border border-gray-700/40 bg-bg-panel/50 px-4 py-2">
+              <span className={`flex items-center gap-2 text-xs font-medium ${isTyping ? 'text-success-400' : 'text-text-secondary'}`}>
+                <span className={`h-1.5 w-1.5 rounded-full ${isTyping ? 'bg-success-400 animate-pulse' : stepInputDone ? 'bg-primary-400' : 'bg-bg-elevated'}`} />
+                {stepInputDone ? '片段已完成' : isTyping ? '训练进行中' : '准备就绪 · 输入开始训练'}
+              </span>
+              <div className="ml-auto flex items-center gap-5" aria-label="最近输入趋势">
                 <div className="flex items-center gap-2">
-                  <svg className="w-3.5 h-3.5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V9m5 10V5m5 14v-8" />
-                  </svg>
-                  <span className="text-xs font-bold text-text-primary">实时表现</span>
-                  <span className="text-[9px] text-text-disabled uppercase tracking-wider hidden md:inline">/ Real-time Performance</span>
+                  <span className="text-[10px] text-text-muted">速度趋势</span>
+                  <BarSparkline data={wpmHistory} tone="amber" />
                 </div>
-                <span className={`flex items-center gap-1.5 text-[10px] ${isTyping ? 'text-success-400' : 'text-text-muted'}`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${isTyping ? 'bg-success-400 animate-pulse' : 'bg-bg-elevated'}`} />
-                  {isTyping ? '正在输入...' : '等待输入'}
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-center gap-3 rounded-tool border border-primary-500/30 bg-bg-app/50 px-3.5 py-2.5">
-                  <div className="w-9 h-9 rounded-lg bg-primary-500/15 border border-primary-500/30 flex items-center justify-center flex-shrink-0">
-                    <img src={boltIcon} alt="" className="h-5 w-5 object-contain" draggable={false} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] text-text-muted leading-none">WPM</div>
-                    <div className="text-2xl font-bold font-mono text-text-primary leading-none mt-1">{wpm}</div>
-                    <div className="text-[9px] text-text-disabled mt-1">输入速度（词/分钟）</div>
-                  </div>
-                  <div className="ml-auto"><BarSparkline data={wpmHistory} tone="amber" /></div>
-                </div>
-                <div className="flex items-center gap-3 rounded-tool border border-success-500/30 bg-bg-app/50 px-3.5 py-2.5">
-                  <div className="w-9 h-9 rounded-lg bg-success-500/15 border border-success-500/30 flex items-center justify-center flex-shrink-0">
-                    <img src={targetIcon} alt="" className="h-5 w-5 object-contain" draggable={false} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] text-text-muted leading-none">ACC</div>
-                    <div className="text-2xl font-bold font-mono text-success-400 leading-none mt-1">{accuracy}%</div>
-                    <div className="text-[9px] text-text-disabled mt-1">准确率</div>
-                  </div>
-                  <div className="ml-auto"><BarSparkline data={accuracyHistory} tone="green" /></div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] text-text-muted">准确趋势</span>
+                  <BarSparkline data={accuracyHistory} tone="green" />
                 </div>
               </div>
             </div>
           )}
-
           {/* 代码训练主卡（打字界面UI） */}
           <div className="flex-1 min-h-0 mx-4 mt-3 rounded-tool border border-gray-700/40 bg-bg-panel/30 flex flex-col overflow-hidden">
             {currentStep?.type === 'typing' && (

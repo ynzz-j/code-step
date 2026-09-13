@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DIFFICULTY_LABELS, type Difficulty, type Step } from '@/types';
+import { LanguageTile } from '@/components/LanguageIcon';
 
 interface InstructionPanelProps {
   step: Step;
@@ -8,17 +9,12 @@ interface InstructionPanelProps {
   difficulty?: Difficulty;
   stepIndex?: number;
   totalSteps?: number;
+  /** 章节列表（普通模式传入；挑战模式循环片段不提供） */
+  steps?: Array<{ title: string; done: boolean }>;
+  /** 点击章节跳转 */
+  onSelectStep?: (index: number) => void;
 }
 
-const LANG_TILES: Record<string, { label: string; tile: string }> = {
-  javascript: { label: 'JS', tile: 'bg-yellow-400/15 text-yellow-300 border-yellow-400/30' },
-  typescript: { label: 'TS', tile: 'bg-blue-400/15 text-blue-300 border-blue-400/30' },
-  python: { label: 'Py', tile: 'bg-sky-400/15 text-sky-300 border-sky-400/30' },
-  java: { label: 'Ja', tile: 'bg-orange-400/15 text-orange-300 border-orange-400/30' },
-  cpp: { label: 'C++', tile: 'bg-pink-400/15 text-pink-300 border-pink-400/30' },
-  sql: { label: 'SQL', tile: 'bg-emerald-400/15 text-emerald-300 border-emerald-400/30' },
-  vim: { label: 'Vi', tile: 'bg-violet-400/15 text-violet-300 border-violet-400/30' },
-};
 
 /**
  * 左侧任务栏（打字界面UI）：当前课程卡 + 章节信息 + 提示卡 + 系列课程入口
@@ -30,12 +26,11 @@ export function InstructionPanel({
   difficulty,
   stepIndex,
   totalSteps,
+  steps,
+  onSelectStep,
 }: InstructionPanelProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const tile = LANG_TILES[language ?? ''] ?? {
-    label: (language ?? 'CS').slice(0, 2).toUpperCase(),
-    tile: 'bg-bg-surface text-text-secondary border-gray-600/40',
-  };
+  const [showStepList, setShowStepList] = useState(false);
 
   return (
     <div className={`flex-shrink-0 flex flex-col border-r border-bg-surface/50 overflow-hidden bg-bg-panel/20 transition-all duration-300 ${collapsed ? 'w-10' : 'w-[270px]'}`}>
@@ -62,9 +57,7 @@ export function InstructionPanel({
           <div className="text-[10px] text-text-muted uppercase tracking-wider mb-2">当前课程</div>
           {courseTitle && (
             <div className="flex items-center gap-2.5 mb-3">
-              <span className={`w-9 h-9 rounded-lg border flex items-center justify-center text-[11px] font-extrabold flex-shrink-0 ${tile.tile}`}>
-                {tile.label}
-              </span>
+              <LanguageTile language={language ?? ''} size={36} />
               <span className="text-sm font-semibold text-text-primary truncate flex-1">{courseTitle}</span>
               {difficulty && (
                 <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-primary-500/15 text-primary-300 border border-primary-500/25 flex-shrink-0">
@@ -93,6 +86,39 @@ export function InstructionPanel({
             </div>
           )}
 
+          {/* 章节列表（点击"系列课程"展开） */}
+          {showStepList && steps && steps.length > 0 && (
+            <div className="mb-3 rounded-tool border border-bg-surface/50 bg-bg-app/50 overflow-auto max-h-44">
+              {steps.map((s, i) => {
+                const isCurrent = i === stepIndex;
+                return (
+                  <button
+                    key={`${s.title}-${i}`}
+                    onClick={() => {
+                      onSelectStep?.(i);
+                      setShowStepList(false);
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left text-xs transition-colors ${
+                      isCurrent
+                        ? 'bg-primary-500/15 text-primary-300'
+                        : 'text-text-secondary hover:bg-bg-surface/60 hover:text-text-primary'
+                    }`}
+                  >
+                    <span className={`font-mono text-[10px] flex-shrink-0 ${isCurrent ? 'text-primary-300' : 'text-text-disabled'}`}>
+                      {i + 1}.
+                    </span>
+                    <span className="truncate flex-1">{s.title}</span>
+                    {s.done && (
+                      <svg className="w-3 h-3 text-success-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           {/* 底部：进度 + 系列课程 */}
           <div className="mt-auto pt-3 border-t border-bg-surface/40 flex items-center justify-between text-[10px] text-text-muted">
             {typeof stepIndex === 'number' && typeof totalSteps === 'number' ? (
@@ -105,12 +131,26 @@ export function InstructionPanel({
             ) : (
               <span />
             )}
-            <span className="flex items-center gap-1">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              系列课程
-            </span>
+            {steps && steps.length > 0 ? (
+              <button
+                onClick={() => setShowStepList((v) => !v)}
+                className={`flex items-center gap-1 transition-colors ${
+                  showStepList ? 'text-primary-300' : 'text-text-muted hover:text-text-primary'
+                }`}
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                系列课程
+              </button>
+            ) : (
+              <span className="flex items-center gap-1">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                系列课程
+              </span>
+            )}
           </div>
 
           {/* 鼓励文字 */}

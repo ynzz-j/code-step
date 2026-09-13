@@ -24,6 +24,8 @@ interface CourseSessionActions {
   prevStep: () => void;
   markStepCompleted: () => void;
   resetProgress: () => void;
+  /** 重置进度并持久化到 DB（重新开始课程） */
+  restartCourse: () => void;
   getCurrentStep: () => Step | null;
   getCourseProgress: (courseId: string) => CourseProgressInfo | null;
 }
@@ -115,6 +117,16 @@ export const useCourseSessionStore = create<CourseSessionStore>((set, get) => ({
 
   resetProgress: () => {
     set({ currentStepIndex: 0, completedSteps: new Set() });
+  },
+
+  restartCourse: () => {
+    const { currentCourse, currentMode, courseStartTime } = get();
+    set({ currentStepIndex: 0, completedSteps: new Set() });
+    // 同步清空 DB 进度，否则下次进入课程会恢复成已完成状态
+    if (currentCourse) {
+      const timeSpent = courseStartTime ? Math.floor((Date.now() - courseStartTime) / 1000) : 0;
+      courseService.saveProgress(currentCourse.id, 0, [], timeSpent, currentMode);
+    }
   },
 
   getCurrentStep: () => {

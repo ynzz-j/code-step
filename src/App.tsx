@@ -7,13 +7,19 @@ import { CoursesPage } from './pages/CoursesPage';
 import { LearnPage } from './pages/LearnPage';
 import { CompletePage } from './pages/CompletePage';
 import { UserCenterPage } from './pages/UserCenterPage';
-import { initSound } from '@/utils/soundEffects';
+import { initSound, playSound } from '@/utils/soundEffects';
 
-/** 在首次用户交互时初始化音效 AudioContext */
+/** 在首次用户交互时初始化音效 AudioContext，并播放一次会话内唯一的品牌三音 */
 function SoundInitializer() {
   useEffect(() => {
     const handler = () => {
-      try { initSound(); } catch (_) { /* ignore */ }
+      try {
+        initSound();
+        if (!sessionStorage.getItem('codestep-motif-played')) {
+          sessionStorage.setItem('codestep-motif-played', '1');
+          playSound('motif');
+        }
+      } catch (_) { /* ignore */ }
       document.removeEventListener('click', handler);
       document.removeEventListener('keydown', handler);
     };

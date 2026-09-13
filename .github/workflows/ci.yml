@@ -32,6 +32,9 @@ jobs:
         run: npm run typecheck
         continue-on-error: true  # 临时允许类型错误
 
+      - name: Unit tests
+        run: npm run test
+
       - name: Build frontend
         run: npm run build
 

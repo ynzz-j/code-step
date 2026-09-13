@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import boltIcon from '@/assets/icons/bolt.png';
-import targetIcon from '@/assets/icons/target.png';
-import errorIcon from '@/assets/icons/error.png';
-import flameIcon from '@/assets/icons/flame.png';
-import flowIcon from '@/assets/icons/flow.png';
-import crownIcon from '@/assets/icons/crown.png';
+import { useTweenNumber } from '@/hooks/useTweenNumber';
+import boltIcon from '@/assets/icons/bolt.svg';
+import targetIcon from '@/assets/icons/target.svg';
+import errorIcon from '@/assets/icons/error.svg';
+import flameIcon from '@/assets/icons/flame.svg';
+import flowIcon from '@/assets/icons/flow.svg';
+import crownIcon from '@/assets/icons/crown.svg';
 
 interface CoreStatsBarProps {
   wpm: number;
@@ -27,6 +28,9 @@ const BEST_STATS_KEY = 'codestep-best-typing-stats';
  */
 export function CoreStatsBar({ wpm, accuracy, errors, maxCombo, flowScore }: CoreStatsBarProps) {
   const [best, setBest] = useState<BestStats>({ wpm: 0, flowScore: 0 });
+  // 数字滚动（odomer 效果）
+  const wpmDisplay = useTweenNumber(wpm);
+  const accDisplay = useTweenNumber(accuracy);
 
   useEffect(() => {
     try {
@@ -38,8 +42,8 @@ export function CoreStatsBar({ wpm, accuracy, errors, maxCombo, flowScore }: Cor
   }, []);
 
   const cards = [
-    { icon: boltIcon, value: wpm, label: 'WPM', tone: 'text-text-primary', hot: false },
-    { icon: targetIcon, value: `${accuracy}%`, label: '准确率', tone: 'text-success-400', hot: false },
+    { icon: boltIcon, value: wpmDisplay, label: 'WPM', tone: 'text-text-primary', hot: false },
+    { icon: targetIcon, value: `${accDisplay}%`, label: '准确率', tone: 'text-success-400', hot: false },
     { icon: errorIcon, value: errors, label: '错误数', tone: errors > 0 ? 'text-error-400' : 'text-text-muted', hot: false },
     { icon: flameIcon, value: `x${maxCombo}`, label: 'Combo', tone: maxCombo >= 20 ? 'text-accent-record' : 'text-primary-300', hot: maxCombo >= 10 },
     { icon: flowIcon, value: flowScore, label: 'Flow', tone: 'text-success-400', hot: false },

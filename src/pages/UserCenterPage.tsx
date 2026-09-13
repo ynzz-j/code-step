@@ -9,8 +9,9 @@ import { challengeService } from '@/services/challengeService';
 import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
 import { DIFFICULTY_LABELS } from '@/types';
 import { playSound } from '@/utils/soundEffects';
-import pathSummit from '@/assets/backgrounds/path-summit.png';
-import calendarIcon from '@/assets/icons/calendar.png';
+import pathSummit from '@/assets/backgrounds/path-summit.webp';
+import { AmbientLayer } from '@/components/AmbientLayer';
+import calendarIcon from '@/assets/icons/calendar.svg';
 
 type StatusFilter = 'all' | 'in_progress' | 'completed';
 
@@ -504,6 +505,7 @@ export function UserCenterPage() {
             <div className="hidden md:block relative w-44 rounded-tool overflow-hidden border border-gray-700/40 flex-shrink-0">
               <img src={pathSummit} alt="" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
               <div className="absolute inset-0 bg-gradient-to-t from-bg-app/85 via-bg-app/20 to-transparent" />
+              <AmbientLayer variant="fireflies" count={4} />
               <span className="absolute bottom-2.5 left-0 right-0 text-center font-hand text-base text-primary-100/85 rotate-[-2deg] select-none">
                 Keep Practicing, Keep Growing.
               </span>

@@ -3,7 +3,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useCourseCatalogStore } from '@/stores/courseCatalogStore';
 import { useCourseSessionStore } from '@/stores/courseSessionStore';
 import { FEATURED_TRAINING_PACKS, DEFAULT_TRAINING_PACK_IDS } from '@/data/trainingPacks';
+import { LanguageTile } from '@/components/LanguageIcon';
 import { normalizeCourseMode, type CourseMode } from '@/services/courseService';
+import { useDbCourseProgress } from '@/hooks/useDbCourseProgress';
 import { ALL_CATEGORIES, COURSE_CATEGORY_LABELS, DIFFICULTY_LABELS, type CourseMetadata, type TrainingPack } from '@/types';
 import { playSound } from '@/utils/soundEffects';
 import { useGrowthStore } from '@/stores/growthStore';
@@ -32,16 +34,6 @@ const DIFFICULTY_ORDER: Record<string, number> = {
   beginner: 1, basic: 2, intermediate: 3, advanced: 4, hell: 5,
 };
 
-// 语言图标徽章（mockup 02：JS/Py/TS 圆角方块）
-const LANGUAGE_BADGES: Record<string, { label: string; tile: string }> = {
-  javascript: { label: 'JS', tile: 'bg-yellow-400/15 text-yellow-300 border-yellow-400/30' },
-  typescript: { label: 'TS', tile: 'bg-blue-400/15 text-blue-300 border-blue-400/30' },
-  python: { label: 'Py', tile: 'bg-sky-400/15 text-sky-300 border-sky-400/30' },
-  java: { label: 'Ja', tile: 'bg-orange-400/15 text-orange-300 border-orange-400/30' },
-  cpp: { label: 'C++', tile: 'bg-pink-400/15 text-pink-300 border-pink-400/30' },
-  sql: { label: 'SQL', tile: 'bg-emerald-400/15 text-emerald-300 border-emerald-400/30' },
-  vim: { label: 'Vi', tile: 'bg-violet-400/15 text-violet-300 border-violet-400/30' },
-};
 
 // 侧栏筛选顺序（mockup 02 左栏）
 const LANG_ORDER = ['javascript', 'typescript', 'python', 'java', 'sql', 'vim', 'cpp'];
@@ -170,28 +162,21 @@ function TrainingPackCard({ pack, course }: { pack: TrainingPack; course?: Cours
 
 // ==================== CourseCard（信息收敛版） ====================
 
-function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode }) {
-  const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
-  const progress = getCourseProgress(course.id);
-  const completedCount = progress?.completedSteps?.length || 0;
-  const progressPercent = course.stepsCount > 0 ? Math.round((completedCount / course.stepsCount) * 100) : 0;
+function CourseCard({ course, mode, progress }: { course: CourseMetadata; mode: CourseMode; progress?: { completed: number; total: number; percent: number } }) {
+  const completedCount = progress?.completed ?? 0;
+  const totalSteps = progress?.total || course.stepsCount;
+  const progressPercent = totalSteps > 0 ? Math.min(Math.round((completedCount / totalSteps) * 100), 100) : 0;
   const hasProgress = completedCount > 0;
   const isComplete = progressPercent >= 100;
-  const badge = LANGUAGE_BADGES[course.language] ?? {
-    label: course.language.slice(0, 2).toUpperCase(),
-    tile: 'bg-bg-surface text-text-secondary border-gray-600/40',
-  };
 
   return (
     <Link
-      to={`/learn/${course.id}?mode=${mode}`}
+      to={`/learn/${course.id}?mode=${mode}${isComplete ? '&restart=1' : ''}`}
       onClick={() => playSound('click')}
       className="group flex items-center gap-4 p-4 rounded-tool border border-gray-700/40 bg-bg-panel transition-all duration-200 hover:border-primary-500/40 hover:bg-bg-surface/50 hover:-translate-y-0.5"
     >
-      {/* 语言图标（mockup 02） */}
-      <div className={`w-12 h-12 rounded-xl border flex items-center justify-center text-sm font-extrabold flex-shrink-0 ${badge.tile}`}>
-        {badge.label}
-      </div>
+      {/* 语言官方图标（devicon） */}
+      <LanguageTile language={course.language} size={48} />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
@@ -214,7 +199,7 @@ function CourseCard({ course, mode }: { course: CourseMetadata; mode: CourseMode
             />
           </div>
           <span className="text-[10px] text-text-muted flex-shrink-0 font-mono">
-            {completedCount}/{course.stepsCount} 段
+            {completedCount}/{totalSteps} 段
           </span>
         </div>
       </div>
@@ -358,18 +343,29 @@ export function CoursesPage() {
   // 状态筛选 + 搜索（线框 3.3-A）
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
+  const dbProgress = useDbCourseProgress(!isCodingMode);
   const getCourseProgress = useCourseSessionStore((s) => s.getCourseProgress);
 
+  // DB 真实进度 + 会话进度合并（取完成数较大的一方）
+  const mergedProgress: Record<string, { completed: number; total: number; percent: number }> = {};
+  const putProgress = (id: string, total: number, completed: number) => {
+    const cur = mergedProgress[id];
+    if (!cur || completed > cur.completed) {
+      mergedProgress[id] = { completed, total, percent: total > 0 ? Math.min(Math.round((completed / total) * 100), 100) : 0 };
+    }
+  };
+  for (const c of courses) putProgress(c.id, c.stepsCount, 0);
+  for (const [id, p] of Object.entries(dbProgress)) putProgress(id, p.totalSteps, p.completedSteps);
+  for (const c of courses) {
+    const s = getCourseProgress(c.id);
+    if (s) putProgress(c.id, c.stepsCount, s.completedSteps?.length ?? 0);
+  }
+
   const packStatus = new Map(visibleTrainingPacks.map((pack) => {
-    const p = getCourseProgress(pack.id);
-    const pct = p ? Math.round((p.completedSteps?.length || 0) / Math.max(courseById.get(pack.id)?.stepsCount ?? 1, 1) * 100) : 0;
+    const pct = mergedProgress[pack.id]?.percent ?? 0;
     return [pack.id, statusOf(pct)] as const;
   }));
-  const courseStatus = new Map(sortedCourses.map((course) => {
-    const p = getCourseProgress(course.id);
-    const pct = course.stepsCount > 0 ? Math.round(((p?.completedSteps?.length || 0) / course.stepsCount) * 100) : 0;
-    return [course.id, statusOf(pct)] as const;
-  }));
+  const courseStatus = new Map(sortedCourses.map((course) => [course.id, statusOf(mergedProgress[course.id]?.percent ?? 0)] as const));
 
   const matchStatus = (id: string, map: Map<string, Exclude<StatusFilter, 'all'>>) =>
     statusFilter === 'all' || map.get(id) === statusFilter;
@@ -547,7 +543,7 @@ export function CoursesPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {sortedFilteredCourses.map((course) => (
-                    <CourseCard key={course.id} course={course} mode={mode} />
+                    <CourseCard key={course.id} course={course} mode={mode} progress={mergedProgress[course.id]} />
                   ))}
                 </div>
               </section>

@@ -1,8 +1,16 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, type CSSProperties } from 'react';
 import { useTypingStats } from '@/hooks/useTypingStats';
 import { useChartStore } from '@/stores/chartStore';
 import { initSound, playSound } from '@/utils/soundEffects';
+import { computeSyntax } from '@/utils/codeHighlight';
+import { resolveTypingKey } from '@/utils/typingEngine';
 import type { TypingStep } from '@/types';
+
+interface Spark {
+  id: number;
+  index: number;
+  dx: number;
+}
 
 export interface TypingCompleteData {
   backspaces: number;
@@ -26,77 +34,6 @@ interface TypingEditorProps {
   onCursorChange?: (position: number) => void;
 }
 
-const JS_KEYWORDS = new Set([
-  'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'do',
-  'import', 'from', 'export', 'default', 'class', 'extends', 'new', 'delete',
-  'async', 'await', 'typeof', 'instanceof', 'in', 'of', 'try', 'catch', 'finally',
-  'throw', 'switch', 'case', 'break', 'continue', 'yield', 'void', 'super', 'this',
-]);
-const PY_KEYWORDS = new Set([
-  'def', 'return', 'if', 'elif', 'else', 'for', 'while', 'import', 'from', 'as',
-  'class', 'print', 'lambda', 'with', 'try', 'except', 'finally', 'raise',
-  'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'global', 'del',
-]);
-
-/** 逐字符语法着色（轻量 tokenizer：字符串/注释/关键字/类名/数字） */
-function computeSyntax(target: string, language?: string): string[] {
-  const keywords = language === 'python' ? PY_KEYWORDS : JS_KEYWORDS;
-  const colors: string[] = new Array(target.length).fill('');
-  let i = 0;
-  while (i < target.length) {
-    const ch = target[i];
-
-    // 字符串
-    if (ch === '"' || ch === "'" || ch === '`') {
-      let j = i + 1;
-      while (j < target.length && target[j] !== ch) {
-        if (target[j] === '\\') j += 1;
-        j += 1;
-      }
-      const end = Math.min(j, target.length - 1);
-      for (let k = i; k <= end; k++) colors[k] = 'syn-str';
-      i = j + 1;
-      continue;
-    }
-    // 注释 // 或 #
-    if ((ch === '/' && target[i + 1] === '/') || (ch === '#' && language === 'python')) {
-      let j = i;
-      while (j < target.length && target[j] !== '\n') {
-        colors[j] = 'syn-com';
-        j += 1;
-      }
-      i = j;
-      continue;
-    }
-    // 标识符 / 关键字
-    if (/[A-Za-z_$]/.test(ch)) {
-      let j = i;
-      while (j < target.length && /[A-Za-z0-9_$]/.test(target[j])) j += 1;
-      const word = target.slice(i, j);
-      const cls = keywords.has(word)
-        ? 'syn-kw'
-        : /^[A-Z]/.test(word)
-          ? 'syn-type'
-          : '';
-      for (let k = i; k < j; k++) colors[k] = cls;
-      i = j;
-      continue;
-    }
-    // 数字
-    if (/[0-9]/.test(ch)) {
-      let j = i;
-      while (j < target.length && /[0-9.]/.test(target[j])) {
-        colors[j] = 'syn-num';
-        j += 1;
-      }
-      i = j;
-      continue;
-    }
-    i += 1;
-  }
-  return colors;
-}
-
 export function TypingEditor({
   step,
   onComplete,
@@ -114,6 +51,19 @@ export function TypingEditor({
   const completedRef = useRef(false);
   const backspaceCount = useRef(0);
   const startedAtRef = useRef(Date.now());
+
+  // 打字火花：敲对字符时光标处溅出的小粒子（同屏上限 9 个，自动清理）
+  const [sparks, setSparks] = useState<Spark[]>([]);
+  const sparkSeqRef = useRef(0);
+  const addSpark = useCallback((index: number) => {
+    setSparks((list) => {
+      if (list.length > 8) return list;
+      const id = ++sparkSeqRef.current;
+      const spark: Spark = { id, index, dx: Number((Math.random() * 14 - 7).toFixed(1)) };
+      setTimeout(() => setSparks((cur) => cur.filter((s) => s.id !== id)), 460);
+      return [...list, spark];
+    });
+  }, []);
 
   // 组件挂载时预初始化音效（需用户已交互）
   useEffect(() => {
@@ -160,6 +110,7 @@ export function TypingEditor({
 
     if (e.key === 'Backspace') {
       backspaceCount.current += 1;
+      playSound('typing', { variant: 'backspace' });
       onBackspace?.({ position: cursorPosition });
       if (cursorPosition > 0) {
         setTyped((prev) => prev.slice(0, -1));
@@ -175,7 +126,7 @@ export function TypingEditor({
       if (cursorPosition + spaces.length <= targetCode.length) {
         const expected = targetCode.slice(cursorPosition, cursorPosition + spaces.length);
         if (expected === spaces) {
-          playSound('typing');
+          playSound('typing', { variant: 'space' });
           onKeystroke(true, { expected: spaces, input: spaces, position: cursorPosition });
           setTyped((prev) => prev + spaces);
           setCursorPosition((prev) => prev + spaces.length);
@@ -190,7 +141,7 @@ export function TypingEditor({
       if (cursorPosition < targetCode.length) {
         const expected = targetCode[cursorPosition];
         if (expected === '\n') {
-          playSound('typing');
+          playSound('typing', { variant: 'enter' });
           onKeystroke(true, { expected: newline, input: newline, position: cursorPosition });
           setTyped((prev) => prev + newline);
           setCursorPosition((prev) => prev + 1);
@@ -211,37 +162,33 @@ export function TypingEditor({
 
     const inputChar = e.key;
 
-    // IDE 式自动对齐：目标位置是空格段时，不需要逐个敲空格——
-    // 按空格一次吞掉整段；按非空格字符则自动补齐空格后直接校验该字符
-    let pos = cursorPosition;
-    if (targetCode[pos] === ' ') {
-      while (pos < targetCode.length && targetCode[pos] === ' ') {
-        playSound('typing');
+    // IDE 式自动对齐：空格段由 resolveTypingKey 自动补齐/吞掉，只播一声空格键
+    const result = resolveTypingKey(targetCode, cursorPosition, inputChar);
+
+    if (result.consumedSpaces > 0) {
+      playSound('typing', { variant: 'space' });
+      for (let i = 0; i < result.consumedSpaces; i += 1) {
         recordKeystroke(true);
-        onKeystroke(true, { expected: ' ', input: ' ', position: pos });
-        pos += 1;
-      }
-      if (inputChar === ' ') {
-        setTyped((prev) => prev + targetCode.slice(cursorPosition, pos));
-        setCursorPosition(pos);
-        return;
-      }
-      if (pos >= targetCode.length) {
-        setTyped((prev) => prev + targetCode.slice(cursorPosition, pos));
-        setCursorPosition(pos);
-        return;
+        onKeystroke(true, { expected: ' ', input: ' ', position: cursorPosition + i });
       }
     }
 
-    const expectedChar = targetCode[pos];
-    const isCorrect = inputChar === expectedChar;
+    if (result.charValidated) {
+      const expectedChar = targetCode[result.nextPosition - 1];
+      playSound(result.charCorrect ? 'typing' : 'error');
+      recordKeystroke(result.charCorrect);
+      if (result.charCorrect) {
+        addSpark(result.nextPosition - 1);
+      }
+      onKeystroke(result.charCorrect, {
+        expected: expectedChar,
+        input: inputChar,
+        position: result.nextPosition - 1,
+      });
+    }
 
-    playSound(isCorrect ? 'typing' : 'error');
-    recordKeystroke(isCorrect);
-    onKeystroke(isCorrect, { expected: expectedChar, input: inputChar, position: pos });
-
-    setTyped((prev) => prev + targetCode.slice(cursorPosition, pos) + inputChar);
-    setCursorPosition(pos + 1);
+    setTyped((prev) => prev + result.insertText);
+    setCursorPosition(result.nextPosition);
   }, [cursorPosition, step.targetCode, onKeystroke, onBackspace]);
 
   useEffect(() => {
@@ -316,9 +263,14 @@ export function TypingEditor({
     else if (isTyped) cls = `${cls ? cls + ' ' : ''}ch-ok`;
     else cls = `${cls ? cls + ' ' : ''}ch-pending`;
 
+    const idxSparks = sparks.filter((s) => s.index === index);
+
     nodes.push(
-      <span key={index} className={cls}>
+      <span key={index} className={`${cls}${cls ? ' ' : ''}relative`}>
         {displayChar}
+        {idxSparks.map((s) => (
+          <span key={s.id} className="ch-spark" style={{ '--dx': `${s.dx}px` } as CSSProperties} />
+        ))}
       </span>,
     );
     return nodes;

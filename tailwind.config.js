@@ -42,7 +42,7 @@ export default {
         'bg-elevated': '#243352',
         'text-primary': '#f5f8ff',
         'text-secondary': '#9aa8bd',
-        'text-muted': '#64748b',
+        'text-muted': '#7e8ca6',
         'text-disabled': '#3d4c63',
         'accent-primary': '#f59e0b',
         'accent-success': '#22c55e',

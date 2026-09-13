@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, type CSSProperties } from 'react';
 import { useComboStore } from '@/stores/comboStore';
 import { playSound } from '@/utils/soundEffects';
-import flameIcon from '@/assets/icons/flame.png';
-import newBestIcon from '@/assets/icons/new-best.png';
+import flameIcon from '@/assets/icons/flame.webp';
+import newBestIcon from '@/assets/icons/new-best.webp';
 
 type ComboEvent = 'increment' | 'reset' | 'new-best';
 
@@ -57,7 +57,7 @@ export function ComboDisplay({ compact = false }: ComboDisplayProps) {
           addTimer(() => setNewBestVisible(false), 500);
         }, 1800);
       } else if ([10, 20, 30].includes(currentCombo)) {
-        playSound('combo-milestone');
+        playSound(currentCombo >= 30 ? 'combo-30' : currentCombo >= 20 ? 'combo-20' : 'combo-10');
       }
     } else if (currentCombo === 0 && prevComboRef.current > 0) {
       setAnimEvent('reset');
@@ -131,6 +131,8 @@ export function ComboDisplay({ compact = false }: ComboDisplayProps) {
         : '状态不错！保持这个节奏！';
   const comboAnim =
     animEvent === 'increment' ? 'animate-combo-bounce' : animEvent === 'reset' ? 'animate-combo-shake' : '';
+  // 火焰呼吸：档位越高越躁（30 档额外飘余烬）
+  const tierAnim = tier === 3 ? 'combo-breathe-3' : tier === 2 ? 'combo-breathe-2' : 'combo-breathe-1';
 
   return (
     <div className={`flex flex-col items-center justify-center ${isMilestone ? 'h-28' : 'h-10'}`}>
@@ -146,13 +148,20 @@ export function ComboDisplay({ compact = false }: ComboDisplayProps) {
         <div
           className={`
             relative w-16 h-16 rounded-full border-2 flex flex-col items-center justify-center shadow-lg
-            transition-all duration-300 ${tierRing} ${comboAnim}
+            transition-all duration-300 ${tierRing} ${comboAnim} ${tierAnim}
             ${comboVisible ? 'opacity-100' : 'opacity-0'}
           `}
         >
           <span className="absolute -top-2 px-1.5 py-px text-[9px] font-bold rounded-full bg-bg-panel border border-inherit text-inherit">
             {currentCombo} 连击
           </span>
+          {tier === 3 && (
+            <>
+              <span className="combo-ember" style={{ left: '16%', top: '32%', '--dx': '-7px', '--delay': '0ms' } as CSSProperties} />
+              <span className="combo-ember" style={{ left: '76%', top: '26%', '--dx': '6px', '--delay': '460ms' } as CSSProperties} />
+              <span className="combo-ember" style={{ left: '48%', top: '10%', '--dx': '2px', '--delay': '920ms' } as CSSProperties} />
+            </>
+          )}
           <svg className="w-3.5 h-3.5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" />
           </svg>

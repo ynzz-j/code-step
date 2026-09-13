@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import keyboardIcon from '@/assets/icons/keyboard.png';
+import keyboardIcon from '@/assets/icons/keyboard.svg';
 
 export interface KeyStrokeInfo {
   /** 实际字符：'\n' Enter、'\t' Tab、'\b' Backspace、' ' 空格 */
@@ -102,11 +102,32 @@ const DISPLAY = {
   '{win}': 'Win',
   '{alt}': 'Alt',
   '{fn}': 'Fn',
-  '{menu}': '☰',
+  '{menu}': '<svg viewBox="0 0 24 24" width="11" height="11" style="stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   '{space}': 'Space',
 };
 
 const COMMAND_BUTTONS = ['{enter}', '{tab}', '{bksp}', '{lock}', '{shift}', '{ctrl}', '{alt}', '{win}', '{fn}', '{menu}'];
+
+/** 标准指法 home row：常驻淡绿分区（参考 键位视觉参考.png），含 shift 布局的对应按钮名 */
+const HOME_ROW_BUTTONS = 'a s d f j k l ; A S D F J K L :';
+
+/** 键帽配色（CSS 变量皮肤）：深空 / 奶油 / 赛博 */
+const KEYBOARD_SKINS = [
+  { id: 'deep', label: '深空', class: '' },
+  { id: 'cream', label: '奶油', class: ' cs-skin-cream' },
+  { id: 'cyber', label: '赛博', class: ' cs-skin-cyber' },
+] as const;
+
+type KeyboardSkinId = (typeof KEYBOARD_SKINS)[number]['id'];
+
+function loadSkin(): KeyboardSkinId {
+  try {
+    const saved = localStorage.getItem('codestep-kb-skin');
+    return KEYBOARD_SKINS.some((s) => s.id === saved) ? (saved as KeyboardSkinId) : 'deep';
+  } catch {
+    return 'deep';
+  }
+}
 
 /**
  * 虚拟键盘（react-simple-keyboard 骨架 + CodeStep 皮肤，参考 键位视觉参考.png）
@@ -118,6 +139,20 @@ export function VirtualKeyboard({ nextChar, lastInput, wide = false }: VirtualKe
   const [view, setView] = useState<'keyboard' | 'fingers'>('keyboard');
   const [hidden, setHidden] = useState(false);
   const [flash, setFlash] = useState<{ button: string; ok: boolean } | null>(null);
+  const [skin, setSkin] = useState<KeyboardSkinId>(loadSkin);
+
+  const cycleSkin = () => {
+    const idx = KEYBOARD_SKINS.findIndex((s) => s.id === skin);
+    const next = KEYBOARD_SKINS[(idx + 1) % KEYBOARD_SKINS.length];
+    setSkin(next.id);
+    try {
+      localStorage.setItem('codestep-kb-skin', next.id);
+    } catch {
+      /* ignore */
+    }
+  };
+  const skinClass = KEYBOARD_SKINS.find((s) => s.id === skin)?.class ?? '';
+  const skinLabel = KEYBOARD_SKINS.find((s) => s.id === skin)?.label ?? '深空';
 
   const needShift = shiftNeeded(nextChar);
   const layoutName = needShift ? 'shift' : 'default';
@@ -146,6 +181,9 @@ export function VirtualKeyboard({ nextChar, lastInput, wide = false }: VirtualKe
     buttonTheme.push({ class: flash.ok ? 'cs-ok' : 'cs-err', buttons: flash.button });
   }
   buttonTheme.push({ class: 'cs-command', buttons: COMMAND_BUTTONS.join(' ') });
+  buttonTheme.push({ class: 'cs-home', buttons: HOME_ROW_BUTTONS });
+
+  const keyboardTheme = `hg-theme-default cs-keyboard${skinClass}`;
 
   if (hidden) {
     return (
@@ -195,6 +233,13 @@ export function VirtualKeyboard({ nextChar, lastInput, wide = false }: VirtualKe
       <div className="px-4 py-2.5 select-none min-w-0">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2.5 text-[10px] text-text-muted min-w-0">
+            <button
+              onClick={cycleSkin}
+              title="切换键帽配色"
+              className="px-2 py-0.5 rounded text-[10px] border border-primary-500/25 bg-primary-500/10 text-primary-300 hover:bg-primary-500/20 transition-colors"
+            >
+              键帽：{skinLabel}
+            </button>
             <span className="flex-shrink-0">当前按键</span>
             <span className={`cs-keycap-preview ${nextChar ? 'cs-next' : ''} inline-flex items-center justify-center flex-shrink-0`}>
               {displayCharLabel || '·'}
@@ -211,7 +256,7 @@ export function VirtualKeyboard({ nextChar, lastInput, wide = false }: VirtualKe
         {view === 'keyboard' ? (
           <Keyboard
             baseClass="cs-keyboard"
-            theme="hg-theme-default cs-keyboard"
+            theme={keyboardTheme}
             layout={LAYOUT}
             display={DISPLAY}
             layoutName={layoutName}
@@ -286,7 +331,7 @@ export function VirtualKeyboard({ nextChar, lastInput, wide = false }: VirtualKe
         <>
           <Keyboard
             baseClass="cs-keyboard"
-            theme="hg-theme-default cs-keyboard"
+            theme={keyboardTheme}
             layout={LAYOUT}
             display={DISPLAY}
             layoutName={layoutName}

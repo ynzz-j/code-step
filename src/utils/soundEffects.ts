@@ -1,34 +1,96 @@
-import blueKey01Url from '@/assets/sounds/keyboard/blue-01.wav?url';
-import blueKey02Url from '@/assets/sounds/keyboard/blue-02.wav?url';
-import blueKey03Url from '@/assets/sounds/keyboard/blue-03.wav?url';
-import blueKey04Url from '@/assets/sounds/keyboard/blue-04.wav?url';
+import key01Url from '@/assets/sounds/codestep-v1/key-01.ogg?url';
+import key02Url from '@/assets/sounds/codestep-v1/key-02.ogg?url';
+import key03Url from '@/assets/sounds/codestep-v1/key-03.ogg?url';
+import key04Url from '@/assets/sounds/codestep-v1/key-04.ogg?url';
+import key05Url from '@/assets/sounds/codestep-v1/key-05.ogg?url';
+import key06Url from '@/assets/sounds/codestep-v1/key-06.ogg?url';
+import key07Url from '@/assets/sounds/codestep-v1/key-07.ogg?url';
+import key08Url from '@/assets/sounds/codestep-v1/key-08.ogg?url';
+import spaceUrl from '@/assets/sounds/codestep-v1/space.ogg?url';
+import enterUrl from '@/assets/sounds/codestep-v1/enter.ogg?url';
+import backspaceUrl from '@/assets/sounds/codestep-v1/backspace.ogg?url';
+import errorUrl from '@/assets/sounds/codestep-v1/error.ogg?url';
+import combo10Url from '@/assets/sounds/codestep-v1/combo-10.ogg?url';
+import combo20Url from '@/assets/sounds/codestep-v1/combo-20.ogg?url';
+import combo30Url from '@/assets/sounds/codestep-v1/combo-30.ogg?url';
+import perfectUrl from '@/assets/sounds/codestep-v1/perfect.ogg?url';
+import newBestUrl from '@/assets/sounds/codestep-v1/new-best.ogg?url';
+import completeUrl from '@/assets/sounds/codestep-v1/complete.ogg?url';
+import motifUrl from '@/assets/sounds/codestep-v1/motif.ogg?url';
 
 /**
- * CodeStep audio system.
+ * CodeStep audio system — CodeStep Sound Pack v1（深夜蓝 + 琥珀）。
  *
- * The product sound direction is a sustainable training groove:
- * mechanical key samples carry the rhythm, while synthetic sounds are reserved
- * for sparse UI, negative, and reward feedback.
+ * 触发规则来自音效包 manifest：
+ * - 正确输入只播键声（8 变体随机轮换，不做额外变调）；Space/Enter/Backspace 只播对应大键音。
+ * - 错误提示间隔 ≥ 90ms；奖励音按 New Best > Complete > Perfect > Combo30 > Combo20 > Combo10
+ *   取最高一项，奖励间隔 ≥ 300ms；键声照常播放。
+ * - 每个采样使用包内标定的电平（音量 = 文件电平 × 主音量，不叠加分类系数）。
+ * - 无采样覆盖的少量 UI/兜底音（click / combo-reset / success）仍走程序合成。
  */
 
 export type SoundType =
   | 'click'
-  | 'combo-increment'
   | 'combo-reset'
-  | 'combo-milestone'
+  | 'combo-10'
+  | 'combo-20'
+  | 'combo-30'
   | 'new-best'
   | 'perfect'
   | 'success'
   | 'error'
-  | 'run-code'
-  | 'typing'
-  | 'complete';
+  | 'complete'
+  | 'motif'
+  | 'typing';
 
-type SoundCategory = 'input' | 'negative' | 'reward' | 'ui';
+type TypingVariant = 'key' | 'space' | 'enter' | 'backspace';
+
+type SampleName =
+  | 'key-01' | 'key-02' | 'key-03' | 'key-04'
+  | 'key-05' | 'key-06' | 'key-07' | 'key-08'
+  | 'space' | 'enter' | 'backspace' | 'error'
+  | 'combo-10' | 'combo-20' | 'combo-30'
+  | 'perfect' | 'new-best' | 'complete' | 'motif';
+
+/** 包内标定电平（manifest 建议音量） */
+const SAMPLE_CONFIG: Record<SampleName, { url: string; volume: number }> = {
+  'key-01': { url: key01Url, volume: 0.45 },
+  'key-02': { url: key02Url, volume: 0.45 },
+  'key-03': { url: key03Url, volume: 0.45 },
+  'key-04': { url: key04Url, volume: 0.45 },
+  'key-05': { url: key05Url, volume: 0.45 },
+  'key-06': { url: key06Url, volume: 0.45 },
+  'key-07': { url: key07Url, volume: 0.45 },
+  'key-08': { url: key08Url, volume: 0.45 },
+  space: { url: spaceUrl, volume: 0.42 },
+  enter: { url: enterUrl, volume: 0.45 },
+  backspace: { url: backspaceUrl, volume: 0.35 },
+  error: { url: errorUrl, volume: 0.35 },
+  'combo-10': { url: combo10Url, volume: 0.4 },
+  'combo-20': { url: combo20Url, volume: 0.43 },
+  'combo-30': { url: combo30Url, volume: 0.45 },
+  perfect: { url: perfectUrl, volume: 0.48 },
+  'new-best': { url: newBestUrl, volume: 0.55 },
+  complete: { url: completeUrl, volume: 0.5 },
+  motif: { url: motifUrl, volume: 0.48 },
+};
+
+const KEY_SAMPLE_NAMES: SampleName[] = ['key-01', 'key-02', 'key-03', 'key-04', 'key-05', 'key-06', 'key-07', 'key-08'];
+
+/** 奖励优先级：数值越高越优先（manifest：New Best > Complete > Perfect > Combo30 > Combo20 > Combo10） */
+export const REWARD_PRIORITY: Partial<Record<SoundType, number>> = {
+  'combo-10': 3,
+  'combo-20': 4,
+  'combo-30': 5,
+  perfect: 6,
+  complete: 7,
+  'new-best': 8,
+};
+
+const REWARD_COOLDOWN_MS = 300;
+const ERROR_COOLDOWN_MS = 90;
 
 interface SynthSoundConfig {
-  category: SoundCategory;
-  priority: number;
   notes: number[];
   duration: number;
   type: OscillatorType;
@@ -43,31 +105,9 @@ interface SynthSoundConfig {
   };
 }
 
-interface PendingReward {
-  soundType: SoundType;
-  config: SynthSoundConfig;
-}
-
-const KEYBOARD_SAMPLE_URLS = [
-  blueKey01Url,
-  blueKey02Url,
-  blueKey03Url,
-  blueKey04Url,
-];
-
-const CATEGORY_GAIN: Record<SoundCategory, number> = {
-  input: 0.45,
-  ui: 0.35,
-  negative: 0.5,
-  reward: 0.65,
-};
-
-const REWARD_COOLDOWN_MS = 120;
-
-const SYNTH_SOUNDS: Record<Exclude<SoundType, 'typing'>, SynthSoundConfig> = {
+/** 无采样覆盖的少量 UI/兜底音，仍走程序合成 */
+const SYNTH_SOUNDS: Partial<Record<SoundType, SynthSoundConfig>> = {
   click: {
-    category: 'ui',
-    priority: 1,
     notes: [720],
     duration: 0.07,
     type: 'triangle',
@@ -75,19 +115,7 @@ const SYNTH_SOUNDS: Record<Exclude<SoundType, 'typing'>, SynthSoundConfig> = {
     fadeIn: 0.004,
     fadeOut: 0.045,
   },
-  'combo-increment': {
-    category: 'reward',
-    priority: 1,
-    notes: [620],
-    duration: 0.08,
-    type: 'sine',
-    gain: 0.18,
-    fadeIn: 0.004,
-    fadeOut: 0.05,
-  },
   'combo-reset': {
-    category: 'negative',
-    priority: 1,
     notes: [155],
     duration: 0.085,
     type: 'triangle',
@@ -96,42 +124,7 @@ const SYNTH_SOUNDS: Record<Exclude<SoundType, 'typing'>, SynthSoundConfig> = {
     fadeOut: 0.065,
     filter: { type: 'lowpass', frequency: 700, q: 0.4 },
   },
-  'combo-milestone': {
-    category: 'reward',
-    priority: 3,
-    notes: [740, 980],
-    duration: 0.22,
-    noteGap: 0.055,
-    type: 'sine',
-    gain: 0.38,
-    fadeIn: 0.006,
-    fadeOut: 0.08,
-  },
-  'new-best': {
-    category: 'reward',
-    priority: 5,
-    notes: [880, 1175, 1568],
-    duration: 0.36,
-    noteGap: 0.06,
-    type: 'triangle',
-    gain: 0.44,
-    fadeIn: 0.006,
-    fadeOut: 0.12,
-  },
-  perfect: {
-    category: 'reward',
-    priority: 4,
-    notes: [1047, 1319, 1760],
-    duration: 0.4,
-    noteGap: 0.07,
-    type: 'triangle',
-    gain: 0.4,
-    fadeIn: 0.006,
-    fadeOut: 0.13,
-  },
   success: {
-    category: 'reward',
-    priority: 2,
     notes: [830, 1109],
     duration: 0.24,
     noteGap: 0.06,
@@ -139,38 +132,6 @@ const SYNTH_SOUNDS: Record<Exclude<SoundType, 'typing'>, SynthSoundConfig> = {
     gain: 0.3,
     fadeIn: 0.006,
     fadeOut: 0.08,
-  },
-  error: {
-    category: 'negative',
-    priority: 2,
-    notes: [125],
-    duration: 0.115,
-    type: 'triangle',
-    gain: 0.45,
-    fadeIn: 0.003,
-    fadeOut: 0.09,
-    filter: { type: 'lowpass', frequency: 540, q: 0.5 },
-  },
-  'run-code': {
-    category: 'ui',
-    priority: 1,
-    notes: [460],
-    duration: 0.12,
-    type: 'triangle',
-    gain: 0.26,
-    fadeIn: 0.01,
-    fadeOut: 0.07,
-  },
-  complete: {
-    category: 'reward',
-    priority: 6,
-    notes: [659, 880, 1175, 1568],
-    duration: 0.45,
-    noteGap: 0.07,
-    type: 'triangle',
-    gain: 0.42,
-    fadeIn: 0.01,
-    fadeOut: 0.14,
   },
 };
 
@@ -181,10 +142,11 @@ class SoundManager {
   private initialized = false;
   private samplesReady = false;
   private samplesFailed = false;
-  private keyboardBuffers: AudioBuffer[] = [];
-  private keyboardSamplesPromise: Promise<void> | null = null;
-  private pendingReward: PendingReward | null = null;
+  private sampleBuffers: Partial<Record<SampleName, AudioBuffer>> = {};
+  private samplesPromise: Promise<void> | null = null;
+  private pendingReward: { priority: number; play: () => void } | null = null;
   private rewardTimer: ReturnType<typeof setTimeout> | null = null;
+  private lastErrorAt = 0;
   private storageKey = 'codestep-sound-enabled';
 
   private loadPreference(): boolean {
@@ -211,7 +173,7 @@ class SoundManager {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         this.enabled = this.loadPreference();
         this.initialized = true;
-        this.loadKeyboardSamples();
+        this.loadSamples();
       } catch (err) {
         console.warn('[SoundManager] Failed to initialize:', err);
         this.enabled = false;
@@ -221,25 +183,30 @@ class SoundManager {
     this.ensureContextRunning();
   }
 
-  play(soundType: SoundType): void {
+  play(soundType: SoundType, options?: { variant?: TypingVariant }): void {
     if (!this.enabled || !this.initialized || !this.audioContext) return;
 
     this.ensureContextRunning();
 
     try {
       if (soundType === 'typing') {
-        this.playKeyboardTyping();
+        this.playTyping(options?.variant ?? 'key');
+        return;
+      }
+
+      if (soundType === 'error') {
+        this.playError();
+        return;
+      }
+
+      const priority = REWARD_PRIORITY[soundType];
+      if (priority !== undefined) {
+        this.queueReward(priority, () => this.playSample(soundType as SampleName));
         return;
       }
 
       const config = SYNTH_SOUNDS[soundType];
       if (!config) return;
-
-      if (config.category === 'reward') {
-        this.queueReward(soundType, config);
-        return;
-      }
-
       this.playSynth(config);
     } catch (err) {
       console.warn(`[SoundManager] Failed to play sound ${soundType}:`, err);
@@ -276,86 +243,82 @@ class SoundManager {
     }
   }
 
-  private loadKeyboardSamples(): void {
-    if (!this.audioContext || this.keyboardSamplesPromise) return;
+  private loadSamples(): void {
+    if (!this.audioContext || this.samplesPromise) return;
 
-    this.keyboardSamplesPromise = Promise.all(
-      KEYBOARD_SAMPLE_URLS.map(async (url) => {
-        const response = await fetch(url);
+    const names = Object.keys(SAMPLE_CONFIG) as SampleName[];
+    this.samplesPromise = Promise.all(
+      names.map(async (name) => {
+        const response = await fetch(SAMPLE_CONFIG[name].url);
         if (!response.ok) {
-          throw new Error(`Failed to load keyboard sample: ${url}`);
+          throw new Error(`Failed to load sample: ${name}`);
         }
         const data = await response.arrayBuffer();
-        return this.audioContext!.decodeAudioData(data);
+        const buffer = await this.audioContext!.decodeAudioData(data);
+        this.sampleBuffers[name] = buffer;
       }),
     )
-      .then((buffers) => {
-        this.keyboardBuffers = buffers;
-        this.samplesReady = buffers.length > 0;
+      .then(() => {
+        this.samplesReady = true;
         this.samplesFailed = false;
       })
       .catch((err) => {
-        console.warn('[SoundManager] Keyboard samples unavailable; using fallback click.', err);
-        this.keyboardBuffers = [];
+        console.warn('[SoundManager] Sound pack samples unavailable.', err);
         this.samplesReady = false;
         this.samplesFailed = true;
       });
   }
 
-  private playKeyboardTyping(): void {
+  private playSample(name: SampleName, gainScale = 1): void {
     if (!this.audioContext) return;
+    const buffer = this.sampleBuffers[name];
+    if (!buffer) return;
 
-    if (!this.samplesReady || this.keyboardBuffers.length === 0) {
-      this.playFallbackKeyboardClick();
-      return;
-    }
-
-    const buffer = this.keyboardBuffers[Math.floor(Math.random() * this.keyboardBuffers.length)];
     const source = this.audioContext.createBufferSource();
     const gain = this.audioContext.createGain();
-    const filter = this.audioContext.createBiquadFilter();
     const now = this.audioContext.currentTime;
 
     source.buffer = buffer;
-    source.playbackRate.setValueAtTime(0.96 + Math.random() * 0.08, now);
+    gain.gain.setValueAtTime(SAMPLE_CONFIG[name].volume * this.volume * gainScale, now);
 
-    filter.type = 'highpass';
-    filter.frequency.setValueAtTime(85, now);
-
-    gain.gain.setValueAtTime(
-      CATEGORY_GAIN.input * this.volume * (0.9 + Math.random() * 0.18),
-      now,
-    );
-
-    source.connect(filter);
-    filter.connect(gain);
+    source.connect(gain);
     gain.connect(this.audioContext.destination);
 
     source.start(now);
     source.onended = () => {
       source.disconnect();
-      filter.disconnect();
       gain.disconnect();
     };
   }
 
-  private playFallbackKeyboardClick(): void {
-    this.playSynth({
-      category: 'input',
-      priority: 0,
-      notes: [2600],
-      duration: 0.045,
-      type: 'triangle',
-      gain: 0.22,
-      fadeIn: 0.002,
-      fadeOut: 0.035,
-      filter: { type: 'highpass', frequency: 900, q: 0.7 },
-    });
+  private playTyping(variant: TypingVariant): void {
+    switch (variant) {
+      case 'space':
+        this.playSample('space');
+        break;
+      case 'enter':
+        this.playSample('enter');
+        break;
+      case 'backspace':
+        this.playSample('backspace');
+        break;
+      default: {
+        const name = KEY_SAMPLE_NAMES[Math.floor(Math.random() * KEY_SAMPLE_NAMES.length)];
+        this.playSample(name);
+      }
+    }
   }
 
-  private queueReward(soundType: SoundType, config: SynthSoundConfig): void {
-    if (!this.pendingReward || config.priority >= this.pendingReward.config.priority) {
-      this.pendingReward = { soundType, config };
+  private playError(): void {
+    const now = performance.now();
+    if (now - this.lastErrorAt < ERROR_COOLDOWN_MS) return;
+    this.lastErrorAt = now;
+    this.playSample('error');
+  }
+
+  private queueReward(priority: number, play: () => void): void {
+    if (!this.pendingReward || priority >= this.pendingReward.priority) {
+      this.pendingReward = { priority, play };
     }
 
     if (this.rewardTimer) return;
@@ -364,7 +327,7 @@ class SoundManager {
       const reward = this.pendingReward;
       this.clearPendingReward();
       if (reward && this.enabled) {
-        this.playSynth(reward.config);
+        reward.play();
       }
     }, REWARD_COOLDOWN_MS);
   }
@@ -386,27 +349,25 @@ class SoundManager {
       0.035,
       (config.duration - noteGap * Math.max(0, config.notes.length - 1)) / config.notes.length,
     );
+    const outputGain = this.audioContext.createGain();
+    outputGain.gain.value = this.volume;
+    outputGain.connect(this.audioContext.destination);
 
     config.notes.forEach((frequency, index) => {
       const startAt = now + index * noteGap;
       const stopAt = startAt + noteDuration;
       const oscillator = this.audioContext!.createOscillator();
       const gain = this.audioContext!.createGain();
-      const outputNode = this.createFilter(config);
 
       oscillator.type = config.type;
       oscillator.frequency.setValueAtTime(frequency, startAt);
 
       gain.gain.setValueAtTime(0, startAt);
-      gain.gain.linearRampToValueAtTime(
-        config.gain * CATEGORY_GAIN[config.category] * this.volume,
-        startAt + (config.fadeIn ?? 0.005),
-      );
+      gain.gain.linearRampToValueAtTime(config.gain, startAt + (config.fadeIn ?? 0.005));
       gain.gain.exponentialRampToValueAtTime(0.001, stopAt + (config.fadeOut ?? 0.06));
 
       oscillator.connect(gain);
-      gain.connect(outputNode);
-      outputNode.connect(this.audioContext!.destination);
+      gain.connect(outputGain);
 
       oscillator.start(startAt);
       oscillator.stop(stopAt + (config.fadeOut ?? 0.06));
@@ -414,30 +375,15 @@ class SoundManager {
       oscillator.onended = () => {
         oscillator.disconnect();
         gain.disconnect();
-        outputNode.disconnect();
       };
     });
-  }
-
-  private createFilter(config: SynthSoundConfig): AudioNode {
-    if (!this.audioContext || !config.filter) {
-      return this.audioContext!.createGain();
-    }
-
-    const filter = this.audioContext.createBiquadFilter();
-    filter.type = config.filter.type;
-    filter.frequency.setValueAtTime(config.filter.frequency, this.audioContext.currentTime);
-    if (config.filter.q !== undefined) {
-      filter.Q.setValueAtTime(config.filter.q, this.audioContext.currentTime);
-    }
-    return filter;
   }
 }
 
 export const soundManager = new SoundManager();
 
-export function playSound(soundType: SoundType): void {
-  soundManager.play(soundType);
+export function playSound(soundType: SoundType, options?: { variant?: TypingVariant }): void {
+  soundManager.play(soundType, options);
 }
 
 export function initSound(): void {

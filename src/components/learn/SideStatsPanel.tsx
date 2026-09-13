@@ -1,5 +1,6 @@
-import trophyIcon from '@/assets/icons/trophy.png';
-import pathSummit from '@/assets/backgrounds/path-summit.png';
+import trophyIcon from '@/assets/icons/trophy.webp';
+import pathSummit from '@/assets/backgrounds/path-summit.webp';
+import { AmbientLayer } from '@/components/AmbientLayer';
 
 interface SideStatsPanelProps {
   accuracy: number;
@@ -26,6 +27,7 @@ export function SideStatsPanel({ accuracy }: SideStatsPanelProps) {
           draggable={false}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-bg-app/90 via-bg-app/45 to-bg-app/15" />
+        <AmbientLayer variant="fireflies" count={4} />
         <div className="relative z-10 p-5">
           <img
             src={trophyIcon}
