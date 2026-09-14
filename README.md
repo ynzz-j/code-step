@@ -5,6 +5,8 @@
 
 A code muscle memory trainer for developers. Break high-frequency code patterns into 30-second micro-snippets, type them repeatedly, and get real-time WPM / Accuracy / Combo feedback — until syntax and symbols become finger instinct.
 
+**🎮 Play online (Web Demo, no install): [code-step.pages.dev](https://code-step.pages.dev)**
+
 Inspired by Duolingo — spend a few minutes a day turning everyday patterns like `map/filter/reduce`, `async/await`, `list/dict` into pure muscle memory.
 
 [中文](#中文)
@@ -109,6 +111,8 @@ MIT License — see [LICENSE](LICENSE).
 ### 简介
 
 面向程序员的代码肌肉记忆训练工具。把高频代码模式拆成 30 秒短片段反复跟敲，WPM / 准确率 / Combo 实时反馈，把语法和符号练到手指本能。
+
+**🎮 在线试玩（Web Demo，无需安装）：[code-step.pages.dev](https://code-step.pages.dev)**
 
 灵感来自 Duolingo —— 每天几分钟，把 `map/filter/reduce`、`async/await`、`list/dict` 这些日常写法变成不用动脑的反射动作。
 
