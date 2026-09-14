@@ -1,8 +1,10 @@
+import { isTauri } from './env';
 import { invoke } from '@tauri-apps/api/core';
 import type { TypingAttemptPayload, GrowthSummary, TrainingPackGrowth, PatternMastery, WeakTokenStat } from '@/types';
 
 class GrowthService {
   async recordTypingAttempt(payload: TypingAttemptPayload): Promise<void> {
+    if (!isTauri()) return; // Web demo 不持久化训练明细
     try {
       await invoke('record_typing_attempt', { payload });
     } catch (error) {
@@ -29,6 +31,7 @@ class GrowthService {
   }
 
   async getTrainingPackPatternMastery(packId: string): Promise<PatternMastery[]> {
+    if (!isTauri()) return []; // Web demo 无成长数据
     try {
       return await invoke<PatternMastery[]>('get_training_pack_pattern_mastery', { packId });
     } catch (error) {

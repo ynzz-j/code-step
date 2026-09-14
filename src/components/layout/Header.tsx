@@ -3,6 +3,7 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { getSoundStatus, setSoundEnabled } from '@/utils/soundEffects';
 import { useUserStore } from '@/stores/userStore';
+import { isTauri } from '@/services/env';
 
 const navLinks = [
   { path: '/', label: '首页' },
@@ -16,6 +17,7 @@ export function Header() {
   const [soundOn, setSoundOn] = useState(true);
   const [isMaximized, setIsMaximized] = useState(false);
   const displayName = useUserStore((s) => s.displayName);
+  const inApp = isTauri();
 
   useEffect(() => {
     setSoundOn(getSoundStatus().enabled);
@@ -105,6 +107,11 @@ export function Header() {
         <span className="font-hand text-sm text-primary-300/70 hidden md:block" data-tauri-drag-region aria-hidden="true">
           每天一点，更强的自己。
         </span>
+        {!inApp && (
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-500/15 text-primary-300 border border-primary-500/25">
+            Web Demo
+          </span>
+        )}
         <Link
           to="/user-center"
           title={`${displayName} · 学习中心`}
@@ -133,7 +140,8 @@ export function Header() {
         </button>
         <span className="text-xs text-text-disabled">v{__APP_VERSION__}</span>
 
-        {/* 无边框窗口控制（最小化 / 最大化 / 退出） */}
+        {/* 无边框窗口控制（最小化 / 最大化 / 退出；仅桌面端） */}
+        {inApp && (
         <div className="flex items-center gap-0.5 ml-1 pl-2 border-l border-gray-700/50">
           {winButton('最小化', () => getCurrentWindow().minimize().catch((e) => console.warn('[Window] minimize:', e)), (
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -156,6 +164,7 @@ export function Header() {
             </svg>
           ), true)}
         </div>
+        )}
       </div>
     </header>
   );

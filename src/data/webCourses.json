@@ -1,0 +1,639 @@
+[
+ {
+  "id": "js-array",
+  "title": "数组",
+  "description": "掌握 JavaScript 数组的创建、操作和高阶方法",
+  "language": "javascript",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+   "数组创建",
+   "map",
+   "filter",
+   "reduce",
+   "forEach"
+  ],
+  "estimated_minutes": 25,
+  "steps_count": 12,
+  "steps": [
+   {
+    "type": "typing",
+    "title": "创建数组",
+    "concept": "数组字面量",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const fruits = [\"apple\", \"banana\", \"cherry\"];\nconsole.log(fruits);",
+    "encouragement": "数组存放有序元素！",
+    "id": "js-array-1"
+   },
+   {
+    "type": "typing",
+    "title": "数组",
+    "concept": "acce 元素",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const colors = [\"red\", \"green\", \"blue\"];\nconsole.log(colors[1]);",
+    "encouragement": "数组 0！",
+    "id": "js-array-2"
+   },
+   {
+    "type": "typing",
+    "title": "puh 和",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3];\nnums.push(4);\nconsole.log(nums.pop());",
+    "encouragement": "/ 数组！",
+    "id": "js-array-3"
+   },
+   {
+    "type": "typing",
+    "title": "hift 和",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3];\nnums.unshift(0);\nconsole.log(nums);",
+    "encouragement": "/ 数组！",
+    "id": "js-array-4"
+   },
+   {
+    "type": "typing",
+    "title": "lice 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3, 4];\nconsole.log(nums.slice(1, 3));",
+    "encouragement": "() ' 数组！",
+    "id": "js-array-5"
+   },
+   {
+    "type": "typing",
+    "title": "fd 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [5, 12, 8, 15];\nconst found = nums.find(n => n > 10);\nconsole.log(found);",
+    "encouragement": "数组存放有序元素！",
+    "id": "js-array-6"
+   },
+   {
+    "type": "typing",
+    "title": "fdIndex 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const letters = [\"a\", \"b\", \"c\"];\nconst idx = letters.findIndex(l => l === \"b\");\nconsole.log(idx);",
+    "encouragement": "数组存放有序元素！",
+    "id": "js-array-7"
+   },
+   {
+    "type": "typing",
+    "title": "clude 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3];\nconsole.log(nums.includes(2));\nconsole.log(nums.includes(5));",
+    "encouragement": "() 布尔值！",
+    "id": "js-array-8"
+   },
+   {
+    "type": "typing",
+    "title": "展开",
+    "concept": "展开",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const a = [1, 2];\nconst b = [3, 4];\nconst combined = [...a, ...b];\nconsole.log(combined);",
+    "encouragement": "展开 数组, ' ！",
+    "id": "js-array-9"
+   },
+   {
+    "type": "typing",
+    "title": "索引Of 和",
+    "concept": "fd 索引",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const letters = [\"a\", \"b\", \"a\", \"c\"];\nconsole.log(letters.indexOf(\"a\"));\nconsole.log(letters.lastIndexOf(\"a\"));",
+    "encouragement": "索引/ ！",
+    "id": "js-array-10"
+   },
+   {
+    "type": "typing",
+    "title": "every 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [2, 4, 6];\nconst allEven = nums.every(n => n % 2 === 0);\nconsole.log(allEven);",
+    "encouragement": "数组存放有序元素！",
+    "id": "js-array-11"
+   },
+   {
+    "type": "typing",
+    "title": "ome 方法",
+    "concept": "数组",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 3, 5];\nconst hasEven = nums.some(n => n % 2 === 0);\nconsole.log(hasEven);",
+    "encouragement": "数组存放有序元素！",
+    "id": "js-array-12"
+   }
+  ]
+ },
+ {
+  "id": "js-function",
+  "title": "函数",
+  "description": "学习 JavaScript 函数的定义、参数、返回值和箭头函数",
+  "language": "javascript",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+   "函数定义",
+   "箭头函数",
+   "参数",
+   "返回值",
+   "回调函数"
+  ],
+  "estimated_minutes": 25,
+  "steps_count": 12,
+  "steps": [
+   {
+    "type": "typing",
+    "title": "函数声明",
+    "concept": "函数关键字",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "function greet() {\n  console.log(\"Hello!\");\n}\ngreet();",
+    "encouragement": "代码！",
+    "id": "js-function-1"
+   },
+   {
+    "type": "typing",
+    "title": "Function 参数",
+    "concept": "参数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "function greet(name) {\n  console.log(`Hello, ${name}!`);\n}\ngreet(\"Alice\");",
+    "encouragement": "参数 ！",
+    "id": "js-function-2"
+   },
+   {
+    "type": "typing",
+    "title": "Return 值",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "function add(a, b) {\n  return a + b;\n}\nconsole.log(add(5, 3));",
+    "encouragement": "值 ！",
+    "id": "js-function-3"
+   },
+   {
+    "type": "typing",
+    "title": "函数 04",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const double = (x) => x * 2;\nconsole.log(double(5));",
+    "encouragement": "函数是代码复用的基础！",
+    "id": "js-function-4"
+   },
+   {
+    "type": "typing",
+    "title": "函数 05",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const add = (a, b) => {\n  return a + b;\n};\nconsole.log(add(3, 4));",
+    "encouragement": "函数是代码复用的基础！",
+    "id": "js-function-5"
+   },
+   {
+    "type": "typing",
+    "title": "默认 参数",
+    "concept": "默认 值",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const greet = (name = \"World\") => {\n  console.log(`Hello, ${name}!`);\n};\ngreet();",
+    "encouragement": "默认 参数 ！",
+    "id": "js-function-6"
+   },
+   {
+    "type": "typing",
+    "title": "回调",
+    "concept": "回调",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const executeTwice = (func, value) => {\n  func(value);\n  func(value);\n};\nconst log = (x) => console.log(x);\nexecuteTwice(log, \"Hi!\");",
+    "encouragement": "回调 ！",
+    "id": "js-function-7"
+   },
+   {
+    "type": "typing",
+    "title": "forEach 方法",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const fruits = [\"apple\", \"banana\", \"cherry\"];\nfruits.forEach(fruit => console.log(fruit));",
+    "encouragement": "是一个 数组 方法！",
+    "id": "js-function-8"
+   },
+   {
+    "type": "typing",
+    "title": "map 方法",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3];\nconst doubled = nums.map(n => n * 2);\nconsole.log(doubled);",
+    "encouragement": "() 数组！",
+    "id": "js-function-9"
+   },
+   {
+    "type": "typing",
+    "title": "filter 方法",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3, 4, 5];\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log(evens);",
+    "encouragement": "() 数组！",
+    "id": "js-function-10"
+   },
+   {
+    "type": "typing",
+    "title": "reduce 方法",
+    "concept": "函数",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const nums = [1, 2, 3, 4, 5];\nconst sum = nums.reduce((acc, n) => acc + n, 0);\nconsole.log(sum);",
+    "encouragement": "函数是代码复用的基础！",
+    "id": "js-function-11"
+   },
+   {
+    "type": "typing",
+    "title": "链式调用 数组",
+    "concept": "方法 链式调用",
+    "difficulty": "intermediate",
+    "instruction": "请照着敲一遍，记住这个固定写法！",
+    "hint": "注意代码格式和语法",
+    "targetCode": "const result = [1,2,3,4,5]\n  .filter(n => n % 2 === 0)\n  .map(n => n * 2);\nconsole.log(result);",
+    "encouragement": "方法 链式调用 代码！",
+    "id": "js-function-12"
+   }
+  ]
+ },
+ {
+  "id": "python-list",
+  "title": "列表与元组",
+  "description": "学习 Python 列表和元组的创建、索引、切片和常用操作",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "intermediate",
+  "concepts": [
+   "列表创建",
+   "列表索引",
+   "列表切片",
+   "列表方法",
+   "元组"
+  ],
+  "estimated_minutes": 25,
+  "steps_count": 12,
+  "steps": [
+   {
+    "type": "typing",
+    "title": "创建列表",
+    "concept": "列表定义",
+    "difficulty": "intermediate",
+    "instruction": "列表用方括号创建，可以包含任意类型。\n\n请照着敲！",
+    "hint": "列表元素用逗号分隔",
+    "targetCode": "nums = [1, 2, 3, 4, 5]\nprint(nums)\nfruits = ['apple', 'banana']\nprint(fruits)\nmixed = [1, 'hello', True]\nprint(mixed)",
+    "encouragement": "列表是 Python 最常用的数据结构！",
+    "id": "python-list-1"
+   },
+   {
+    "type": "typing",
+    "title": "访问元素",
+    "concept": "列表索引",
+    "difficulty": "intermediate",
+    "instruction": "通过索引访问列表元素。\n\n请照着敲！",
+    "hint": "索引从 0 开始",
+    "targetCode": "fruits = ['apple', 'banana', 'cherry']\nprint(fruits[0])\nprint(fruits[1])\nprint(fruits[-1])",
+    "encouragement": "索引让你精确定位！",
+    "id": "python-list-2"
+   },
+   {
+    "type": "typing",
+    "title": "列表切片",
+    "concept": "列表切片",
+    "difficulty": "intermediate",
+    "instruction": "切片可以获取列表的一部分。\n\n请照着敲！",
+    "hint": "s[start:end] 不包括 end",
+    "targetCode": "nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])\nprint(nums[:3])\nprint(nums[3:])",
+    "encouragement": "切片让截取列表变得简单！",
+    "id": "python-list-3"
+   },
+   {
+    "type": "typing",
+    "title": "修改元素",
+    "concept": "列表赋值",
+    "difficulty": "intermediate",
+    "instruction": "可以通过索引修改列表元素。\n\n请照着敲！",
+    "hint": "直接赋值即可",
+    "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfruits[0] = 'orange'\nprint(fruits)\nfruits[-1] = 'grape'\nprint(fruits)",
+    "encouragement": "列表是可变的！",
+    "id": "python-list-4"
+   },
+   {
+    "type": "typing",
+    "title": "添加元素",
+    "concept": "append 方法",
+    "difficulty": "intermediate",
+    "instruction": "append() 在末尾添加元素。\n\n请照着敲！",
+    "hint": "一次添加一个",
+    "targetCode": "fruits = ['apple', 'banana']\nfruits.append('cherry')\nprint(fruits)\nfruits.append('orange')\nprint(fruits)",
+    "encouragement": "append 是最常用的方法！",
+    "id": "python-list-5"
+   },
+   {
+    "type": "typing",
+    "title": "插入元素",
+    "concept": "insert 方法",
+    "difficulty": "intermediate",
+    "instruction": "insert() 在指定位置插入元素。\n\n请照着敲！",
+    "hint": "insert(位置, 元素)",
+    "targetCode": "fruits = ['apple', 'banana']\nfruits.insert(1, 'cherry')\nprint(fruits)\nfruits.insert(0, 'orange')\nprint(fruits)",
+    "encouragement": "insert 让插入更灵活！",
+    "id": "python-list-6"
+   },
+   {
+    "type": "typing",
+    "title": "删除元素",
+    "concept": "remove 方法",
+    "difficulty": "intermediate",
+    "instruction": "remove() 删除指定的元素。\n\n请照着敲！",
+    "hint": "删除第一个匹配的",
+    "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfruits.remove('banana')\nprint(fruits)\nfruits.remove('apple')\nprint(fruits)",
+    "encouragement": "remove 按值删除！",
+    "id": "python-list-7"
+   },
+   {
+    "type": "typing",
+    "title": "列表长度",
+    "concept": "len 函数",
+    "difficulty": "intermediate",
+    "instruction": "len() 返回列表长度。\n\n请照着敲！",
+    "hint": "元素个数",
+    "targetCode": "nums = [1, 2, 3, 4, 5]\nprint(len(nums))\nfruits = ['apple', 'banana']\nprint(len(fruits))",
+    "encouragement": "len() 统计元素个数！",
+    "id": "python-list-8"
+   },
+   {
+    "type": "typing",
+    "title": "列表排序",
+    "concept": "sort 方法",
+    "difficulty": "intermediate",
+    "instruction": "sort() 对列表进行排序。\n\n请照着敲！",
+    "hint": "原地排序",
+    "targetCode": "nums = [3, 1, 4, 1, 5]\nnums.sort()\nprint(nums)\nfruits = ['banana', 'apple', 'cherry']\nfruits.sort()\nprint(fruits)",
+    "encouragement": "sort 让列表有序！",
+    "id": "python-list-9"
+   },
+   {
+    "type": "typing",
+    "title": "列表推导式",
+    "concept": "推导式",
+    "difficulty": "intermediate",
+    "instruction": "列表推导式是创建列表的简洁方式。\n\n请照着敲！",
+    "hint": "[expr for item in list]",
+    "targetCode": "nums = [1, 2, 3, 4, 5]\nsquares = [x**2 for x in nums]\nprint(squares)\nevens = [x for x in nums if x % 2 == 0]\nprint(evens)",
+    "encouragement": "列表推导式是 Python 的特色！",
+    "id": "python-list-10"
+   },
+   {
+    "type": "typing",
+    "title": "遍历列表",
+    "concept": "循环遍历",
+    "difficulty": "intermediate",
+    "instruction": "用 for 循环遍历列表。\n\n请照着敲！",
+    "hint": "for 元素 in 列表",
+    "targetCode": "fruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(fruit)",
+    "encouragement": "遍历是处理列表的基础！",
+    "id": "python-list-11"
+   },
+   {
+    "type": "typing",
+    "title": "列表综合",
+    "concept": "综合练习",
+    "difficulty": "intermediate",
+    "instruction": "综合练习：综合使用列表方法。\n\n请照着敲！",
+    "hint": "创建、处理、排序",
+    "targetCode": "nums = [5, 2, 8, 1, 9]\nnums.append(3)\nnums.sort()\nprint(nums)\nprint('Sum:', sum(nums))\nprint('Max:', max(nums))",
+    "encouragement": "列表方法你都掌握了！",
+    "id": "python-list-12"
+   }
+  ]
+ },
+ {
+  "id": "python-dict",
+  "title": "字典与集合",
+  "description": "掌握 Python 字典和集合的创建、操作和推导式",
+  "language": "python",
+  "category": "fundamentals",
+  "difficulty": "advanced",
+  "concepts": [
+   "字典创建",
+   "字典操作",
+   "集合操作",
+   "字典推导式",
+   "集合推导式"
+  ],
+  "estimated_minutes": 30,
+  "steps_count": 15,
+  "steps": [
+   {
+    "type": "typing",
+    "title": "创建字典",
+    "concept": "字典定义",
+    "difficulty": "advanced",
+    "instruction": "字典用花括号，键值对用冒号分隔。\n\n请照着敲！",
+    "hint": "{key: value}",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(person)\nprint(person['name'])",
+    "encouragement": "字典是键值对的容器！",
+    "id": "python-dict-1"
+   },
+   {
+    "type": "typing",
+    "title": "访问字典",
+    "concept": "键访问",
+    "difficulty": "advanced",
+    "instruction": "通过键访问字典的值。\n\n请照着敲！",
+    "hint": "dict[key]",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(person['name'])\nprint(person['age'])",
+    "encouragement": "字典的访问很快！",
+    "id": "python-dict-2"
+   },
+   {
+    "type": "typing",
+    "title": "添加修改",
+    "concept": "赋值操作",
+    "difficulty": "advanced",
+    "instruction": "通过赋值可以添加或修改字典项。\n\n请照着敲！",
+    "hint": "不存在的键会添加",
+    "targetCode": "person = {'name': 'Alice'}\nperson['age'] = 18\nprint(person)\nperson['name'] = 'Bob'\nprint(person)",
+    "encouragement": "字典是可变的！",
+    "id": "python-dict-3"
+   },
+   {
+    "type": "typing",
+    "title": "安全访问",
+    "concept": "get 方法",
+    "difficulty": "advanced",
+    "instruction": "get() 安全访问，不怕键不存在。\n\n请照着敲！",
+    "hint": "get(key, default)",
+    "targetCode": "person = {'name': 'Alice'}\nprint(person.get('name'))\nprint(person.get('age'))\nprint(person.get('age', 0))",
+    "encouragement": "get() 避免 KeyError！",
+    "id": "python-dict-4"
+   },
+   {
+    "type": "typing",
+    "title": "删除键值",
+    "concept": "del 语句",
+    "difficulty": "advanced",
+    "instruction": "del 删除字典中的键值对。\n\n请照着敲！",
+    "hint": "del dict[key]",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\ndel person['age']\nprint(person)",
+    "encouragement": "del 彻底删除键值对！",
+    "id": "python-dict-5"
+   },
+   {
+    "type": "typing",
+    "title": "弹出键值",
+    "concept": "pop 方法",
+    "difficulty": "advanced",
+    "instruction": "pop() 删除并返回值。\n\n请照着敲！",
+    "hint": "删除并返回",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nage = person.pop('age')\nprint('Age:', age)\nprint(person)",
+    "encouragement": "pop 删值又取值！",
+    "id": "python-dict-6"
+   },
+   {
+    "type": "typing",
+    "title": "遍历键",
+    "concept": "keys 方法",
+    "difficulty": "advanced",
+    "instruction": "用 keys() 遍历所有键。\n\n请照着敲！",
+    "hint": "for key in dict.keys()",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor key in person.keys():\n    print(key)",
+    "encouragement": "遍历是处理字典的基础！",
+    "id": "python-dict-7"
+   },
+   {
+    "type": "typing",
+    "title": "遍历值",
+    "concept": "values 方法",
+    "difficulty": "advanced",
+    "instruction": "用 values() 遍历所有值。\n\n请照着敲！",
+    "hint": "for value in dict.values()",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor value in person.values():\n    print(value)",
+    "encouragement": "values() 获取所有值！",
+    "id": "python-dict-8"
+   },
+   {
+    "type": "typing",
+    "title": "遍历键值对",
+    "concept": "items 方法",
+    "difficulty": "advanced",
+    "instruction": "用 items() 同时遍历键和值。\n\n请照着敲！",
+    "hint": "for k, v in dict.items()",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nfor key, value in person.items():\n    print(f'{key}: {value}')",
+    "encouragement": "items() 是遍历字典的最佳方式！",
+    "id": "python-dict-9"
+   },
+   {
+    "type": "typing",
+    "title": "字典长度",
+    "concept": "len 函数",
+    "difficulty": "advanced",
+    "instruction": "len() 返回字典的键值对数量。\n\n请照着敲！",
+    "hint": "键值对个数",
+    "targetCode": "person = {'name': 'Alice', 'age': 18}\nprint(len(person))\nperson['city'] = 'Beijing'\nprint(len(person))",
+    "encouragement": "len() 统计键值对！",
+    "id": "python-dict-10"
+   },
+   {
+    "type": "typing",
+    "title": "字典推导式",
+    "concept": "推导式",
+    "difficulty": "advanced",
+    "instruction": "字典推导式快速创建字典。\n\n请照着敲！",
+    "hint": "{k: v for k, v in items}",
+    "targetCode": "nums = [1, 2, 3]\nsquares = {x: x**2 for x in nums}\nprint(squares)\nwords = ['a', 'bb', 'ccc']\nlens = {w: len(w) for w in words}\nprint(lens)",
+    "encouragement": "字典推导式很强大！",
+    "id": "python-dict-11"
+   },
+   {
+    "type": "typing",
+    "title": "创建集合",
+    "concept": "集合定义",
+    "difficulty": "advanced",
+    "instruction": "集合用花括号，但没有键值对。\n\n请照着敲！",
+    "hint": "无序且不重复",
+    "targetCode": "s = {1, 2, 3, 3, 3}\nprint(s)\nnums = set([1, 2, 2, 3])\nprint(nums)",
+    "encouragement": "集合自动去重！",
+    "id": "python-dict-12"
+   },
+   {
+    "type": "typing",
+    "title": "集合运算",
+    "concept": "集合运算",
+    "difficulty": "advanced",
+    "instruction": "集合支持交、并、差运算。\n\n请照着敲！",
+    "hint": "& | -",
+    "targetCode": "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a & b)\nprint(a | b)\nprint(a - b)",
+    "encouragement": "集合运算是数学的体现！",
+    "id": "python-dict-13"
+   },
+   {
+    "type": "typing",
+    "title": "集合增删",
+    "concept": "add/remove",
+    "difficulty": "advanced",
+    "instruction": "add() 添加，remove() 删除元素。\n\n请照着敲！",
+    "hint": "add 添加，remove 删除",
+    "targetCode": "s = {1, 2, 3}\ns.add(4)\nprint(s)\ns.remove(2)\nprint(s)",
+    "encouragement": "集合操作很灵活！",
+    "id": "python-dict-14"
+   },
+   {
+    "type": "typing",
+    "title": "字典集合综合",
+    "concept": "综合练习",
+    "difficulty": "advanced",
+    "instruction": "综合练习：综合使用字典和集合。\n\n请照着敲！",
+    "hint": "结合之前学的方法",
+    "targetCode": "words = ['apple', 'banana', 'apple', 'cherry', 'banana']\nunique = set(words)\nprint('Unique words:', unique)\ncount = {w: words.count(w) for w in unique}\nprint('Count:', count)",
+    "encouragement": "字典和集合你都掌握了！",
+    "id": "python-dict-15"
+   }
+  ]
+ }
+]

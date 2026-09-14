@@ -8,16 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Web demo mode: the app now runs as a pure static site in the browser. Course loading falls back to a curated set of four rhythm-friendly typing courses (JS array / JS function / Python list / Python dict, 51 snippets) baked in via `scripts/build-web-courses.mjs`; progress persists in localStorage and the learning center renders from it.
+- Language official icons via a devicon font subset (woff + 7 glyphs only, MIT), with an inline database glyph fallback for generic SQL.
+- Micro-interactions: typing spark particles at the caret, three-tier combo flame breathing with embers at 30 combo, odometer tween on WPM/accuracy, session-result choreography (trophy drop-in, light sweep, confetti on new record), and route transitions.
+- Ambient layer: drifting fireflies / twinkling stars composited over dusk illustrations on the welcome hero, result card, profile art panel and encouragement card.
+- Keycap colorways for the virtual keyboard (deep space / cream / cyber), persisted per device.
+- Smart indentation (IDE-style): space runs auto-fill so indentation never needs typing key by key.
+- Syntax-highlighted typing surface with line numbers and a breathing amber caret.
+- Persistent course restart: "重新开始" entry on completed courses, durable `restartCourse` action that clears SQLite/localStorage progress.
 
 ### Changed
-
-### Deprecated
-
-### Removed
+- Course page and home page now read real progress from the database (merged with in-session progress) — previously cards always showed 0% after a fresh app start.
+- Bundled Caveat handwriting font (OFL) for consistent annotations; unified amber focus rings; raised `text-muted` contrast to WCAG AA; menu glyph on the virtual keyboard drawn as SVG.
+- Illustrations and reward icons converted to WebP and the sound pack to OGG (~15 MB of assets reduced to ~2 MB); removed `dist/`, mock data, prototypes and stray logs from the repository.
 
 ### Fixed
-
-### Security
+- Two React hooks-order crashes (blank profile center and a crash when entering a course after loading) — both classes are now covered by an ErrorBoundary and regression-tested logic modules.
 
 ## [1.1.0] - 2026-09-12
 
@@ -42,52 +48,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a React hooks-order crash that blanked the profile center while loading.
 
 ## [1.0.1] - 2026-05-18
-
-### Added
-- Add weak-first ordering for challenge segments based on pattern mastery.
-
-### Changed
-- Record per-segment mastery during challenge runs so weak-first ordering adapts over time.
-
-### Fixed
-- Stop timed challenge countdowns while waiting to enter the next segment.
-- Display training pack mastery as an integer percentage.
-
-## [0.1.0] - 2024-05-10
-
-### Added
-- Initial release of CodeStep
-- Basic typing practice functionality
-- Course management system
-- Multi-language support (Python, Java, JavaScript)
-
----
-
-## Template for Future Releases
-
-```markdown
-## [x.y.z] - YYYY-MM-DD
-
-### Added
-- New features
-
-### Changed
-- Changes in existing functionality
-
-### Deprecated
-- Soon-to-be removed features
-
-### Removed
-- Now removed features
-
-### Fixed
-- Any bug fixes
-
-### Security
-- Security fixes
-```
-
-[Unreleased]: https://github.com/ynzz-j/code-step/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/ynzz-j/code-step/compare/v1.0.1...v1.1.0
-[1.0.1]: https://github.com/ynzz-j/code-step/compare/v0.1.0...v1.0.1
-[0.1.0]: https://github.com/ynzz-j/code-step/releases/tag/v0.1.0

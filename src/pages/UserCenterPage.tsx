@@ -1,6 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
+import { isTauri } from '@/services/env';
+import { buildWebLearningSummary } from '@/services/webProgress';
 import type { UserLearningSummary, CourseProgressSummary } from '@/types/user';
 import type { WeakTokenStat, ChallengeRunResult } from '@/types';
 import { useUserStore } from '@/stores/userStore';
@@ -299,6 +301,15 @@ export function UserCenterPage() {
   const loadSummary = async () => {
     try {
       setLoading(true);
+
+      // Web demo：进度来自 localStorage，弱点/挑战数据不可用
+      if (!isTauri()) {
+        setSummary(buildWebLearningSummary());
+        setWeakTokenStats([]);
+        setRecentChallenges([]);
+        setLoading(false);
+        return;
+      }
       const data = await invoke<UserLearningSummary>('get_user_learning_summary');
       setSummary(data);
       const tokens = await invoke<WeakTokenStat[]>('get_weak_token_stats');

@@ -1,4 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
+import { isTauri } from './env';
+import * as webProgress from './webProgress';
+import webCoursesJson from '@/data/webCourses.json';
 import type { Course, CourseMetadata, CourseCategory, Difficulty, Step } from '@/types';
 
 export type CourseMode = 'typing' | 'coding';
@@ -11,6 +14,8 @@ export function isCourseMode(value: unknown): value is CourseMode {
 export function normalizeCourseMode(value: unknown): CourseMode {
   return isCourseMode(value) ? value : DEFAULT_COURSE_MODE;
 }
+
+const WEB_COURSES = webCoursesJson as unknown as (CourseFromBackend & CourseMetadataFromBackend)[];
 
 interface CourseFromBackend {
   id: string;
@@ -84,6 +89,10 @@ function transformCourse(backend: CourseFromBackend): Course {
 class CourseService {
   // 直接调用 Tauri 后端，不再使用 mock 数据
   async getCourses(mode?: CourseMode): Promise<CourseMetadata[]> {
+    if (!isTauri()) {
+      // Web demo：静态精选课程
+      return WEB_COURSES.map(transformCourseMetadata);
+    }
     try {
       const result = await invoke<CourseMetadataFromBackend[]>('get_courses', { mode });
       return result.map(transformCourseMetadata);
@@ -94,6 +103,11 @@ class CourseService {
   }
 
   async getCourse(courseId: string, mode?: CourseMode): Promise<Course> {
+    if (!isTauri()) {
+      const web = WEB_COURSES.find((c) => c.id === courseId);
+      if (!web) throw new Error(`Course not found: ${courseId}`);
+      return transformCourse(web);
+    }
     try {
       const result = await invoke<CourseFromBackend>('get_course', { courseId, mode });
       return transformCourse(result);
@@ -104,6 +118,12 @@ class CourseService {
   }
 
   async getStep(courseId: string, stepIndex: number, mode?: CourseMode): Promise<Step> {
+    if (!isTauri()) {
+      const web = WEB_COURSES.find((c) => c.id === courseId);
+      const step = web?.steps[stepIndex];
+      if (!step) throw new Error(`Step ${stepIndex} not found in course ${courseId}`);
+      return { ...step, id: `${courseId}-${stepIndex + 1}` };
+    }
     try {
       const result = await invoke<Step>('get_step', { courseId, stepIndex, mode });
       return {
@@ -117,6 +137,10 @@ class CourseService {
   }
 
   async saveProgress(courseId: string, currentStep: number, completedSteps: number[], timeSpent: number, courseMode?: CourseMode): Promise<void> {
+    if (!isTauri()) {
+      webProgress.saveWebProgress(courseId, currentStep, completedSteps, timeSpent);
+      return;
+    }
     try {
       await invoke('save_progress', {
         courseId,
@@ -131,6 +155,12 @@ class CourseService {
   }
 
   async getProgress(courseId: string): Promise<{ currentStep: number; completedSteps: number[]; timeSpent: number } | null> {
+    if (!isTauri()) {
+      const entry = webProgress.loadWebProgress()[courseId];
+      return entry
+        ? { currentStep: entry.current_step, completedSteps: entry.completed_steps, timeSpent: entry.time_spent }
+        : null;
+    }
     try {
       const result = await invoke<any>('get_user_progress', { courseId });
       if (result) {

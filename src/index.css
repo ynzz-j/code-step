@@ -13,7 +13,7 @@
 /* devicon 字体子集（MIT 许可）：仅打包 woff 与项目用到的 7 个字形 */
 @font-face {
   font-family: 'devicon';
-  src: url('@/assets/fonts/devicon.woff') format('woff');
+  src: url('@/assets/fonts/devicon-subset.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block;
