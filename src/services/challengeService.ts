@@ -1,8 +1,10 @@
 import { invoke } from '@tauri-apps/api/core';
+import { isTauri } from './env';
 import type { ChallengeRunPayload, ChallengeRunResult } from '@/types';
 
 class ChallengeService {
   async recordRun(payload: ChallengeRunPayload): Promise<ChallengeRunResult | null> {
+    if (!isTauri()) return null; // Web demo 不持久化挑战
     try {
       return await invoke<ChallengeRunResult>('record_challenge_run', { payload });
     } catch (error) {
@@ -12,6 +14,7 @@ class ChallengeService {
   }
 
   async getLeaderboard(packId: string, challengeMode: string, limit = 10): Promise<ChallengeRunResult[]> {
+    if (!isTauri()) return []; // Web demo
     try {
       return await invoke<ChallengeRunResult[]>('get_challenge_leaderboard', { packId, challengeMode, limit });
     } catch (error) {
@@ -21,6 +24,7 @@ class ChallengeService {
   }
 
   async getRun(runId: number): Promise<ChallengeRunResult | null> {
+    if (!isTauri()) return null; // Web demo
     try {
       return await invoke<ChallengeRunResult | null>('get_challenge_run', { runId });
     } catch (error) {
@@ -30,6 +34,7 @@ class ChallengeService {
   }
 
   async getBest(packId: string, challengeMode: string): Promise<ChallengeRunResult | null> {
+    if (!isTauri()) return null; // Web demo
     try {
       return await invoke<ChallengeRunResult | null>('get_challenge_best', { packId, challengeMode });
     } catch (error) {
@@ -39,6 +44,7 @@ class ChallengeService {
   }
 
   async getRecentRuns(limit = 10): Promise<ChallengeRunResult[]> {
+    if (!isTauri()) return []; // Web demo
     try {
       return await invoke<ChallengeRunResult[]>('get_recent_challenge_runs', { limit });
     } catch (error) {

@@ -13,6 +13,7 @@ class GrowthService {
   }
 
   async getGrowthSummary(): Promise<GrowthSummary | null> {
+    if (!isTauri()) return null; // Web demo
     try {
       return await invoke<GrowthSummary>('get_growth_summary');
     } catch (error) {
@@ -22,6 +23,7 @@ class GrowthService {
   }
 
   async getTrainingPackGrowth(packId: string): Promise<TrainingPackGrowth | null> {
+    if (!isTauri()) return null; // Web demo
     try {
       return await invoke<TrainingPackGrowth>('get_training_pack_growth', { packId });
     } catch (error) {
@@ -41,6 +43,7 @@ class GrowthService {
   }
 
   async getWeakTokenStats(): Promise<WeakTokenStat[]> {
+    if (!isTauri()) return []; // Web demo
     try {
       return await invoke<WeakTokenStat[]>('get_weak_token_stats');
     } catch (error) {
@@ -50,6 +53,7 @@ class GrowthService {
   }
 
   async importLegacyGrowthData(): Promise<void> {
+    if (!isTauri()) return; // Web demo
     try {
       const packStats = localStorage.getItem('codestep-training-pack-stats') || '{}';
       const userStats = localStorage.getItem('codestep-user') || '{}';

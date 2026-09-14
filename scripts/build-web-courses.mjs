@@ -8,13 +8,18 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 
+import { readdirSync } from 'node:fs';
+
 const BASE = 'courses/typing';
-const SELECTED = [
-  'javascript/js-array',    // 12 段 · 均长 79 字符，数组高阶方法节奏最顺
-  'javascript/js-function', // 12 段 · 均长 81 字符，箭头函数手感
-  'python/python-list',     // 12 段 · 均长 102 字符
-  'python/python-dict',     // 15 段 · 均长 92 字符
-];
+// 收录全部打字课程（47 门 / 399 段），保证训练包入口全部可用
+const SELECTED = [];
+for (const lang of readdirSync(BASE).sort()) {
+  for (const course of readdirSync(`${BASE}/${lang}`).sort()) {
+    if (readdirSync(`${BASE}/${lang}/${course}`).includes('course.json')) {
+      SELECTED.push(`${lang}/${course}`);
+    }
+  }
+}
 
 const courses = SELECTED.map((dir) => {
   const meta = JSON.parse(readFileSync(`${BASE}/${dir}/course.json`, 'utf-8'));
@@ -38,5 +43,5 @@ const courses = SELECTED.map((dir) => {
 });
 
 const out = 'src/data/webCourses.json';
-writeFileSync(out, JSON.stringify(courses, null, 1));
+writeFileSync(out, JSON.stringify(courses));
 console.log(`written ${out}: ${courses.map((c) => `${c.id}(${c.steps_count}段)`).join(', ')}`);
